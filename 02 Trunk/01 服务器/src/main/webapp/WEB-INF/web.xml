@@ -10,6 +10,16 @@
   	<param-value>classpath:applicationContext.xml</param-value>
   </context-param>
   
+  <!-- 小程序url都经过此拦截器 -->
+  <filter>
+        <filter-name>wxLoginFilter</filter-name>
+        <filter-class>com.grosup.ttzy.filter.WxLoginFilter</filter-class>
+        <init-param>
+            <param-name>excludeurls</param-name>
+            <param-value>*/sso/*,*/image/*,*/js/*,*/css/*,*/pages/login/*,*.html</param-value>
+        </init-param>
+    </filter>
+  
   <filter>
 		<filter-name>loginFilter</filter-name>
 		<filter-class>com.grosup.ttzy.filter.LoginFilter</filter-class>
@@ -46,6 +56,11 @@
 		<filter-name>SpringCharacterEncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+	<!-- 小程序url都经过此拦截器 -->
+	<filter-mapping>
+        <filter-name>wxLoginFilter</filter-name>
+        <url-pattern>/wx/*</url-pattern>
+    </filter-mapping>
 	<filter-mapping>
 		<filter-name>loginFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -53,7 +68,7 @@
 	
 	<!-- 加载springmvc servlet -->
 	<servlet>
-		<servlet-name>resource111</servlet-name>
+		<servlet-name>resource</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
 			<param-name>contextConfigLocation</param-name>
@@ -62,7 +77,7 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>resource111</servlet-name>
+		<servlet-name>resource</servlet-name>
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
 
