@@ -27,8 +27,8 @@ public class SsoUtil {
 		String validStr = cookieValid.getValue();
 		if (MD5Util.GetMD5Code(userStr).equalsIgnoreCase(validStr)) {
 			String userJson = AESUtil.RevertAESCode(userStr);
-			UserBean user = new UserBean(userJson);
-			return user;
+//			UserBean user = new UserBean(userJson);
+//			return user;
 		}
 		return null;
 	}

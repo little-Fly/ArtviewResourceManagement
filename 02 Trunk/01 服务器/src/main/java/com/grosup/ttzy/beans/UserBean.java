@@ -5,14 +5,14 @@ import java.util.Date;
 import net.sf.json.JSONObject;
 
 public class UserBean {
-    
-    public UserBean(String str) {
-        JSONObject obj = JSONObject.fromObject(str);
-        this.uid = obj.optLong("uid");
-        this.openId = obj.optString("openId");
-        this.nickName = obj.optString("nickName");
-        this.roleKey = obj.optString("roleKey");
-    }
+
+//    public UserBean(String str) {
+//        JSONObject obj = JSONObject.fromObject(str);
+//        this.uid = obj.optLong("uid");
+//        this.openId = obj.optString("openId");
+//        this.nickName = obj.optString("nickName");
+//        this.roleKey = obj.optString("roleKey");
+//    }
     
     private long uid;
     

@@ -14,7 +14,8 @@ public class UserDao extends AbstractDao {
         return this.getSession().selectOne("com.grosup.ttzy.user.getUserInfo", params);
     }
     
-    public void userAdd(UserBean userBean) throws GrosupException{
+    public long userAdd(UserBean userBean) throws GrosupException{
         this.getSession().insert("com.grosup.ttzy.user.userAdd", userBean);
+        return userBean.getUid();
     }
 }
