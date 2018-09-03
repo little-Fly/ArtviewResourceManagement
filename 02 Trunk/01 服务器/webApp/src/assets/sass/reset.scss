@@ -1,0 +1,165 @@
+$FontSize: 16px;
+$FontFamily: "PingFang SC", "Source Han Sans", "Microsoft YaHei", "黑体", Arial, sans-serif;
+
+$LinkC: #FF3D00;
+$HoverC: #FF3D00;
+$BaseC: #808082;
+$ph_color: ccc;
+// mixins
+@mixin dz($time:0.25s) {
+  -webkit-transition: all $time ease-in-out;
+  -moz-transition: all $time ease-in-out;
+  -o-transition: all $time ease-in-out;
+  transition: all $time ease-in-out;
+}
+
+* {
+  font-family: $FontFamily;
+}
+
+body, ul, ol, dl, dd, h1, h2, h3, h4, h5, h6, pre, form, fieldset, legend, input, button, textarea, p, blockquote, table, th, td, menu {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed
+}
+
+ul, ol, menu {
+  list-style: none
+}
+
+fieldset, img {
+  border: none
+}
+
+img, object, select, input, textarea, button {
+  vertical-align: middle
+}
+
+input, textarea, select, address, caption, cite, code, dfn, em, i, b, strong, small, th, var, abbr {
+  font-size: 100%;
+  font-style: normal
+}
+
+caption, th {
+  text-align: left;
+}
+
+article, aside, footer, header, hgroup, nav, section, figure, figcaption {
+  display: block;
+}
+
+code, kbd, pre, samp, tt {
+  font-family: Consolas, "Courier New", Courier, monospace;
+}
+
+address, cite, dfn, em, var, i {
+  font-style: normal;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: "";
+  content: none;
+}
+
+a {
+  color: $LinkC;
+  text-decoration: none;
+  cursor: pointer;
+  &:link, &:visited, &:active, &:focus {
+    color: $LinkC;
+  }
+  &:hover {
+    color: $HoverC;
+    outline: none;
+  }
+  &, span, i, em, u, strong, b, p, img, ul, li, div, dd, dt, dl, ol, table, th, td, h1, h2, h3, h4, h5, h6, input, textarea, button, small, select {
+    cursor: pointer;
+    @include dz;
+  }
+}
+
+abbr[title], acronym[title] {
+  border-bottom: 1px dotted;
+  cursor: help;
+}
+
+html, body {
+  font-size: $FontSize;
+  color: $BaseC;
+  line-height: 1;
+  height: 100%;
+  width: 100%;
+}
+
+body, button, input, select, textarea {
+  font-family: sans-serif, '微软雅黑', 'Microsoft YaHei';
+  font-size: $FontSize;
+}
+
+h1 {
+  font-size: $FontSize + 10;
+}
+
+h2 {
+  font-size: $FontSize + 8;
+}
+
+h3 {
+  font-size: $FontSize + 6;
+}
+
+h4 {
+  font-size: $FontSize + 4;
+}
+
+h5 {
+  font-size: $FontSize + 2;
+}
+
+h6 {
+  font-size: $FontSize;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background: lighten($BaseC, 50%);
+}
+
+::-webkit-input-placeholder {
+  color: $ph_color;
+  font-weight: normal;
+}
+
+::-moz-placeholder {
+  color: $ph_color;
+  font-weight: normal;
+}
+
+:-ms-input-placeholder {
+  color: $ph_color;
+  font-weight: normal;
+}
+
+/*滚动条样式*/
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  //background: #E5E5E5;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #726bab;
+  border-radius: 4px;
+}
