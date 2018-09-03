@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grosup.ttzy.user">
+
+<!-- 	<resultMap type="com.grosup.ttzy.beans.UserBean" id="BaseResultMap"> -->
+<!-- 		<result column="third_session" jdbcType="VARCHAR" property="third_session"/> -->
+<!-- 		<result column="session_key" jdbcType="VARCHAR" property="session_key"/> -->
+<!-- 		<result column="openId" jdbcType="VARCHAR" property="openId"/> -->
+<!-- 	</resultMap> -->
+	<select id="getUserInfo" parameterType="map" resultType="com.grosup.ttzy.beans.UserBean">
+       select * from t_user 
+       <where>
+           <if test="openId != null and openId != ''">
+               openId = #{openId}
+           </if>
+       </where>
+    </select>
+    <!-- 人员注册 -->
+    <insert id="userAdd" parameterType="com.grosup.ttzy.beans.UserBean">
+        insert into t_user (uid,openId,nickName,roleKey,createTime,lastTime,status)
+        values (#{uid},#{openId},#{nickName},#{roleKey},#{createTime},#{lastTime},#{status})
+    </insert>
+</mapper>
