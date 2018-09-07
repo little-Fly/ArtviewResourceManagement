@@ -17,7 +17,16 @@
     </select>
     <!-- 人员注册 -->
     <insert id="userAdd" parameterType="com.grosup.ttzy.beans.UserBean">
-        insert into t_user (uid,openId,nickName,roleKey,createTime,lastTime,status)
-        values (#{uid},#{openId},#{nickName},#{roleKey},#{createTime},#{lastTime},#{status})
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="uid">
+          SELECT LAST_INSERT_ID()
+      </selectKey>
+        insert into t_user (openId,nickName,roleKey,createTime,lastTime,status)
+        values (
+        #{openId},
+        #{nickName},
+        #{roleKey},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{lastTime,jdbcType=TIMESTAMP},
+        #{status})
     </insert>
 </mapper>
