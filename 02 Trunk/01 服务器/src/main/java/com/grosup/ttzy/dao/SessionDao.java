@@ -16,8 +16,7 @@ public class SessionDao extends AbstractDao{
 	 * @return
 	 */
 	public boolean checkThirdSession(String third_session) {
-		int rows =  this.getSession().selectOne("com.grosup.practice.session.checkThirdSession", third_session);
-		logger.info(rows);
+		int rows =  this.getSession().selectOne("com.grosup.ttzy.session.checkThirdSession", third_session);
 		if (rows > 0) {
 			return true;
 		} else {
@@ -26,7 +25,7 @@ public class SessionDao extends AbstractDao{
 	}
 	
 	public boolean insertSessionValue(SessionBean sessionBean) {
-		int rows = this.getSession().insert("com.grosup.practice.session.insertSessionValue", sessionBean);
+		int rows = this.getSession().insert("com.grosup.ttzy.session.insertSessionValue", sessionBean);
 		if (rows > 0) {
 			return true;
 		} else {
@@ -35,7 +34,7 @@ public class SessionDao extends AbstractDao{
 	}
 	
 	public boolean updateThirdSession(SessionBean sessionBean) {
-		int rows = this.getSession().insert("com.grosup.practice.session.updateThirdSession", sessionBean);
+		int rows = this.getSession().insert("com.grosup.ttzy.session.updateThirdSession", sessionBean);
 		if (rows > 0) {
 			return true;
 		} else {
@@ -44,7 +43,7 @@ public class SessionDao extends AbstractDao{
 	}
 	
 	public String getOpenIdByThirdSession(String third_session) {
-		SessionBean sessionBean = this.getSession().selectOne("com.grosup.practice.session.getOpenIdByThirdSession", third_session);
+		SessionBean sessionBean = this.getSession().selectOne("com.grosup.ttzy.session.getOpenIdByThirdSession", third_session);
 		if (null != sessionBean) {
 			return sessionBean.getOpenId();
 		} else {

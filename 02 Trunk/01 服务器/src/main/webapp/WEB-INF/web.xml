@@ -25,7 +25,7 @@
 		<filter-class>com.grosup.ttzy.filter.LoginFilter</filter-class>
 		<init-param>
 			<param-name>excludeurls</param-name>
-			<param-value>*/sso/*,*/image/*,*/js/*,*/css/*,*/pages/login/*,*.html</param-value>
+			<param-value>*/sso/*,*/image/*,*/js/*,*/css/*,*/pages/login/*,*.html,*/wx/*</param-value>
 		</init-param>
 	</filter>
   

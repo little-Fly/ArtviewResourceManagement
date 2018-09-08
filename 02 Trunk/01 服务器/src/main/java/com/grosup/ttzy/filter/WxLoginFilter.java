@@ -53,6 +53,7 @@ public class WxLoginFilter implements Filter {
             boolean login = TtzyUtil.checkThirdSession(third_session);
             if (login) {
                 chain.doFilter(sRequest, sResponse);
+                return;
             } else {
                 sResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "授权不正确");
             }

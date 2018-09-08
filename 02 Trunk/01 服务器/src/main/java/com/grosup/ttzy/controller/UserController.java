@@ -4,6 +4,8 @@ import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,6 +16,7 @@ import com.grosup.ttzy.util.CodeUtil;
 import com.grosup.ttzy.util.GrosupException;
 
 @RequestMapping("/wx/user")
+@Controller
 public class UserController {
     
     private static Logger logger = Logger.getLogger(UserController.class);
@@ -23,7 +26,7 @@ public class UserController {
     
     @RequestMapping(method = RequestMethod.POST, value = "/add")
     @ResponseBody
-    public JSONObject studentAdd(UserBean user) {
+    public JSONObject userAdd(@RequestBody UserBean user) {
         JSONObject result = new JSONObject();
         try {
             userService.userAdd(user);

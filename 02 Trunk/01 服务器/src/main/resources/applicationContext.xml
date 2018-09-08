@@ -52,7 +52,8 @@
 	
 	<bean id="TtzyUtil" class="com.grosup.ttzy.util.TtzyUtil" init-method="init">  
     <property name="sessionDao" ref="sessionDao"/>
-    <property name="userDao" ref="userDao"/>  
+    <property name="userDao" ref="userDao"/>
+    <property name="logDao" ref="logDao"/>    
     </bean>  
 	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
