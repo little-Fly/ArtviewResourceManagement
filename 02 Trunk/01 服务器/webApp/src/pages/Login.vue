@@ -7,7 +7,7 @@
 			</div>
 			<div class="qr tc">
 				<img src="@/assets/image/qr.png" alt="二维码">
-				<p class="tips">使用微信扫码登录</p>
+				<p class="tips" @click="goMain">使用微信扫码登录</p>
 			</div>
 			<div class="footer">
 				<p class="copy-right tc">Copyright © 2004 - 2018  天天艺境 版权所有</p>
@@ -21,8 +21,13 @@
     export default {
         name: "login",
         data() {
-            return {};
-        }
+            return {}
+        },
+	    methods:{
+            goMain(){
+                this.$router.push('/main');
+            }
+	    }
     };
 </script>
 
