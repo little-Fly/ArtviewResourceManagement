@@ -1,0 +1,19 @@
+<import src="/components/zan/capsule.vue.wxml" /><template name="72260514">
+  <view class="_div data-v-79a77908">
+    <view class="_div data-v-79a77908 invite-btn"><button class="_button data-v-79a77908 zan-btn zan-btn--primary">邀请新成员</button></view>
+    <view class="_div data-v-79a77908 zan-panel">
+      <view class="_div data-v-79a77908 zan-cell">
+        <view class="_div data-v-79a77908 zan-cell__bd"> 薛利 <template data="{{...$root[$kk+'0'], $root}}" is="650f5648"></template> <template data="{{...$root[$kk+'1'], $root}}" is="650f5648"></template></view>
+        <view class="_div data-v-79a77908 zan-cell__ft">更改权限</view>
+      </view>
+      <view class="_div data-v-79a77908 zan-cell">
+        <view class="_div data-v-79a77908 zan-cell__bd"> 代强 <template data="{{...$root[$kk+'2'], $root}}" is="650f5648"></template></view>
+        <view class="_div data-v-79a77908 zan-cell__ft">更改权限</view>
+      </view>
+      <view class="_div data-v-79a77908 zan-cell">
+        <view class="_div data-v-79a77908 zan-cell__bd"> 王玲 <template data="{{...$root[$kk+'3'], $root}}" is="650f5648"></template></view>
+        <view class="_div data-v-79a77908 zan-cell__ft">更改权限</view>
+      </view>
+    </view>
+  </view>
+</template>
