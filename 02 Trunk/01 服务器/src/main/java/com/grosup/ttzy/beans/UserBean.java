@@ -1,8 +1,7 @@
 package com.grosup.ttzy.beans;
 
 import java.util.Date;
-
-import net.sf.json.JSONObject;
+import java.util.List;
 
 public class UserBean {
 
@@ -20,13 +19,13 @@ public class UserBean {
     
     private String nickName;
     
-    private String roleKey;
-    
     private Date createTime;
     
     private Date lastTime;
     
     private int status;
+    
+    private List<RoleBean> roles;
 
     public long getUid() {
         return uid;
@@ -52,14 +51,6 @@ public class UserBean {
         this.nickName = nickName;
     }
 
-    public String getRoleKey() {
-        return roleKey;
-    }
-
-    public void setRoleKey(String roleKey) {
-        this.roleKey = roleKey;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -82,6 +73,14 @@ public class UserBean {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public List<RoleBean> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleBean> roles) {
+        this.roles = roles;
     }
 
 }
