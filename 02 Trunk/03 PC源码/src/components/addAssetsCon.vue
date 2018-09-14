@@ -18,7 +18,6 @@
 					<el-form-item label="资源类别名称">
 						<el-input v-model="form.name"></el-input>
 						<el-button type="success" plain>上传图片</el-button>
-						<el-button type="success" plain>上传视频</el-button>
 					</el-form-item>
 					<el-form-item label="属性名称">
 						<el-input placeholder="请输入内容">

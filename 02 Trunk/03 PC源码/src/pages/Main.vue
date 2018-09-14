@@ -10,7 +10,7 @@
 						<el-input placeholder="输入关键字" v-model="searchInput">
 							<el-select v-model="searchType"
 							           slot="prepend"
-							           placeholder="输入关键字搜索">
+							           placeholder="选择资源类型">
 								<el-option
 										v-for="item in searchOptions"
 										:key="item.value"
