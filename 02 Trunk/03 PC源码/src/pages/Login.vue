@@ -10,8 +10,8 @@
 				<p class="tips" @click="goMain">使用微信扫码登录</p>
 			</div>
 			<div class="footer">
-				<p class="copy-right tc">Copyright © 2004 - 2018  天天艺境 版权所有</p>
-				<p class="tc">备案号：############</p>
+				<p class="copy-right tc">深圳天天艺境文化传播有限公司</p>
+				<p class="tc"> 粤 ICP 备 09109527 号-1 </p>
 			</div>
 		</div>
 	</div>
