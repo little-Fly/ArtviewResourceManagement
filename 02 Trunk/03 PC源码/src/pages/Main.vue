@@ -4,7 +4,7 @@
 			<el-header>
 				<el-row>
 					<el-col :span="4" class="logo tc">
-						天天艺境
+						<img width="150" src="@/assets/image/logo.png" style="margin-top: -10px" alt="logo">
 					</el-col>
 					<el-col :span="12" :offset="2" class="search-content">
 						<el-input placeholder="输入关键字" v-model="searchInput">

@@ -2,32 +2,42 @@
 	<div class="login">
 		<div class="content">
 			<div class="header tc">
-				<span class="title">天天艺境</span>
+				<img class="title" src="@/assets/image/logo.png" alt="logo">
+				<!--<span class="title">天天艺境</span>-->
 				<span class="title-low">后台管理系统</span>
 			</div>
 			<div class="qr tc">
-				<img src="@/assets/image/qr.png" alt="二维码">
-				<p class="tips" @click="goMain">使用微信扫码登录</p>
+				<wxlogin :appid="appId" :scope="scope" :redirect_uri="redirect_uri"></wxlogin>
+				<!--<p class="tips">使用微信扫码登录</p>-->
 			</div>
 			<div class="footer">
-				<p class="copy-right tc">深圳天天艺境文化传播有限公司</p>
-				<p class="tc"> 粤 ICP 备 09109527 号-1 </p>
+				<p class="copy-right tr fl">深圳天天艺境文化传播有限公司</p>
+				<p class="tl fl"> 粤 ICP 备 09109527 号-1 </p>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+    import wxlogin from 'vue-wxlogin';
+
     export default {
         name: "login",
+        components: {
+            wxlogin
+        },
         data() {
-            return {}
+            return {
+                appId:"wxb41c2d9e3682c984",
+                scope:"snsapi_login",
+                redirect_uri: "http%3a%2f%2fwww.hwyst.net%2f%23%2fmain"
+            }
         },
 	    methods:{
             goMain(){
                 this.$router.push('/main');
             }
-	    }
+	    },
     };
 </script>
 
@@ -45,7 +55,7 @@
 		}
 		.header {
 			position: relative;
-			height: 30%;
+			height: 25%;
 			/*padding-top: 20%;*/
 			.title {
 				font-size: 50px;
@@ -76,10 +86,20 @@
 			}
 		}
 		.footer{
-			.tc{
+			padding-top: 75px;
+			width: 75vw;
+			height: 1px;
+			margin-left: -25%;
+			p{
+				width: 37.5vw;
 				color: #333;
 				height: 40px;
 				line-height: 40px;
+				box-sizing: border-box;
+				padding-left: 30px;
+				&.copy-right{
+					padding-right: 30px;
+				}
 			}
 		}
 	}
