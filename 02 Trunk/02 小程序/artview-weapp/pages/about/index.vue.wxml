@@ -1,0 +1,10 @@
+<template name="ca5128b6">
+  <view class="_div data-v-57c709aa">
+    <view class="_div data-v-57c709aa zan-panel">
+      <view class="_div data-v-57c709aa zan-cell">
+        <view class="_div data-v-57c709aa zan-cell__bd">天天资源版本号</view>
+        <view class="_div data-v-57c709aa zan-cell__ft">1.0.0</view>
+      </view>
+    </view>
+  </view>
+</template>

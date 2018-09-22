@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grosup.ttzy.user">
+
+	<resultMap type="com.grosup.ttzy.beans.UserBean" id="BaseResultMap">
+		<result column="uid" jdbcType="VARCHAR" property="uid"/>
+		<result column="openId" jdbcType="VARCHAR" property="openId"/>
+		<result column="nickName" jdbcType="VARCHAR" property="nickName"/>
+		<result column="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
+		<result column="lastTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="lastTime"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+		<collection property="roles" ofType="com.grosup.ttzy.beans.RoleBean">
+            <result column="roleKey" jdbcType="VARCHAR" property="roleKey"/>
+            <result column="roleName" jdbcType="VARCHAR" property="roleName"/>
+            <result column="roleType" jdbcType="VARCHAR" property="roleType"/>
+            <result column="remark" jdbcType="VARCHAR" property="remark"/>
+		</collection>
+	</resultMap>
+	<select id="getUserInfo" parameterType="map" resultType="com.grosup.ttzy.beans.UserBean">
+       select * from t_user 
+       <where>
+           <if test="openId != null and openId != ''">
+               openId = #{openId}
+           </if>
+       </where>
+    </select>
+    <!-- 人员注册 -->
+    <insert id="userAdd" parameterType="com.grosup.ttzy.beans.UserBean">
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="uid">
+          SELECT LAST_INSERT_ID()
+      </selectKey>
+        insert into t_user (openId,nickName,roleKey,createTime,lastTime,status)
+        values (
+        #{openId},
+        #{nickName},
+        #{roleKey},
+        #{createTime,jdbcType=TIMESTAMP},
+        #{lastTime,jdbcType=TIMESTAMP},
+        #{status})
+    </insert>
+    
+    <!-- 获取待审核人员的信息 -->
+    <select id="queryUnCheckedUser" parameterType="map" resultType="com.grosup.ttzy.beans.UserBean">
+        select * from t_user where status = 0
+    </select>
+    
+    <!-- 人员审核结果 -->
+    <update id="changeUserStatus" parameterType="map">
+        update t_user set 
+        status = #{status}
+        where uid = #{uid}
+    </update>
+    
+    <!-- 查获取公司人员的信息不包含超管 -->
+    <select id="queryUsers" resultMap="BaseResultMap">
+	select * from (
+	select ttur.roleKey,tur.*,tro.roleName FROM
+	t_user_role ttur
+	LEFT JOIN t_user tur ON
+	ttur.uid = tur.uid
+	LEFT JOIN t_role tro ON
+	ttur.roleKey = tro.roleKey
+	) as middle
+	where middle.roleKey != 'root' and status = 1
+    </select>
+</mapper>

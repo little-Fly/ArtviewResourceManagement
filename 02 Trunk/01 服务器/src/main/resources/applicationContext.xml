@@ -50,6 +50,12 @@
 		<property name="validationQuery" value="select 1 from dual"></property>
 	</bean>
 	
+	<bean id="TtzyUtil" class="com.grosup.ttzy.util.TtzyUtil" init-method="init">  
+    <property name="sessionDao" ref="sessionDao"/>
+    <property name="userDao" ref="userDao"/>
+    <property name="logDao" ref="logDao"/>    
+    </bean>  
+	
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="configLocation" value="classpath:sqlMapConfig.xml"></property>
 		<property name="dataSource" ref="dataSource" />

@@ -1,0 +1,85 @@
+<template name="21c44fe8">
+  <view class="_div data-v-224c62dc">
+    <view class="_div data-v-224c62dc zan-panel">
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 title align-right">
+          <view class="_strong data-v-224c62dc">Manfray：</view>
+        </view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17 title">
+          <view class="_strong data-v-224c62dc">申请加入天天意境</view>
+        </view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">联系方式：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">18126470043</view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">性别：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">男</view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">注册理由：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">就啊收快递放假啦是肯德基就啊了空间发空间刷空间卢卡斯简单科技会计法上课</view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">微信号：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">Mistergong</view>
+      </view>
+      <view class="_div data-v-224c62dc align-center btn-box"><button class="_button data-v-224c62dc zan-btn zan-btn--small zan-btn--primary">审核通过</button> <button class="_button data-v-224c62dc zan-btn zan-btn--small zan-btn--danger">不能通过</button></view>
+    </view>
+    <view class="_div data-v-224c62dc zan-panel">
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 title align-right">
+          <view class="_strong data-v-224c62dc">Manfray：</view>
+        </view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17 title">
+          <view class="_strong data-v-224c62dc">申请加入天天意境</view>
+        </view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">联系方式：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">18126470043</view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">性别：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">男</view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">注册理由：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">就啊收快递放假啦是肯德基就啊了空间发空间刷空间卢卡斯简单科技会计法上课</view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">微信号：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">Mistergong</view>
+      </view>
+      <view class="_div data-v-224c62dc align-center btn-box"><button class="_button data-v-224c62dc zan-btn zan-btn--small zan-btn--primary">审核通过</button> <button class="_button data-v-224c62dc zan-btn zan-btn--small zan-btn--danger">不能通过</button></view>
+    </view>
+    <view class="_div data-v-224c62dc zan-panel">
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 title align-right">
+          <view class="_strong data-v-224c62dc">Manfray：</view>
+        </view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17 title">
+          <view class="_strong data-v-224c62dc">申请加入天天意境</view>
+        </view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">联系方式：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">18126470043</view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">性别：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">男</view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">注册理由：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">就啊收快递放假啦是肯德基就啊了空间发空间刷空间卢卡斯简单科技会计法上课</view>
+      </view>
+      <view class="_div data-v-224c62dc zan-row">
+        <view class="_div data-v-224c62dc zan-col zan-col-7 align-right">微信号：</view>
+        <view class="_div data-v-224c62dc zan-col zan-col-17">Mistergong</view>
+      </view>
+      <view class="_div data-v-224c62dc align-center btn-box"><button class="_button data-v-224c62dc zan-btn zan-btn--small zan-btn--primary">审核通过</button> <button class="_button data-v-224c62dc zan-btn zan-btn--small zan-btn--danger">不能通过</button></view>
+    </view>
+  </view>
+</template>

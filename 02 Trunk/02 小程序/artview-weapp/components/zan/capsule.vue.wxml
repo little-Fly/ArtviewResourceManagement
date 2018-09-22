@@ -1,0 +1,12 @@
+<template name="650f5648">
+  <view bindtap="handleProxy" class="_div data-v-14ae0916 zan-capsule {{'zan-capsule--' + type}}" data-eventid="{{'0'}}" data-comkey="{{$k}}">
+    <block wx:if="{{color}}">
+      <view class="_div data-v-14ae0916 zan-capsule__left" style=" {{computedClassStr}}">{{ leftText }}</view>
+      <view class="_div data-v-14ae0916 zan-capsule__right" style=" {{getObject}}">{{ rightText }}</view>
+    </block>
+    <block wx:else>
+      <view class="_div data-v-14ae0916 zan-capsule__left">{{ leftText }}</view>
+      <view class="_div data-v-14ae0916 zan-capsule__right">{{ rightText }}</view>
+    </block>
+  </view>
+</template>
