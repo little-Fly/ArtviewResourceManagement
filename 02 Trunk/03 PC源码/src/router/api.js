@@ -9,6 +9,4 @@ axios.defaults.baseURL = HOST;  // 设置请求地址，后面的接口都将基
 // 设置请求头
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
-Vue.prototype.$axios = (data) => {
-
-};
+Vue.prototype.$axios = axios;
