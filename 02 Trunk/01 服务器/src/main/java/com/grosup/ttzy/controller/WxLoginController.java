@@ -25,12 +25,12 @@ import com.grosup.ttzy.util.TtzyUtil;
 
 @Controller
 @RequestMapping("/wx/login")
-public class LoginController {
+public class WxLoginController {
 
     @Autowired
     private SessionService sessionService;
 
-    private Logger logger = Logger.getLogger(LoginController.class);
+    private Logger logger = Logger.getLogger(WxLoginController.class);
 
     /**
      * 小程序授权登录
