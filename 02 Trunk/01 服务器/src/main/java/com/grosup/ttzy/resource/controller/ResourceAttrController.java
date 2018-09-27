@@ -20,7 +20,6 @@ import com.grosup.ttzy.resource.service.ResourceAttrService;
 import com.grosup.ttzy.util.StringUtil;
 
 import net.sf.json.JSONArray;
-import net.sf.json.JSONArray;
 
 @Controller
 @RequestMapping("/rs/attr")
@@ -49,6 +48,12 @@ public class ResourceAttrController implements MessageMapConstant {
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/attr/add.do
+	 * @param json ："[{"attrKey":"RAt示例表头ID","attrLevel":"0","attrName":"示例表头","attrType":"default","remark":"示例表头备注","typeKey":"RDf示例表ID"}]"
+	 * @return ["state":"successful"}]
+	 * 参见示例请求：localhost:8080/practice/rs/attr/getall.do?typekey=RDf示例表ID
+	 */
 	@RequestMapping(value = "/add.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
@@ -67,24 +72,36 @@ public class ResourceAttrController implements MessageMapConstant {
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/attr/del.do
+	 * @param attkey ：attrKey
+	 * @return ["state":"successful"}]
+	 * 参见示例请求：localhost:8080/practice/rs/attr/getall.do?typekey=RDf示例表ID
+	 */
 	@RequestMapping(value = "/del.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String del(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String resourceKey = request.getParameter("resourcekey");
-		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-			resourceAttrService.del(resourceKey);
+		String attrKey = request.getParameter("attrey");
+		if (!StringUtil.isNullOrEmpty(attrKey)) {
+			resourceAttrService.del(attrKey);
 			messageMap.put(STATE, STATE_SUCCESSFUL);
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-			log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + attrKey + "\"");
+			log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + attrKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/attr/update.do
+	 * @param json ："[{"attrKey":"RAt示例表头ID","attrLevel":"0","attrName":"示例表头","attrType":"default","remark":"示例表头备注","typeKey":"RDf示例表ID"}]"
+	 * @return ["state":"successful"}]
+	 * 参见示例请求：localhost:8080/practice/rs/attr/getall.do?typekey=RDf示例表ID
+	 */
 	@RequestMapping(value = "/update.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
@@ -103,32 +120,44 @@ public class ResourceAttrController implements MessageMapConstant {
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/attr/get.do
+	 * @param attkey ：attrKey
+	 * @return [{"data":"[{\"attrKey\":\"RAt示例表头ID\",\"attrLevel\":\"0\",\"attrName\":\"示例表头\",\"attrType\":\"default\",\"remark\":\"示例表头备注\",\"typeKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 * 参见示例请求：localhost:8080/practice/rs/attr/getall.do?typekey=RDf示例表ID
+	 */
 	@RequestMapping(value = "/get.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String get(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String resourceKey = request.getParameter("resourcekey");
-		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-			ResourceAttrDto resourceAttrDto = resourceAttrService.get(resourceKey);
+		String attrKey = request.getParameter("attkey");
+		if (!StringUtil.isNullOrEmpty(attrKey)) {
+			ResourceAttrDto resourceAttrDto = resourceAttrService.get(attrKey);
 			if (resourceAttrDto != null) {
 				JSONArray resourceAttrJson = JSONArray.fromObject(resourceAttrDto);
 				messageMap.put(DATA, resourceAttrJson.toString());
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "resourceKey:\"" + resourceKey + "\"");
-				log.error("get " + MESSAGE_DTO_ETER + "resourceKey:\"" + resourceKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "resourceKey:\"" + attrKey + "\"");
+				log.error("get " + MESSAGE_DTO_ETER + "resourceKey:\"" + attrKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-			log.error("update " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + attrKey + "\"");
+			log.error("update " + MESSAGE_PARAM_ETER + "resourceKey:\"" + attrKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/attr/getAll.do
+	 * @param typekey ：typeKey
+	 * @return [{"data":"[{\"attrKey\":\"RAt示例表头ID\",\"attrLevel\":\"0\",\"attrName\":\"示例表头\",\"attrType\":\"default\",\"remark\":\"示例表头备注\",\"typeKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 * 参见示例请求：localhost:8080/practice/rs/attr/getall.do?typekey=RDf示例表ID
+	 */
 	@RequestMapping(value = "/getall.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody

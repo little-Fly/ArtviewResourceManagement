@@ -32,8 +32,8 @@ public class ResourceAttrServiceImp  implements ResourceAttrService {
 
 	}
 
-	public void del(String resourceKey) {
-		resourceAttrDao.del(resourceKey);
+	public void del(String attrKey) {
+		resourceAttrDao.del(attrKey);
 
 	}
 
