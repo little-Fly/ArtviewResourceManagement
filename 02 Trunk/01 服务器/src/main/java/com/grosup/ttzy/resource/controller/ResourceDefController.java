@@ -48,6 +48,11 @@ public class ResourceDefController implements MessageMapConstant{
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/def/add.do
+	 * @param json [{"name":"示例表名","remark":"示例表注释","typeKey":"RDf示例表ID"}] 
+	 * @return ["state":"error", "message":"错误消息"}]
+	 */
 	@RequestMapping(value = "/add.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
@@ -66,24 +71,34 @@ public class ResourceDefController implements MessageMapConstant{
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/def/del.do
+	 * @param typekey ：typeKey
+	 * @return ["state":"error", "message":"错误消息"}]
+	 */
 	@RequestMapping(value = "/del.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String del(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String resourceKey = request.getParameter("resourcekey");
-		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-			resourceDefService.del(resourceKey);
+		String typeKey = request.getParameter("typekey");
+		if (!StringUtil.isNullOrEmpty(typeKey)) {
+			resourceDefService.del(typeKey);
 			messageMap.put(STATE, STATE_SUCCESSFUL);
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-			log.error("del "+MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + typeKey + "\"");
+			log.error("del "+MESSAGE_PARAM_ETER + "resourceKey:\"" + typeKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/def/update.do
+	 * @param json [{"name":"示例表名","remark":"示例表注释","typeKey":"RDf示例表ID"}] 
+	 * @return ["state":"error", "message":"错误消息"}]
+	 */
 	@RequestMapping(value = "/update.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
@@ -101,33 +116,42 @@ public class ResourceDefController implements MessageMapConstant{
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
-
+	
+	/**
+	 * /rs/def/get.do
+	 * @param typekey ：typeKey
+	 * @return [{"data":"[{\"name\":\"示例表名\",\"remark\":\"示例表注释\",\"typeKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 */
 	@RequestMapping(value = "/get.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String get(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String resourceKey = request.getParameter("resourcekey");
-		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-			ResourceDefDto resourceDefDto = resourceDefService.get(resourceKey);
+		String typeKey = request.getParameter("typekey");
+		if (!StringUtil.isNullOrEmpty(typeKey)) {
+			ResourceDefDto resourceDefDto = resourceDefService.get(typeKey);
 			if (resourceDefDto != null) {
 				JSONArray resourceDefJson = JSONArray.fromObject(resourceDefDto);
 				messageMap.put(DATA, resourceDefJson.toString());
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "resourceKey:\"" + resourceKey + "\"");
-				log.error("get "+MESSAGE_DTO_ETER + "resourceKey:\"" + resourceKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "resourceKey:\"" + typeKey + "\"");
+				log.error("get "+MESSAGE_DTO_ETER + "resourceKey:\"" + typeKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-			log.error("update "+MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + typeKey + "\"");
+			log.error("update "+MESSAGE_PARAM_ETER + "resourceKey:\"" + typeKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/def/getAll.do
+	 * @return [{"data":"[{\"name\":\"示例表名\",\"remark\":\"示例表注释\",\"typeKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 */
 	@RequestMapping(value = "/getall.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody

@@ -49,6 +49,11 @@ public class ResourceDetailController implements MessageMapConstant {
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/detail/add.do
+	 * @param json [{"attrKey":"RAt示例表头ID","attrLevel":"0","attrName":"示例表头","attrType":"default","attrValue":"值","resourceKey":"RDt示例值ID","typeKey":"RDf示例表ID"}]]
+	 * @return ["state":"successful"}]
+	 */
 	@RequestMapping(value = "/add.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
@@ -67,6 +72,11 @@ public class ResourceDetailController implements MessageMapConstant {
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/detail/del.do
+	 * @param resourcekey resourceKey
+	 * @return ["state":"successful"}]
+	 */
 	@RequestMapping(value = "/del.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
@@ -84,7 +94,12 @@ public class ResourceDetailController implements MessageMapConstant {
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
-
+	
+	/**
+	 * /rs/detail/update.do
+	 * @param json [{"attrKey":"RAt示例表头ID","attrLevel":"0","attrName":"示例表头","attrType":"default","attrValue":"值","resourceKey":"RDt示例值ID","typeKey":"RDf示例表ID"}]]
+	 * @return ["state":"successful"}]
+	 */
 	@RequestMapping(value = "/update.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
@@ -107,6 +122,11 @@ public class ResourceDetailController implements MessageMapConstant {
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/detail/get.do
+	 * @param resourcekey resourceKey
+	 * @return [{"data":"[{\"attrKey\":\"RAt示例表头ID\",\"attrLevel\":\"0\",\"attrName\":\"示例表头\",\"attrType\":\"default\",\"attrValue\":\"值\",\"resourceKey\":\"RDt示例值ID\",\"typeKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 */
 	@RequestMapping(value = "/get.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
@@ -133,6 +153,13 @@ public class ResourceDetailController implements MessageMapConstant {
 		return jsonobj.toString();
 	}
 
+	/**
+	 * /rs/detail/getall.do
+	 * @param typekey typeKey
+	 * @param start start
+	 * @param len len
+	 * @return [{"data":"[{\"attrKey\":\"RAt示例表头ID\",\"attrLevel\":\"0\",\"attrName\":\"示例表头\",\"attrType\":\"default\",\"attrValue\":\"值\",\"resourceKey\":\"RDt示例值ID\",\"typeKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 */
 	@RequestMapping(value = "/getall.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
