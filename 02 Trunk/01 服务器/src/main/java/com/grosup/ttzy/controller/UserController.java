@@ -28,7 +28,7 @@ public class UserController {
     @Autowired
     private UserService userService;
     
-    @RequestMapping(method = RequestMethod.POST, value = "/add")
+    @RequestMapping(method = RequestMethod.POST, value = "/add.do")
     @ResponseBody
     public JSONObject userAdd(@RequestBody UserBean user) {
         JSONObject result = new JSONObject();
@@ -46,13 +46,20 @@ public class UserController {
     @ResponseBody
     public JSONObject queryUnCheckedUser() {
         JSONObject result = new JSONObject();
+        JSONArray data = new JSONArray();
         try {
             List<UserBean> uncheckUsers = userService.queryUnCheckedUser();
             if (ObjectUtil.isNull(uncheckUsers) || uncheckUsers.size() == 0) {
                 result.put("code", CodeUtil.NODATA);
             } else {
+                for (UserBean userBean : uncheckUsers) {
+                    JSONObject user = new JSONObject();
+                    user.put("nickName", userBean.getNickName());
+                    user.put("uid", userBean.getUid());
+                    data.add(user);
+                }
                 result.put("code", CodeUtil.SUCCESS);
-                result.put("data", uncheckUsers);
+                result.put("data", data);
             }
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);
