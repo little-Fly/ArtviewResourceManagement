@@ -3,15 +3,22 @@ package com.grosup.ttzy.beans;
 import java.util.Date;
 import java.util.List;
 
-public class UserBean {
+import com.grosup.ttzy.util.JSONBuilder;
 
-//    public UserBean(String str) {
-//        JSONObject obj = JSONObject.fromObject(str);
-//        this.uid = obj.optLong("uid");
-//        this.openId = obj.optString("openId");
-//        this.nickName = obj.optString("nickName");
-//        this.roleKey = obj.optString("roleKey");
-//    }
+import net.sf.json.JSONObject;
+
+public class UserBean {
+    
+    public UserBean() {
+        
+    }
+
+    public UserBean(String str) {
+        JSONObject obj = JSONObject.fromObject(str);
+        this.uid = obj.optLong("uid");
+        this.openId = obj.optString("openId");
+        this.nickName = obj.optString("nickName");
+    }
     
     private long uid;
     
@@ -25,6 +32,16 @@ public class UserBean {
     
     private int status;
     
+    private long lastValidTime = System.currentTimeMillis();
+    
+    public long getLastValidTime() {
+        return lastValidTime;
+    }
+
+    public void setLastValidTime(long lastValidTime) {
+        this.lastValidTime = lastValidTime;
+    }
+
     private List<RoleBean> roles;
 
     public long getUid() {
@@ -81,6 +98,13 @@ public class UserBean {
 
     public void setRoles(List<RoleBean> roles) {
         this.roles = roles;
+    }
+    public String toString() {
+        return JSONBuilder.build().put("uid", this.uid)
+                .put("openId", this.openId).put("nickName", this.nickName)
+                .put("createTime", this.createTime).put("lastTime", this.lastTime)
+                .put("status", this.status)
+                .put("lastValidTime", this.lastValidTime).put("roles", this.roles).toString();
     }
 
 }
