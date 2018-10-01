@@ -2,6 +2,7 @@ package com.grosup.ttzy.resource.service.Imp;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,9 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 
 	public Collection<ResourceDetailDto> getAll(String typeKey, int start, int len) {
 		return resourceDetailDao.getAll(typeKey, start, len);
+	}
+	
+	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len) {
+		return resourceDetailDao.search(typeKey, searchKeyMap, start, len);
 	}
 }

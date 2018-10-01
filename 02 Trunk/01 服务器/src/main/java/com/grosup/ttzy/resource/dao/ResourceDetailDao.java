@@ -2,7 +2,11 @@ package com.grosup.ttzy.resource.dao;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -21,19 +25,19 @@ public class ResourceDetailDao implements ResourceConstant {
 
 	private static Logger log = Logger.getLogger(ResourceDetailDao.class);
 
-	List<ResourceDetailDto> list = new ArrayList<ResourceDetailDto>();
-	
+	List<ResourceDetailDto> list = Collections.synchronizedList(new ArrayList<ResourceDetailDto>());
+
 	private String resourceKey = RESOURCE_DETAIL + "示例值ID"; // long Y 主键，资源Id
 	private String attrKey = RESOURCE_ATTR + "示例表头ID"; // varchar Y 主键，属性Key
 	private String typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
 	private String attrName = "示例表头"; // varchar Y 属性名
 	private String attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 	private String attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
-	private String attrValue ="值"; // varchar Y 属性值
-	
+	private String attrValue = "1234567890abcdefghijklmnopqrstuvwxyz值"; // varchar Y 属性值
+
 	@PostConstruct
 	public void initMethod() {
-		ResourceDetailDto resourceDetailDto =new ResourceDetailDto();
+		ResourceDetailDto resourceDetailDto = new ResourceDetailDto();
 		resourceDetailDto.setTypeKey(typeKey);
 		resourceDetailDto.setAttrKey(attrKey);
 		resourceDetailDto.setResourceKey(resourceKey);
@@ -43,7 +47,7 @@ public class ResourceDetailDao implements ResourceConstant {
 		resourceDetailDto.setAttrValue(attrValue);
 		list.add(resourceDetailDto);
 	}
-	
+
 	public Collection<ResourceDetailDto> create(String json) {
 		JSONArray jsonArray = JSONArray.fromObject(json);
 		Collection<ResourceDetailDto> collection = (Collection<ResourceDetailDto>) JSONArray.toCollection(jsonArray,
@@ -85,7 +89,7 @@ public class ResourceDetailDao implements ResourceConstant {
 	public List<ResourceDetailDto> get(String resourceKey) {
 		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-			
+
 			for (ResourceDetailDto resourceDetailDto : list) {
 				if (resourceKey.equals(resourceDetailDto.getResourceKey())) {
 					resourceDetaillist.add(resourceDetailDto);
@@ -115,6 +119,62 @@ public class ResourceDetailDao implements ResourceConstant {
 			}
 		}
 		return resourceDetaillist;
+	}
+
+	public Collection<ResourceDetailDto> getAll(String typeKey) {
+
+		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+		for (ResourceDetailDto resourceDetailDto : list) {
+			if (typeKey.equals(resourceDetailDto.getTypeKey())) {
+				resourceDetaillist.add(resourceDetailDto);
+			}
+		}
+		return resourceDetaillist;
+	}
+
+	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len) {
+		
+		if (searchKeyMap == null || searchKeyMap.size() == 0) {
+			return getAll(typeKey, start, len);
+		} else {
+			Collection<ResourceDetailDto> alllist = getAll(typeKey);
+			Set<String> delResourceKeySet = new HashSet<String>();
+			String attrName;
+			String attrValue;
+			String searchAttrValue;
+			for (ResourceDetailDto resourceDetailDto : alllist) {
+
+				attrName = resourceDetailDto.getAttrName();
+				attrValue = resourceDetailDto.getAttrValue();
+				if (attrName != null) {
+					searchAttrValue = searchKeyMap.get(attrName);
+					if (searchAttrValue == null) {
+						continue;
+					}
+
+					if (attrValue == null || attrValue.indexOf(searchAttrValue) < 0) {
+						delResourceKeySet.add(resourceDetailDto.getResourceKey());
+					}
+				}
+			}
+
+			List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+			int time = 0;
+			for (ResourceDetailDto resourceDetailDto : alllist) {
+				if (!delResourceKeySet.contains(resourceDetailDto.getResourceKey())) {
+					if (time < start) {
+						time++;
+						continue;
+					} else {
+						resourceDetaillist.add(resourceDetailDto);
+					}
+					if (time >= start + len) {
+						break;
+					}
+				}
+			}
+			return resourceDetaillist;
+		}
 	}
 
 }
