@@ -2,7 +2,8 @@ import Vue from "vue";
 import axios from "axios";
 
 
-const HOST = "ws://39.104.81.103:8561";
+const HOST = "http://www.hwyst.net/ttzy";
+const LOCAL = "url/" + "ttzy";
 
 axios.defaults.baseURL = HOST;  // 设置请求地址，后面的接口都将基于这个基本请求地址
 
