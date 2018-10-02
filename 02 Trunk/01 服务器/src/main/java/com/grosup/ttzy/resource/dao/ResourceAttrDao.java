@@ -2,6 +2,7 @@ package com.grosup.ttzy.resource.dao;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,7 @@ public class ResourceAttrDao implements ResourceConstant {
 
 	private static Logger log = Logger.getLogger(ResourceAttrDao.class);
 
-	Map<String, ResourceAttrDto> map = new HashMap<String, ResourceAttrDto>();
+	Map<String, ResourceAttrDto> map = Collections.synchronizedMap(new HashMap<String, ResourceAttrDto>());
 	
 	private String attrKey = RESOURCE_ATTR + "示例表头ID"; // varchar Y 主键，属性Key
 	private String typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
@@ -46,8 +47,8 @@ public class ResourceAttrDao implements ResourceConstant {
 	
 	public ResourceAttrDto create(String json) {
 		JSONObject jsonObject = JSONObject.fromObject(json);
-		ResourceAttrDto ResourceAttrDto = (ResourceAttrDto) JSONObject.toBean(jsonObject, ResourceAttrDto.class);
-		return ResourceAttrDto;
+		ResourceAttrDto resourceAttrDto = (ResourceAttrDto) JSONObject.toBean(jsonObject, ResourceAttrDto.class);
+		return resourceAttrDto;
 	}
 
 	public void add(ResourceAttrDto resourceAttrDto) {

@@ -1,6 +1,7 @@
 package com.grosup.ttzy.resource.dao;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class ResourceDefDao implements ResourceConstant {
 
 	private static Logger log = Logger.getLogger(ResourceDefDao.class);
 
-	Map<String, ResourceDefDto> map = new HashMap<String, ResourceDefDto>();
+	Map<String, ResourceDefDto> map = Collections.synchronizedMap(new HashMap<String, ResourceDefDto>());
 
 	private String typeKey = RESOURCE_DEF + "示例表ID";	//varchar	Y	主键，资源类型Key
 	private String name = "示例表名";	//varchar	Y	资源类型名称
@@ -38,8 +39,8 @@ public class ResourceDefDao implements ResourceConstant {
 
 	public ResourceDefDto create(String json) {
 		JSONObject jsonObject = JSONObject.fromObject(json);
-		ResourceDefDto ResourceDefDto = (ResourceDefDto) JSONObject.toBean(jsonObject, ResourceDefDto.class);
-		return ResourceDefDto;
+		ResourceDefDto resourceDefDto = (ResourceDefDto) JSONObject.toBean(jsonObject, ResourceDefDto.class);
+		return resourceDefDto;
 	}
 
 	public void add(ResourceDefDto resourceDefDto) {
