@@ -37,6 +37,7 @@ public class UserController {
             result.put("code", CodeUtil.SUCCESS);
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);
+            result.put("message", "系统错误");
             logger.error("人员注册异常", e);
         }
         return result;
@@ -70,7 +71,7 @@ public class UserController {
     
     @RequestMapping(method = RequestMethod.GET, value = "/changeUserStatus")
     @ResponseBody
-    public JSONObject queryUnCheckedUser(@RequestParam long uid, @RequestParam String nickName, @RequestParam int status, @RequestParam String refuse) {
+    public JSONObject changeUserStatus(@RequestParam long uid, @RequestParam String nickName, @RequestParam int status, @RequestParam String refuse) {
         JSONObject result = new JSONObject();
         try {
             userService.changeUserStatus(uid, nickName, status, refuse);
