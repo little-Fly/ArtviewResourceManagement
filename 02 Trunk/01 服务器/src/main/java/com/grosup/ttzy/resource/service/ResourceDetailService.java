@@ -2,6 +2,7 @@ package com.grosup.ttzy.resource.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import com.grosup.ttzy.resource.dto.ResourceDetailDto;
 
@@ -17,5 +18,7 @@ public interface ResourceDetailService{
 	public List<ResourceDetailDto> get(String resourceKey);
 
 	public Collection<ResourceDetailDto> getAll(String typeKey, int start, int len);
+	
+	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len);
 
 }
