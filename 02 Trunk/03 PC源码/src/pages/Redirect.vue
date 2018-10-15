@@ -15,7 +15,12 @@
         },
         mounted() {
             let code = this.getParams();
-            this.$axios.get(`/login/pcLogin.do?code=${code}&noCheck=1`)
+            let params = {
+                code: code,
+                noCheck: 1
+            };
+            this.$ajax.autoService
+                .login(params)
                 .then((response) => {
                     if (response.status === 200) {
                         let data = response.data;
@@ -25,10 +30,23 @@
                             this.$router.push("/login");
                         }
                     }
-                })
-                .catch((error) => {
-                    this.$message(error);
+                }, (error) => {
+                    this.$message.error(error);
                 });
+            // this.$axios.get(`/login/pcLogin.do?code=${code}&noCheck=1`)
+            //     .then((response) => {
+            //         if (response.status === 200) {
+            //             let data = response.data;
+            //             if (data.msg === "success") {
+            //                 this.$router.push("/main");
+            //             } else {
+            //                 this.$router.push("/login");
+            //             }
+            //         }
+            //     })
+            //     .catch((error) => {
+            //         this.$message(error);
+            //     });
         }
     };
 </script>

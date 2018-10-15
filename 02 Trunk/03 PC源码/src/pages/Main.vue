@@ -33,33 +33,9 @@
 				<el-aside width="300px">
 					<div class="type-list">
 						<ul>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
+							<li class="type-list-item tc" @click="getResTable(item)" v-for="(item,key) in attrTypeList">
+								{{item.name}}
+							</li>
 						</ul>
 					</div>
 					<div class="bottom-btn tc" @click="goAssets">
@@ -77,31 +53,19 @@
 						</ul>
 					</div>
 					<div class="main-body">
-						<el-table
-								:data="assetsData"
-								height="100%"
-								stripe
-								border
-								@selection-change="handleSelectionChange"
-								style="width: 100%">
+						<el-table :data="tableData"
+						          height="100%"
+						          stripe
+						          border
+						          @selection-change="handleSelectionChange"
+						          style="width: 100%">
 							<el-table-column
 									type="selection"
 									width="55">
 							</el-table-column>
-							<el-table-column
-									prop="date"
-									label="日期"
-									width="180">
-							</el-table-column>
-							<el-table-column
-									prop="name"
-									label="姓名"
-									width="180">
-							</el-table-column>
-							<el-table-column
-									prop="address"
-									label="地址">
-							</el-table-column>
+							<template v-for="(col ,index) in attrData">
+								<el-table-column :prop="col.attrKey" :label="col.attrName"></el-table-column>
+							</template>
 						</el-table>
 					</div>
 					<div class="main-foot tc">
@@ -140,38 +104,12 @@
         name: "main-content",
         data() {
             return {
+                attrTypeList: [],
                 searchType: "",
                 searchOptions: [
                     {label: "资源类型", value: 1}
                 ],
                 searchInput: "",
-                assetsData: [
-                    {
-                        date: "2016-05-03",
-                        name: "王小虎",
-                        address: "上海市普陀区金沙江路 1518 弄"
-                    },
-                    {
-                        date: "2016-05-02",
-                        name: "王小虎",
-                        address: "上海市普陀区金沙江路 1518 弄"
-                    },
-                    {
-                        date: "2016-05-04",
-                        name: "王小虎",
-                        address: "上海市普陀区金沙江路 1518 弄"
-                    },
-                    {
-                        date: "2016-05-06",
-                        name: "王小虎",
-                        address: "上海市普陀区金沙江路 1518 弄"
-                    },
-                    {
-                        date: "2016-05-07",
-                        name: "王小虎",
-                        address: "上海市普陀区金沙江路 1518 弄"
-                    }
-                ],
                 dialogFormVisible: false,
                 formLabelWidth: "100px",
                 form: {
@@ -179,10 +117,63 @@
                     name: "",
                     region: "",
                 },
-                multipleSelection: []
+                multipleSelection: [],
+                attrData: [], // 表头数据
+                tableData: []
             };
         },
         methods: {
+            /**
+             * 点击资源类别 获取资源
+             */
+            getResTable(item) {
+                let params = {
+                    typekey: item.typeKey,
+                };
+                this.$ajax.attr
+                    .getAttrAll(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            console.log(JSON.parse(data[0].data));
+                            this.attrData = [
+                                {attrName: "节点编号", attrKey: "node"},
+                                {attrName: "名称", attrKey: "name"},
+                                {attrName: "类型", attrKey: "type"},
+                                {attrName: "坐标", attrKey: "coordinate"}
+                            ];
+                            this.attrData = JSON.parse(data[0].data);
+                            this.$ajax.detail
+                                .getDetailAll(params)
+                                .then((response) => {
+                                    if (response.status === 200) {
+                                        let detail = response.data;
+                                        // console.log(detail);
+                                        this.tableData = [
+                                            {
+                                                node: "0051",
+                                                name: " 机库顶",
+                                                type: "UWB",
+                                                status: "正常",
+                                                coordinate: "12.21,34.45,34.6"
+                                            },
+                                            {
+                                                node: "0061",
+                                                name: "机库门",
+                                                type: "GPS",
+                                                status: "低电",
+                                                coordinate: "45.41,67.45,78.6"
+                                            }
+                                        ];
+                                    }
+                                }, (error) => {
+                                    this.$message.error(error.message);
+                                });
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
             /**
              * 新增资源
              */
@@ -267,6 +258,24 @@
             exit() {
                 this.$router.push("/login");
             }
+        },
+        mounted() {
+            let params = {
+                typekey: "RDf示例表ID",
+            };
+            this.$ajax.def
+                .getDefAll(params)
+                .then((response) => {
+                    if (response.status === 200) {
+                        let data = response.data;
+                        this.attrTypeList = JSON.parse(data[0].data);
+                        if (this.attrTypeList.length > 0) {
+                            this.getResTable(this.attrTypeList[0]);
+                        }
+                    }
+                }, (error) => {
+                    this.$message.error(error.message);
+                });
         }
     };
 </script>

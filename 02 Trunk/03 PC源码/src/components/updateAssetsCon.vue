@@ -2,70 +2,13 @@
 	<div class="update-assets-con">
 		<div class="father-box">
 			<div class="content">
-				<el-card class="box-card">
-					<h3 class="title">演员资源</h3>
+				<el-card class="box-card" v-for="(item,key) in attrTypeList" :key="key">
+					<h3 class="title">{{item.name}}</h3>
 					<div class="tags">
 						<el-tag>标签一</el-tag>
 						<el-tag type="info">标签二</el-tag>
-						<el-tag type="info">标签三</el-tag>
-						<el-tag type="info">标签四</el-tag>
-						<el-tag type="info">标签五</el-tag>
-						<el-tag type="info">标签五</el-tag>
-						<el-tag type="info">标签五二</el-tag>
 					</div>
 					<el-button type="primary" class="btn" @click="update">修改</el-button>
-				</el-card>
-				<el-card class="box-card">
-					<h3 class="title">演员资源</h3>
-					<div class="tags">
-						<el-tag>标签一</el-tag>
-						<el-tag type="info">标签二</el-tag>
-						<el-tag type="info">标签三</el-tag>
-						<el-tag type="info">标签四</el-tag>
-						<el-tag type="info">标签五</el-tag>
-						<el-tag type="info">标签五</el-tag>
-						<el-tag type="info">标签五二</el-tag>
-					</div>
-					<el-button type="primary" class="btn" @click="update">修改</el-button>
-				</el-card>
-				<el-card class="box-card">
-					<h3 class="title">演员资源</h3>
-					<div class="tags">
-						<el-tag>标签一</el-tag>
-						<el-tag type="info">标签二</el-tag>
-						<el-tag type="info">标签三</el-tag>
-						<el-tag type="info">标签四</el-tag>
-						<el-tag type="info">标签五</el-tag>
-						<el-tag type="info">标签五</el-tag>
-						<el-tag type="info">标签五二</el-tag>
-					</div>
-					<el-button type="primary" class="btn" @click="update">修改</el-button>
-				</el-card>
-				<el-card class="box-card">
-					<h3 class="title">演员资源</h3>
-					<div class="tags">
-						<el-tag>标签一</el-tag>
-						<el-tag type="info">标签二</el-tag>
-						<el-tag type="info">标签三</el-tag>
-						<el-tag type="info">标签四</el-tag>
-						<el-tag type="info">标签五</el-tag>
-						<el-tag type="info">标签五</el-tag>
-						<el-tag type="info">标签五二</el-tag>
-					</div>
-					<el-button type="primary" class="btn" @click="update">修改</el-button>
-				</el-card>
-				<el-card class="box-card">
-					<h3 class="title">演员资源</h3>
-					<div class="tags">
-						<el-tag>标签一</el-tag>
-						<el-tag type="info">标签二</el-tag>
-						<el-tag type="info">标签三</el-tag>
-						<el-tag type="info">标签四</el-tag>
-						<el-tag type="info">标签五</el-tag>
-						<el-tag type="info">标签五</el-tag>
-						<el-tag type="info">标签五二</el-tag>
-					</div>
-					<el-button type="primary" class="btn">修改</el-button>
 				</el-card>
 			</div>
 			<div class="assets-footer tc">
@@ -107,6 +50,7 @@
             return {
                 dialogFormVisible: false,
                 formLabelWidth: "100px",
+                attrTypeList: [],
                 form: {
                     name: ""
                 },
@@ -133,7 +77,37 @@
                 }).catch(() => {
 
                 });
+            },
+            getResAttr(item) {
+                let params = {
+                    typekey: item.typeKey,
+                };
+                this.$ajax.attr
+                    .getAttrAll(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            console.log(JSON.parse(data[0].data));
+                        }
+                    });
             }
+        },
+        mounted() {
+            let params = {
+                typekey: "RDf示例表ID",
+            };
+            this.$ajax.def
+                .getDefAll(params)
+                .then((response) => {
+                    if (response.status === 200) {
+                        let data = response.data;
+                        this.attrTypeList = JSON.parse(data[0].data);
+                        console.log(this.attrTypeList);
+                        // this.getResAttr()
+                    }
+                }, (error) => {
+                    this.$message.error(error.message);
+                });
         }
     };
 </script>
