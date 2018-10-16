@@ -2,10 +2,9 @@ import Vue from "vue";
 import axios from "axios";
 import qs from "qs";
 
-
 const PRODUCT = "http://www.hwyst.net/ttzy/";
 const LOCAL = "url/" + "ttzy/";
-const HOST = LOCAL;
+const HOST = PRODUCT;
 
 // 设置请求头
 axios.defaults.headers.post["Content-Type"] = "application/json";

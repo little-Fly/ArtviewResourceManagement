@@ -5,10 +5,9 @@
 				<el-card class="box-card" v-for="(item,key) in attrTypeList" :key="key">
 					<h3 class="title">{{item.name}}</h3>
 					<div class="tags">
-						<el-tag>标签一</el-tag>
-						<el-tag type="info">标签二</el-tag>
+						<el-tag type="info" v-for="(attr,i) in item.attr" :key="i">{{attr.attrName}}</el-tag>
 					</div>
-					<el-button type="primary" class="btn" @click="update">修改</el-button>
+					<el-button type="primary" class="btn" @click="update(item)">修改</el-button>
 				</el-card>
 			</div>
 			<div class="assets-footer tc">
@@ -26,14 +25,12 @@
 				<el-form-item label="资源类别名称" :label-width="formLabelWidth">
 					<el-input v-model="form.name" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="属性名称" :label-width="formLabelWidth">
-					<el-input v-model="form.name" auto-complete="off"></el-input>
+				<el-form-item label="属性名称" :label-width="formLabelWidth"
+				              v-for="(item,key) in attrList" :key="key">
+					<el-input v-model="item.name" auto-complete="off"></el-input>
 				</el-form-item>
-				<el-form-item label="属性名称" :label-width="formLabelWidth">
-					<el-input v-model="form.name" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="属性名称" :label-width="formLabelWidth">
-					<el-input v-model="form.name" auto-complete="off"></el-input>
+				<el-form-item>
+					<el-button type="primary" @click="addAttr">增加属性</el-button>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -55,12 +52,32 @@
                     name: ""
                 },
                 type1: "",
-                type2: ""
+                type2: "",
+                attrList: []
             };
         },
         methods: {
-            update() {
-                this.dialogFormVisible = true;
+            /**
+             * 修改 按钮弹窗
+             * @param item
+             */
+            update(item) {
+                let params = {
+                    typekey: item.typeKey,
+                };
+                this.$ajax.attr
+                    .getAttrAll(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            this.attrList = JSON.parse(data[0].data)
+                            this.dialogFormVisible = true;
+                        }
+                    });
+            },
+            addAttr() {
+                this.attrList.push({name: ""});
+                console.log(this.attrList);
             },
             confirmUpdate() {
                 this.$confirm("是否确定保存?", "提示", {
@@ -78,16 +95,16 @@
 
                 });
             },
-            getResAttr(item) {
+            getResAttr(i) {
                 let params = {
-                    typekey: item.typeKey,
+                    typekey: this.attrTypeList[i].typeKey,
                 };
                 this.$ajax.attr
                     .getAttrAll(params)
                     .then((response) => {
                         if (response.status === 200) {
                             let data = response.data;
-                            console.log(JSON.parse(data[0].data));
+                            this.$set(this.attrTypeList[i], "attr", JSON.parse(data[0].data));
                         }
                     });
             }
@@ -102,8 +119,7 @@
                     if (response.status === 200) {
                         let data = response.data;
                         this.attrTypeList = JSON.parse(data[0].data);
-                        console.log(this.attrTypeList);
-                        // this.getResAttr()
+                        this.getResAttr(0);
                     }
                 }, (error) => {
                     this.$message.error(error.message);

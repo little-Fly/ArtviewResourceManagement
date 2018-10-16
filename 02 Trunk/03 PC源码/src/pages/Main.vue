@@ -135,36 +135,20 @@
                     .then((response) => {
                         if (response.status === 200) {
                             let data = response.data;
-                            console.log(JSON.parse(data[0].data));
-                            this.attrData = [
-                                {attrName: "节点编号", attrKey: "node"},
-                                {attrName: "名称", attrKey: "name"},
-                                {attrName: "类型", attrKey: "type"},
-                                {attrName: "坐标", attrKey: "coordinate"}
-                            ];
+                            // this.attrData = [
+                            //     {attrName: "节点编号", attrKey: "node"},
+                            //     {attrName: "名称", attrKey: "name"},
+                            //     {attrName: "类型", attrKey: "type"},
+                            //     {attrName: "坐标", attrKey: "coordinate"}
+                            // ];
                             this.attrData = JSON.parse(data[0].data);
                             this.$ajax.detail
                                 .getDetailAll(params)
                                 .then((response) => {
                                     if (response.status === 200) {
                                         let detail = response.data;
-                                        // console.log(detail);
-                                        this.tableData = [
-                                            {
-                                                node: "0051",
-                                                name: " 机库顶",
-                                                type: "UWB",
-                                                status: "正常",
-                                                coordinate: "12.21,34.45,34.6"
-                                            },
-                                            {
-                                                node: "0061",
-                                                name: "机库门",
-                                                type: "GPS",
-                                                status: "低电",
-                                                coordinate: "45.41,67.45,78.6"
-                                            }
-                                        ];
+                                        console.log(JSON.parse(detail[0].data));
+                                        this.tableData = JSON.parse(detail[0].data);
                                     }
                                 }, (error) => {
                                     this.$message.error(error.message);
