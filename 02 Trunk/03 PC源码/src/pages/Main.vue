@@ -135,12 +135,6 @@
                     .then((response) => {
                         if (response.status === 200) {
                             let data = response.data;
-                            // this.attrData = [
-                            //     {attrName: "节点编号", attrKey: "node"},
-                            //     {attrName: "名称", attrKey: "name"},
-                            //     {attrName: "类型", attrKey: "type"},
-                            //     {attrName: "坐标", attrKey: "coordinate"}
-                            // ];
                             this.attrData = JSON.parse(data[0].data);
                             this.$ajax.detail
                                 .getDetailAll(params)

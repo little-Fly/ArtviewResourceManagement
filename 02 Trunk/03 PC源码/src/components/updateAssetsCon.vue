@@ -27,10 +27,11 @@
 				</el-form-item>
 				<el-form-item label="属性名称" :label-width="formLabelWidth"
 				              v-for="(item,key) in attrList" :key="key">
-					<el-input v-model="item.name" auto-complete="off"></el-input>
+					<el-input v-model="item.attrName" auto-complete="off"></el-input>
+					<el-button type="primary" @click.prevent="delThisLine(item,key)">删除</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="addAttr">增加属性</el-button>
+					<el-button type="primary" @click.prevent="addAttr" v-if="!hasAdded">增加属性</el-button>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
@@ -53,7 +54,9 @@
                 },
                 type1: "",
                 type2: "",
-                attrList: []
+                attrList: [],
+                updateTypeKey: "",
+                hasAdded: false,
             };
         },
         methods: {
@@ -62,37 +65,114 @@
              * @param item
              */
             update(item) {
+                this.hasAdded = false;
                 let params = {
                     typekey: item.typeKey,
                 };
+                this.updateTypeKey = item.typeKey;
+                this.form.name = item.name;
                 this.$ajax.attr
                     .getAttrAll(params)
                     .then((response) => {
                         if (response.status === 200) {
                             let data = response.data;
-                            this.attrList = JSON.parse(data[0].data)
+                            this.attrList = JSON.parse(data[0].data);
                             this.dialogFormVisible = true;
                         }
                     });
             },
             addAttr() {
-                this.attrList.push({name: ""});
-                console.log(this.attrList);
+                this.attrList.push({attrName: ""});
+                this.hasAdded = true;
             },
+            delThisLine(item, key) {
+                this.$confirm("是否确定删除该属性?", "提示", {
+                    confirmButtonText: "提交审核",
+                    cancelButtonText: "我再想想",
+                    type: "warning",
+                    center: true
+                }).then(() => {
+                    let params = {
+                        attkey: item.attrkey,
+                    };
+                    this.$ajax.attr
+                        .delAttr(params)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                let data = response.data;
+                                console.log(data);
+                                this.attrList.splice(key, 1);
+                                this.dialogFormVisible = true;
+                            }
+                        });
+                }).catch((err) => {
+                    console.log(err);
+                });
+            },
+            /**
+             * 确认修改按钮
+             */
             confirmUpdate() {
+                if (this.form.name === "") {
+                    this.$message({
+                        type: "warning",
+                        message: "资源名称不能为空!"
+                    });
+                    return;
+                }
                 this.$confirm("是否确定保存?", "提示", {
                     confirmButtonText: "提交审核",
                     cancelButtonText: "我再想想",
                     type: "warning",
                     center: true
                 }).then(() => {
-                    this.$message({
-                        type: "success",
-                        message: "提交成功!"
-                    });
-                    this.dialogFormVisible = false;
-                }).catch(() => {
-
+                    let params = {
+                        typekey: this.updateTypeKey,
+                    };
+                    this.$ajax.def
+                        .updateDef(params)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                let data = response.data;
+                                this.$message({
+                                    type: "info",
+                                    message: data[0].message
+                                });
+                                this.dialogFormVisible = false;
+                            }
+                        });
+                    // 增加属性
+                    let newAttr = this.attrList[this.attrList.length - 1].attrName;
+                    if (this.hasAdded && newAttr !== "") {
+                        let json = {
+                            attrKey: encodeURI("c测试attrKey"),
+                            attrLevel: encodeURI("0"),
+                            attrName: encodeURI(newAttr),
+                            attrType: encodeURI("default"),
+                            remark: encodeURI(""),
+                            // typeKey: encodeURI(this.updateTypeKey)
+                            typeKey: this.updateTypeKey
+                        };
+                        console.log(json);
+                        let params = {
+                            json: JSON.stringify(json)
+                        };
+                        this.$ajax.attr
+                            .addAttr(params)
+                            .then((response) => {
+                                if (response.status === 200) {
+                                    let data = response.data;
+                                    console.log(data);
+                                    this.$message({
+                                        type: "info",
+                                        message: "添加成功"
+                                    });
+                                    this.refreshIndex();
+                                }
+                            });
+                    }
+                }).catch((err) => {
+                    console.log(err);
                 });
             },
             getResAttr(i) {
@@ -107,23 +187,26 @@
                             this.$set(this.attrTypeList[i], "attr", JSON.parse(data[0].data));
                         }
                     });
+            },
+            refreshIndex() {
+                let params = {
+                    typekey: "RDf示例表ID",
+                };
+                this.$ajax.def
+                    .getDefAll(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            this.attrTypeList = JSON.parse(data[0].data);
+                            this.getResAttr(0);
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
             }
         },
         mounted() {
-            let params = {
-                typekey: "RDf示例表ID",
-            };
-            this.$ajax.def
-                .getDefAll(params)
-                .then((response) => {
-                    if (response.status === 200) {
-                        let data = response.data;
-                        this.attrTypeList = JSON.parse(data[0].data);
-                        this.getResAttr(0);
-                    }
-                }, (error) => {
-                    this.$message.error(error.message);
-                });
+            this.refreshIndex();
         }
     };
 </script>
@@ -171,6 +254,11 @@
 				.el-pagination {
 					margin-top: 15px;
 				}
+			}
+		}
+		.el-dialog {
+			.el-input {
+				width: 70%;
 			}
 		}
 	}
