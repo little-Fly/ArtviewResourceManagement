@@ -60,7 +60,7 @@
                     typeKey: this.form.typeKey
                 };
                 let json = {
-                    json: JSON.stringify(params)
+                    json: decodeURI(encodeURI(JSON.stringify(params)))
                 };
                 this.$ajax.def
                     .addDef(json)
@@ -74,7 +74,23 @@
                                 this.form.name = "";
                                 this.form.remark = "";
                                 this.form.typeKey = "";
+                                this.getLeft();
                             }
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
+            getLeft() {
+                let params = {
+                    typekey: "RDf示例表ID",
+                };
+                this.$ajax.def
+                    .getDefAll(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            this.attrTypeList = JSON.parse(data[0].data);
                         }
                     }, (error) => {
                         this.$message.error(error.message);
@@ -82,19 +98,7 @@
             }
         },
         mounted() {
-            let params = {
-                typekey: "RDf示例表ID",
-            };
-            this.$ajax.def
-                .getDefAll(params)
-                .then((response) => {
-                    if (response.status === 200) {
-                        let data = response.data;
-                        this.attrTypeList = JSON.parse(data[0].data);
-                    }
-                }, (error) => {
-                    this.$message.error(error.message);
-                });
+            this.getLeft();
         }
     };
 </script>

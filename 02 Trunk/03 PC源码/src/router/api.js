@@ -82,9 +82,9 @@ Vue.prototype.$ajax = {
         },
         updateAttr(params) {
             return axios({
-                method: "POST",
+                method: "GET",
                 url: API.UPDATE_ATTR,
-                data: params
+                params: params
             });
         },
         getAttr(params) {
@@ -105,9 +105,9 @@ Vue.prototype.$ajax = {
     def: {
         addDef(params) {
             return axios({
-                method: "POST",
+                method: "GET",
                 url: API.ADD_DEF,
-                data: params
+                params: params
             });
         },
         delDef(params) {
@@ -119,9 +119,9 @@ Vue.prototype.$ajax = {
         },
         updateDef(params) {
             return axios({
-                method: "POST",
+                method: "GET",
                 url: API.UPDATE_DEF,
-                data: params
+                params: params
             });
         },
         getDef(params) {

@@ -33,7 +33,8 @@
 				<el-aside width="300px">
 					<div class="type-list">
 						<ul>
-							<li class="type-list-item tc" @click="getResTable(item)" v-for="(item,key) in attrTypeList">
+							<li class="type-list-item tc" :class="{'isActive':isActive === key}"
+							    @click="getResTable(item,key)" v-for="(item,key) in attrTypeList">
 								{{item.name}}
 							</li>
 						</ul>
@@ -119,14 +120,18 @@
                 },
                 multipleSelection: [],
                 attrData: [], // 表头数据
-                tableData: []
+                tableData: [],
+                isActive: 0,
+                currentTypeKey: ""
             };
         },
         methods: {
             /**
              * 点击资源类别 获取资源
              */
-            getResTable(item) {
+            getResTable(item, i) {
+                this.currentTypeKey = item.typeKey;
+                this.isActive = i;
                 let params = {
                     typekey: item.typeKey,
                 };
@@ -136,17 +141,26 @@
                         if (response.status === 200) {
                             let data = response.data;
                             this.attrData = JSON.parse(data[0].data);
-                            this.$ajax.detail
-                                .getDetailAll(params)
-                                .then((response) => {
-                                    if (response.status === 200) {
-                                        let detail = response.data;
-                                        console.log(JSON.parse(detail[0].data));
-                                        this.tableData = JSON.parse(detail[0].data);
-                                    }
-                                }, (error) => {
-                                    this.$message.error(error.message);
-                                });
+                            console.log(this.attrData);
+                            this.getResTableDetail(0,10);
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
+            getResTableDetail(start,len) {
+                let json = {
+                    typekey: this.currentTypeKey,
+                    start: start,
+                    len: len,
+                };
+                this.$ajax.detail
+                    .getDetailAll(json)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let detail = response.data;
+                            this.tableData = JSON.parse(detail[0].data);
+                            console.log(this.tableData);
                         }
                     }, (error) => {
                         this.$message.error(error.message);
@@ -248,7 +262,7 @@
                         let data = response.data;
                         this.attrTypeList = JSON.parse(data[0].data);
                         if (this.attrTypeList.length > 0) {
-                            this.getResTable(this.attrTypeList[0]);
+                            this.getResTable(this.attrTypeList[0], 0);
                         }
                     }
                 }, (error) => {
@@ -365,6 +379,9 @@
 					background: #2D3A42;
 					color: #DC3D0F;
 					border-color: #DC3D0F;
+				}
+				&.isActive {
+					color: #DC3D0F;
 				}
 			}
 		}
