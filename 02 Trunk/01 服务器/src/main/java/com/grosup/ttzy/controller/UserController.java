@@ -93,8 +93,7 @@ public class UserController {
             if (ObjectUtil.isNull(users) || users.size() == 0) {
                 result.put("code", CodeUtil.NODATA);
                 return result;
-            } 
-            else {
+            } else {
                 for (UserBean user : users) {
                     JSONObject userInfo = new JSONObject();
                     userInfo.put("uid", user.getUid());

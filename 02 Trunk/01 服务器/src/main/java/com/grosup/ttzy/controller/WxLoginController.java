@@ -54,9 +54,9 @@ public class WxLoginController {
         }
 
         // 微信小程序id
-        String wxspAppid = "wxf1bac238f0e6a7f0";
+        String wxspAppid = "wxb41c2d9e3682c984";
         // 微信 app secret (小程序秘钥)
-        String wxspSecret = "9bec3c2bcb203fcae846d6431401a004";
+        String wxspSecret = "89742aa2e8e08bfa83fa6f8789621c02";
         // 用户授权
         String grant_type = "authorization_code";
 
