@@ -25,10 +25,10 @@ public class ResourceShareDao implements ResourceConstant {
 	Map<String, ResourceShareDto> map = Collections.synchronizedMap(new HashMap<String, ResourceShareDto>());
 
 	private String shareKey = RESOURCE_SHARE + "templatekey"; // 分享ID，用于访问和获取
-	private String resourceListJson = "[{\"typeKey\":\"" + RESOURCE_DEF + "示例表ID" + "\", \"resourceKey\":\""
-			+ RESOURCE_DETAIL + "示例值ID" + "\"}]"; // 分享的资源列表Json格式
+	private String resourceListJson = 
+			"[{\"resourceKey\":\""+ RESOURCE_DETAIL + "示例值ID" + "\"}]"; // 分享的资源列表Json格式
 	private String sendUser = "示例分享人"; // 分享人
-	private String templateName = "default"; // 模板名称
+	private String templateName = "template0"; // 模板名称
 
 	@PostConstruct
 	public void initMethod() {

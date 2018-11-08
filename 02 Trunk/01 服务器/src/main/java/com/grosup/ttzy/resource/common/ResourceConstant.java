@@ -6,5 +6,6 @@ public interface ResourceConstant {
 	String RESOURCE_DEF = "RDf"; //ResourceDef
 	String RESOURCE_ATTR = "RAt"; //ResourceAttr
 	String RESOURCE_SHARE = "RSr"; //ResourceAttr
+	String RESOURCE_FILE = "RFl"; //ResourceAttr
 
 }

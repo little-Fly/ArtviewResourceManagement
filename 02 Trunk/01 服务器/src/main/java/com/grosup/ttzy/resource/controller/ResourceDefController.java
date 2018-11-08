@@ -1,5 +1,6 @@
 package com.grosup.ttzy.resource.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,16 @@ public class ResourceDefController implements MessageMapConstant{
 	@ResponseBody
 	public String create(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String json = request.getParameter("json");
+		log.error("request.getCharacterEncoding(): "+request.getCharacterEncoding());
+		log.error("request.getParameter(\"json\"): "+request.getParameter("json"));
+//		String json = request.getParameter("json");
+		String json= "";
+		try {
+			json = new String(request.getParameter("json").getBytes("iso-8859-1"), "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		log.error("new String(request.getParameter(\"json\").getBytes(\"iso-8859-1\"), \"utf-8\"): "+json);
 		if (!StringUtil.isNullOrEmpty(json)) {
 			resourceDefService.create(json);
 			messageMap.put(STATE, STATE_SUCCESSFUL);
