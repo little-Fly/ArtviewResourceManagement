@@ -2,7 +2,7 @@ import Vue from "vue";
 import axios from "axios";
 import qs from "qs";
 
-const PRODUCT = "http://www.hwyst.net/ttzy/";
+const PRODUCT = "https://www.hwyst.net/ttzy/";
 const LOCAL = "url/" + "ttzy/";
 const HOST = LOCAL;
 

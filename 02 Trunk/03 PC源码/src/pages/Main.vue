@@ -75,7 +75,7 @@
 								prev-text="<上一页"
 								next-text="下一页>"
 								layout="prev, pager, next,total,jumper"
-								:total="100">
+								:total="1">
 						</el-pagination>
 					</div>
 					<el-dialog :title="form.title" width="30%" :visible.sync="dialogFormVisible">
@@ -141,14 +141,22 @@
                         if (response.status === 200) {
                             let data = response.data;
                             this.attrData = JSON.parse(data[0].data);
-                            console.log(this.attrData);
-                            this.getResTableDetail(0,10);
+                            this.getResTableDetail(0, 10);
                         }
                     }, (error) => {
                         this.$message.error(error.message);
                     });
             },
-            getResTableDetail(start,len) {
+	        /**
+	         * [{
+	         *      resourceKey,
+	         *      attrKey的值
+	         * },{
+	         *      resourceKey,
+	         *      attrKey的值
+	         * }]
+	         */
+            getResTableDetail(start, len) {
                 let json = {
                     typekey: this.currentTypeKey,
                     start: start,
@@ -159,13 +167,27 @@
                     .then((response) => {
                         if (response.status === 200) {
                             let detail = response.data;
-                            this.tableData = JSON.parse(detail[0].data);
-                            console.log(this.tableData);
+                            let json = JSON.parse(detail[0].data);
+	                        this.getLineData(json);
                         }
                     }, (error) => {
                         this.$message.error(error.message);
                     });
             },
+	        getLineData(data){
+                // this.tableData
+		        let obj = {};
+                for (let i = 0; i < this.attrData.length; i++) {
+					obj[this.attrData[i].attrKey] = ""
+                }
+                console.log(this.attrData);
+                console.log(data);
+                for (let j = 0; j < data.length; j++) {
+                    if(this.tableData){
+                        console.log(data[j].resourceKey);
+                    }
+                }
+	        },
             /**
              * 新增资源
              */
@@ -249,25 +271,28 @@
              */
             exit() {
                 this.$router.push("/login");
+            },
+            getDefAll() {
+                let params = {
+                    typekey: "RDf示例表ID",
+                };
+                this.$ajax.def
+                    .getDefAll(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            this.attrTypeList = JSON.parse(data[0].data);
+                            if (this.attrTypeList.length > 0) {
+                                this.getResTable(this.attrTypeList[0], 0);
+                            }
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
             }
         },
         mounted() {
-            let params = {
-                typekey: "RDf示例表ID",
-            };
-            this.$ajax.def
-                .getDefAll(params)
-                .then((response) => {
-                    if (response.status === 200) {
-                        let data = response.data;
-                        this.attrTypeList = JSON.parse(data[0].data);
-                        if (this.attrTypeList.length > 0) {
-                            this.getResTable(this.attrTypeList[0], 0);
-                        }
-                    }
-                }, (error) => {
-                    this.$message.error(error.message);
-                });
+            this.getDefAll();
         }
     };
 </script>
