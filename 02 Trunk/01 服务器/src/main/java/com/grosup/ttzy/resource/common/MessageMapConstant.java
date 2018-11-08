@@ -9,5 +9,6 @@ public interface MessageMapConstant {
 	String MESSAGE_PARAM_ETER = "parameter is null.";
 	String MESSAGE_DTO_ETER = "DTO is null.";
 	String MESSAGE_LIST_ETER = "List is null.";
+	String MESSAGE_FILE_ETER = "File update is error.";
 	String DATA = "data";
 }

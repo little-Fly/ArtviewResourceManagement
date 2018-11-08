@@ -1,5 +1,6 @@
 package com.grosup.ttzy.share.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.grosup.ttzy.resource.common.MessageMapConstant;
+import com.grosup.ttzy.resource.dto.ResourceDetailDto;
+import com.grosup.ttzy.resource.service.ResourceDetailService;
+import com.grosup.ttzy.share.dto.ResourceDto;
 import com.grosup.ttzy.share.dto.ResourceShareDto;
 import com.grosup.ttzy.share.service.ResourceShareService;
 import com.grosup.ttzy.util.StringUtil;
@@ -30,6 +34,9 @@ public class ResourceShareController implements MessageMapConstant{
 	@Autowired
 	ResourceShareService resourceShareService;
 
+	@Autowired
+	ResourceDetailService resourceDetailService;
+	
 	/**
 	 * /rs/share/add.do
 	 * @param json {"resourceListJson":"[{\"typeKey\":\"RDf示例表ID\", \"resourceKey\":\"RDt示例值ID\"}]","templateName":"default"}
@@ -142,6 +149,39 @@ public class ResourceShareController implements MessageMapConstant{
 		Map<String, String> messageMap = new HashMap<String, String>();
 		Collection<ResourceShareDto> collection = resourceShareService.getAll();
 		if (collection != null) {
+			JSONArray resourceDefJson = JSONArray.fromObject(collection);
+			messageMap.put(DATA, resourceDefJson.toString());
+			messageMap.put(STATE, STATE_SUCCESSFUL);
+		} else {
+			messageMap.put(STATE, STATE_ERROR);
+			messageMap.put(MESSAGE, MESSAGE_LIST_ETER);
+			log.error("getAll "+MESSAGE_LIST_ETER);
+		}
+		JSONArray jsonobj = JSONArray.fromObject(messageMap);
+		return jsonobj.toString();
+	}
+	
+	/**
+	 * /rs/share/getall.do
+	 * @return [{"data":"[{\"lastTime\":1538382729506,\"resourceListJson\":\"[{\\\"typeKey\\\":\\\"RDf示例表ID\\\", \\\"resourceKey\\\":\\\"RDt示例值ID\\\"}]\",\"sendTime\":1538382729506,\"sendUser\":\"示例分享人\",\"shareKey\":\"RSrtemplatekey\",\"templateName\":\"default\"}]","state":"successful"}]
+	 */
+	@RequestMapping(value = "/getresource.do", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String getResource(HttpServletRequest request, HttpServletResponse response) {
+		Map<String, String> messageMap = new HashMap<String, String>();
+		String resourceKey = request.getParameter("resourceKey");
+		if (!StringUtil.isNullOrEmpty(resourceKey)) {
+			JSONArray jsonArray = JSONArray.fromObject(resourceKey);
+			Collection<ResourceDto> resourceDtoList = (Collection<ResourceDto>) JSONArray.toCollection(jsonArray,
+					ResourceDto.class);
+			
+			Collection<String> resourceList =new ArrayList<String>();
+			for(ResourceDto resourceDto: resourceDtoList)
+			{
+				resourceList.add(resourceDto.getResourceKey());
+			}
+			Collection<ResourceDetailDto> collection = resourceDetailService.get(resourceList);
 			JSONArray resourceDefJson = JSONArray.fromObject(collection);
 			messageMap.put(DATA, resourceDefJson.toString());
 			messageMap.put(STATE, STATE_SUCCESSFUL);

@@ -7,6 +7,7 @@ package com.grosup.ttzy.share.dto;
 public class ResourceShareDto {
 	
 	private String shareKey; //分享ID，用于访问和获取
+	private String shareName; //分享ID，用于访问和获取
 	private String resourceListJson; //分享的资源列表Json格式
 	private String sendUser;		//分享人
 	private String templateName;		//模板名称
@@ -17,6 +18,12 @@ public class ResourceShareDto {
 	}
 	public void setShareKey(String shareKey) {
 		this.shareKey = shareKey;
+	}
+	public String getShareName() {
+		return shareName;
+	}
+	public void setShareName(String shareName) {
+		this.shareName = shareName;
 	}
 	public String getResourceListJson() {
 		return resourceListJson;
