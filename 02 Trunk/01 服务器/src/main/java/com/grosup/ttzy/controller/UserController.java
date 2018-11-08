@@ -110,4 +110,34 @@ public class UserController {
         }
         return result;
     }
+    /**
+     * 查询角色下所有人员信息
+     * @param roleKey
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/getUsersByRole")
+    @ResponseBody
+    public JSONObject getUsersByRole(@RequestParam String roleKey) {
+        JSONObject result = new JSONObject();
+        JSONArray data = new JSONArray();
+        try {
+            List<UserBean> users = userService.getUsersByRole(roleKey);
+            if (ObjectUtil.isNull(users) || users.size() == 0) {
+                result.put("code", CodeUtil.NODATA);
+                return result;
+            } 
+            for (UserBean user : users) {
+                JSONObject userInfo = new JSONObject();
+                userInfo.put("uid", user.getUid());
+                userInfo.put("nickName", user.getNickName());
+                data.add(userInfo);
+                result.put("code", CodeUtil.SUCCESS);
+                result.put("data", data);
+            }
+        } catch (GrosupException e) {
+            result.put("code", CodeUtil.ERROR);
+            logger.error("查询人员异常", e);
+        }
+        return result;
+    }
 }
