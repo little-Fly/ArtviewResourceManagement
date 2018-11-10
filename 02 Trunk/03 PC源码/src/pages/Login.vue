@@ -30,7 +30,8 @@
             return {
                 appId:"wxb41c2d9e3682c984",
                 scope:"snsapi_login",
-                redirect_uri: "http%3a%2f%2fwww.hwyst.net%2f%23%2fmain"
+                // redirect_uri: "http%3A%2F%2Fwww.hwyst.net%2Fttzy%2F%23%2FRedirect",
+                redirect_uri: "http%3A%2F%2Fwww.hwyst.net%2Fttzy%2Findex.html%23%2Fredirect",
             }
         },
 	    methods:{
@@ -38,6 +39,13 @@
                 this.$router.push('/main');
             }
 	    },
+	    mounted(){
+            console.log(this.redirect_uri);
+        },
+        beforeMount(){
+            // let href = location.href.split("#")[0];
+            // this.redirect_uri = encodeURIComponent(`${href}#Redirect`)
+        }
     };
 </script>
 
