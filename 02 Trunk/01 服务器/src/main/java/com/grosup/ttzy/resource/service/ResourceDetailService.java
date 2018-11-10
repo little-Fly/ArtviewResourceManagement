@@ -16,6 +16,8 @@ public interface ResourceDetailService{
 	public void update(String resourceKey, String json);
 
 	public List<ResourceDetailDto> get(String resourceKey);
+	
+	public List<ResourceDetailDto> get(Collection<String> resourceList);
 
 	public Collection<ResourceDetailDto> getAll(String typeKey, int start, int len);
 	
