@@ -101,6 +101,15 @@ public class ResourceDetailDao implements ResourceConstant {
 		return resourceDetaillist;
 	}
 
+	public List<ResourceDetailDto> get(Collection<String> resourceList) {
+		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+		for(String resourceKey :resourceList)
+		{
+			resourceDetaillist.addAll(get(resourceKey));
+		}
+		return resourceDetaillist;
+	}
+	
 	public Collection<ResourceDetailDto> getAll(String typeKey, int start, int len) {
 
 		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();

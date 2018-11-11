@@ -83,14 +83,14 @@ public class ResourceAttrController implements MessageMapConstant {
 	@ResponseBody
 	public String del(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String attrKey = request.getParameter("attrey");
+		String attrKey = request.getParameter("attrkey");
 		if (!StringUtil.isNullOrEmpty(attrKey)) {
 			resourceAttrService.del(attrKey);
 			messageMap.put(STATE, STATE_SUCCESSFUL);
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + attrKey + "\"");
-			log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + attrKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "attrKey:\"" + attrKey + "\"");
+			log.error("del " + MESSAGE_PARAM_ETER + "attrKey:\"" + attrKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
@@ -131,7 +131,7 @@ public class ResourceAttrController implements MessageMapConstant {
 	@ResponseBody
 	public String get(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String attrKey = request.getParameter("attkey");
+		String attrKey = request.getParameter("attrkey");
 		if (!StringUtil.isNullOrEmpty(attrKey)) {
 			ResourceAttrDto resourceAttrDto = resourceAttrService.get(attrKey);
 			if (resourceAttrDto != null) {
@@ -140,13 +140,13 @@ public class ResourceAttrController implements MessageMapConstant {
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "resourceKey:\"" + attrKey + "\"");
-				log.error("get " + MESSAGE_DTO_ETER + "resourceKey:\"" + attrKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "attrKey:\"" + attrKey + "\"");
+				log.error("get " + MESSAGE_DTO_ETER + "attrKey:\"" + attrKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + attrKey + "\"");
-			log.error("update " + MESSAGE_PARAM_ETER + "resourceKey:\"" + attrKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "attrKey:\"" + attrKey + "\"");
+			log.error("update " + MESSAGE_PARAM_ETER + "attrKey:\"" + attrKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();

@@ -52,6 +52,11 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 		return resourceDetailDao.get(resourceKey);
 	}
 
+	public List<ResourceDetailDto> get(Collection<String> resourceList)
+	{
+		return resourceDetailDao.get(resourceList);
+	}
+	
 	public Collection<ResourceDetailDto> getAll(String typeKey, int start, int len) {
 		return resourceDetailDao.getAll(typeKey, start, len);
 	}

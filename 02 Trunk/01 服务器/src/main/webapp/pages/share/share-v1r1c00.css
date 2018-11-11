@@ -1,0 +1,21 @@
+
+
+img{  
+    width: auto;  
+    height: auto;  
+    max-width: 100%;  
+    max-height: 100%;     
+}  
+
+
+#noshare{
+	
+	padding: 0px;
+	width:500px;
+	height:200px;
+	text-align:center;
+	background-color:#F69;
+
+	display: table-cell;
+	vertical-align:middle
+}
