@@ -1,6 +1,7 @@
 package com.grosup.ttzy.controller;
 
 import java.util.List;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.grosup.ttzy.beans.UserBean;
+import com.grosup.ttzy.impl.RoleImpl;
 import com.grosup.ttzy.service.UserService;
 import com.grosup.ttzy.util.CodeUtil;
 import com.grosup.ttzy.util.GrosupException;
@@ -27,6 +29,9 @@ public class UserController {
     
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private RoleImpl roleImpl;
     
     @RequestMapping(method = RequestMethod.POST, value = "/add.do")
     @ResponseBody
