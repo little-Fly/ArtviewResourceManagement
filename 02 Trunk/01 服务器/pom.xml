@@ -175,7 +175,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>practice</finalName>
+		<finalName>ttzy</finalName>
 	</build>
 	<profiles>
 		<profile>

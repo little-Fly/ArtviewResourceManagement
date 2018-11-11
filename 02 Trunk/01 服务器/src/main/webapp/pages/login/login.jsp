@@ -18,7 +18,7 @@
 		<input id="username">用户名
 		<input id="password">密码
 	</form>
-	<a href="https://open.weixin.qq.com/connect/qrconnect?appid=wxb41c2d9e3682c984&redirect_uri=http%3a%2f%2fwww.hwyst.net%2f&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect">微信登录</a>
+	<a href="https://open.weixin.qq.com/connect/qrconnect?appid=wxb41c2d9e3682c984&redirect_uri=http%3A%2F%2Fwww.hwyst.net%2Fttzy%2Findex.html&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect">微信登录</a>
 
 	<button id="submit" onclick="login"></button>
 </body>

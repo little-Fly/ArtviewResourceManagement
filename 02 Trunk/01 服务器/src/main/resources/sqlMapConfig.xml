@@ -11,6 +11,7 @@
 		<mapper resource="mybatis/session-orm.xml"/>
 		<mapper resource="mybatis/user-orm.xml"/>
 		<mapper resource="mybatis/log-orm.xml"/>
+		<mapper resource="mybatis/role-orm.xml"/>
 <!-- 		<mapper resource="mybatis/session-orm.xml"/> -->
 <!-- 		<mapper resource="mybatis/type-orm.xml"/> -->
 <!-- 		<mapper resource="mybatis/problem-orm.xml"/> -->

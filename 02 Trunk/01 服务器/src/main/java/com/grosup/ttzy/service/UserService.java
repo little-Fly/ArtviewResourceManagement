@@ -75,4 +75,13 @@ public class UserService {
     public List<UserBean> queryUsers() throws GrosupException {
         return userDao.queryUsers();
     }
+    
+    /**
+     * 查询角色下所有人员信息
+     * @param roleKey
+     * @return
+     */
+    public List<UserBean> getUsersByRole(String roleKey) throws GrosupException{
+        return userDao.getUsersByRole(roleKey);
+    }
 }

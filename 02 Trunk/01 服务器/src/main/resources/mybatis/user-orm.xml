@@ -29,11 +29,10 @@
     <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="uid">
           SELECT LAST_INSERT_ID()
       </selectKey>
-        insert into t_user (openId,nickName,roleKey,createTime,lastTime,status)
+        insert into t_user (openId,nickName,createTime,lastTime,status)
         values (
         #{openId},
         #{nickName},
-        #{roleKey},
         #{createTime,jdbcType=TIMESTAMP},
         #{lastTime,jdbcType=TIMESTAMP},
         #{status})
@@ -63,4 +62,12 @@
 	) as middle
 	where middle.roleKey != 'root' and status = 1
     </select>
+    
+    <!-- 通过角色key查询该角色下人员 -->
+    <select id="getUsersByRole" parameterType="java.lang.String" resultType="com.grosup.ttzy.beans.UserBean">
+        SELECT tur.roleKey,tu.* from t_user_role tur
+        RIGHT JOIN t_user tu ON tur.uid = tu.uid
+        WHERE tur.roleKey = #{roleKey}
+    </select>
+    
 </mapper>
