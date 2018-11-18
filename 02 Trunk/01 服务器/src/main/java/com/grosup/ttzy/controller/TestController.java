@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 @RequestMapping("/login")
 public class TestController {
-	@RequestMapping(method = RequestMethod.GET,value = "helloword")
+	@RequestMapping(method = RequestMethod.GET,value = "helloword.do")
 	public void helloworld(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.getWriter().write("welcome to practice");
 	}

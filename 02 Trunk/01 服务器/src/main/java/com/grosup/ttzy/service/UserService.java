@@ -2,6 +2,8 @@ package com.grosup.ttzy.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +36,52 @@ public class UserService {
         String remark = userBean.getNickName()+ "于" + sdf.format(createTime) + "注册成功";
         LogBean logBean = TtzyUtil.createLog(uid, createTime, "注册", remark);
         TtzyUtil.saveLog(logBean);
+    }
+    
+    /**
+     * 查询待审核人员
+     */
+    public List<UserBean> queryUnCheckedUser() throws GrosupException {
+        return userDao.queryUnCheckedUser();
+    }
+    /**
+     * 人员审核
+     * @param param
+     * @throws GrosupException
+     */
+    public void changeUserStatus(long uid, String nickName, int status, String refuse) throws GrosupException{
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("uid", uid);
+        param.put("status", status);
+        userDao.changeUserStatus(param);
+        //记录日志
+        Date optTime = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+        String checkStr = "";
+        if (status == 1) {
+            checkStr = "通过";
+        } else {
+            checkStr = "拒绝,理由：" + refuse;
+        }
+        String remark = "超级管理员于" + sdf.format(optTime) + "审核人员" + nickName + checkStr;
+        LogBean logBean = TtzyUtil.createLog(uid, optTime, "注册", remark);
+        TtzyUtil.saveLog(logBean);
+    }
+    
+    /**
+     * 查询所有非超管人员信息
+     * @return
+     */
+    public List<UserBean> queryUsers() throws GrosupException {
+        return userDao.queryUsers();
+    }
+    
+    /**
+     * 查询角色下所有人员信息
+     * @param roleKey
+     * @return
+     */
+    public List<UserBean> getUsersByRole(String roleKey) throws GrosupException{
+        return userDao.getUsersByRole(roleKey);
     }
 }

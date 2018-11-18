@@ -1,18 +1,24 @@
 package com.grosup.ttzy.beans;
 
 import java.util.Date;
+import java.util.List;
+
+import com.grosup.ttzy.util.JSONBuilder;
 
 import net.sf.json.JSONObject;
 
 public class UserBean {
+    
+    public UserBean() {
+        
+    }
 
-//    public UserBean(String str) {
-//        JSONObject obj = JSONObject.fromObject(str);
-//        this.uid = obj.optLong("uid");
-//        this.openId = obj.optString("openId");
-//        this.nickName = obj.optString("nickName");
-//        this.roleKey = obj.optString("roleKey");
-//    }
+    public UserBean(String str) {
+        JSONObject obj = JSONObject.fromObject(str);
+        this.uid = obj.optLong("uid");
+        this.openId = obj.optString("openId");
+        this.nickName = obj.optString("nickName");
+    }
     
     private long uid;
     
@@ -20,13 +26,23 @@ public class UserBean {
     
     private String nickName;
     
-    private String roleKey;
-    
     private Date createTime;
     
     private Date lastTime;
     
     private int status;
+    
+    private long lastValidTime = System.currentTimeMillis();
+    
+    public long getLastValidTime() {
+        return lastValidTime;
+    }
+
+    public void setLastValidTime(long lastValidTime) {
+        this.lastValidTime = lastValidTime;
+    }
+
+    private List<RoleBean> roles;
 
     public long getUid() {
         return uid;
@@ -52,14 +68,6 @@ public class UserBean {
         this.nickName = nickName;
     }
 
-    public String getRoleKey() {
-        return roleKey;
-    }
-
-    public void setRoleKey(String roleKey) {
-        this.roleKey = roleKey;
-    }
-
     public Date getCreateTime() {
         return createTime;
     }
@@ -82,6 +90,21 @@ public class UserBean {
 
     public void setStatus(int status) {
         this.status = status;
+    }
+
+    public List<RoleBean> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<RoleBean> roles) {
+        this.roles = roles;
+    }
+    public String toString() {
+        return JSONBuilder.build().put("uid", this.uid)
+                .put("openId", this.openId).put("nickName", this.nickName)
+                .put("createTime", this.createTime).put("lastTime", this.lastTime)
+                .put("status", this.status)
+                .put("lastValidTime", this.lastValidTime).put("roles", this.roles).toString();
     }
 
 }
