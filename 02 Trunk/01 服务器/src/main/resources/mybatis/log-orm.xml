@@ -6,4 +6,9 @@
         insert into t_log (uid,logTime,operation,remark)
         values (#{uid},#{logTime},#{operation},#{remark})
     </insert>
+    
+    <select id="queryLogByPage" parameterType="map" resultType="com.grosup.ttzy.beans.LogBean">
+        select * from t_log
+        limit #{indexStart},#{pageSize}
+    </select>
 </mapper>

@@ -29,7 +29,7 @@ import com.grosup.ttzy.util.StringUtil;
 @RequestMapping("/login")
 public class PcLoginController {
 
-    private Logger logger = Logger.getLogger(PcLoginController.class);
+    private static Logger logger = Logger.getLogger(PcLoginController.class);
 
     @Autowired
     private UserService userService;
@@ -72,6 +72,7 @@ public class PcLoginController {
         // 转换为json
         JSONObject access_token_return_json = JSONObject
                 .fromObject(access_token_return_str);
+        logger.info("access_token_return_json is:" + access_token_return_json);
         // 用户唯一标识
         String openid = (String) access_token_return_json.get("openid");
         String access_token = (String) access_token_return_json
