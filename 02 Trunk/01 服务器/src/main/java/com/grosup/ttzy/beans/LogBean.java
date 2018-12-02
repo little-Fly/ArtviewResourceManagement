@@ -19,6 +19,9 @@ public class LogBean {
         this.operation = operation;
         this.remark = remark;
     }
+    public LogBean() {
+        
+    }
 
     private String remark;
 

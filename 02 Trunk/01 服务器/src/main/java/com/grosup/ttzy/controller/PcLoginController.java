@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.grosup.ttzy.beans.UserBean;
 import com.grosup.ttzy.service.UserService;
 import com.grosup.ttzy.util.CodeUtil;
+import com.grosup.ttzy.util.Constant;
 import com.grosup.ttzy.util.CookieUtil;
 import com.grosup.ttzy.util.GrosupException;
 import com.grosup.ttzy.util.HttpRequest;
@@ -61,12 +62,9 @@ public class PcLoginController {
         // 用户授权
         String grant_type = "authorization_code";
 
-        // 获取微信access_token
-        String access_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token";
-
         String params = "appid=" + appid + "&secret=" + appSecret + "&code="
                 + code + "&grant_type=" + grant_type;
-        String access_token_return_str = HttpRequest.sendGet(access_token_url,
+        String access_token_return_str = HttpRequest.sendGet(Constant.OUTH2_URL,
                 params);
 
         // 转换为json

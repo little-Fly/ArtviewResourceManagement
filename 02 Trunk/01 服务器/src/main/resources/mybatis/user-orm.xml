@@ -3,7 +3,7 @@
 <mapper namespace="com.grosup.ttzy.user">
 
 	<resultMap type="com.grosup.ttzy.beans.UserBean" id="BaseResultMap">
-		<result column="uid" jdbcType="VARCHAR" property="uid"/>
+		<id column="uid" jdbcType="VARCHAR" property="uid"/>
 		<result column="openId" jdbcType="VARCHAR" property="openId"/>
 		<result column="nickName" jdbcType="VARCHAR" property="nickName"/>
 		<result column="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
@@ -16,13 +16,19 @@
             <result column="remark" jdbcType="VARCHAR" property="remark"/>
 		</collection>
 	</resultMap>
-	<select id="getUserInfo" parameterType="map" resultType="com.grosup.ttzy.beans.UserBean">
-       select * from t_user 
-       <where>
-           <if test="openId != null and openId != ''">
-               openId = #{openId}
-           </if>
-       </where>
+	<select id="getUserInfo" parameterType="map" resultMap="BaseResultMap">
+
+	select tur.*,ttur.roleKey,tro.roleName FROM
+	t_user tur
+	LEFT JOIN t_user_role ttur ON
+	ttur.uid = tur.uid
+	LEFT JOIN t_role tro ON
+	ttur.roleKey = tro.roleKey
+	<where>
+		<if test="openId != null and openId != ''">
+			openId = #{openId}
+		</if>
+	</where>
     </select>
     <!-- 人员注册 -->
     <insert id="userAdd" parameterType="com.grosup.ttzy.beans.UserBean">
@@ -60,7 +66,8 @@
 	LEFT JOIN t_role tro ON
 	ttur.roleKey = tro.roleKey
 	) as middle
-	where middle.roleKey != 'root' and status = 1
+	where middle.roleKey != 'root' 
+<!-- 	and status = 1 -->
     </select>
     
     <!-- 通过角色key查询该角色下人员 -->
@@ -68,6 +75,12 @@
         SELECT tur.roleKey,tu.* from t_user_role tur
         RIGHT JOIN t_user tu ON tur.uid = tu.uid
         WHERE tur.roleKey = #{roleKey}
+    </select>
+    <!-- 通过角色key查询该不在该角色下人员 -->
+    <select id="getUnUsersByRole" parameterType="java.lang.String" resultType="com.grosup.ttzy.beans.UserBean">
+        SELECT tur.roleKey,tu.* from t_user_role tur
+        RIGHT JOIN t_user tu ON tur.uid = tu.uid
+        WHERE tur.roleKey != #{roleKey}
     </select>
     
 </mapper>

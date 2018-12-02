@@ -2,12 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.grosup.ttzy.log">
 
+    <resultMap type="com.grosup.ttzy.beans.LogBean" id="BaseResultMap">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="uid" jdbcType="VARCHAR" property="uid"/>
+        <result column="operation" jdbcType="VARCHAR" property="operation"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="logTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="logTime"/>
+    </resultMap>
+    
     <insert id="logAdd" parameterType="com.grosup.ttzy.beans.LogBean">
         insert into t_log (uid,logTime,operation,remark)
         values (#{uid},#{logTime},#{operation},#{remark})
     </insert>
     
-    <select id="queryLogByPage" parameterType="map" resultType="com.grosup.ttzy.beans.LogBean">
+    <select id="queryLogByPage" parameterType="map" resultMap="BaseResultMap">
         select * from t_log
         limit #{indexStart},#{pageSize}
     </select>

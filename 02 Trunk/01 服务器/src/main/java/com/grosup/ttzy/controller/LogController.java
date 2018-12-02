@@ -1,9 +1,11 @@
 package com.grosup.ttzy.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
@@ -20,7 +22,7 @@ import com.grosup.ttzy.util.CodeUtil;
 import com.grosup.ttzy.util.GrosupException;
 
 @Controller
-@RequestMapping("/log")
+@RequestMapping("/wx/log")
 public class LogController {
     
     private static Logger logger = Logger.getLogger(LogController.class);
@@ -32,13 +34,19 @@ public class LogController {
     @ResponseBody
     public JSONObject queryLogByPage(@RequestParam int pageSize,@RequestParam int pageNumber) {
         JSONObject result = new JSONObject();
+        JSONArray data = new JSONArray();
         try {
             Map<String, Integer> pageMap = new HashMap<String, Integer>();
-            pageMap.put("indexStart", pageSize * pageNumber);
+            pageMap.put("indexStart", pageSize * (pageNumber-1));
             pageMap.put("pageSize", pageSize);
             List<LogBean> logs = logDao.queryLogByPage(pageMap);
+            for (LogBean logBean : logs) {
+                JSONObject json = new JSONObject();
+                json.put("remark", logBean.getRemark());
+                data.add(json);
+            }
             
-            result.put("data", logs);
+            result.put("data", data);
             result.put("code", CodeUtil.SUCCESS);
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);

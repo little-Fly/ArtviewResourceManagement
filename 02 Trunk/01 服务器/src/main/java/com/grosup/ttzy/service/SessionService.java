@@ -24,7 +24,7 @@ public class SessionService {
 		return sessionDao.updateThirdSession(sessionBean);
 	}
 	
-	public String getOpenIdByThirdSession(String third_session) {
+	public SessionBean getOpenIdByThirdSession(String third_session) {
 		return sessionDao.getOpenIdByThirdSession(third_session);
 	}
 }

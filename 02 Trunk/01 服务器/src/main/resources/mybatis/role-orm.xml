@@ -32,4 +32,10 @@
        where uid = #{uid} and roleKey='writer'
     </select>
     
+    <insert id="BatchAddUserRole" parameterType="list">
+        insert into t_user_role (id, uid, roleKey) values
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item.uid}, #{item.roleKey}
+        </foreach>
+    </insert>
 </mapper>
