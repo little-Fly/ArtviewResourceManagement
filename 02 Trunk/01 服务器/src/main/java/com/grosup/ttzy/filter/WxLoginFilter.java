@@ -53,7 +53,6 @@ public class WxLoginFilter implements Filter {
             boolean login = TtzyUtil.checkThirdSession(third_session);
             if (login) {
                 chain.doFilter(sRequest, sResponse);
-                return;
             } else {
                 sResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "授权不正确");
             }
@@ -72,8 +71,7 @@ public class WxLoginFilter implements Filter {
         for (int i = 0; i < this.excludeUrls.length; i++) {
             String excludeUrl = this.excludeUrls[i];
             //本地为resource
-            if (url.matches("/resource/login/decode.do")) {
-                log.info("/practice/login/decode.do");
+            if (url.matches("/resource/wx/login.do") ||url.matches("/ttzy/wx/login.do")) {
                 return true;
             }
             if (url.matches(excludeUrl.replaceAll("\\*", "\\.\\*"))) {

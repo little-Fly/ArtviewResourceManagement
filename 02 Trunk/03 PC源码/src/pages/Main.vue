@@ -33,33 +33,10 @@
 				<el-aside width="300px">
 					<div class="type-list">
 						<ul>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
-							<li class="type-list-item tc">演员资源</li>
+							<li class="type-list-item tc" :class="{'isActive':isActive === key}"
+							    @click="getResTable(item,key)" v-for="(item,key) in attrTypeList">
+								{{item.name}}
+							</li>
 						</ul>
 					</div>
 					<div class="bottom-btn tc" @click="goAssets">
@@ -77,31 +54,19 @@
 						</ul>
 					</div>
 					<div class="main-body">
-						<el-table
-								:data="assetsData"
-								height="100%"
-								stripe
-								border
-								@selection-change="handleSelectionChange"
-								style="width: 100%">
+						<el-table :data="tableData"
+						          height="100%"
+						          stripe
+						          border
+						          @selection-change="handleSelectionChange"
+						          style="width: 100%">
 							<el-table-column
 									type="selection"
 									width="55">
 							</el-table-column>
-							<el-table-column
-									prop="date"
-									label="日期"
-									width="180">
-							</el-table-column>
-							<el-table-column
-									prop="name"
-									label="姓名"
-									width="180">
-							</el-table-column>
-							<el-table-column
-									prop="address"
-									label="地址">
-							</el-table-column>
+							<template v-for="(col ,index) in attrData">
+								<el-table-column :prop="col.attrKey" :label="col.attrName"></el-table-column>
+							</template>
 						</el-table>
 					</div>
 					<div class="main-foot tc">
@@ -110,7 +75,7 @@
 								prev-text="<上一页"
 								next-text="下一页>"
 								layout="prev, pager, next,total,jumper"
-								:total="100">
+								:total="1">
 						</el-pagination>
 					</div>
 					<el-dialog :title="form.title" width="30%" :visible.sync="dialogFormVisible">
@@ -140,38 +105,12 @@
         name: "main-content",
         data() {
             return {
+                attrTypeList: [],
                 searchType: "",
                 searchOptions: [
                     {label: "资源类型", value: 1}
                 ],
                 searchInput: "",
-                assetsData: [
-                    {
-                        date: "2016-05-03",
-                        name: "王小虎",
-                        address: "上海市普陀区金沙江路 1518 弄"
-                    },
-                    {
-                        date: "2016-05-02",
-                        name: "王小虎",
-                        address: "上海市普陀区金沙江路 1518 弄"
-                    },
-                    {
-                        date: "2016-05-04",
-                        name: "王小虎",
-                        address: "上海市普陀区金沙江路 1518 弄"
-                    },
-                    {
-                        date: "2016-05-06",
-                        name: "王小虎",
-                        address: "上海市普陀区金沙江路 1518 弄"
-                    },
-                    {
-                        date: "2016-05-07",
-                        name: "王小虎",
-                        address: "上海市普陀区金沙江路 1518 弄"
-                    }
-                ],
                 dialogFormVisible: false,
                 formLabelWidth: "100px",
                 form: {
@@ -179,10 +118,76 @@
                     name: "",
                     region: "",
                 },
-                multipleSelection: []
+                multipleSelection: [],
+                attrData: [], // 表头数据
+                tableData: [],
+                isActive: 0,
+                currentTypeKey: ""
             };
         },
         methods: {
+            /**
+             * 点击资源类别 获取资源
+             */
+            getResTable(item, i) {
+                this.currentTypeKey = item.typeKey;
+                this.isActive = i;
+                let params = {
+                    typekey: item.typeKey,
+                };
+                this.$ajax.attr
+                    .getAttrAll(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            this.attrData = JSON.parse(data[0].data);
+                            this.getResTableDetail(0, 10);
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
+	        /**
+	         * [{
+	         *      resourceKey,
+	         *      attrKey的值
+	         * },{
+	         *      resourceKey,
+	         *      attrKey的值
+	         * }]
+	         */
+            getResTableDetail(start, len) {
+                let json = {
+                    typekey: this.currentTypeKey,
+                    start: start,
+                    len: len,
+                };
+                this.$ajax.detail
+                    .getDetailAll(json)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let detail = response.data;
+                            let json = JSON.parse(detail[0].data);
+	                        this.getLineData(json);
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
+	        getLineData(data){
+                // this.tableData
+		        let obj = {};
+                for (let i = 0; i < this.attrData.length; i++) {
+					obj[this.attrData[i].attrKey] = ""
+                }
+                console.log(this.attrData);
+                console.log(data);
+                for (let j = 0; j < data.length; j++) {
+                    if(this.tableData){
+                        console.log(data[j].resourceKey);
+                    }
+                }
+	        },
             /**
              * 新增资源
              */
@@ -266,7 +271,28 @@
              */
             exit() {
                 this.$router.push("/login");
+            },
+            getDefAll() {
+                let params = {
+                    typekey: "RDf示例表ID",
+                };
+                this.$ajax.def
+                    .getDefAll(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            this.attrTypeList = JSON.parse(data[0].data);
+                            if (this.attrTypeList.length > 0) {
+                                this.getResTable(this.attrTypeList[0], 0);
+                            }
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
             }
+        },
+        mounted() {
+            this.getDefAll();
         }
     };
 </script>
@@ -378,6 +404,9 @@
 					background: #2D3A42;
 					color: #DC3D0F;
 					border-color: #DC3D0F;
+				}
+				&.isActive {
+					color: #DC3D0F;
 				}
 			}
 		}

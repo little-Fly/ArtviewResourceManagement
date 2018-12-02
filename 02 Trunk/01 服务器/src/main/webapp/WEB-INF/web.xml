@@ -36,13 +36,13 @@
 		</init-param>
 	</filter>
     
-    <!-- PC url都经过此拦截器 -->
+<!--     PC url都经过此拦截器 -->
 	<filter>
 		<filter-name>loginFilter</filter-name>
 		<filter-class>com.grosup.ttzy.filter.LoginFilter</filter-class>
 		<init-param>
 			<param-name>excludeurls</param-name>
-			<param-value>*/sso/*,*/image/*,*/js/*,*/css/*,*/pages/login/*,*.html,*/wx/*,*.png,*.jpg,*/login/*</param-value>
+			<param-value>*/sso/*,*/image/*,*/js/*,*/css/*,*/pages/login/*,*.html,*/wx/*,*.png,*.jpg,*/login/*,*/Redirect,*/rs/*</param-value>
 		</init-param>
 	</filter>
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.grosup.ttzy.role">
+
+	<resultMap type="com.grosup.ttzy.beans.UserBean" id="BaseResultMap">
+		<result column="uid" jdbcType="VARCHAR" property="uid"/>
+		<result column="openId" jdbcType="VARCHAR" property="openId"/>
+		<result column="nickName" jdbcType="VARCHAR" property="nickName"/>
+		<result column="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
+		<result column="lastTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="lastTime"/>
+		<result column="status" jdbcType="INTEGER" property="status"/>
+		<collection property="roles" ofType="com.grosup.ttzy.beans.RoleBean">
+            <result column="roleKey" jdbcType="VARCHAR" property="roleKey"/>
+            <result column="roleName" jdbcType="VARCHAR" property="roleName"/>
+            <result column="roleType" jdbcType="VARCHAR" property="roleType"/>
+            <result column="remark" jdbcType="VARCHAR" property="remark"/>
+		</collection>
+	</resultMap>
+	
+	<select id="checkIsAdmin" resultType="int">
+	   select count(*) from t_user_role 
+	   where uid = #{uid} and roleKey='admin'
+	</select>
+	
+	<select id="checkIsChecker" resultType="int">
+       select count(*) from t_user_role 
+       where uid = #{uid} and roleKey='checker'
+    </select>
+    
+    <select id="checkIsWriter" resultType="int">
+       select count(*) from t_user_role 
+       where uid = #{uid} and roleKey='writer'
+    </select>
+    
+</mapper>

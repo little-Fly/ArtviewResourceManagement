@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.grosup.ttzy.beans.SessionBean;
 import com.grosup.ttzy.beans.UserBean;
 import com.grosup.ttzy.service.SessionService;
+import com.grosup.ttzy.util.CodeUtil;
 import com.grosup.ttzy.util.HttpRequest;
 import com.grosup.ttzy.util.StringUtil;
 import com.grosup.ttzy.util.TtzyUtil;
 
 @Controller
-@RequestMapping("/wx/login")
+@RequestMapping("/wx")
 public class WxLoginController {
 
     @Autowired
@@ -39,7 +40,7 @@ public class WxLoginController {
      * @param code
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST, value = "wxLogin")
+    @RequestMapping(method = RequestMethod.POST, value = "login.do")
     @ResponseBody
     public Map<String, Object> wxLogin(HttpServletRequest request,
             @RequestParam String code) {
@@ -53,9 +54,9 @@ public class WxLoginController {
         }
 
         // 微信小程序id
-        String wxspAppid = "wxf1bac238f0e6a7f0";
+        String wxspAppid = "wxb41c2d9e3682c984";
         // 微信 app secret (小程序秘钥)
-        String wxspSecret = "9bec3c2bcb203fcae846d6431401a004";
+        String wxspSecret = "89742aa2e8e08bfa83fa6f8789621c02";
         // 用户授权
         String grant_type = "authorization_code";
 
@@ -72,9 +73,10 @@ public class WxLoginController {
         String session_key = json.get("session_key").toString();
         // 用户唯一标识
         String openid = (String) json.get("openid");
+        logger.info("用户的opinID为-----------------"+ openid);
         // 微信用户在开放平台的唯一标识符
-        // String unionid = (String) json.get("unionId");
-
+         String unionid = (String) json.get("unionId");
+         logger.info("用户的unionid为--------------"+ unionid);
         try {
             String third_session = session.getId();
             map.put("third_session", third_session);
@@ -97,9 +99,11 @@ public class WxLoginController {
                 map.put("userStatus", "checked");
                 session.setAttribute("userId", userBean.getUid());
             }
-            map.put("status", "success");
+            map.put("code", CodeUtil.SUCCESS);
             map.put("msg", "校验登录成功");
         } catch (Exception e) {
+            map.put("code", CodeUtil.ERROR);
+            map.put("msg", "校验登录失败");
             logger.error("校验登录失败");
         }
         return map;

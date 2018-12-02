@@ -40,4 +40,12 @@ public class UserDao extends AbstractDao {
     public List<UserBean> queryUsers() throws GrosupException {
         return this.getSession().selectList("com.grosup.ttzy.user.queryUsers");
     }
+    /**
+     * 查询角色下所有人员信息
+     * @param roleKey
+     * @return
+     */
+    public List<UserBean> getUsersByRole(String roleKey) throws GrosupException{
+        return this.getSession().selectList("com.grosup.ttzy.user.getUsersByRole", roleKey);
+    }
 }
