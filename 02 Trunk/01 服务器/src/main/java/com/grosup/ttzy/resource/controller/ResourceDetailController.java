@@ -147,7 +147,7 @@ public class ResourceDetailController implements MessageMapConstant {
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
 			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-			log.error("update " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			log.error("get " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
@@ -172,12 +172,12 @@ public class ResourceDetailController implements MessageMapConstant {
 		try {
 			start = Integer.parseInt(startStr);
 		} catch (NumberFormatException e) {
-			log.error("update " + MESSAGE_PARAM_ETER + "startStr:\"" + startStr + "\"");
+			log.error("getAll " + MESSAGE_PARAM_ETER + "startStr:\"" + startStr + "\"");
 		}
 		try {
 			len = Integer.parseInt(lenStr);
 		} catch (NumberFormatException e) {
-			log.error("update " + MESSAGE_PARAM_ETER + "lenStr:\"" + lenStr + "\"");
+			log.error("getAll " + MESSAGE_PARAM_ETER + "lenStr:\"" + lenStr + "\"");
 		}
 		String typeKey = request.getParameter("typekey");
 		if (!StringUtil.isNullOrEmpty(typeKey)) {

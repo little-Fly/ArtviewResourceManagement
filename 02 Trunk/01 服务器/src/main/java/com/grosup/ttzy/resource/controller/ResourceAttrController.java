@@ -146,7 +146,7 @@ public class ResourceAttrController implements MessageMapConstant {
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
 			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "attrKey:\"" + attrKey + "\"");
-			log.error("update " + MESSAGE_PARAM_ETER + "attrKey:\"" + attrKey + "\"");
+			log.error("get " + MESSAGE_PARAM_ETER + "attrKey:\"" + attrKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
