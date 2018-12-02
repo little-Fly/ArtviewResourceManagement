@@ -34,18 +34,18 @@ public class ResourceDefController implements MessageMapConstant{
 	@RequestMapping(value = "/create.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String create(HttpServletRequest request, HttpServletResponse response) {
+	public String create(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
 		Map<String, String> messageMap = new HashMap<String, String>();
 		log.error("request.getCharacterEncoding(): "+request.getCharacterEncoding());
 		log.error("request.getParameter(\"json\"): "+request.getParameter("json"));
-//		String json = request.getParameter("json");
-		String json= "";
-		try {
-			json = new String(request.getParameter("json").getBytes("iso-8859-1"), "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		log.error("new String(request.getParameter(\"json\").getBytes(\"iso-8859-1\"), \"utf-8\"): "+json);
+		String json = request.getParameter("json");
+//		String json= "";
+//		try {
+//			json = new String(request.getParameter("json").getBytes("iso-8859-1"), "utf-8");
+//		} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		}
+		log.error("new String(request.getParameter(\"json\").getBytes(\"iso-8859-1\"), \"utf-8\"): "+(new String(json.getBytes("iso-8859-1"), "utf-8")));
 		if (!StringUtil.isNullOrEmpty(json)) {
 			resourceDefService.create(json);
 			messageMap.put(STATE, STATE_SUCCESSFUL);
@@ -152,7 +152,7 @@ public class ResourceDefController implements MessageMapConstant{
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
 			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + typeKey + "\"");
-			log.error("update "+MESSAGE_PARAM_ETER + "resourceKey:\"" + typeKey + "\"");
+			log.error("get "+MESSAGE_PARAM_ETER + "resourceKey:\"" + typeKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();

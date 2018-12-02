@@ -27,16 +27,69 @@ public class ResourceDetailDao implements ResourceConstant {
 
 	List<ResourceDetailDto> list = Collections.synchronizedList(new ArrayList<ResourceDetailDto>());
 
-	private String resourceKey = RESOURCE_DETAIL + "示例值ID"; // long Y 主键，资源Id
-	private String attrKey = RESOURCE_ATTR + "示例表头ID"; // varchar Y 主键，属性Key
-	private String typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
-	private String attrName = "示例表头"; // varchar Y 属性名
-	private String attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
-	private String attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
-	private String attrValue = "1234567890abcdefghijklmnopqrstuvwxyz值"; // varchar Y 属性值
+	private String resourceKey; // long Y 主键，资源Id
+	private String attrKey; // varchar Y 主键，属性Key
+	private String typeKey; // varchar Y 资源类型Key
+	private String attrName; // varchar Y 属性名
+	private String attrLevel; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+	private String attrType; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+	private String attrValue; // varchar Y 属性值
 
 	@PostConstruct
 	public void initMethod() {
+
+		resourceKey = RESOURCE_DETAIL + "示例值ID"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID1"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头1"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行1值1"; // varchar Y 属性值
+		initResourceDetailDto();
+		resourceKey = RESOURCE_DETAIL + "示例值ID"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID2"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头2"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行1值2"; // varchar Y 属性值
+		initResourceDetailDto();
+		resourceKey = RESOURCE_DETAIL + "示例值ID"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头3"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行1值3"; // varchar Y 属性值
+		initResourceDetailDto();
+		
+		resourceKey = RESOURCE_DETAIL + "示例值ID2"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID1"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头1"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2值1"; // varchar Y 属性值
+		initResourceDetailDto();
+		resourceKey = RESOURCE_DETAIL + "示例值ID2"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID2"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头2"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2值2"; // varchar Y 属性值
+		initResourceDetailDto();
+		resourceKey = RESOURCE_DETAIL + "示例值ID2"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头3"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2值3"; // varchar Y 属性值
+		initResourceDetailDto();
+	}
+
+	public void initResourceDetailDto() {
 		ResourceDetailDto resourceDetailDto = new ResourceDetailDto();
 		resourceDetailDto.setTypeKey(typeKey);
 		resourceDetailDto.setAttrKey(attrKey);
@@ -47,7 +100,6 @@ public class ResourceDetailDao implements ResourceConstant {
 		resourceDetailDto.setAttrValue(attrValue);
 		list.add(resourceDetailDto);
 	}
-
 	public Collection<ResourceDetailDto> create(String json) {
 		JSONArray jsonArray = JSONArray.fromObject(json);
 		Collection<ResourceDetailDto> collection = (Collection<ResourceDetailDto>) JSONArray.toCollection(jsonArray,
