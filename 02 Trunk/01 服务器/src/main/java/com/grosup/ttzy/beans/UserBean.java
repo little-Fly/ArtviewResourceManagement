@@ -24,6 +24,8 @@ public class UserBean {
     
     private String openId;
     
+    private String unionId;
+    
     private String nickName;
     
     private Date createTime;
@@ -31,6 +33,8 @@ public class UserBean {
     private Date lastTime;
     
     private int status;
+    
+    private List<RoleBean> roles;
     
     private long lastValidTime = System.currentTimeMillis();
     
@@ -42,7 +46,6 @@ public class UserBean {
         this.lastValidTime = lastValidTime;
     }
 
-    private List<RoleBean> roles;
 
     public long getUid() {
         return uid;
@@ -99,6 +102,16 @@ public class UserBean {
     public void setRoles(List<RoleBean> roles) {
         this.roles = roles;
     }
+    
+    
+    public String getUnionId() {
+        return unionId;
+    }
+
+    public void setUnionId(String unionId) {
+        this.unionId = unionId;
+    }
+
     public String toString() {
         return JSONBuilder.build().put("uid", this.uid)
                 .put("openId", this.openId).put("nickName", this.nickName)
