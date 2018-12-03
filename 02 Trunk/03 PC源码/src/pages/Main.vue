@@ -147,15 +147,15 @@
                         this.$message.error(error.message);
                     });
             },
-	        /**
-	         * [{
+            /**
+             * [{
 	         *      resourceKey,
 	         *      attrKey的值
 	         * },{
 	         *      resourceKey,
 	         *      attrKey的值
 	         * }]
-	         */
+             */
             getResTableDetail(start, len) {
                 let json = {
                     typekey: this.currentTypeKey,
@@ -168,26 +168,58 @@
                         if (response.status === 200) {
                             let detail = response.data;
                             let json = JSON.parse(detail[0].data);
-	                        this.getLineData(json);
+                            this.getLineData(json);
                         }
                     }, (error) => {
                         this.$message.error(error.message);
                     });
             },
-	        getLineData(data){
-                // this.tableData
-		        let obj = {};
-                for (let i = 0; i < this.attrData.length; i++) {
-					obj[this.attrData[i].attrKey] = ""
-                }
-                console.log(this.attrData);
+            // attrKey: "RAt示例表头ID1"
+            // attrName: "示例表头1"
+            // typeKey: "RDf示例表ID"
+
+            // attrKey: "RAt示例表头ID1"
+            // attrName: "示例表头1"
+            // attrState: ""
+            // attrType: "default"
+            // attrValue: "行1值1"
+            // resourceKey: "RDt示例值ID"
+            // typeKey: "RDf示例表ID"
+
+            // attrKey: "RAt示例表头ID2"
+            // attrLevel: "0"
+            // attrName: "示例表头2"
+            // attrState: ""
+            // attrType: "default"
+            // attrValue: "行1值2"
+            // resourceKey: "RDt示例值ID"
+            // typeKey: "RDf示例表ID"
+
+            // attrKey: "RAt示例表头ID1"
+            // attrLevel: "0"
+            // attrName: "示例表头1"
+            // attrState: ""
+            // attrType: "default"
+            // attrValue: "行2值1"
+            // resourceKey: "RDt示例值ID2"
+            // typeKey: "RDf示例表ID"
+
+            getLineData(data) {
+                this.tableData.length = 0;
                 console.log(data);
-                for (let j = 0; j < data.length; j++) {
-                    if(this.tableData){
-                        console.log(data[j].resourceKey);
+                // this.tableData
+                let obj = {};
+                let attrLen = this.attrData.length;
+                let dataLen = data.length;
+                for (let i = 0; i < attrLen; i++) {
+                    obj[this.attrData[i].attrKey] = "";
+                }
+                for (let j = 0; j < dataLen; j++) {
+                    if (this.tableData) {
+                        // console.log(data[j].resourceKey);
                     }
                 }
-	        },
+            },
             /**
              * 新增资源
              */
