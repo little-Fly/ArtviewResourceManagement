@@ -144,7 +144,7 @@
                     center: true
                 }).then(() => {
                     let params = {
-                        attrey: item.attrKey,
+                        attrkey: item.attrKey,
                     };
                     this.$ajax.attr
                         .delAttr(params)
@@ -155,6 +155,7 @@
                                     this.$message.error(data[0].message);
                                 } else {
                                     this.$message.success("删除成功");
+                                    this.dialogFormVisible = false;
                                     this.refreshIndex();
                                 }
                             }

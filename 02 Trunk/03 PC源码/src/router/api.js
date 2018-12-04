@@ -142,9 +142,9 @@ Vue.prototype.$ajax = {
     detail: {
         addDetail(params) {
             return axios({
-                method: "POST",
+                method: "GET",
                 url: API.ADD_DETAIL,
-                data: params
+                params: params
             });
         },
         delDetail(params) {
@@ -156,9 +156,9 @@ Vue.prototype.$ajax = {
         },
         updateDetail(params) {
             return axios({
-                method: "POST",
+                method: "GET",
                 url: API.UPDATE_DETAIL,
-                data: params
+                params: params
             });
         },
         getDetail(params) {
