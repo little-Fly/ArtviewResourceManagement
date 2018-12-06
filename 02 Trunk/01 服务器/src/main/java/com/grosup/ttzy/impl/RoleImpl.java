@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import com.grosup.ttzy.beans.RoleBean;
 import com.grosup.ttzy.beans.UserBean;
+import com.grosup.ttzy.beans.UserRoleBean;
 import com.grosup.ttzy.dao.AbstractDao;
 import com.grosup.ttzy.dao.RoleDao;
 import com.grosup.ttzy.util.GrosupException;
@@ -51,6 +52,17 @@ public class RoleImpl extends AbstractDao implements RoleDao{
             return true;
         }
         return false;
+    }
+    
+    /**
+     * 批量新增用户角色
+     */
+    public void BatchAddUserRole(List<UserRoleBean> userRoles) throws GrosupException{
+        this.getSession().insert("com.grosup.ttzy.role.BatchAddUserRole", userRoles);
+    }
+    
+    public void BatchdelUserRole(List<UserRoleBean> userRoles) throws GrosupException{
+        this.getSession().delete("com.grosup.ttzy.role.BatchdelUserRole", userRoles);
     }
     
 }
