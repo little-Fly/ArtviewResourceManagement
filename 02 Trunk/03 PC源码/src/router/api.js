@@ -4,7 +4,7 @@ import qs from "qs";
 
 const PRODUCT = "https://www.hwyst.net/ttzy/";
 const LOCAL = "url/" + "ttzy/";
-const HOST = LOCAL;
+const HOST = PRODUCT;
 
 // 设置请求头
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -172,6 +172,15 @@ Vue.prototype.$ajax = {
             return axios({
                 method: "GET",
                 url: API.GET_DETAIL_ALL,
+                params: params
+            });
+        }
+    },
+    search:{
+        searchAll(params) {
+            return axios({
+                method: "GET",
+                url: API.SEARCH,
                 params: params
             });
         }

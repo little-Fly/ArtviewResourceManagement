@@ -10,17 +10,18 @@
 						<el-input placeholder="输入关键字" v-model="searchInput">
 							<el-select v-model="searchType"
 							           slot="prepend"
+							           disabled
 							           placeholder="选择资源类型">
 								<el-option
 										v-for="item in searchOptions"
-										:key="item.value"
-										:label="item.label"
-										:value="item.value">
+										:key="item.typeKey"
+										:label="item.name"
+										:value="item.typeKey">
 								</el-option>
 							</el-select>
 							<el-button
 									slot="append"
-									icon="el-icon-search">搜索
+									icon="el-icon-search" @click.native="search">搜索
 							</el-button>
 						</el-input>
 					</el-col>
@@ -89,15 +90,6 @@
 							<el-button type="primary" @click="submitAudit">提交审核</el-button>
 						</div>
 					</el-dialog>
-					<el-dialog :title="addForm.title" width="30%" :visible.sync="updateFormVisible">
-						<el-form :model="addForm">
-							<el-form-item :label="item.attrName" :label-width="formLabelWidth"
-							              v-for="(item,key) in attrData" :key="key">
-								<el-input v-model="addForm[item.attrKey]" auto-complete="off"></el-input>
-								<el-button type="warning" @click.prevent="updateThisRow(item,key)">修改</el-button>
-							</el-form-item>
-						</el-form>
-					</el-dialog>
 				</el-main>
 			</el-container>
 		</el-container>
@@ -116,7 +108,6 @@
                 ],
                 searchInput: "",
                 dialogFormVisible: false,
-                updateFormVisible: false,
                 formLabelWidth: "100px",
                 addForm: {},
                 multipleSelection: [],
@@ -137,6 +128,7 @@
                 this.currentTypeKey = item.typeKey;
                 this.currentActiveItem = item.name;
                 this.isActive = i;
+                this.searchType = this.currentTypeKey;
                 this.getTableByType();
             },
             getTableByType() {
@@ -247,7 +239,11 @@
                     let params = {
                         json: decodeURI(encodeURI(JSON.stringify(json)))
                     };
-                    this.addDetailFun(params);
+                    if(this.operatingMode === "add"){
+                        this.addDetailFun(params);
+                    } else if(this.operatingMode === "update"){
+                        this.updateDetailFun(json);
+                    }
                 }).catch(() => {
 
                 });
@@ -294,69 +290,36 @@
                 this.clearForm();
                 this.operatingMode = "update";
                 this.addForm.title = `修改${this.currentActiveItem}资源`;
-                this.updateFormVisible = true;
+                this.dialogFormVisible = true;
                 for (let i = 0; i < this.attrData.length; i++) {
                     let key = this.attrData[i].attrKey;
                     this.addForm[key] = this.multipleSelection[0][key];
                 }
             },
-            updateThisRow(item) {
-                this.$confirm("确认提交审核吗?", "提示", {
-                    confirmButtonText: "提交审核",
-                    cancelButtonText: "我再想想",
-                    type: "warning",
-                    center: true
-                }).then(() => {
-                    let json = {
-                        attrKey: item.attrKey,
-                        typeKey: item.typeKey,
-                        attrValue: this.addForm[item.attrKey],
-                        resourceKey: this.multipleSelection[0].resourceKey,
-                    };
-                    // json = [
-                    //     {
-                    //         "attrKey": "RAt示例表头ID1",
-                    //         "attrValue": "22221",
-                    //         "resourceKey": "RDt15441028866702339152920749367481",
-                    //         "typeKey": "RDf示例表ID"
-                    //     },
-                    //     {
-                    //         "attrKey": "RAt示例表头ID2",
-                    //         "attrValue": "21",
-                    //         "resourceKey": "RDt15441028866702339152920749367481",
-                    //         "typeKey": "RDf示例表ID"
-                    //     },
-                    //     {
-                    //         "attrKey": "RAt示例表头ID3",
-                    //         "attrValue": "21",
-                    //         "resourceKey": "RDt15441028866702339152920749367481",
-                    //         "typeKey": "RDf示例表ID"
-                    //     }];
-                    let data = {
-                        json: decodeURI(encodeURI(JSON.stringify(json)))
-                    };
-                    console.log(JSON.stringify(json));
-                    this.$ajax.detail
-                        .updateDetail(data)
-                        .then((response) => {
-                            if (response.status === 200) {
-                                let data = response.data;
-                                if (data[0].state === "error") {
-                                    this.$message.error(data[0].message);
-                                    console.log(data[0]);
-                                } else {
-                                    this.$message({
-                                        type: "success",
-                                        message: "提交成功!请等待审核！"
-                                    });
-                                    this.getTableByType();
-                                    this.updateFormVisible = false;
-                                }
+            updateDetailFun(json) {
+                let data = {
+                    json: decodeURI(encodeURI(JSON.stringify(json))),
+                    resourcekey: this.multipleSelection[0].resourceKey
+                };
+                this.$ajax.detail
+                    .updateDetail(data)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            if (data[0].state === "error") {
+                                this.$message.error(data[0].message);
+                            } else {
+                                this.$message({
+                                    type: "success",
+                                    message: "提交成功!请等待审核！"
+                                });
+                                this.getTableByType();
+                                this.dialogFormVisible = false;
                             }
-                        }, (error) => {
-                            this.$message.error(error.message);
-                        });
-                });
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
             },
             /**
              * 删除资源
@@ -430,8 +393,35 @@
                         if (response.status === 200) {
                             let data = response.data;
                             this.attrTypeList = JSON.parse(data[0].data);
+                            this.searchOptions = this.attrTypeList;
                             if (this.attrTypeList.length > 0) {
                                 this.getResTable(this.attrTypeList[0], 0);
+                            }
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
+            /**
+             * 搜索
+             */
+            search() {
+                let json = {
+                    typekey: this.searchType,
+                    start: 0,
+                    len: 10,
+                    searchkey: {"searchKeyMap": "[{\"RDt示例值ID\":\"1234\"}]"}
+                };
+                this.$ajax.search
+                    .searchAll(json)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            if (data[0].state === "error") {
+                                this.$message.error(data[0].message);
+                            } else {
+                                let json = JSON.parse(data[0].data);
+                                this.getLineData(json);
                             }
                         }
                     }, (error) => {
@@ -575,12 +565,6 @@
 				height: 45px;
 				background: red;
 			}
-		}
-	}
-
-	.el-dialog {
-		.el-input {
-			width: 70%;
 		}
 	}
 </style>
