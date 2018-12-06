@@ -1,0 +1,278 @@
+@import "reset";
+@import "color";
+@import "mixin";
+@import "margin";
+/*
+  页面公共样式
+*/
+@font-face {
+  font-family: 'iconfont';
+  /* project id 534128 */
+  src: url('//at.alicdn.com/t/font_534128_w0sd98g2nzq.eot');
+  src: url('//at.alicdn.com/t/font_534128_w0sd98g2nzq.eot?#iefix') format('embedded-opentype'), url('//at.alicdn.com/t/font_534128_w0sd98g2nzq.woff') format('woff'), url('//at.alicdn.com/t/font_534128_w0sd98g2nzq.ttf') format('truetype'), url('//at.alicdn.com/t/font_534128_w0sd98g2nzq.svg#iconfont') format('svg');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-icon_:before {
+  content: "\e61c";
+}
+
+.icon-shezhi:before {
+  content: "\e643";
+}
+
+.icon-shouye:before {
+  content: "\e65f";
+}
+
+.icon-shequ:before {
+  content: "\e660";
+}
+
+.icon-pingjiaxitong:before {
+  content: "\e661";
+}
+
+.icon-huwai:before {
+  content: "\e662";
+}
+
+.icon-customermanagement_:before {
+  content: "\e6b7";
+}
+
+.icon-tuikuan:before {
+  content: "\e719";
+}
+
+.icon-zhangdan:before {
+  content: "\e718";
+}
+
+.icon-course-manageme:before {
+  content: "\e717";
+}
+
+.icon-dingdan:before {
+  content: "\e716";
+}
+
+.icon-hetong:before {
+  content: "\e739";
+}
+
+.ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
+}
+
+.el-submenu .el-menu-item{
+    min-width: auto;
+}
+
+.display-flex{
+    display: flex;
+}
+.flex-center{
+   justify-content: center;
+}
+.flex-verticle{
+     -webkit-box-align: center;
+     -moz-box-align: center;
+      -ms-flex-align: center;
+     -webkit-align-items: center;
+     align-items: center;
+}
+.flex1{
+    flex: 1;
+}
+.clear-both{
+  position: relative;
+  &:after {
+    content: '';
+    display: block;
+    clear: both;
+    width: 0;
+    height: 0;
+  }
+}
+.m-320-width{
+    max-width: 320px;
+}
+
+.el-date-editor .el-range-separator{
+    padding: 0 !important;
+}
+
+.txt-r {
+  text-align: right;
+}
+
+.no-data-default{
+    text-align: center;
+    @include font-style(14px, $fontColorTip, 48px);
+}
+.sub-txt {
+  @include font-style(12px, $fontColorSubTitle, 24px);
+}
+
+
+.tip-txt{
+    @include font-style(12px, $fontColorTip, 24px);
+}
+
+
+/* 面包屑处样式 */
+.common-bread-zone{
+    height: 48px;
+    background: $bgColorCrumbs;
+    border-bottom: 1px solid $borderColorTable;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    .bread-crumb-left{
+        display: inline-block;
+        padding-left: 16px;
+        line-height: 48px;
+    }
+    .top-search-input{
+        position: absolute;
+        right: 30px;
+        top: 9px;
+        width: 310px;
+    }
+}
+/* 筛选处样式 */
+.search-condition-zone{
+    border-bottom: 1px solid $borderColorTable;
+}
+
+/* 主体内容块 */
+.common-content-zone{
+    position: absolute;
+    left: 0;
+    top: 48px;
+    bottom: 0;
+    right: 0;
+    padding:16px 30px;
+    overflow-y: auto;
+    &::-webkit-scrollbar-track-piece{
+        background-color: #fff;
+        -webkit-border-radius: 5px;
+    }
+    &::-webkit-scrollbar-thumb{
+        height: 30px;
+        background-color: #999;
+        -webkit-border-radius: 7px;
+        outline: 2px solid #fff;
+        outline-offset: -2px;
+        border: 2px solid #fff;
+    }
+    &::-webkit-scrollbar{
+        width: 16px;
+        height: 10px;
+    }
+}
+.m-14-top{
+    margin-top: 14px;
+}
+.w-140{
+    width: 140px !important;
+}
+.m-w-80{
+  width: 100px !important;
+}
+
+.w-200 {
+  width: 200px !important;
+}
+.w-400 {
+  width: 400px !important;
+}
+
+.multli-lable {
+  .el-form-item__label {
+    line-height: 20px !important;
+  }
+}
+.el-table td.self-td{
+  padding:0 !important;
+}
+
+tbody .self-td {
+  .cell {
+    padding: 0 !important;
+  }
+}
+
+
+//删除等危险按钮
+.el-button--text.danger-btn{
+    color: $negativeColorNormal;
+    &:hover{
+        color: $negativeColorHover;
+    }
+    &:active{
+        color: $negativeColorActive;
+    }
+}
+
+.w-140 .el-cascader--small .el-cascader__label,
+.w-200 .el-cascader--small .el-cascader__label {
+  line-height: 36px;
+}
+
+
+ iframe {
+   border: none;
+   display: block;
+   width: 170px;
+ }
+
+.refundDialogForm .foldLineLabel .el-form-item__label{
+  line-height: 1.5;
+  margin-top: 2px;
+}
+
+.can-point tbody .el-table__row {
+  cursor: pointer;
+}
+
+.el-message{
+  z-index: 3001 !important;
+}
+
+.el-tooltip__popper{
+  max-width: 500px;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+.no-data{
+  width: 100%;
+  text-align: center;
+  @include font-style(16px, $fontColorTip, 32px);
+
+}
