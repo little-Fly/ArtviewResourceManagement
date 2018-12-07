@@ -42,12 +42,8 @@ public class SessionDao extends AbstractDao{
 		}
 	}
 	
-	public String getOpenIdByThirdSession(String third_session) {
+	public SessionBean getOpenIdByThirdSession(String third_session) {
 		SessionBean sessionBean = this.getSession().selectOne("com.grosup.ttzy.session.getOpenIdByThirdSession", third_session);
-		if (null != sessionBean) {
-			return sessionBean.getOpenId();
-		} else {
-			return "";
-		}
+		return sessionBean;
 	}
 }
