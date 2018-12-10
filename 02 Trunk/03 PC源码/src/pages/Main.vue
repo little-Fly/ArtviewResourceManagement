@@ -85,6 +85,19 @@
 							              v-for="(item,key) in attrData" :key="key">
 								<el-input v-model="addForm[item.attrKey]" auto-complete="off"></el-input>
 							</el-form-item>
+							<el-form-item class="tc" v-show="operatingMode === 'add'">
+								<el-upload
+										class="upload-demo"
+										ref="upload"
+										:limit="1"
+										:multiple="false"
+										:on-success="uploadSuc"
+										:on-error="uploadFail"
+										action="https://www.hwyst.net/ttzy/rs/file/add.do"
+										:auto-upload="false">
+									<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+								</el-upload>
+							</el-form-item>
 						</el-form>
 						<div slot="footer" class="dialog-footer">
 							<el-button type="primary" @click="submitAudit">提交审核</el-button>
@@ -103,9 +116,7 @@
             return {
                 attrTypeList: [],
                 searchType: "",
-                searchOptions: [
-                    {label: "资源类型", value: 1}
-                ],
+                searchOptions: [],
                 searchInput: "",
                 dialogFormVisible: false,
                 formLabelWidth: "100px",
@@ -118,6 +129,7 @@
                 currentActiveItem: "",
                 addDetailData: [],
                 operatingMode: "", // 当前行为 是add、update
+                fileArr: []
             };
         },
         methods: {
@@ -218,30 +230,35 @@
              * 提交审核
              */
             submitAudit() {
+                let json = [];
+                for (let key in this.addForm) {
+                    if (this.addForm.hasOwnProperty(key) &&
+                        key !== "title" &&
+                        key !== "resourceKey") {
+                        json.push({
+                            "attrKey": key,
+                            "attrValue": this.addForm[key],
+                            "typeKey": this.currentTypeKey,
+                        });
+                    }
+                }
+                if (json.length === 0) {
+                    this.$message.error("请输入内容");
+                    return;
+                }
                 this.$confirm("确认提交审核吗?", "提示", {
                     confirmButtonText: "提交审核",
                     cancelButtonText: "我再想想",
                     type: "warning",
                     center: true
                 }).then(() => {
-                    let json = [];
-                    for (let key in this.addForm) {
-                        if (this.addForm.hasOwnProperty(key) &&
-                            key !== "title" &&
-                            key !== "resourceKey") {
-                            json.push({
-                                "attrKey": key,
-                                "attrValue": this.addForm[key],
-                                "typeKey": this.currentTypeKey,
-                            });
-                        }
-                    }
                     let params = {
                         json: decodeURI(encodeURI(JSON.stringify(json)))
                     };
-                    if(this.operatingMode === "add"){
+                    if (this.operatingMode === "add") {
                         this.addDetailFun(params);
-                    } else if(this.operatingMode === "update"){
+                        this.$refs.upload.submit(); // 上传图片
+                    } else if (this.operatingMode === "update") {
                         this.updateDetailFun(json);
                     }
                 }).catch(() => {
@@ -427,10 +444,29 @@
                     }, (error) => {
                         this.$message.error(error.message);
                     });
+            },
+            uploadSuc() {
+                console.log("upload success");
+            },
+            uploadFail() {
+                console.log("upload Fail");
             }
         },
         mounted() {
             this.getDefAll();
+            // let params = {
+            //     filekey: "RFlExamplesFile",
+            // };
+            // this.$ajax.file
+            //     .getFiles(params)
+            //     .then((response) => {
+            //         if (response.status === 200) {
+            //             let data = response.data;
+            //             console.log(JSON.parse(data[0].data));
+            //         }
+            //     }, (error) => {
+            //         this.$message.error(error.message);
+            //     });
         }
     };
 </script>

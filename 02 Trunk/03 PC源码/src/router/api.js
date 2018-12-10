@@ -4,7 +4,7 @@ import qs from "qs";
 
 const PRODUCT = "https://www.hwyst.net/ttzy/";
 const LOCAL = "url/" + "ttzy/";
-const HOST = PRODUCT;
+const HOST = LOCAL;
 
 // 设置请求头
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -32,7 +32,11 @@ const API = {
     GET_DETAIL_ALL: "rs/detail/getall.do",
 
     SEARCH: "/rs/search/search.do",
+
+    GET_FILE: "/rs/file/get.do"
 };
+// https://www.hwyst.net/ttzy/rs/file/add.do
+// https://www.hwyst.net/ttzy/pages/testUpload.jsp
 
 axios.defaults.baseURL = HOST;
 
@@ -176,11 +180,20 @@ Vue.prototype.$ajax = {
             });
         }
     },
-    search:{
+    search: {
         searchAll(params) {
             return axios({
                 method: "GET",
                 url: API.SEARCH,
+                params: params
+            });
+        }
+    },
+    file:{
+        getFiles(params){
+            return axios({
+                method: "GET",
+                url: API.GET_FILE,
                 params: params
             });
         }
