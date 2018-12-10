@@ -6,6 +6,9 @@
 		<id column="uid" jdbcType="VARCHAR" property="uid"/>
 		<result column="openId" jdbcType="VARCHAR" property="openId"/>
 		<result column="nickName" jdbcType="VARCHAR" property="nickName"/>
+		<result column="gender" jdbcType="VARCHAR" property="gender"/>
+		<result column="phone" jdbcType="VARCHAR" property="phone"/>
+		<result column="reason" jdbcType="VARCHAR" property="reason"/>
 		<result column="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
 		<result column="lastTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="lastTime"/>
 		<result column="status" jdbcType="INTEGER" property="status"/>
@@ -35,10 +38,13 @@
     <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="uid">
           SELECT LAST_INSERT_ID()
       </selectKey>
-        insert into t_user (openId,nickName,createTime,lastTime,status)
+        insert into t_user (openId,nickName,gender,phone,reason,createTime,lastTime,status)
         values (
         #{openId},
         #{nickName},
+        #{gender},
+        #{phone},
+        #{reason},
         #{createTime,jdbcType=TIMESTAMP},
         #{lastTime,jdbcType=TIMESTAMP},
         #{status})

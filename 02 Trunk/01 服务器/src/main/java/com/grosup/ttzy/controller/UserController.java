@@ -1,6 +1,7 @@
 package com.grosup.ttzy.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.grosup.ttzy.beans.RoleBean;
 import com.grosup.ttzy.beans.SessionBean;
 import com.grosup.ttzy.beans.UserBean;
+import com.grosup.ttzy.beans.UserRoleBean;
 import com.grosup.ttzy.impl.RoleImpl;
+import com.grosup.ttzy.service.RoleService;
 import com.grosup.ttzy.service.SessionService;
 import com.grosup.ttzy.service.UserService;
 import com.grosup.ttzy.util.AesCbcUtil;
@@ -42,6 +46,9 @@ public class UserController {
     @Autowired
     private SessionService sessionService;
     
+    @Autowired
+    private RoleService roleService;
+    
     @RequestMapping(method = RequestMethod.POST, value = "/add.do")
     @ResponseBody
     public JSONObject userAdd(HttpServletRequest request) {
@@ -50,10 +57,17 @@ public class UserController {
         try {
             String third_session = request.getHeader("third_session");
             String nickName = request.getParameter("nickName");
+            String gender = request.getParameter("gender");
+            String reason = request.getParameter("reason");
+            String phone = request.getParameter("phone");
+            
             String iv = request.getParameter("iv");
             String encryptedData = request.getParameter("encryptedData");
             UserBean user = new UserBean();
             user.setNickName(nickName);
+            user.setGender(Integer.parseInt(gender));
+            user.setPhone(phone);
+            user.setReason(reason);
             SessionBean sessionBean = sessionService.getOpenIdByThirdSession(third_session);
             String ret = AesCbcUtil.decrypt(encryptedData, sessionBean.getSession_key(), iv,
                     "UTF-8");
@@ -65,7 +79,15 @@ public class UserController {
             LOGGER.info("ret value = " + userInfoJSON.toString());
             String unionId = (String) userInfoJSON.get("unionId");
             user.setUnionId(unionId);
-            userService.userAdd(user);
+            long uid = userService.userAdd(user);
+            //设置角色为游客
+            List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
+            UserRoleBean userRoleBean = new UserRoleBean();
+            userRoleBean.setUid(uid);
+            userRoleBean.setRoleKey("visitor");
+            userRoles.add(userRoleBean);
+            roleService.BatchAddUserRole(userRoles);
+            
             result.put("code", CodeUtil.SUCCESS);
         } catch (Exception e) {
             result.put("code", CodeUtil.ERROR);

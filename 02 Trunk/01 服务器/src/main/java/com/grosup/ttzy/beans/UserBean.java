@@ -28,6 +28,12 @@ public class UserBean {
     
     private String nickName;
     
+    private int gender;
+    
+    private String phone;
+    
+    private String reason;
+    
     private Date createTime;
     
     private Date lastTime;
@@ -110,6 +116,30 @@ public class UserBean {
 
     public void setUnionId(String unionId) {
         this.unionId = unionId;
+    }
+
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public String toString() {
