@@ -25,7 +25,7 @@ public class UserService {
         return userDao.getUserInfo(params);
     } 
     
-    public void userAdd(UserBean userBean) throws GrosupException {
+    public long userAdd(UserBean userBean) throws GrosupException {
         //注册时间
         Date createTime = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
@@ -36,6 +36,7 @@ public class UserService {
         String remark = userBean.getNickName()+ "于" + sdf.format(createTime) + "注册成功";
         LogBean logBean = TtzyUtil.createLog(uid, createTime, "注册", remark);
         TtzyUtil.saveLog(logBean);
+        return uid;
     }
     
     /**

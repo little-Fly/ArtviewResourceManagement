@@ -10,17 +10,18 @@
 						<el-input placeholder="输入关键字" v-model="searchInput">
 							<el-select v-model="searchType"
 							           slot="prepend"
+							           disabled
 							           placeholder="选择资源类型">
 								<el-option
 										v-for="item in searchOptions"
-										:key="item.value"
-										:label="item.label"
-										:value="item.value">
+										:key="item.typeKey"
+										:label="item.name"
+										:value="item.typeKey">
 								</el-option>
 							</el-select>
 							<el-button
 									slot="append"
-									icon="el-icon-search">搜索
+									icon="el-icon-search" @click.native="search">搜索
 							</el-button>
 						</el-input>
 					</el-col>
@@ -78,16 +79,24 @@
 								:total="1">
 						</el-pagination>
 					</div>
-					<el-dialog :title="form.title" width="30%" :visible.sync="dialogFormVisible">
-						<el-form :model="form">
-							<el-form-item label="活动名称" :label-width="formLabelWidth">
-								<el-input v-model="form.name" auto-complete="off"></el-input>
+					<el-dialog :title="addForm.title" width="30%" :visible.sync="dialogFormVisible">
+						<el-form :model="addForm">
+							<el-form-item :label="item.attrName" :label-width="formLabelWidth"
+							              v-for="(item,key) in attrData" :key="key">
+								<el-input v-model="addForm[item.attrKey]" auto-complete="off"></el-input>
 							</el-form-item>
-							<el-form-item label="活动区域" :label-width="formLabelWidth">
-								<el-select v-model="form.region" placeholder="请选择活动区域">
-									<el-option label="区域一" value="shanghai"></el-option>
-									<el-option label="区域二" value="beijing"></el-option>
-								</el-select>
+							<el-form-item class="tc" v-show="operatingMode === 'add'">
+								<el-upload
+										class="upload-demo"
+										ref="upload"
+										:limit="1"
+										:multiple="false"
+										:on-success="uploadSuc"
+										:on-error="uploadFail"
+										action="https://www.hwyst.net/ttzy/rs/file/add.do"
+										:auto-upload="false">
+									<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+								</el-upload>
 							</el-form-item>
 						</el-form>
 						<div slot="footer" class="dialog-footer">
@@ -107,22 +116,20 @@
             return {
                 attrTypeList: [],
                 searchType: "",
-                searchOptions: [
-                    {label: "资源类型", value: 1}
-                ],
+                searchOptions: [],
                 searchInput: "",
                 dialogFormVisible: false,
                 formLabelWidth: "100px",
-                form: {
-                    title: "新增演员资源",
-                    name: "",
-                    region: "",
-                },
+                addForm: {},
                 multipleSelection: [],
                 attrData: [], // 表头数据
-                tableData: [],
+                tableData: [],// 表格数据
                 isActive: 0,
-                currentTypeKey: ""
+                currentTypeKey: "",
+                currentActiveItem: "",
+                addDetailData: [],
+                operatingMode: "", // 当前行为 是add、update
+                fileArr: []
             };
         },
         methods: {
@@ -131,9 +138,14 @@
              */
             getResTable(item, i) {
                 this.currentTypeKey = item.typeKey;
+                this.currentActiveItem = item.name;
                 this.isActive = i;
+                this.searchType = this.currentTypeKey;
+                this.getTableByType();
+            },
+            getTableByType() {
                 let params = {
-                    typekey: item.typeKey,
+                    typekey: this.currentTypeKey,
                 };
                 this.$ajax.attr
                     .getAttrAll(params)
@@ -147,15 +159,15 @@
                         this.$message.error(error.message);
                     });
             },
-	        /**
-	         * [{
-	         *      resourceKey,
-	         *      attrKey的值
-	         * },{
-	         *      resourceKey,
-	         *      attrKey的值
-	         * }]
-	         */
+            /**
+             * [{
+             *      resourceKey,
+             *      attrKey的值
+             * },{
+             *      resourceKey,
+             *      attrKey的值
+             * }]
+             */
             getResTableDetail(start, len) {
                 let json = {
                     typekey: this.currentTypeKey,
@@ -168,45 +180,168 @@
                         if (response.status === 200) {
                             let detail = response.data;
                             let json = JSON.parse(detail[0].data);
-	                        this.getLineData(json);
+                            this.getLineData(json);
                         }
                     }, (error) => {
                         this.$message.error(error.message);
                     });
             },
-	        getLineData(data){
-                // this.tableData
-		        let obj = {};
-                for (let i = 0; i < this.attrData.length; i++) {
-					obj[this.attrData[i].attrKey] = ""
-                }
-                console.log(this.attrData);
-                console.log(data);
-                for (let j = 0; j < data.length; j++) {
-                    if(this.tableData){
-                        console.log(data[j].resourceKey);
+            getLineData(data) {
+                this.tableData.length = 0;
+                let obj = {};
+                let dataLen = data.length;
+                let one;
+                let index = 0;
+                let arr = [];
+                for (let i = 0; i < dataLen; i++) {
+                    if (one !== data[i].resourceKey) {
+                        if (i !== 0) {
+                            arr[index - 1] = obj;
+                        }
+                        one = data[i].resourceKey;
+                        index++;
+                        obj = {};
+                    }
+                    obj[data[i].attrKey] = data[i].attrValue;
+                    obj.resourceKey = data[i].resourceKey;
+                    if (i === dataLen - 1) {
+                        arr[index - 1] = obj;
                     }
                 }
-	        },
-            /**
-             * 新增资源
-             */
-            addSource() {
-                this.form.title = "新增演员资源";
-                this.dialogFormVisible = true;
+                this.tableData = arr;
             },
             /**
-             * 修改资源
+             * 新增资源按钮
+             */
+            addSource() {
+                this.operatingMode = "add";
+                this.clearForm();
+                this.addForm.title = `新增${this.currentActiveItem}资源`;
+                this.dialogFormVisible = true;
+            },
+            clearForm() {
+                for (let key in this.addForm) {
+                    if (this.addForm.hasOwnProperty(key) && key !== "title") {
+                        this.addForm[key] = "";
+                    }
+                }
+            },
+            /**
+             * 提交审核
+             */
+            submitAudit() {
+                let json = [];
+                for (let key in this.addForm) {
+                    if (this.addForm.hasOwnProperty(key) &&
+                        key !== "title" &&
+                        key !== "resourceKey") {
+                        json.push({
+                            "attrKey": key,
+                            "attrValue": this.addForm[key],
+                            "typeKey": this.currentTypeKey,
+                        });
+                    }
+                }
+                if (json.length === 0) {
+                    this.$message.error("请输入内容");
+                    return;
+                }
+                this.$confirm("确认提交审核吗?", "提示", {
+                    confirmButtonText: "提交审核",
+                    cancelButtonText: "我再想想",
+                    type: "warning",
+                    center: true
+                }).then(() => {
+                    let params = {
+                        json: decodeURI(encodeURI(JSON.stringify(json)))
+                    };
+                    if (this.operatingMode === "add") {
+                        this.addDetailFun(params);
+                        this.$refs.upload.submit(); // 上传图片
+                    } else if (this.operatingMode === "update") {
+                        this.updateDetailFun(json);
+                    }
+                }).catch(() => {
+
+                });
+            },
+            addDetailFun(data) {
+                this.$ajax.detail
+                    .addDetail(data)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            if (data[0].state === "error") {
+                                this.$message.error(data[0].message);
+                            } else {
+                                this.$message({
+                                    type: "success",
+                                    message: "提交成功!请等待审核！"
+                                });
+                                this.getTableByType();
+                                this.dialogFormVisible = false;
+                            }
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
+            /**
+             * 修改资源按钮
              */
             updateSource() {
-                this.form.title = "修改演员资源";
+                if (this.multipleSelection.length > 1) {
+                    this.$message({
+                        type: "warning",
+                        message: "一次最多只能修改一条数据!"
+                    });
+                    return;
+                }
+                if (this.multipleSelection.length < 1) {
+                    this.$message({
+                        type: "warning",
+                        message: "请先选择需要修改的数据!"
+                    });
+                    return;
+                }
+                this.clearForm();
+                this.operatingMode = "update";
+                this.addForm.title = `修改${this.currentActiveItem}资源`;
                 this.dialogFormVisible = true;
+                for (let i = 0; i < this.attrData.length; i++) {
+                    let key = this.attrData[i].attrKey;
+                    this.addForm[key] = this.multipleSelection[0][key];
+                }
+            },
+            updateDetailFun(json) {
+                let data = {
+                    json: decodeURI(encodeURI(JSON.stringify(json))),
+                    resourcekey: this.multipleSelection[0].resourceKey
+                };
+                this.$ajax.detail
+                    .updateDetail(data)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            if (data[0].state === "error") {
+                                this.$message.error(data[0].message);
+                            } else {
+                                this.$message({
+                                    type: "success",
+                                    message: "提交成功!请等待审核！"
+                                });
+                                this.getTableByType();
+                                this.dialogFormVisible = false;
+                            }
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
             },
             /**
              * 删除资源
              */
             deleteConfirm() {
-                console.log(this.multipleSelection);
                 if (this.multipleSelection.length > 1) {
                     this.$message({
                         type: "warning",
@@ -227,10 +362,22 @@
                     type: "warning",
                     center: true
                 }).then(() => {
-                    this.$message({
-                        type: "success",
-                        message: "删除成功!"
-                    });
+                    let params = {
+                        resourcekey: this.multipleSelection[0].resourceKey,
+                    };
+                    this.$ajax.detail
+                        .delDetail(params)
+                        .then((response) => {
+                            if (response.status === 200) {
+                                let data = response.data;
+                                if (data[0].state === "error") {
+                                    this.$message.error(data[0].message);
+                                } else {
+                                    this.getTableByType();
+                                    this.$message.success("删除成功");
+                                }
+                            }
+                        });
                 }).catch(() => {
 
                 });
@@ -240,25 +387,6 @@
              */
             handleSelectionChange(val) {
                 this.multipleSelection = val;
-            },
-            /**
-             * 提交审核
-             */
-            submitAudit() {
-                this.$confirm("确认提交审核吗?", "提示", {
-                    confirmButtonText: "提交审核",
-                    cancelButtonText: "我再想想",
-                    type: "warning",
-                    center: true
-                }).then(() => {
-                    this.$message({
-                        type: "success",
-                        message: "提交成功!请等待审核！"
-                    });
-                    this.dialogFormVisible = false;
-                }).catch(() => {
-
-                });
             },
             /**
              * 退出登录
@@ -282,6 +410,7 @@
                         if (response.status === 200) {
                             let data = response.data;
                             this.attrTypeList = JSON.parse(data[0].data);
+                            this.searchOptions = this.attrTypeList;
                             if (this.attrTypeList.length > 0) {
                                 this.getResTable(this.attrTypeList[0], 0);
                             }
@@ -289,10 +418,55 @@
                     }, (error) => {
                         this.$message.error(error.message);
                     });
+            },
+            /**
+             * 搜索
+             */
+            search() {
+                let json = {
+                    typekey: this.searchType,
+                    start: 0,
+                    len: 10,
+                    searchkey: {"searchKeyMap": "[{\"RDt示例值ID\":\"1234\"}]"}
+                };
+                this.$ajax.search
+                    .searchAll(json)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            if (data[0].state === "error") {
+                                this.$message.error(data[0].message);
+                            } else {
+                                let json = JSON.parse(data[0].data);
+                                this.getLineData(json);
+                            }
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
+            uploadSuc() {
+                console.log("upload success");
+            },
+            uploadFail() {
+                console.log("upload Fail");
             }
         },
         mounted() {
             this.getDefAll();
+            // let params = {
+            //     filekey: "RFlExamplesFile",
+            // };
+            // this.$ajax.file
+            //     .getFiles(params)
+            //     .then((response) => {
+            //         if (response.status === 200) {
+            //             let data = response.data;
+            //             console.log(JSON.parse(data[0].data));
+            //         }
+            //     }, (error) => {
+            //         this.$message.error(error.message);
+            //     });
         }
     };
 </script>

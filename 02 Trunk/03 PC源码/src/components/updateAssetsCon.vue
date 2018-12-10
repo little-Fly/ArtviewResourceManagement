@@ -42,9 +42,6 @@
 		</el-dialog>
 		<el-dialog title="增加资源属性" width="30%" :visible.sync="dialogResVisible">
 			<el-form>
-				<el-form-item label="attrKey" :label-width="formLabelWidth">
-					<el-input v-model="resAttr.attrKey" auto-complete="off"></el-input>
-				</el-form-item>
 				<el-form-item label="属性名称" :label-width="formLabelWidth">
 					<el-input v-model="resAttr.attrName" auto-complete="off"></el-input>
 				</el-form-item>
@@ -58,9 +55,6 @@
 		</el-dialog>
 		<el-dialog title="修改资源属性" width="30%" :visible.sync="resUpdateVisible">
 			<el-form>
-				<el-form-item label="attrKey" :label-width="formLabelWidth">
-					<el-input v-model="resAttr.attrKey" auto-complete="off"></el-input>
-				</el-form-item>
 				<el-form-item label="属性名称" :label-width="formLabelWidth">
 					<el-input v-model="resAttr.attrName" auto-complete="off"></el-input>
 				</el-form-item>
@@ -144,7 +138,7 @@
                     center: true
                 }).then(() => {
                     let params = {
-                        attrey: item.attrKey,
+                        attrkey: item.attrKey,
                     };
                     this.$ajax.attr
                         .delAttr(params)
@@ -155,6 +149,7 @@
                                     this.$message.error(data[0].message);
                                 } else {
                                     this.$message.success("删除成功");
+                                    this.dialogFormVisible = false;
                                     this.refreshIndex();
                                 }
                             }
@@ -167,10 +162,6 @@
              * 确认增加资源属性
              */
             confirmAddAttr() {
-                if (this.resAttr.attrKey === "") {
-                    this.$message.warning("attrKey不能为空!");
-                    return;
-                }
                 if (this.resAttr.attrName === "") {
                     this.$message.warning("属性名称不能为空!");
                     return;
@@ -206,10 +197,6 @@
              * 确认修改资源属性
              */
             confirmUpdateAttr(){
-                if (this.resAttr.attrKey === "") {
-                    this.$message.warning("attrKey不能为空!");
-                    return;
-                }
                 if (this.resAttr.attrName === "") {
                     this.$message.warning("属性名称不能为空!");
                     return;

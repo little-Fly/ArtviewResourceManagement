@@ -32,7 +32,11 @@ const API = {
     GET_DETAIL_ALL: "rs/detail/getall.do",
 
     SEARCH: "/rs/search/search.do",
+
+    GET_FILE: "/rs/file/get.do"
 };
+// https://www.hwyst.net/ttzy/rs/file/add.do
+// https://www.hwyst.net/ttzy/pages/testUpload.jsp
 
 axios.defaults.baseURL = HOST;
 
@@ -142,9 +146,9 @@ Vue.prototype.$ajax = {
     detail: {
         addDetail(params) {
             return axios({
-                method: "POST",
+                method: "GET",
                 url: API.ADD_DETAIL,
-                data: params
+                params: params
             });
         },
         delDetail(params) {
@@ -156,9 +160,9 @@ Vue.prototype.$ajax = {
         },
         updateDetail(params) {
             return axios({
-                method: "POST",
+                method: "GET",
                 url: API.UPDATE_DETAIL,
-                data: params
+                params: params
             });
         },
         getDetail(params) {
@@ -172,6 +176,24 @@ Vue.prototype.$ajax = {
             return axios({
                 method: "GET",
                 url: API.GET_DETAIL_ALL,
+                params: params
+            });
+        }
+    },
+    search: {
+        searchAll(params) {
+            return axios({
+                method: "GET",
+                url: API.SEARCH,
+                params: params
+            });
+        }
+    },
+    file:{
+        getFiles(params){
+            return axios({
+                method: "GET",
+                url: API.GET_FILE,
                 params: params
             });
         }

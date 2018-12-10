@@ -22,9 +22,6 @@
 							<!--</el-select>-->
 						</el-input>
 					</el-form-item>
-					<el-form-item label="typeKey">
-						<el-input placeholder="请输入typeKey" v-model="form.typeKey"></el-input>
-					</el-form-item>
 					<p class="tc ">
 						<el-button type="success" class="add-confirm-btn" @click="addConfirm">确认新增</el-button>
 					</p>
