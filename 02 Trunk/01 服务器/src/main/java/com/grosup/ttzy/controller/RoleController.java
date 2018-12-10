@@ -1,6 +1,9 @@
 package com.grosup.ttzy.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONObject;
 
@@ -26,9 +29,24 @@ public class RoleController {
 
     @RequestMapping(path = "/batchAddUserRole.do", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject BatchAddUserRole(@RequestBody List<UserRoleBean> userRoles) {
+    public JSONObject BatchAddUserRole(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         try {
+            
+            String roleKey = request.getParameter("roleKey");
+            if (ObjectUtil.isNull(roleKey)
+                    || ObjectUtil.isNull(request.getParameter("uids"))) {
+                result.put("code", CodeUtil.ERROR);
+                result.put("msg", "request param error");
+            }
+            String[] uids = request.getParameter("uids").trim().split(",");
+            List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
+            for (String uid : uids) {
+                UserRoleBean userRole = new UserRoleBean();
+                userRole.setRoleKey(roleKey);
+                userRole.setUid(Long.parseLong(uid));
+                userRoles.add(userRole);
+            }
             if (ObjectUtil.isNull(userRoles)) {
                 result.put("code", CodeUtil.ERROR);
                 result.put("msg", "param is null");
@@ -44,9 +62,27 @@ public class RoleController {
     
     @RequestMapping(path = "/batchdelUserRole.do", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject BatchdelUserRole(@RequestBody List<UserRoleBean> userRoles) {
+    public JSONObject BatchdelUserRole(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         try {
+            String roleKey = request.getParameter("roleKey");
+            if (ObjectUtil.isNull(roleKey)
+                    || ObjectUtil.isNull(request.getParameter("uids"))) {
+                result.put("code", CodeUtil.ERROR);
+                result.put("msg", "request param error");
+            }
+            String[] uids = request.getParameter("uids").trim().split(",");
+            List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
+            for (String uid : uids) {
+                UserRoleBean userRole = new UserRoleBean();
+                userRole.setRoleKey(roleKey);
+                userRole.setUid(Long.parseLong(uid));
+                userRoles.add(userRole);
+            }
+            if (ObjectUtil.isNull(userRoles)) {
+                result.put("code", CodeUtil.ERROR);
+                result.put("msg", "param is null");
+            }
             if (ObjectUtil.isNull(userRoles)) {
                 result.put("code", CodeUtil.ERROR);
                 result.put("msg", "param is null");
