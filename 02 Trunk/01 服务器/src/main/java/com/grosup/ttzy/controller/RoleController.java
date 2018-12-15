@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONObject;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +24,8 @@ import com.grosup.ttzy.util.ObjectUtil;
 @Controller
 @RequestMapping("/wx/role")
 public class RoleController {
+    
+    private static final Logger LOGGER = Logger.getLogger(RoleController.class);
     
     @Autowired
     private RoleService roleService;
@@ -54,6 +57,7 @@ public class RoleController {
             roleService.BatchAddUserRole(userRoles);
             result.put("code", CodeUtil.SUCCESS);
         } catch (GrosupException e) {
+            LOGGER.error("", e);
             result.put("code", CodeUtil.ERROR);
             result.put("msg", "BatchAddUserRole error");
         }
@@ -63,9 +67,11 @@ public class RoleController {
     @RequestMapping(path = "/batchdelUserRole.do", method = RequestMethod.POST)
     @ResponseBody
     public JSONObject BatchdelUserRole(HttpServletRequest request) {
+        LOGGER.info("Begin BatchdelUserRole...");
         JSONObject result = new JSONObject();
         try {
             String roleKey = request.getParameter("roleKey");
+            LOGGER.info("roleKey = " + roleKey);
             if (ObjectUtil.isNull(roleKey)
                     || ObjectUtil.isNull(request.getParameter("uids"))) {
                 result.put("code", CodeUtil.ERROR);

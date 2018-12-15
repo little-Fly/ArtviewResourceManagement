@@ -30,7 +30,7 @@ import com.grosup.ttzy.util.StringUtil;
 @RequestMapping("/login")
 public class PcLoginController {
 
-    private static Logger logger = Logger.getLogger(PcLoginController.class);
+    private static final Logger LOGGER = Logger.getLogger(PcLoginController.class);
 
     @Autowired
     private UserService userService;
@@ -70,7 +70,7 @@ public class PcLoginController {
         // 转换为json
         JSONObject access_token_return_json = JSONObject
                 .fromObject(access_token_return_str);
-        logger.info("access_token_return_json is:" + access_token_return_json);
+        LOGGER.info("access_token_return_json is:" + access_token_return_json);
         // 用户唯一标识
         String openid = (String) access_token_return_json.get("openid");
         String access_token = (String) access_token_return_json
@@ -87,11 +87,6 @@ public class PcLoginController {
                     .fromObject(weixin_userInfo_Str);
             String unionid = (String) weixin_userInfo_json.get("unionid");
             String nickname = (String) weixin_userInfo_json.get("nickname");
-            // String headimgurl = (String) weixin_userInfo_json
-            // .getString("headimgurl");
-
-            // 通过微信unionid查询用户信息
-            // UserBean user = userWS.getUserbeanbyWeixinUnionid(unionid);
             Map<String, Object> queryParam = new HashMap<String, Object>();
             // 为了测试
             if ("1".equals(noCheck)) {
@@ -102,17 +97,15 @@ public class PcLoginController {
                 map.put("msg", "code无效");
                 return map;
             }
-            queryParam.put("openId", openid);
+            queryParam.put("unionId", unionid);
             UserBean user = userService.getUserInfo(queryParam);
             Map<String, Object> userInfo = new HashMap<String, Object>();
             if (ObjectUtil.isNull(user)) {
                 // 用户未注册
-                userInfo.put("userStatus", "unRegister");
-            } else if ("1".equals(user.getStatus())) {
-                // 用户已经注册还未通过审核
-                userInfo.put("userStatus", "unChecked");
+                userInfo.put("status", -1);
             } else {
-                userInfo.put("userStatus", "checked");
+                map.put("status", user.getStatus());
+                map.put("userInfo", JSONObject.fromObject(user));
             }
             map.put("userInfo", userInfo);
             map.put("code", 1);
@@ -129,7 +122,7 @@ public class PcLoginController {
                 CookieUtil.setCookies(response, user);
             }
         } catch (GrosupException e) {
-            logger.error("登录认证失败", e);
+            LOGGER.error("登录认证失败", e);
         }
         return map;
     }
