@@ -100,24 +100,21 @@ public class WxLoginController {
 //           ***根据unionId去数据库查询用户是否注册，如果未注册，session返回用户标识未注册
 //           并返回用户注册状态----未注册/注册还未通过审核，如果已经注册并通过审核，返回用户信息并写入session
              Map<String, Object> userParam = new HashMap<String, Object>();
-//             userParam.put("openId", openid);
-             userParam.put("openId", "oVEQd0W7jgUobhqDk-Q8IINdoiCY");
+             userParam.put("openId", openid);
+//             userParam.put("openId", "oVEQd0W7jgUobhqDk-Q8IINdoiCY");
              UserBean userBean = userService.getUserInfo(userParam);
              if (userBean == null) {
                  //用户未注册
-                 map.put("userStatus", "unRegister");
-             } else if ("1".equals(userBean.getStatus())) {
-                 //用户已经注册还未通过审核
-                 map.put("userStatus", "unChecked");
+                 map.put("status", -1);
              } else {
-                 map.put("userStatus", "checked");
+                 map.put("status", userBean.getStatus());
                  map.put("userInfo", JSONObject.fromObject(userBean));
                  session.setAttribute("userId", userBean.getUid());
              }
              map.put("code", CodeUtil.SUCCESS);
              map.put("msg", "校验登录成功");
      } catch (Exception e) {
-         LOGGER.error("校验登录失败");
+         LOGGER.error("校验登录失败", e);
      }
         return map;
     }

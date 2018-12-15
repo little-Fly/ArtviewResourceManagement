@@ -17,6 +17,7 @@
     
     <select id="queryLogByPage" parameterType="map" resultMap="BaseResultMap">
         select * from t_log
+        ORDER BY id desc 
         limit #{indexStart},#{pageSize}
     </select>
 </mapper>
