@@ -130,11 +130,13 @@ public class UserController {
         JSONObject result = new JSONObject();
         try {
             userService.changeUserStatus(uid, nickName, status, refuse);
-            List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
-            UserRoleBean userRoleBean = new UserRoleBean();
-            userRoleBean.setUid(uid);
-            userRoleBean.setRoleKey("visitor");
-            roleService.BatchdelUserRole(userRoles);
+            if (status == 1) {
+                List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
+                UserRoleBean userRoleBean = new UserRoleBean();
+                userRoleBean.setUid(uid);
+                userRoleBean.setRoleKey("visitor");
+                roleService.BatchdelUserRole(userRoles);
+            }
             result.put("code", CodeUtil.SUCCESS);
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);

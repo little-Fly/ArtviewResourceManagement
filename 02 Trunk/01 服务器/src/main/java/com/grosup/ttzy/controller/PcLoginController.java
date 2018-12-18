@@ -85,8 +85,8 @@ public class PcLoginController {
                     "access_token=" + access_token + "&openid=" + openid);
             JSONObject weixin_userInfo_json = JSONObject
                     .fromObject(weixin_userInfo_Str);
+            LOGGER.info("weixin_userInfo_Str is:" + weixin_userInfo_Str);
             String unionid = (String) weixin_userInfo_json.get("unionid");
-            String nickname = (String) weixin_userInfo_json.get("nickname");
             Map<String, Object> queryParam = new HashMap<String, Object>();
             // 为了测试
             if ("1".equals(noCheck)) {
@@ -110,17 +110,9 @@ public class PcLoginController {
             map.put("userInfo", userInfo);
             map.put("code", 1);
             map.put("msg", "success");
-            // new UserBean();
-            // user.setUid(1L);
-            // user.setOpenId("1111");
-            // user.setNickName("薛利飞");
-            // user.setCreateTime(new Date());
-            // user.setLastTime(new Date());
-            // 查询用户信息
-            if (ObjectUtil.isNotNull(user)) {
-                user.setLastValidTime(System.currentTimeMillis());
-                CookieUtil.setCookies(response, user);
-            }
+            
+            user.setLastValidTime(System.currentTimeMillis());
+            CookieUtil.setCookies(response, user);
         } catch (GrosupException e) {
             LOGGER.error("登录认证失败", e);
         }
