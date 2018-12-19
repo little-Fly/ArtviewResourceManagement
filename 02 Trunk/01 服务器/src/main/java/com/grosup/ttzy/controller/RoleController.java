@@ -1,9 +1,13 @@
 package com.grosup.ttzy.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONObject;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,14 +25,31 @@ import com.grosup.ttzy.util.ObjectUtil;
 @RequestMapping("/wx/role")
 public class RoleController {
     
+    private static final Logger LOGGER = Logger.getLogger(RoleController.class);
+    
     @Autowired
     private RoleService roleService;
 
     @RequestMapping(path = "/batchAddUserRole.do", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject BatchAddUserRole(@RequestBody List<UserRoleBean> userRoles) {
+    public JSONObject BatchAddUserRole(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         try {
+            
+            String roleKey = request.getParameter("roleKey");
+            if (ObjectUtil.isNull(roleKey)
+                    || ObjectUtil.isNull(request.getParameter("uids"))) {
+                result.put("code", CodeUtil.ERROR);
+                result.put("msg", "request param error");
+            }
+            String[] uids = request.getParameter("uids").trim().split(",");
+            List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
+            for (String uid : uids) {
+                UserRoleBean userRole = new UserRoleBean();
+                userRole.setRoleKey(roleKey);
+                userRole.setUid(Long.parseLong(uid));
+                userRoles.add(userRole);
+            }
             if (ObjectUtil.isNull(userRoles)) {
                 result.put("code", CodeUtil.ERROR);
                 result.put("msg", "param is null");
@@ -36,6 +57,7 @@ public class RoleController {
             roleService.BatchAddUserRole(userRoles);
             result.put("code", CodeUtil.SUCCESS);
         } catch (GrosupException e) {
+            LOGGER.error("", e);
             result.put("code", CodeUtil.ERROR);
             result.put("msg", "BatchAddUserRole error");
         }
@@ -44,9 +66,29 @@ public class RoleController {
     
     @RequestMapping(path = "/batchdelUserRole.do", method = RequestMethod.POST)
     @ResponseBody
-    public JSONObject BatchdelUserRole(@RequestBody List<UserRoleBean> userRoles) {
+    public JSONObject BatchdelUserRole(HttpServletRequest request) {
+        LOGGER.info("Begin BatchdelUserRole...");
         JSONObject result = new JSONObject();
         try {
+            String roleKey = request.getParameter("roleKey");
+            LOGGER.info("roleKey = " + roleKey);
+            if (ObjectUtil.isNull(roleKey)
+                    || ObjectUtil.isNull(request.getParameter("uids"))) {
+                result.put("code", CodeUtil.ERROR);
+                result.put("msg", "request param error");
+            }
+            String[] uids = request.getParameter("uids").trim().split(",");
+            List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
+            for (String uid : uids) {
+                UserRoleBean userRole = new UserRoleBean();
+                userRole.setRoleKey(roleKey);
+                userRole.setUid(Long.parseLong(uid));
+                userRoles.add(userRole);
+            }
+            if (ObjectUtil.isNull(userRoles)) {
+                result.put("code", CodeUtil.ERROR);
+                result.put("msg", "param is null");
+            }
             if (ObjectUtil.isNull(userRoles)) {
                 result.put("code", CodeUtil.ERROR);
                 result.put("msg", "param is null");
