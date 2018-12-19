@@ -4,7 +4,7 @@ import qs from "qs";
 
 const PRODUCT = "https://www.hwyst.net/ttzy/";
 const LOCAL = "url/" + "ttzy/";
-const HOST = LOCAL;
+const HOST = PRODUCT;
 
 // 设置请求头
 axios.defaults.headers.post["Content-Type"] = "application/json";
