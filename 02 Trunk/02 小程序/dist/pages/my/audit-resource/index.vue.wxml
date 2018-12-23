@@ -1,0 +1,25 @@
+<template name="46d6af71">
+  <view class="_div data-v-15972d2b">
+    <view class="_div data-v-15972d2b zan-panel zan-cell--access">
+      <view class="_div data-v-15972d2b zan-cell">
+        <view class="_div data-v-15972d2b zan-cell__icon zan-icon zan-icon-description" style="color:#4b0;"></view>
+        <view class="_div data-v-15972d2b zan-cell__bd">新增资源审核</view>
+        <view class="_div data-v-15972d2b zan-cell__ft"></view>
+      </view>
+    </view>
+    <view class="_div data-v-15972d2b zan-panel zan-cell--access">
+      <view class="_div data-v-15972d2b zan-cell">
+        <view class="_div data-v-15972d2b zan-cell__icon zan-icon zan-icon-description" style="color:#f85;"></view>
+        <view class="_div data-v-15972d2b zan-cell__bd">修改资源审核</view>
+        <view class="_div data-v-15972d2b zan-cell__ft"></view>
+      </view>
+    </view>
+    <view class="_div data-v-15972d2b zan-panel zan-cell--access">
+      <view class="_div data-v-15972d2b zan-cell">
+        <view class="_div data-v-15972d2b zan-cell__icon zan-icon zan-icon-description" style="color:#f24544;"></view>
+        <view class="_div data-v-15972d2b zan-cell__bd">删除资源审核</view>
+        <view class="_div data-v-15972d2b zan-cell__ft"></view>
+      </view>
+    </view>
+  </view>
+</template>

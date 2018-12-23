@@ -1,1 +1,26 @@
-<template name="3f9d0c58"><view class="_div data-v-b91ca566 counter-warp"></view></template>
+<template name="59a2d593">
+  <view class="_div data-v-b91ca566 container">
+    <view class="_div data-v-b91ca566 resource-warp clearfix">
+      <view class="_div data-v-b91ca566 res-item fl">
+        <image class="_img data-v-b91ca566 res-item__headimg" src="/assets/images/resource_init.png" alt></image>
+        <view class="_div data-v-b91ca566 res-name">灯光</view>
+      </view>
+      <view class="_div data-v-b91ca566 res-item fl">
+        <image class="_img data-v-b91ca566 res-item__headimg" src="/assets/images/resource_init.png" alt></image>
+        <view class="_div data-v-b91ca566 res-name">灯光</view>
+      </view>
+      <view class="_div data-v-b91ca566 res-item fl">
+        <image class="_img data-v-b91ca566 res-item__headimg" src="/assets/images/resource_init.png" alt></image>
+        <view class="_div data-v-b91ca566 res-name">灯光</view>
+      </view>
+      <view class="_div data-v-b91ca566 res-item fl">
+        <image class="_img data-v-b91ca566 res-item__headimg" src="/assets/images/resource_init.png" alt></image>
+        <view class="_div data-v-b91ca566 res-name">灯光</view>
+      </view>
+      <view class="_div data-v-b91ca566 res-item fl">
+        <image class="_img data-v-b91ca566 res-item__headimg" src="/assets/images/resource_init.png" alt></image>
+        <view class="_div data-v-b91ca566 res-name">灯光</view>
+      </view>
+    </view>
+  </view>
+</template>

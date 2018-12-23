@@ -1,0 +1,16 @@
+<template name="5050d7a8">
+  <view class="_div data-v-59a0112e">
+    <view class="_div data-v-59a0112e zan-panel"><button bindtap="handleProxy" type="{{operateKey == 'add' ? 'primary' : 'warn'}}" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_button data-v-59a0112e">{{operateKey === 'add' ? '授权' : '取消授权'}}</button></view>
+    <view class="_div data-v-59a0112e zan-panel">
+      <checkbox-group bindchange="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}" class="_checkbox-group data-v-59a0112e">
+        <view wx:key="index" key="{{index}}" class="_div data-v-59a0112e zan-cell" wx:for="{{userListForSelect}}" wx:for-index="index" wx:for-item="item">
+          <view class="_div data-v-59a0112e zan-cell__icon zan-icon zan-icon-contact" style="color:#666;"></view>
+          <view class="_div data-v-59a0112e zan-cell__bd">{{item.nickName}}</view>
+          <view class="_div data-v-59a0112e zan-cell__ft">
+            <checkbox value="{{item.uid}}" class="_checkbox data-v-59a0112e" />
+          </view>
+        </view>
+      </checkbox-group>
+    </view>
+  </view>
+</template>

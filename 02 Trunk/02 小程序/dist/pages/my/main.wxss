@@ -1,2 +1,9 @@
 @import "../../common/vendor.wxss";
-.container{padding:0;background-color:#eee}.container .zan-panel{width:100%}
+
+.container {
+  padding: 0;
+  background-color: #eee;
+}
+.container .zan-panel {
+  width: 100%;
+}
