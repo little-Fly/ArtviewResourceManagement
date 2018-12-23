@@ -1,0 +1,46 @@
+import Vue from 'vue'
+import { BASE_URL } from '@/config/api';
+/**
+ * 小程序请求方法封装
+ * @param {*} queryObj 请求对象
+ */
+function $http (queryObj) {
+	// 拿自定义登录态
+	let customSession = this.$store.state.third_session;
+	let customSessionObj = customSession ? {third_session: customSession} : {};
+	wx.request({
+		url: BASE_URL + queryObj.url,//必传参数
+		data: queryObj.data || "",//默认为空
+		header: Object.assign({}, {
+			'content-type': 'application/x-www-form-urlencoded'
+		}, customSessionObj, queryObj.header),
+		method: queryObj.method || "GET",// 默认为get
+		// success: queryObj.success || function () {},// 默认为空函数
+		success (res) {
+			res = res.data; // 数据结构返回内容为data下
+			if (res.status === 'success') {
+				queryObj.success && queryObj.success(res);// 默认为空函数
+			} else {
+				console.error(res.msg);
+			}
+		},
+		fail () {
+			if (res.statusCode !== 200) {
+				// 说明请求失败
+				console.error(res);
+				// 如果有自定义错误操作，就在此执行
+				queryObj.fail && queryObj.fail();
+			}
+		},
+		complete (res) {
+			if (res.statusCode !== 200) {
+				// 说明请求失败
+				console.error(res);
+				debugger;
+				// 如果有自定义错误操作，就在此执行
+				queryObj.fail && queryObj.fail();
+			}
+		}
+	})
+}
+export { $http }

@@ -1,10 +1,16 @@
 package com.grosup.ttzy.util;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
+
 import com.grosup.ttzy.beans.LogBean;
+import com.grosup.ttzy.beans.SessionBean;
 import com.grosup.ttzy.beans.UserBean;
 import com.grosup.ttzy.dao.LogDao;
 import com.grosup.ttzy.dao.SessionDao;
@@ -16,7 +22,7 @@ import com.grosup.ttzy.dao.UserDao;
  */
 public class TtzyUtil {
     
-    private static Logger logger = Logger.getLogger(TtzyUtil.class);
+    private static final Logger LOGGER = Logger.getLogger(TtzyUtil.class);
     
     private static TtzyUtil ttzyUtil;
     
@@ -59,7 +65,7 @@ public class TtzyUtil {
         try {
             userBean = userDao.getUserInfo(params);
         } catch (GrosupException e) {
-            logger.error("根据openId获取人员信息异常", e);
+            LOGGER.error("根据openId获取人员信息异常", e);
         }
         return userBean;
     }
@@ -79,9 +85,72 @@ public class TtzyUtil {
         try {
             logDao.logAdd(logBean);
         } catch (GrosupException e) {
-            logger.error("日志记录异常", e);
+            LOGGER.error("日志记录异常", e);
             throw new GrosupException(-1 ,"日志记录异常", e);
         }
         
+    }
+    /**
+     * 获取uid方法
+     * @param request
+     * @return
+     */
+    public static Long getUid(HttpServletRequest request) {
+        Long uid = null;
+        try {
+            //1、从cookie获取
+            Cookie cookieUser = getCookie(request, SsoConstant.SSO_GROSUP);
+            Cookie cookieValid = getCookie(request, SsoConstant.SSO_GROSUP_VALID);
+            if ((null == cookieUser) || (null == cookieValid)) {
+              //2、wx小程序方式获取
+                uid = getUidBywx(request);
+                return uid;
+            }
+            String userStr = cookieUser.getValue();
+            String validStr = cookieValid.getValue();
+            if (MD5Util.GetMD5Code(userStr).equalsIgnoreCase(validStr)) {
+                String userJson = AESUtil.RevertAESCode(userStr);
+                UserBean user = new UserBean(userJson);
+                uid = user.getUid();
+            }
+        } catch (Exception e) {
+            LOGGER.error("get uid failed", e);
+        }
+        return uid;
+    }
+    
+    private static Long getUidBywx(HttpServletRequest request) throws GrosupException {
+        LOGGER.info("通过third_session获取Uid...");
+        String third_session = request.getHeader("third_session");
+        if (ObjectUtil.isNull(third_session)) {
+            LOGGER.info("third_session is null...");
+            return null;
+        }
+        SessionBean sessionBean = sessionDao.getOpenIdByThirdSession(third_session);
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("openId", sessionBean.getOpenId());
+        UserBean user = userDao.getUserInfo(params);
+        return user.getUid();
+    }
+    
+    private static Cookie getCookie(HttpServletRequest request, String key) {
+        if (null == request) {
+            return null;
+        }
+
+        if (StringUtil.isNullOrEmpty(key)) {
+            return null;
+        }
+
+        Cookie[] cookies = request.getCookies();
+        if (null == cookies) {
+            return null;
+        }
+        for (Cookie cookie : cookies) {
+            if (key.equalsIgnoreCase(cookie.getName())) {
+                return cookie;
+            }
+        }
+        return null;
     }
 }

@@ -3,13 +3,12 @@ package com.grosup.ttzy.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
 import com.grosup.ttzy.beans.RoleBean;
 import com.grosup.ttzy.beans.UserBean;
+import com.grosup.ttzy.beans.UserRoleBean;
 import com.grosup.ttzy.util.GrosupException;
 
-@Repository
 public interface RoleDao {
     
     public List<UserBean> getUserListByRole(@Param("roleKey") String roleKey);
@@ -26,4 +25,7 @@ public interface RoleDao {
     
     public boolean isWriter(@Param("uid") long uid) throws GrosupException;
     
+    public void BatchAddUserRole(@Param("userRoles") List<UserRoleBean> userRoles) throws GrosupException;
+    
+    public void BatchdelUserRole(@Param("userRoles") List<UserRoleBean> userRoles) throws GrosupException;
 }

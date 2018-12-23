@@ -19,20 +19,33 @@
                 code: code,
                 noCheck: 1
             };
-            this.$ajax.autoService
-                .login(params)
-                .then((response) => {
-                    if (response.status === 200) {
-                        let data = response.data;
-                        if (data.msg === "success") {
-                            this.$router.push("/main");
-                        } else {
-                            this.$router.push("/login");
+            try {
+                this.$ajax.autoService
+                    .login(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            if (data.msg === "success") {
+                                this.$router.push("/main");
+                            } else {
+                                this.$message.error(data.msg);
+                                setTimeout(()=>{
+                                    this.$router.push("/login");
+                                },2000);
+                            }
                         }
-                    }
-                }, (error) => {
-                    this.$message.error(error);
-                });
+                    }, (error) => {
+                        this.$message.error(error);
+                        setTimeout(()=>{
+                            this.$router.push("/login");
+                        },2000);
+                    });
+            } catch(e){
+                this.$message.error(e);
+                setTimeout(()=>{
+                    this.$router.push("/login");
+                },2000);
+            }
             // this.$axios.get(`/login/pcLogin.do?code=${code}&noCheck=1`)
             //     .then((response) => {
             //         if (response.status === 200) {

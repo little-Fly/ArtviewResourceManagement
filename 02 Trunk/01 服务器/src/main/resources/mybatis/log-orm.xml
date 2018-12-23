@@ -1,9 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.grosup.ttzy.log">
-
+    <resultMap type="com.grosup.ttzy.beans.LogBean" id="BaseResultMap">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="uid" jdbcType="VARCHAR" property="uid"/>
+        <result column="operation" jdbcType="VARCHAR" property="operation"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="logTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="logTime"/>
+    </resultMap>
+    
+    <resultMap type="com.grosup.ttzy.beans.ReportBean" id="report">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="uid" jdbcType="VARCHAR" property="uid"/>
+        <result column="report" jdbcType="VARCHAR" property="report"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="date" jdbcType="VARCHAR" property="date"/>
+    </resultMap>
     <insert id="logAdd" parameterType="com.grosup.ttzy.beans.LogBean">
         insert into t_log (uid,logTime,operation,remark)
         values (#{uid},#{logTime},#{operation},#{remark})
+    </insert>
+    
+    <select id="queryLogByPage" parameterType="map" resultMap="BaseResultMap">
+        select * from t_log
+        ORDER BY id desc 
+        limit #{indexStart},#{pageSize}
+    </select>
+    
+     <!-- 查询用户消息 -->
+    <select id="queryReport" parameterType="map" resultMap="report">
+        select * from t_report
+        where uid = #{uid}
+        ORDER BY id desc 
+        limit #{indexStart},#{pageSize}
+    </select>
+    
+    <insert id="reportAdd" parameterType="com.grosup.ttzy.beans.ReportBean">
+        insert into t_report (uid,report,status,date)
+        values (#{uid},#{report},#{status},#{date})
     </insert>
 </mapper>

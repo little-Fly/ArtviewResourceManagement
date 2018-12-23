@@ -1,6 +1,10 @@
 package com.grosup.ttzy.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -8,15 +12,19 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.grosup.ttzy.beans.SessionBean;
 import com.grosup.ttzy.beans.UserBean;
+import com.grosup.ttzy.beans.UserRoleBean;
 import com.grosup.ttzy.impl.RoleImpl;
+import com.grosup.ttzy.service.RoleService;
+import com.grosup.ttzy.service.SessionService;
 import com.grosup.ttzy.service.UserService;
+import com.grosup.ttzy.util.AesCbcUtil;
 import com.grosup.ttzy.util.CodeUtil;
 import com.grosup.ttzy.util.GrosupException;
 import com.grosup.ttzy.util.ObjectUtil;
@@ -25,7 +33,7 @@ import com.grosup.ttzy.util.ObjectUtil;
 @Controller
 public class UserController {
     
-    private static Logger logger = Logger.getLogger(UserController.class);
+    private static final Logger LOGGER = Logger.getLogger(UserController.class);
     
     @Autowired
     private UserService userService;
@@ -33,17 +41,59 @@ public class UserController {
     @Autowired
     private RoleImpl roleImpl;
     
+    @Autowired
+    private SessionService sessionService;
+    
+    @Autowired
+    private RoleService roleService;
+    
     @RequestMapping(method = RequestMethod.POST, value = "/add.do")
     @ResponseBody
-    public JSONObject userAdd(@RequestBody UserBean user) {
+    public JSONObject userAdd(HttpServletRequest request) {
+        LOGGER.info("Begin user add...");
         JSONObject result = new JSONObject();
         try {
-            userService.userAdd(user);
+            String third_session = request.getHeader("third_session");
+            String nickName = request.getParameter("nickName");
+            String gender = request.getParameter("gender");
+            String reason = request.getParameter("reason");
+            String phone = request.getParameter("phone");
+            
+            String iv = request.getParameter("iv");
+            String encryptedData = request.getParameter("encryptedData");
+            UserBean user = new UserBean();
+            user.setNickName(nickName);
+            user.setGender(Integer.parseInt(gender));
+            user.setPhone(phone);
+            user.setReason(reason);
+            SessionBean sessionBean = sessionService.getOpenIdByThirdSession(third_session);
+            String ret = AesCbcUtil.decrypt(encryptedData, sessionBean.getSession_key(), iv,
+                    "UTF-8");
+            if (ObjectUtil.isNull(ret)) {
+                LOGGER.error("解密用户信息失败....");
+                throw new Exception();
+            }
+            JSONObject userInfoJSON = JSONObject.fromObject(ret);
+            LOGGER.info("ret value = " + userInfoJSON.toString());
+            String unionId = (String) userInfoJSON.get("unionId");
+            String openId = (String) userInfoJSON.get("openId");
+            user.setUnionId(unionId);
+            user.setOpenId(openId);
+            LOGGER.info("user value = " + user.toString());
+            long uid = userService.userAdd(user);
+            //设置角色为游客
+            List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
+            UserRoleBean userRoleBean = new UserRoleBean();
+            userRoleBean.setUid(uid);
+            userRoleBean.setRoleKey("visitor");
+            userRoles.add(userRoleBean);
+            roleService.BatchAddUserRole(userRoles);
+            
             result.put("code", CodeUtil.SUCCESS);
-        } catch (GrosupException e) {
+        } catch (Exception e) {
             result.put("code", CodeUtil.ERROR);
             result.put("message", "系统错误");
-            logger.error("人员注册异常", e);
+            LOGGER.error("人员注册异常", e);
         }
         return result;
     }
@@ -69,7 +119,7 @@ public class UserController {
             }
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);
-            logger.error("查询待审核人员异常", e);
+            LOGGER.error("查询待审核人员异常", e);
         }
         return result;
     }
@@ -80,10 +130,17 @@ public class UserController {
         JSONObject result = new JSONObject();
         try {
             userService.changeUserStatus(uid, nickName, status, refuse);
+            if (status == 1) {
+                List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
+                UserRoleBean userRoleBean = new UserRoleBean();
+                userRoleBean.setUid(uid);
+                userRoleBean.setRoleKey("visitor");
+                roleService.BatchdelUserRole(userRoles);
+            }
             result.put("code", CodeUtil.SUCCESS);
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);
-            logger.error("审核人员异常", e);
+            LOGGER.error("审核人员异常", e);
         }
         return result;
     }
@@ -99,11 +156,30 @@ public class UserController {
                 result.put("code", CodeUtil.NODATA);
                 return result;
             } else {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
                 for (UserBean user : users) {
                     JSONObject userInfo = new JSONObject();
                     userInfo.put("uid", user.getUid());
                     userInfo.put("nickName", user.getNickName());
+                    userInfo.put("phone", user.getPhone());
+                    userInfo.put("gender", user.getGender() == 1? "男":"女");
+                    userInfo.put("reason", user.getReason());
                     userInfo.put("roles", JSONArray.fromObject(user.getRoles()));
+                    userInfo.put("createTime", sdf.format(user.getCreateTime()));
+                    switch (user.getStatus()) {
+                        case 0:
+                            userInfo.put("userStatus", "待审核");
+                            break;
+                               
+                        case 1:
+                            userInfo.put("userStatus", "已审核");
+                            break;
+                        case 2:
+                            userInfo.put("userStatus", "被拒绝");
+                            break;    
+                        default:
+                            break;
+                    }
                     data.add(userInfo);
                 }
                 result.put("code", CodeUtil.SUCCESS);
@@ -111,7 +187,7 @@ public class UserController {
             }
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);
-            logger.error("查询人员异常", e);
+            LOGGER.error("查询人员异常", e);
         }
         return result;
     }
@@ -136,12 +212,43 @@ public class UserController {
                 userInfo.put("uid", user.getUid());
                 userInfo.put("nickName", user.getNickName());
                 data.add(userInfo);
-                result.put("code", CodeUtil.SUCCESS);
-                result.put("data", data);
             }
+            result.put("code", CodeUtil.SUCCESS);
+            result.put("data", data);
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);
-            logger.error("查询人员异常", e);
+            LOGGER.error("查询人员异常", e);
+        }
+        return result;
+    }
+    
+    /**
+     * 查询未在该角色下所有人员信息
+     * @param roleKey
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.GET, value = "/getUnUsersByRole")
+    @ResponseBody
+    public JSONObject getUnUsersByRole(@RequestParam String roleKey) {
+        JSONObject result = new JSONObject();
+        JSONArray data = new JSONArray();
+        try {
+            List<UserBean> users = userService.getUnUsersByRole(roleKey);
+            if (ObjectUtil.isNull(users) || users.size() == 0) {
+                result.put("code", CodeUtil.NODATA);
+                return result;
+            } 
+            for (UserBean user : users) {
+                JSONObject userInfo = new JSONObject();
+                userInfo.put("uid", user.getUid());
+                userInfo.put("nickName", user.getNickName());
+                data.add(userInfo);
+            }
+            result.put("code", CodeUtil.SUCCESS);
+            result.put("data", data);
+        } catch (GrosupException e) {
+            result.put("code", CodeUtil.ERROR);
+            LOGGER.error("查询人员异常", e);
         }
         return result;
     }
