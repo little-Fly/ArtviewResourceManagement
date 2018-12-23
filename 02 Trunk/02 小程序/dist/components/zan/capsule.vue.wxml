@@ -1,1 +1,12 @@
-<template name="39b25da1"><view bindtap="handleProxy" class="_div data-v-5071db4c zan-capsule {{'zan-capsule--' + type}}" data-eventid="{{'0'}}" data-comkey="{{$k}}"><block wx:if="{{color}}"><view class="_div data-v-5071db4c zan-capsule__left" style=" {{computedClassStr}}">{{ leftText }}</view> <view class="_div data-v-5071db4c zan-capsule__right" style=" {{getObject}}">{{ rightText }}</view></block><block wx:else><view class="_div data-v-5071db4c zan-capsule__left">{{ leftText }}</view> <view class="_div data-v-5071db4c zan-capsule__right">{{ rightText }}</view></block></view></template>
+<template name="6065bbc6">
+  <view bindtap="handleProxy" class="_div data-v-5071db4c zan-capsule {{'zan-capsule--' + type}}" data-eventid="{{'0'}}" data-comkey="{{$k}}">
+    <block wx:if="{{color}}">
+      <view class="_div data-v-5071db4c zan-capsule__left" style=" {{computedClassStr}}">{{ leftText }}</view>
+      <view class="_div data-v-5071db4c zan-capsule__right" style=" {{getObject}}">{{ rightText }}</view>
+    </block>
+    <block wx:else>
+      <view class="_div data-v-5071db4c zan-capsule__left">{{ leftText }}</view>
+      <view class="_div data-v-5071db4c zan-capsule__right">{{ rightText }}</view>
+    </block>
+  </view>
+</template>

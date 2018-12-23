@@ -2,7 +2,7 @@
   <div class="container" @click="clickHandle('test click', $event)">
     <!-- <Unregistered></Unregistered> -->
     <!-- myMessage and Register -->
-    <div class="zan-panel">
+    <div v-if="myMessages" class="zan-panel">
       <div class="zan-cell zan-cell--access" @click="navigeteClick('myMessage')">
         <div class="zan-cell__icon zan-icon zan-icon-chat" style="color:#666;"></div>
         <div class="zan-cell__bd">我的消息</div>
@@ -11,147 +11,160 @@
     </div>
     <!-- 不同角色进来不同功能 -->
     <div class="zan-panel">
-      <div class="zan-cell zan-cell--access" @click="navigeteClick('register')">
+      <div v-if="register" class="zan-cell zan-cell--access" @click="navigeteClick('register')">
         <div class="zan-cell__icon zan-icon zan-icon-setting" style="color:#666;"></div>
         <div class="zan-cell__bd">注册申请</div>
         <div class="zan-cell__ft"></div>
       </div>
-      <div class="zan-cell zan-cell--access" @click="navigeteClick('auditResourse')">
-        <div class="zan-cell__icon zan-icon zan-icon-edit" style="color:#666;"></div>
-        <div class="zan-cell__bd">资源审核</div>
-        <div class="zan-cell__ft"></div>
-      </div>
-      <div class="zan-cell zan-cell--access" @click="navigateToMyTeam">
+      <div v-if="userManagement" class="zan-cell zan-cell--access" @click="navigeteClick('myTeam')">
         <div class="zan-cell__icon zan-icon zan-icon-shop" style="color:#666;"></div>
-        <div class="zan-cell__bd">我的团队</div>
+        <div class="zan-cell__bd">用户管理</div>
         <div class="zan-cell__ft"></div>
       </div>
-      <div class="zan-cell zan-cell--access" @click="navigateToLog">
+      <div v-if="enpowerAdmins" class="zan-cell zan-cell--access" @click="navigeteClick('auditAdmin')">
+        <div class="zan-cell__icon zan-icon zan-icon-add-o" style="color:#666;"></div>
+        <div class="zan-cell__bd">管理员授权</div>
+        <div class="zan-cell__ft"></div>
+      </div>
+      <div v-if="powerForInputRes" class="zan-cell zan-cell--access" @click="navigeteClick('auditWriter')">
+        <div class="zan-cell__icon zan-icon zan-icon-add-o" style="color:#666;"></div>
+        <div class="zan-cell__bd">权限管理（资源录入）</div>
+        <div class="zan-cell__ft"></div>
+      </div>
+      <div v-if="powerForAuditRes" class="zan-cell zan-cell--access" @click="navigeteClick('auditChecker')">
+        <div class="zan-cell__icon zan-icon zan-icon-add-o" style="color:#666;"></div>
+        <div class="zan-cell__bd">权限管理（资源审核）</div>
+        <div class="zan-cell__ft"></div>
+      </div>
+      <div v-if="auditResourse" class="zan-cell zan-cell--access" @click="navigeteClick('auditResourse')">
+        <div class="zan-cell__icon zan-icon zan-icon-edit" style="color:#666;"></div>
+        <div class="zan-cell__bd">审核资源</div>
+        <div class="zan-cell__ft"></div>
+      </div>
+      <!-- <div v-if="inputResourse" class="zan-cell zan-cell--access" @click="navigeteClick('auditResourse')">
+        <div class="zan-cell__icon zan-icon zan-icon-edit" style="color:#666;"></div>
+        <div class="zan-cell__bd">录入资源</div>
+        <div class="zan-cell__ft"></div>
+      </div> -->
+      <div v-if="logPage" class="zan-cell zan-cell--access" @click="navigeteClick('log')">
         <div class="zan-cell__icon zan-icon zan-icon-records" style="color:#666;"></div>
         <div class="zan-cell__bd">查看日志</div>
         <div class="zan-cell__ft"></div>
       </div>
-      <div class="zan-cell zan-cell--access" @click="navigateToAuditRegist">
+      <!-- <div v-if="logPage" class="zan-cell zan-cell--access" @click="navigateToAuditRegist">
         <div class="zan-cell__icon zan-icon zan-icon-add-o" style="color:#666;"></div>
         <div class="zan-cell__bd">新成员注册审核</div>
         <div class="zan-cell__ft"></div>
-      </div>
+      </div> -->
     </div>
     <!-- personalPage -->
-    <div class="zan-panel">
-      <div class="zan-cell zan-cell--access" @click="navigateToPersonal">
+    <div v-if="personalPage" class="zan-panel">
+      <div class="zan-cell zan-cell--access" @click="navigeteClick('personal')">
         <div class="zan-cell__icon zan-icon zan-icon-contact" style="color:#666;"></div>
         <div class="zan-cell__bd">个人信息</div>
         <div class="zan-cell__ft"></div>
       </div>
-      <div class="zan-cell zan-cell--access" @click="navigateToRegister">
-        <div class="zan-cell__icon zan-icon zan-icon-contact" style="color:#666;"></div>
-        <div class="zan-cell__bd">注册申请</div>
-        <div class="zan-cell__ft"></div>
-      </div>
     </div>
     <!-- about -->
-    <div class="zan-panel">
-      <div class="zan-cell zan-cell--access" @click="navigateToAbout">
+    <div v-if="about" class="zan-panel">
+      <div class="zan-cell zan-cell--access" @click="navigeteClick('about')">
         <div class="zan-cell__icon zan-icon zan-icon-setting" style="color:#666;"></div>
         <div class="zan-cell__bd">关于天天资源</div>
         <div class="zan-cell__ft"></div>
       </div>
     </div>
-    <zanDialog @ensureBtnClick="ensureBtnClick" :zanDialogObj="zanDialogObj"/>
   </div>
 </template>
 
 <script>
 // import card from '@/components/card'
 // import Unregistered from '@/components/my/unregistered'
-// 不能命名为dialog会与微信的产生冲突
-import zanDialog from '@/components/zan/dialog'
 export default {
   data () {
     return {
       motto: 'Hello World',
-      userInfo: {},
-      zanDialogObj: {
-        'name': '',
-        'show': true,
-        'title': '',
-        'content': '您的信息正在审核中，请耐心等待！',
-        'buttons': [{
-          text: '确定',
-          color: 'green',
-          type: 'confirm',
-          fnName: 'ensureBtnClick'
-        }]
-      }
+      userInfo: {}
     }
   },
-
-  components: {
-    // Unregistered,
-    zanDialog
-  },
-
   methods: {
     navigeteClick (pageKey) {
+      // 判断用户审核状态
+      if (this.userAuditStatusState === 2) { // 审核中
+        // 点击我的消息，个人信息注册申请时弹出个人信息正在审核中
+        if (['myMessage', 'register'].indexOf(pageKey) > -1) {
+          wx.showModal({
+            content: '等待管理员审核中...',
+            showCancel: false
+          });
+          return;
+        }
+      }
+      // 根据用户点击项，导航到不同页面
       switch (pageKey) {
         case 'myMessage':
           wx.navigateTo({
-            url: "../my-message/main"
+            url: "./my-message/main"
           })
           break;
         case 'register':
           // 由于微信用户要与PC用户互通，这里注册需要得到用户授权获取高级信息
-          debugger;
-          if (!this.$tool.checkUserInfoAuth()) { // 用户未授权，进到授权页
-            this.$tool.goToAuthPage();
-          } else {
+          this.$tool.checkUserInfoAuth().then(() => {
+            // 用户未授权，进到授权页
+            console.log('已授权');
             wx.navigateTo({
-              url: "../register/main"
+              url: "./register/main"
             })
-          }
+          }, () => {
+            console.log('未授权');
+            this.$tool.goToAuthPage();
+          });
+          break;
+        case 'auditAdmin':
+          wx.navigateTo({
+            url: "./audit-role/main?rolekey=admin"
+          })
+          break;
+        case 'auditChecker':
+          wx.navigateTo({
+            url: "./audit-role/main?rolekey=checker"
+          })
+          break;
+        case 'auditWriter':
+          wx.navigateTo({
+            url: "./audit-role/main?rolekey=writer"
+          })
           break;
         case 'auditResourse':
           wx.navigateTo({
-            url: "../audit-resource/main"
+            url: "./audit-resource/main"
+          })
+          break;
+        case 'myTeam':
+          wx.navigateTo({
+            url: "./my-team/main"
+          })
+          break;
+        case 'log':
+          wx.navigateTo({
+            url: "./logs/main"
+          })
+          break;
+        case 'personal':
+          wx.navigateTo({
+            url: "./personal/main"
+          })
+          break;
+        case 'about':
+          wx.navigateTo({
+            url: "./about/main"
           })
           break;
       }
     },
-    navigateToMessage () {
-      wx.navigateTo({
-        url: "../my-message/main"
-      })
-    },
-    navigateToAbout () {
-      wx.navigateTo({
-        url: "../about/main"
-      })
-    },
-    navigateToPersonal () {
-      wx.navigateTo({
-        url: "../personal/main"
-      })
-    },
-    navigateToRegister () {
-      wx.navigateTo({
-        url: "../personal/main"
-      })
-    },
     navigateToAuditRegist () {
       wx.navigateTo({
-        url: "../auditRegistration/main"
+        url: "./auditRegistration/main"
       })
-    },
-    navigateToMyTeam () {
-      console.log(1111)
-      wx.navigateTo({
-        url: "../my-team/main"
-      })
-    },
-    navigateToLog () {
-      const url = '../logs/main'
-      wx.navigateTo({ url })
     },
     getUserInfo () {
       // // 调用登录接口
@@ -173,15 +186,51 @@ export default {
     }
   },
 
-  created () {
+  mounted () {
+    console.log(this.$store.state);
     // 调用应用实例的方法获取全局数据
     // this.getUserInfo()
   },
   computed: {
-    // 根据用户角色状态分流
-    userRoleState () {
-      return this.$store.state.userRole;
-    }
+    userAuditStatusState () {
+      return this.$store.state.userAuditStatus;
+    },
+    /**
+     * 计算得到的用户权限树，每个权限的计算值
+     */
+    myMessages () {
+      return this.$store.state.accessTree.my && this.$store.state.accessTree.my.myMessages;
+    },
+    register () {
+      return this.$store.state.accessTree.my && this.$store.state.accessTree.my.register;
+    },
+    userManagement () {
+      return this.$store.state.accessTree.my && this.$store.state.accessTree.my.userManagement;
+    },
+    enpowerAdmins () {
+      return this.$store.state.accessTree.my && this.$store.state.accessTree.my.enpowerAdmins;
+    },
+    logPage () {
+      return this.$store.state.accessTree.my && this.$store.state.accessTree.my.logPage;
+    },
+    powerForInputRes () {
+      return this.$store.state.accessTree.my && this.$store.state.accessTree.my.powerForInputRes;
+    },
+    powerForAuditRes () {
+      return this.$store.state.accessTree.my && this.$store.state.accessTree.my.powerForAuditRes;
+    },
+    auditResourse () {
+      return this.$store.state.accessTree.my && this.$store.state.accessTree.my.auditResourse;
+    },
+    /* inputResourse () {
+      return this.$store.state.accessTree.my && this.$store.state.accessTree.my.inputResourse;
+    }, */
+    personalPage () {
+      return this.$store.state.accessTree.my && this.$store.state.accessTree.my.personalPage;
+    },
+    about () {
+      return this.$store.state.accessTree.my && this.$store.state.accessTree.my.about;
+    },
   }
 }
 </script>

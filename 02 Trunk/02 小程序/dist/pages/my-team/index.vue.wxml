@@ -1,7 +1,0 @@
-<import src="/components/zan/capsule.vue.wxml" /><template name="c4d79a5e"><view class="_div data-v-8ed2e5f4"><view class="_div data-v-8ed2e5f4 invite-btn"><button class="_button data-v-8ed2e5f4 zan-btn zan-btn--primary">邀请新成员</button></view> <view class="_div data-v-8ed2e5f4 zan-panel"><view class="_div data-v-8ed2e5f4 zan-cell"><view class="_div data-v-8ed2e5f4 zan-cell__bd">
-        薛利
-        <template data="{{...$root[$kk+'0'], $root}}" is="39b25da1"></template> <template data="{{...$root[$kk+'1'], $root}}" is="39b25da1"></template></view> <view class="_div data-v-8ed2e5f4 zan-cell__ft">更改权限</view></view> <view class="_div data-v-8ed2e5f4 zan-cell"><view class="_div data-v-8ed2e5f4 zan-cell__bd">
-        代强
-        <template data="{{...$root[$kk+'2'], $root}}" is="39b25da1"></template></view> <view class="_div data-v-8ed2e5f4 zan-cell__ft">更改权限</view></view> <view class="_div data-v-8ed2e5f4 zan-cell"><view class="_div data-v-8ed2e5f4 zan-cell__bd">
-        王玲
-        <template data="{{...$root[$kk+'3'], $root}}" is="39b25da1"></template></view> <view class="_div data-v-8ed2e5f4 zan-cell__ft">更改权限</view></view></view></view></template>
