@@ -7,6 +7,7 @@ package com.grosup.ttzy.resource.dto;
 public class ResourceDefDto {
 
 	private String typeKey;	//varchar	Y	主键，资源类型Key
+	private String logoUrl;	//varchar	Y	主键，资源类型Key
 	private String name;	//varchar	Y	资源类型名称
 	private String remark;	//varchar	N	备注ע
 
@@ -17,6 +18,14 @@ public class ResourceDefDto {
 
 	public void setTypeKey(String typeKey) {
 		this.typeKey = typeKey;
+	}
+
+	public String getLogoUrl() {
+		return logoUrl;
+	}
+
+	public void setLogoUrl(String logoUrl) {
+		this.logoUrl = logoUrl;
 	}
 
 	public String getName() {
