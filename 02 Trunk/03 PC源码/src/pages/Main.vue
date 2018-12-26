@@ -40,7 +40,7 @@
 							</li>
 						</ul>
 					</div>
-					<div class="bottom-btn tc" @click="goAssets">
+					<div class="bottom-btn tc" @click="goAssets" v-if="canWrite">
 						<img src="@/assets/image/sourceM.png" alt="icon" width="30" height="30">
 						资源类别管理
 					</div>
@@ -48,7 +48,7 @@
 				<el-main>
 					<div class="main-head">
 						<div class="title">资源录入</div>
-						<ul class="btns fr">
+						<ul class="btns fr" v-if="canWrite">
 							<li class="fl"><span class="operate-btn type-in" @click="addSource"></span></li>
 							<li class="fl"><span class="operate-btn delete" @click="deleteConfirm"></span></li>
 							<li class="fl"><span class="operate-btn update" @click="updateSource"></span></li>
@@ -114,6 +114,7 @@
         name: "main-content",
         data() {
             return {
+                canWrite: false,
                 attrTypeList: [],
                 searchType: "",
                 searchOptions: [],
@@ -179,8 +180,14 @@
                     .then((response) => {
                         if (response.status === 200) {
                             let detail = response.data;
-                            let json = JSON.parse(detail[0].data);
-                            this.getLineData(json);
+                            if (detail.length > 0) {
+                                if (detail[0].state === "error") {
+                                    this.$message.error(detail[0].message);
+                                    return;
+                                }
+                                let json = JSON.parse(detail[0].data);
+                                this.getLineData(json);
+                            }
                         }
                     }, (error) => {
                         this.$message.error(error.message);
@@ -450,10 +457,19 @@
             },
             uploadFail() {
                 console.log("upload Fail");
-            }
+            },
         },
         mounted() {
-            this.getDefAll();
+            this.$chargeAuthority().then((t) => {
+                console.log(t);
+                this.getDefAll();
+                if (t === "writer") {
+                    this.canWrite = true;
+                }
+            }, (ee) => {
+                console.log(ee);
+                this.$router.replace("/");
+            });
             // let params = {
             //     filekey: "RFlExamplesFile",
             // };

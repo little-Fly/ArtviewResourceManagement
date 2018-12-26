@@ -4,7 +4,7 @@ import qs from "qs";
 
 const PRODUCT = "https://www.hwyst.net/ttzy/";
 const LOCAL = "url/" + "ttzy/";
-const HOST = PRODUCT;
+const HOST = LOCAL;
 
 // 设置请求头
 axios.defaults.headers.post["Content-Type"] = "application/json";
@@ -189,8 +189,8 @@ Vue.prototype.$ajax = {
             });
         }
     },
-    file:{
-        getFiles(params){
+    file: {
+        getFiles(params) {
             return axios({
                 method: "GET",
                 url: API.GET_FILE,
@@ -198,4 +198,51 @@ Vue.prototype.$ajax = {
             });
         }
     }
+};
+
+Vue.prototype.$chargeAuthority = () => {
+    // let ada = [{"remark": "", "roleKey": "visitor", "roleName": "游客", "roleType": 0}, {
+    //     "remark": "",
+    //     "roleKey": "writer",
+    //     "roleName": "录入人员",
+    //     "roleType": 0
+    // }];
+    // sessionStorage.setItem("myRoles", JSON.stringify(ada));
+
+    return new Promise((resolve, reject) => {
+        let role = sessionStorage.getItem("myRoles");
+        if (!role || role === "") {
+            //没权限
+            reject(false);
+            return;
+        }
+        let myRoles = JSON.parse(role);
+        let canIn = false;
+        let canWrite = false;
+        for (let i = 0; i < myRoles.length; i++) {
+            switch (myRoles[i].roleKey) {
+                case "writer":
+                    canWrite = true;
+                    break;
+                case "admin":
+                case "checker":
+                case "common":
+                    canIn = true;
+                    break;
+                default:
+                    canIn = false;
+            }
+            if (canWrite) {
+                resolve("writer");
+                break;
+            }
+            if (canIn) {
+                resolve(true);
+                break;
+            }
+        }
+        if (!canIn) {
+            reject(false);
+        }
+    });
 };

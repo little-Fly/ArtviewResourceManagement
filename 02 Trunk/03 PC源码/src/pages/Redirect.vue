@@ -22,29 +22,7 @@
             let json = {
                 "msg": "success",
                 "userInfo": {
-                    "createTime": {
-                        "date": 17,
-                        "day": 1,
-                        "hours": 23,
-                        "minutes": 31,
-                        "month": 11,
-                        "seconds": 45,
-                        "time": 1545060705000,
-                        "timezoneOffset": -480,
-                        "year": 118
-                    },
                     "gender": 1,
-                    "lastTime": {
-                        "date": 17,
-                        "day": 1,
-                        "hours": 23,
-                        "minutes": 31,
-                        "month": 11,
-                        "seconds": 45,
-                        "time": 1545060705000,
-                        "timezoneOffset": -480,
-                        "year": 118
-                    },
                     "lastValidTime": 1545233361873,
                     "nickName": "薛利飞",
                     "openId": "oVEQd0SO9VTr0WkHR4uJCmq7MWdo",
@@ -67,8 +45,32 @@
                             let data = response.data;
                             console.log(data);
                             if (data.msg === "success") {
-                                console.log(data);
-                                // this.$router.push("/main");
+                                console.log(data.userInfo);
+                                if (data.userInfo) {
+                                    let myRoles = data.userInfo.roles;
+                                    sessionStorage.setItem("myRoles", JSON.stringify(myRoles));
+                                    let canIn = false;
+                                    for (let i = 0; i < myRoles.length; i++) {
+                                        switch (myRoles[i].roleKey) {
+                                            case "admin":
+                                            case "checker":
+                                            case "writer":
+                                            case "common":
+                                                canIn = true;
+                                                break;
+                                            default:
+                                                canIn = false;
+                                        }
+                                        if (canIn) {
+                                            this.$router.push("/main");
+                                            break;
+                                        }
+                                    }
+                                    if (!canIn) {
+                                        this.$router.push("/NoAuthority");
+                                        sessionStorage.removeItem("myRoles");
+                                    }
+                                }
                             } else {
                                 this.$message.error(data.msg);
                                 setTimeout(() => {
