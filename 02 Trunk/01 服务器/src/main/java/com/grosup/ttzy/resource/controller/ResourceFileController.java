@@ -24,10 +24,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
+import com.grosup.ttzy.dao.RoleDao;
 import com.grosup.ttzy.resource.common.MessageMapConstant;
 import com.grosup.ttzy.resource.dto.ResourceFileDto;
 import com.grosup.ttzy.resource.service.ResourceFileService;
+import com.grosup.ttzy.util.GrosupException;
 import com.grosup.ttzy.util.StringUtil;
+import com.grosup.ttzy.util.TtzyUtil;
 
 import net.sf.json.JSONArray;
 
@@ -39,74 +42,89 @@ public class ResourceFileController implements MessageMapConstant {
 	@Autowired
 	ResourceFileService resourceFileService;
 
+	@Autowired
+	RoleDao roleDao;
+
 	/**
 	 * <form action="/rs/file/add.do?" method="post" enctype="multipart/form-data">
 	 * 
 	 * @param json {""}参见 /pages/testUpload.jsp
 	 * @post File
 	 * @return ["state":"successful"}]
+	 * @throws GrosupException 
 	 */
 	@RequestMapping(value = "/add.do", method = { RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String add(HttpServletRequest request, HttpServletResponse response) {
+	public String add(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String json = request.getParameter("json");
-		if (!StringUtil.isNullOrEmpty(json)) {
-			ResourceFileDto resourceFileDto = resourceFileService.create(json);
-			boolean bFlag = springUpload(request, resourceFileDto, messageMap);
-			if (bFlag) {
+		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+			String json = request.getParameter("json");
+			if (!StringUtil.isNullOrEmpty(json)) {
+				ResourceFileDto resourceFileDto = resourceFileService.create(json);
+				boolean bFlag = springUpload(request, resourceFileDto, messageMap);
+				if (bFlag) {
 
-				resourceFileService.add(resourceFileDto);
-				messageMap.put(STATE, STATE_SUCCESSFUL);
-				messageMap.put(DATA, resourceFileDto.getFileKey());
+					resourceFileService.add(resourceFileDto);
+					messageMap.put(STATE, STATE_SUCCESSFUL);
+					messageMap.put(DATA, resourceFileDto.getFileKey());
+				} else {
+					messageMap.put(STATE, STATE_ERROR);
+					messageMap.put(MESSAGE, MESSAGE_FILE_ETER + "json:\"" + json + "\"");
+					log.error("add " + MESSAGE_FILE_ETER + "json:\"" + json + "\"");
+				}
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_FILE_ETER + "json:\"" + json + "\"");
-				log.error("add " + MESSAGE_FILE_ETER + "json:\"" + json + "\"");
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+				log.error("upload " + MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
-			log.error("upload " + MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
 
 	public boolean springUpload(HttpServletRequest request, ResourceFileDto resourceFileDto,
-			Map<String, String> messageMap) {
-		long startTime = System.currentTimeMillis();
-		// 将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
-				request.getSession().getServletContext());
-		// 检查form中是否有enctype="multipart/form-data"
-		if (multipartResolver.isMultipart(request)) {
-			// 将request变成多部分request
-			MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-			// 获取multiRequest 中所有的文件名
-			Iterator<String> iter = multiRequest.getFileNames();
-			String filenName = "";
+			Map<String, String> messageMap) throws GrosupException {
+		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+			long startTime = System.currentTimeMillis();
+			// 将当前上下文初始化给  CommonsMutipartResolver （多部分解析器）
+			CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver(
+					request.getSession().getServletContext());
+			// 检查form中是否有enctype="multipart/form-data"
+			if (multipartResolver.isMultipart(request)) {
+				// 将request变成多部分request
+				MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
+				// 获取multiRequest 中所有的文件名
+				Iterator<String> iter = multiRequest.getFileNames();
+				String filenName = "";
 
-			while (iter.hasNext()) {
+				while (iter.hasNext()) {
 
-				// 一次遍历所有文件
-				MultipartFile file = multiRequest.getFile(iter.next().toString());
-				if (file != null) {
-					filenName = file.getOriginalFilename();
-					// 上传
-					try {
-						resourceFileService.addFile(resourceFileDto, file, filenName);
-					} catch (IllegalStateException e) {
-						log.error(MESSAGE_FILE_ETER, e);
-					} catch (IOException e) {
-						log.error(MESSAGE_FILE_ETER, e);
+					// 一次遍历所有文件
+					MultipartFile file = multiRequest.getFile(iter.next().toString());
+					if (file != null) {
+						filenName = file.getOriginalFilename();
+						// 上传
+						try {
+							resourceFileService.addFile(resourceFileDto, file, filenName);
+						} catch (IllegalStateException e) {
+							log.error(MESSAGE_FILE_ETER, e);
+						} catch (IOException e) {
+							log.error(MESSAGE_FILE_ETER, e);
+						}
 					}
 				}
+				long endTime = System.currentTimeMillis();
+				log.info("springUpload time：" + String.valueOf(endTime - startTime) + "ms");
+				return true;
 			}
-			long endTime = System.currentTimeMillis();
-			log.info("springUpload time：" + String.valueOf(endTime - startTime) + "ms");
-			return true;
+		} else {
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
 		}
+		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return false;
 	}
 
@@ -115,20 +133,27 @@ public class ResourceFileController implements MessageMapConstant {
 	 * 
 	 * @param filekey ：fileKey
 	 * @return ["state":"error", "message":"错误消息"}]
+	 * @throws GrosupException 
 	 */
 	@RequestMapping(value = "/del.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String del(HttpServletRequest request, HttpServletResponse response) {
+	public String del(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String fileKey = request.getParameter("filekey");
-		if (!StringUtil.isNullOrEmpty(fileKey)) {
-			resourceFileService.del(fileKey);
-			messageMap.put(STATE, STATE_SUCCESSFUL);
+		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+			String fileKey = request.getParameter("filekey");
+			if (!StringUtil.isNullOrEmpty(fileKey)) {
+				resourceFileService.del(fileKey);
+				messageMap.put(STATE, STATE_SUCCESSFUL);
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + fileKey + "\"");
+				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + fileKey + "\"");
+			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + fileKey + "\"");
-			log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + fileKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
@@ -162,6 +187,7 @@ public class ResourceFileController implements MessageMapConstant {
 			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + fileKey + "\"");
 			log.error("update " + MESSAGE_PARAM_ETER + "resourceKey:\"" + fileKey + "\"");
 		}
+
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
