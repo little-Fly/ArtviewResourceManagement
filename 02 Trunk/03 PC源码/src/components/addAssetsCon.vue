@@ -21,6 +21,9 @@
 								<el-option label="视频" value="video"></el-option>
 							</el-select>
 						</el-input>
+						<el-input placeholder="字符限制" style="width: 100px"
+						          v-if="item.type==='default'"
+						          v-model="item.attrlen"></el-input>
 						<el-button type="primary" @click.prevent="addAttr()" v-if="key === attrList.length-1">
 							增加
 						</el-button>
@@ -118,11 +121,19 @@
                     this.addAttrItemFun(this.attrList[i], typeKey);
                 }
             },
+            // attrKey: "RAt示例表头ID1"
+            // attrLevel: "0"
+            // attrName: "示例表头1"
+            // attrType: "default"
+            // attrlen: 0
+            // remark: "示例表头备注"
+            // typeKey: "RDf示例表ID"
             addAttrItemFun(item, typeKey) {
                 let json = {
                     attrName: item.attrName,
                     attrType: item.type,
-                    typeKey: typeKey
+                    typeKey: typeKey,
+                    attrlen: item.attrlen,
                 };
                 let params = {
                     json: decodeURI(encodeURI(JSON.stringify(json)))

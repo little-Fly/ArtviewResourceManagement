@@ -83,7 +83,10 @@
 						<el-form :model="addForm">
 							<el-form-item :label="item.attrName" :label-width="formLabelWidth"
 							              v-for="(item,key) in attrData" :key="key">
-								<el-input v-model="addForm[item.attrKey]" auto-complete="off"></el-input>
+								<el-input v-model="addForm[item.attrKey]"
+								          :maxlength="item.attrlen"
+								          :placeholder="item.attrlen >0 ? `限制${item.attrlen}个字符` :``"
+								          auto-complete="off"></el-input>
 							</el-form-item>
 							<el-form-item class="tc" v-show="operatingMode === 'add'">
 								<el-upload
@@ -154,6 +157,7 @@
                         if (response.status === 200) {
                             let data = response.data;
                             this.attrData = JSON.parse(data[0].data);
+                            console.log(this.attrData);
                             this.getResTableDetail(0, 10);
                         }
                     }, (error) => {
@@ -406,6 +410,7 @@
              */
             exit() {
                 this.$router.push("/login");
+                sessionStorage.removeItem("myRoles");
             },
             getDefAll() {
                 let params = {
@@ -458,6 +463,21 @@
             uploadFail() {
                 console.log("upload Fail");
             },
+            getLoadPic() {
+                let params = {
+                    filekey: "RFlExamplesFile",
+                };
+                this.$ajax.file
+                    .getFiles(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            console.log(JSON.parse(data[0].data));
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            }
         },
         mounted() {
             this.$chargeAuthority().then((t) => {
@@ -470,19 +490,7 @@
                 console.log(ee);
                 this.$router.replace("/");
             });
-            // let params = {
-            //     filekey: "RFlExamplesFile",
-            // };
-            // this.$ajax.file
-            //     .getFiles(params)
-            //     .then((response) => {
-            //         if (response.status === 200) {
-            //             let data = response.data;
-            //             console.log(JSON.parse(data[0].data));
-            //         }
-            //     }, (error) => {
-            //         this.$message.error(error.message);
-            //     });
+            // this.getLoadPic();
         }
     };
 </script>
