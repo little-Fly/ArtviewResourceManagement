@@ -83,23 +83,24 @@
 						<el-form :model="addForm">
 							<el-form-item :label="item.attrName" :label-width="formLabelWidth"
 							              v-for="(item,key) in attrData" :key="key">
-								<el-input v-model="addForm[item.attrKey]"
-								          :maxlength="item.attrlen"
-								          :placeholder="item.attrlen >0 ? `限制${item.attrlen}个字符` :``"
-								          auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item class="tc" v-show="operatingMode === 'add'">
 								<el-upload
+										v-if="item.attrType === 'picture'||item.attrType === 'video'"
 										class="upload-demo"
 										ref="upload"
 										:limit="1"
 										:multiple="false"
 										:on-success="uploadSuc"
 										:on-error="uploadFail"
-										action="https://www.hwyst.net/ttzy/rs/file/add.do"
-										:auto-upload="false">
+										:before-upload="beforeUpload(item,key)"
+										:action="item.url"
+										:auto-upload="true">
 									<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
 								</el-upload>
+								<el-input v-model="addForm[item.attrKey]"
+								          v-if="item.attrType !== 'picture'&&item.attrType !== 'video'"
+								          :maxlength="item.attrlen > 0 ? item.attrlen :100"
+								          :placeholder="item.attrlen >0 ? `限制${item.attrlen}个字符` :``"
+								          auto-complete="off"></el-input>
 							</el-form-item>
 						</el-form>
 						<div slot="footer" class="dialog-footer">
@@ -133,7 +134,8 @@
                 currentActiveItem: "",
                 addDetailData: [],
                 operatingMode: "", // 当前行为 是add、update
-                fileArr: []
+                fileArr: [],
+                currentUploadAttrKey: ""
             };
         },
         methods: {
@@ -157,7 +159,7 @@
                         if (response.status === 200) {
                             let data = response.data;
                             this.attrData = JSON.parse(data[0].data);
-                            console.log(this.attrData);
+                            // console.log(this.attrData);
                             this.getResTableDetail(0, 10);
                         }
                     }, (error) => {
@@ -253,6 +255,7 @@
                         });
                     }
                 }
+                console.log(json);
                 if (json.length === 0) {
                     this.$message.error("请输入内容");
                     return;
@@ -268,13 +271,21 @@
                     };
                     if (this.operatingMode === "add") {
                         this.addDetailFun(params);
-                        this.$refs.upload.submit(); // 上传图片
                     } else if (this.operatingMode === "update") {
                         this.updateDetailFun(json);
                     }
                 }).catch(() => {
 
                 });
+            },
+            beforeUpload(item, i) {
+                let url = `https://www.hwyst.net/ttzy/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
+                this.$set(this.attrData[i], "url", url);
+                if(this.addForm[item.attrKey] && this.addForm[item.attrKey] !== ""){
+                    return
+                }
+                this.addForm[item.attrKey] = "";
+                this.currentUploadAttrKey = item.attrKey;
             },
             addDetailFun(data) {
                 this.$ajax.detail
@@ -457,7 +468,8 @@
                         this.$message.error(error.message);
                     });
             },
-            uploadSuc() {
+            uploadSuc(response) {
+                this.addForm[this.currentUploadAttrKey] = response[0].data;
                 console.log("upload success");
             },
             uploadFail() {
