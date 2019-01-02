@@ -1,0 +1,19 @@
+.DS_Store
+node_modules/
+dist/
+#Designed Img and Json
+apiJsonData/
+PrototypeImg/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/saleAdmin/
+saleAdmin.zip
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+.history

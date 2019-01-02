@@ -133,10 +133,11 @@ export default {
         method: 'get',
         data: sendData,
         success: res => {
+          this.userList[index].userStatus = '已审核';
           wx.hideLoading();
           wx.showToast({
             title: '操作成功'
-          })
+          });
         }
       });
     }
