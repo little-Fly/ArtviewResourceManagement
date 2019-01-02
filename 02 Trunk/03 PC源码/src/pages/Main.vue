@@ -66,7 +66,12 @@
 									width="55">
 							</el-table-column>
 							<template v-for="(col ,index) in attrData">
-								<el-table-column :prop="col.attrKey" :label="col.attrName"></el-table-column>
+								<el-table-column :prop="col.attrKey" :label="col.attrName">
+									<!--<template slot-scope="scope">-->
+										<!--<img :src="`https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=`+scope.row[col.attrKey]"-->
+										     <!--alt="" width="40" height="40">-->
+									<!--</template>-->
+								</el-table-column>
 							</template>
 						</el-table>
 					</div>
@@ -192,6 +197,7 @@
                                     return;
                                 }
                                 let json = JSON.parse(detail[0].data);
+                                console.log("表格数据11", json);
                                 this.getLineData(json);
                             }
                         }
@@ -222,6 +228,7 @@
                     }
                 }
                 this.tableData = arr;
+                console.log("表格数据", arr);
             },
             /**
              * 新增资源按钮
@@ -248,14 +255,19 @@
                     if (this.addForm.hasOwnProperty(key) &&
                         key !== "title" &&
                         key !== "resourceKey") {
-                        json.push({
+                        let obj = {
                             "attrKey": key,
                             "attrValue": this.addForm[key],
                             "typeKey": this.currentTypeKey,
-                        });
+                        };
+                        for (let i = 0; i < this.attrData.length; i++) {
+                            if (this.attrData[i].attrKey === obj.attrKey) {
+                                obj.attrType = this.attrData[i].attrType;
+                            }
+                        }
+                        json.push(obj);
                     }
                 }
-                console.log(json);
                 if (json.length === 0) {
                     this.$message.error("请输入内容");
                     return;
@@ -281,8 +293,8 @@
             beforeUpload(item, i) {
                 let url = `https://www.hwyst.net/ttzy/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
                 this.$set(this.attrData[i], "url", url);
-                if(this.addForm[item.attrKey] && this.addForm[item.attrKey] !== ""){
-                    return
+                if (this.addForm[item.attrKey] && this.addForm[item.attrKey] !== "") {
+                    return;
                 }
                 this.addForm[item.attrKey] = "";
                 this.currentUploadAttrKey = item.attrKey;
@@ -510,7 +522,7 @@
 <style lang="scss" type="text/scss" scoped>
 	$herderH: 60px;
 	.el-header {
-		background: #36474F;
+		background: #e5e5e5;
 		.logo {
 			height: $herderH;
 			line-height: $herderH;
@@ -596,7 +608,7 @@
 
 	.el-aside {
 		height: calc(100vh - 60px);
-		background: #273238;
+		background: #365562;
 		box-sizing: border-box;
 		border-top: 1px solid #F43E04;
 		position: relative;
