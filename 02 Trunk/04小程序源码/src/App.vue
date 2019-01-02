@@ -45,8 +45,8 @@ export default {
               // 更新用户权限树
               // mockdata
               // this.$store.commit('updateRoleAuthTree', ['root','admin','checker','writer','common','unregister']); // 超级权限
-              this.$store.commit('updateRoleAuthTree', ['admin']);
-              // this.$store.commit('updateRoleAuthTree', this.userRoleList);
+              // this.$store.commit('updateRoleAuthTree', ['admin']);
+              this.$store.commit('updateRoleAuthTree', this.userRoleList);
               this.$store.commit('updateUserRoleList', this.userRoleList);
               console.log(this.userRoleList, this.$store);
             } else { // 其他三种状态的页面结构一样

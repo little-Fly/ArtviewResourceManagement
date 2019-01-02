@@ -5,6 +5,7 @@ import { BASE_URL } from '@/config/api';
  * @param {*} queryObj 请求对象
  */
 function $http (queryObj) {
+	// queryObj.url.indexOf('rs') > -1 && console.log(queryObj.url);
 	wx.showLoading(this.$config.LOADING_PARAM_OBJ);
 	// 拿自定义登录态
 	let customSession = this.$store.state.third_session;
@@ -18,14 +19,27 @@ function $http (queryObj) {
 		method: queryObj.method || "GET",// 默认为get
 		// success: queryObj.success || function () {},// 默认为空函数
 		success (res) {
-			res = res.data; // 数据结构返回内容为data下
-			if (res.code === 1) { // 请求正常
-				queryObj.success && queryObj.success(res);// 默认为空函数
-				wx.hideLoading();
-			} else { // 415 405 401
-				console.error(`后台接口返回code不为1，错误信息为${res.msg}`);
-				wx.hideLoading();
+			if (queryObj.url.indexOf('rs') > -1) {
+				res = res.data[0]; // 数据结构返回内容为data下
+				res.data = JSON.parse(res.data);
+				if (res.state === 'successful') { // 请求正常
+					queryObj.success && queryObj.success(res);// 默认为空函数
+					wx.hideLoading();
+				} else { // 415 405 401
+					console.error(`后台接口返回state不为successful，错误信息${res.msg}`);
+					wx.hideLoading();
+				}
+			} else {
+				res = res.data; // 数据结构返回内容为data下
+				if (res.code === 1) { // 请求正常
+					queryObj.success && queryObj.success(res);// 默认为空函数
+					wx.hideLoading();
+				} else { // 415 405 401
+					console.error(`后台接口返回code不为1，错误信息${res.msg}`);
+					wx.hideLoading();
+				}
 			}
+			
 		},
 		fail () {
 			wx.hideLoading();
