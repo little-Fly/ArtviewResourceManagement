@@ -40,7 +40,7 @@
 							</li>
 						</ul>
 					</div>
-					<div class="bottom-btn tc" @click="goAssets">
+					<div class="bottom-btn tc" @click="goAssets" v-if="canWrite">
 						<img src="@/assets/image/sourceM.png" alt="icon" width="30" height="30">
 						资源类别管理
 					</div>
@@ -48,7 +48,7 @@
 				<el-main>
 					<div class="main-head">
 						<div class="title">资源录入</div>
-						<ul class="btns fr">
+						<ul class="btns fr" v-if="canWrite">
 							<li class="fl"><span class="operate-btn type-in" @click="addSource"></span></li>
 							<li class="fl"><span class="operate-btn delete" @click="deleteConfirm"></span></li>
 							<li class="fl"><span class="operate-btn update" @click="updateSource"></span></li>
@@ -83,7 +83,10 @@
 						<el-form :model="addForm">
 							<el-form-item :label="item.attrName" :label-width="formLabelWidth"
 							              v-for="(item,key) in attrData" :key="key">
-								<el-input v-model="addForm[item.attrKey]" auto-complete="off"></el-input>
+								<el-input v-model="addForm[item.attrKey]"
+								          :maxlength="item.attrlen"
+								          :placeholder="item.attrlen >0 ? `限制${item.attrlen}个字符` :``"
+								          auto-complete="off"></el-input>
 							</el-form-item>
 							<el-form-item class="tc" v-show="operatingMode === 'add'">
 								<el-upload
@@ -114,6 +117,7 @@
         name: "main-content",
         data() {
             return {
+                canWrite: false,
                 attrTypeList: [],
                 searchType: "",
                 searchOptions: [],
@@ -153,6 +157,7 @@
                         if (response.status === 200) {
                             let data = response.data;
                             this.attrData = JSON.parse(data[0].data);
+                            console.log(this.attrData);
                             this.getResTableDetail(0, 10);
                         }
                     }, (error) => {
@@ -179,8 +184,14 @@
                     .then((response) => {
                         if (response.status === 200) {
                             let detail = response.data;
-                            let json = JSON.parse(detail[0].data);
-                            this.getLineData(json);
+                            if (detail.length > 0) {
+                                if (detail[0].state === "error") {
+                                    this.$message.error(detail[0].message);
+                                    return;
+                                }
+                                let json = JSON.parse(detail[0].data);
+                                this.getLineData(json);
+                            }
                         }
                     }, (error) => {
                         this.$message.error(error.message);
@@ -399,6 +410,7 @@
              */
             exit() {
                 this.$router.push("/login");
+                sessionStorage.removeItem("myRoles");
             },
             getDefAll() {
                 let params = {
@@ -450,23 +462,35 @@
             },
             uploadFail() {
                 console.log("upload Fail");
+            },
+            getLoadPic() {
+                let params = {
+                    filekey: "RFlExamplesFile",
+                };
+                this.$ajax.file
+                    .getFiles(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            console.log(JSON.parse(data[0].data));
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
             }
         },
         mounted() {
-            this.getDefAll();
-            // let params = {
-            //     filekey: "RFlExamplesFile",
-            // };
-            // this.$ajax.file
-            //     .getFiles(params)
-            //     .then((response) => {
-            //         if (response.status === 200) {
-            //             let data = response.data;
-            //             console.log(JSON.parse(data[0].data));
-            //         }
-            //     }, (error) => {
-            //         this.$message.error(error.message);
-            //     });
+            this.$chargeAuthority().then((t) => {
+                console.log(t);
+                this.getDefAll();
+                if (t === "writer") {
+                    this.canWrite = true;
+                }
+            }, (ee) => {
+                console.log(ee);
+                this.$router.replace("/");
+            });
+            // this.getLoadPic();
         }
     };
 </script>

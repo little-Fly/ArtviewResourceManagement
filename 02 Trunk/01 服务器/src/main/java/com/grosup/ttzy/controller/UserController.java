@@ -12,13 +12,11 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.grosup.ttzy.beans.RoleBean;
 import com.grosup.ttzy.beans.SessionBean;
 import com.grosup.ttzy.beans.UserBean;
 import com.grosup.ttzy.beans.UserRoleBean;
@@ -78,7 +76,10 @@ public class UserController {
             JSONObject userInfoJSON = JSONObject.fromObject(ret);
             LOGGER.info("ret value = " + userInfoJSON.toString());
             String unionId = (String) userInfoJSON.get("unionId");
+            String openId = (String) userInfoJSON.get("openId");
             user.setUnionId(unionId);
+            user.setOpenId(openId);
+            LOGGER.info("user value = " + user.toString());
             long uid = userService.userAdd(user);
             //设置角色为游客
             List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
@@ -129,6 +130,13 @@ public class UserController {
         JSONObject result = new JSONObject();
         try {
             userService.changeUserStatus(uid, nickName, status, refuse);
+            if (status == 1) {
+                List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
+                UserRoleBean userRoleBean = new UserRoleBean();
+                userRoleBean.setUid(uid);
+                userRoleBean.setRoleKey("visitor");
+                roleService.BatchdelUserRole(userRoles);
+            }
             result.put("code", CodeUtil.SUCCESS);
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);
@@ -153,6 +161,9 @@ public class UserController {
                     JSONObject userInfo = new JSONObject();
                     userInfo.put("uid", user.getUid());
                     userInfo.put("nickName", user.getNickName());
+                    userInfo.put("phone", user.getPhone());
+                    userInfo.put("gender", user.getGender() == 1? "男":"女");
+                    userInfo.put("reason", user.getReason());
                     userInfo.put("roles", JSONArray.fromObject(user.getRoles()));
                     userInfo.put("createTime", sdf.format(user.getCreateTime()));
                     switch (user.getStatus()) {
