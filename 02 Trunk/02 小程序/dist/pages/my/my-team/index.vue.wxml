@@ -1,22 +1,22 @@
-<template name="3fffbcba">
-  <view class="_div data-v-5fe77dae userlist-wrap">
+<template name="49adefdc">
+  <view class="_div data-v-4206b170 userlist-wrap">
     <block wx:for="{{userList}}" wx:for-index="index" wx:for-item="item">
-      <view class="_div data-v-5fe77dae userlist-item-wrap" key="{{index}}">
-        <view class="_div data-v-5fe77dae userlist-item clearfix" bindtap="handleProxy" data-eventid="{{'0-'+index}}" data-comkey="{{$k}}">
+      <view class="_div data-v-4206b170 userlist-item-wrap" key="{{index}}">
+        <view class="_div data-v-4206b170 userlist-item clearfix" bindtap="handleProxy" data-eventid="{{'0-'+index}}" data-comkey="{{$k}}">
           {{item.nickName}}
-          <view wx:if="{{item.userStatus != '待审核'}}" class="_div data-v-5fe77dae inline-block">
-            <block wx:for="{{item.roles}}" wx:for-index="cindex" wx:for-item="citem"><label class="_span data-v-5fe77dae user_status_icon {{citem.roleKey}}" key="{{cindex}}">{{citem.roleName}}</label></block>
+          <view wx:if="{{item.userStatus != '待审核'}}" class="_div data-v-4206b170 inline-block">
+            <block wx:for="{{item.roles}}" wx:for-index="cindex" wx:for-item="citem"><label class="_span data-v-4206b170 user_status_icon {{citem.roleKey}}" key="{{cindex}}">{{citem.roleName}}</label></block>
           </view>
-          <view wx:else class="_div data-v-5fe77dae fr"><label class="_span data-v-5fe77dae user_status_icon for_audit">待审核</label></view>
+          <view wx:else class="_div data-v-4206b170 fr"><label class="_span data-v-4206b170 user_status_icon for_audit">待审核</label></view>
         </view>
-        <view hidden="{{!(item.userStatus === '待审核' && item.showContent)}}" class="_div data-v-5fe77dae collapse-body">
-          <view class="_div data-v-5fe77dae content-item"><label class="_span data-v-5fe77dae item-title align-right inline-block">性别</label>：{{'男'}}
+        <view hidden="{{!(item.userStatus === '待审核' && item.showContent)}}" class="_div data-v-4206b170 collapse-body">
+          <view class="_div data-v-4206b170 content-item"><label class="_span data-v-4206b170 item-title align-right inline-block">性别</label>：{{'男'}}
           </view>
-          <view class="_div data-v-5fe77dae content-item"><label class="_span data-v-5fe77dae item-title align-right inline-block">电话</label>：{{'18126450043'}}
+          <view class="_div data-v-4206b170 content-item"><label class="_span data-v-4206b170 item-title align-right inline-block">电话</label>：{{'18126450043'}}
           </view>
-          <view class="_div data-v-5fe77dae content-item"><label class="_span data-v-5fe77dae item-title align-right inline-block">注册理由</label>：{{'巴拉巴拉一大堆巴拉巴拉一大堆巴拉巴拉一大堆巴拉巴拉一大堆巴拉巴拉一大堆'}}
+          <view class="_div data-v-4206b170 content-item"><label class="_span data-v-4206b170 item-title align-right inline-block">注册理由</label>：{{'巴拉巴拉一大堆巴拉巴拉一大堆巴拉巴拉一大堆巴拉巴拉一大堆巴拉巴拉一大堆'}}
           </view>
-          <view class="_div data-v-5fe77dae content-item btn-wrap align-center"><button class="_button data-v-5fe77dae lr-mg-10" type="primary" size="mini" bindtap="handleProxy" data-eventid="{{'1-'+index}}" data-comkey="{{$k}}">审核通过</button> <button class="_button data-v-5fe77dae lr-mg-10" type="warn" size="mini" bindtap="handleProxy" data-eventid="{{'2-'+index}}" data-comkey="{{$k}}">不能通过</button></view>
+          <view class="_div data-v-4206b170 content-item btn-wrap align-center"><button class="_button data-v-4206b170 lr-mg-10" type="primary" size="mini" bindtap="handleProxy" data-eventid="{{'1-'+index}}" data-comkey="{{$k}}">审核通过</button> <button class="_button data-v-4206b170 lr-mg-10" type="warn" size="mini" bindtap="handleProxy" data-eventid="{{'2-'+index}}" data-comkey="{{$k}}">不能通过</button></view>
         </view>
       </view>
     </block>
