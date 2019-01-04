@@ -66,11 +66,15 @@
 									width="55">
 							</el-table-column>
 							<template v-for="(col ,index) in attrData">
-								<el-table-column :prop="col.attrKey" :label="col.attrName">
-									<!--<template slot-scope="scope">-->
-										<!--<img :src="`https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=`+scope.row[col.attrKey]"-->
-										     <!--alt="" width="40" height="40">-->
-									<!--</template>-->
+								<el-table-column
+										:prop="col.attrKey"
+										:label="col.attrName">
+									<template slot-scope="scope">
+										<img v-if="(scope.row[col.attrKey]+'').indexOf('RFl') === 0"
+										     :src="`https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=`+scope.row[col.attrKey]"
+										     alt="" width="40" height="40">
+										<span v-else>{{scope.row[col.attrKey]}}</span>
+									</template>
 								</el-table-column>
 							</template>
 						</el-table>
@@ -164,22 +168,12 @@
                         if (response.status === 200) {
                             let data = response.data;
                             this.attrData = JSON.parse(data[0].data);
-                            // console.log(this.attrData);
                             this.getResTableDetail(0, 10);
                         }
                     }, (error) => {
                         this.$message.error(error.message);
                     });
             },
-            /**
-             * [{
-             *      resourceKey,
-             *      attrKey的值
-             * },{
-             *      resourceKey,
-             *      attrKey的值
-             * }]
-             */
             getResTableDetail(start, len) {
                 let json = {
                     typekey: this.currentTypeKey,
@@ -197,7 +191,7 @@
                                     return;
                                 }
                                 let json = JSON.parse(detail[0].data);
-                                console.log("表格数据11", json);
+                                // console.log("表格数据11", json);
                                 this.getLineData(json);
                             }
                         }
@@ -228,7 +222,7 @@
                     }
                 }
                 this.tableData = arr;
-                console.log("表格数据", arr);
+                // console.log("表格数据", arr);
             },
             /**
              * 新增资源按钮
@@ -487,21 +481,6 @@
             uploadFail() {
                 console.log("upload Fail");
             },
-            getLoadPic() {
-                let params = {
-                    filekey: "RFlExamplesFile",
-                };
-                this.$ajax.file
-                    .getFiles(params)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            let data = response.data;
-                            console.log(JSON.parse(data[0].data));
-                        }
-                    }, (error) => {
-                        this.$message.error(error.message);
-                    });
-            }
         },
         mounted() {
             this.$chargeAuthority().then((t) => {
