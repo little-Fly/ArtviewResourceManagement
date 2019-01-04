@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="zan-panel">
-      <button @click="ensureOperate" :type="operateKey == 'add' ? 'primary' : 'warn'">{{operateKey === 'add' ? '授权' : '取消授权'}}</button>
+      <button :disabled="userListForSelect && !userListForSelect.length" @click="ensureOperate" :type="operateKey == 'add' ? 'primary' : 'warn'">{{operateKey === 'add' ? '授权' : '取消授权'}}</button>
     </div>
     <div class="zan-panel">
       <checkbox-group @change="selecteUserChange">
@@ -93,6 +93,7 @@ export default {
             title: '操作成功！',
             duration: 2000
           });
+          wx.navigateBack();
         }
       });
     }

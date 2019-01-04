@@ -41,6 +41,7 @@ export default {
      */
     getUserRoleList () {
       console.log(this.userRoleListState);
+      this.userRoleNameList = [];
       for (let i = 0, len = this.userRoleListState.length; i < len; i ++) {
         this.userRoleNameList.push(this.$tool.getRoleNameByRoleKey(this.$config.$DATA.ROLE_KEY_MAP, this.userRoleListState[i]));
       }

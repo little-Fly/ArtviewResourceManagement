@@ -1,26 +1,13 @@
 <template>
   <div class="container">
     <div class="resource-warp clearfix">
-      <div class="res-item fl">
-        <img class="res-item__headimg" src="../../assets/images/resource_init.png" alt="">
-        <div class="res-name">灯光</div>
-      </div>
-      <div class="res-item fl">
-        <img class="res-item__headimg" src="../../assets/images/resource_init.png" alt="">
-        <div class="res-name">灯光</div>
-      </div>
-      <div class="res-item fl">
-        <img class="res-item__headimg" src="../../assets/images/resource_init.png" alt="">
-        <div class="res-name">灯光</div>
-      </div>
-      <div class="res-item fl">
-        <img class="res-item__headimg" src="../../assets/images/resource_init.png" alt="">
-        <div class="res-name">灯光</div>
-      </div>
-      <div class="res-item fl">
-        <img class="res-item__headimg" src="../../assets/images/resource_init.png" alt="">
-        <div class="res-name">灯光</div>
-      </div>
+      <template v-for="(item, index) in resList">
+        <div class="res-item fl" :key="'res_items_' + index">
+          <img v-if="item.logoUrl" class="res-item__headimg" :src="logoUrl" alt="">
+          <img v-else class="res-item__headimg" src="../../assets/images/resource_init.png" alt="">
+          <div class="res-name">{{item.name}}</div>
+        </div>
+      </template>
     </div>
   </div>
 </template>
@@ -28,6 +15,11 @@
 <script>
 
 export default {
+  data () {
+    return {
+      resList: []
+    }
+  },
   computed: {
   },
   methods: {
@@ -46,6 +38,7 @@ export default {
         },
         success: res => {
           console.log(res);
+          this.resList = res.data;
         }
       });
     }
