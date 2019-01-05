@@ -1,26 +1,13 @@
-<template name="59a2d593">
-  <view class="_div data-v-b91ca566 container">
-    <view class="_div data-v-b91ca566 resource-warp clearfix">
-      <view class="_div data-v-b91ca566 res-item fl">
-        <image class="_img data-v-b91ca566 res-item__headimg" src="/assets/images/resource_init.png" alt></image>
-        <view class="_div data-v-b91ca566 res-name">灯光</view>
-      </view>
-      <view class="_div data-v-b91ca566 res-item fl">
-        <image class="_img data-v-b91ca566 res-item__headimg" src="/assets/images/resource_init.png" alt></image>
-        <view class="_div data-v-b91ca566 res-name">灯光</view>
-      </view>
-      <view class="_div data-v-b91ca566 res-item fl">
-        <image class="_img data-v-b91ca566 res-item__headimg" src="/assets/images/resource_init.png" alt></image>
-        <view class="_div data-v-b91ca566 res-name">灯光</view>
-      </view>
-      <view class="_div data-v-b91ca566 res-item fl">
-        <image class="_img data-v-b91ca566 res-item__headimg" src="/assets/images/resource_init.png" alt></image>
-        <view class="_div data-v-b91ca566 res-name">灯光</view>
-      </view>
-      <view class="_div data-v-b91ca566 res-item fl">
-        <image class="_img data-v-b91ca566 res-item__headimg" src="/assets/images/resource_init.png" alt></image>
-        <view class="_div data-v-b91ca566 res-name">灯光</view>
-      </view>
+<template name="debd8346">
+  <view class="_div data-v-61dc874e container">
+    <view class="_div data-v-61dc874e resource-warp clearfix">
+      <block wx:for="{{resList}}" wx:for-index="index" wx:for-item="item">
+        <view class="_div data-v-61dc874e res-item fl" key="{{'res_items_' + index}}">
+          <image wx:if="{{item.logoUrl}}" class="_img data-v-61dc874e res-item__headimg" src="{{logoUrl}}" alt></image>
+          <image wx:else class="_img data-v-61dc874e res-item__headimg" src="/assets/images/resource_init.png" alt></image>
+          <view class="_div data-v-61dc874e res-name">{{item.name}}</view>
+        </view>
+      </block>
     </view>
   </view>
 </template>

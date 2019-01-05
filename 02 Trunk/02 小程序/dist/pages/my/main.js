@@ -1,19 +1,19 @@
 require("../../common/manifest.js");
 require("../../common/vendor.js");
-global.webpackJsonp([7],{
+global.webpackJsonp([8],{
 
-/***/ 55:
+/***/ 166:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__index__ = __webpack_require__(167);
 
 
 
-const app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a(__WEBPACK_IMPORTED_MODULE_1__index__["a" /* default */]);
+var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a(__WEBPACK_IMPORTED_MODULE_1__index__["a" /* default */]);
 app.$mount();
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -32,18 +32,18 @@ app.$mount();
 
 /***/ }),
 
-/***/ 56:
+/***/ 167:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_1_1_4_mpvue_loader_lib_selector_type_script_index_0_index_vue__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_mpvue_loader_1_1_4_mpvue_loader_lib_template_compiler_index_id_data_v_65e1681a_hasScoped_false_transformToRequire_video_src_source_src_img_src_image_xlink_href_node_modules_mpvue_loader_1_1_4_mpvue_loader_lib_selector_type_template_index_0_index_vue__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_lib_selector_type_script_index_0_index_vue__ = __webpack_require__(169);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_mpvue_loader_lib_template_compiler_index_id_data_v_c565458e_hasScoped_false_transformToRequire_video_src_source_src_img_src_image_xlink_href_node_modules_mpvue_loader_lib_selector_type_template_index_0_index_vue__ = __webpack_require__(170);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(57)
+  __webpack_require__(168)
 }
-var normalizeComponent = __webpack_require__(0)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 
 /* template */
@@ -55,26 +55,26 @@ var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_1_1_4_mpvue_loader_lib_selector_type_script_index_0_index_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_mpvue_loader_1_1_4_mpvue_loader_lib_template_compiler_index_id_data_v_65e1681a_hasScoped_false_transformToRequire_video_src_source_src_img_src_image_xlink_href_node_modules_mpvue_loader_1_1_4_mpvue_loader_lib_selector_type_template_index_0_index_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_lib_selector_type_script_index_0_index_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_mpvue_loader_lib_template_compiler_index_id_data_v_c565458e_hasScoped_false_transformToRequire_video_src_source_src_img_src_image_xlink_href_node_modules_mpvue_loader_lib_selector_type_template_index_0_index_vue__["a" /* default */],
   __vue_styles__,
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "src/pages/my/index.vue"
+Component.options.__file = "src\\pages\\my\\index.vue"
 if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
 if (Component.options.functional) {console.error("[vue-loader] index.vue: functional components are not supported with templates, they should use render functions.")}
 
 /* hot reload */
 if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
+  var hotAPI = require("vue-hot-reload-api")
   hotAPI.install(require("vue"), false)
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-65e1681a", Component.options)
+    hotAPI.createRecord("data-v-c565458e", Component.options)
   } else {
-    hotAPI.reload("data-v-65e1681a", Component.options)
+    hotAPI.reload("data-v-c565458e", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -86,14 +86,14 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 57:
+/***/ 168:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
 
-/***/ 58:
+/***/ 169:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -179,14 +179,17 @@ if (false) {(function () {
 // import card from '@/components/card'
 // import Unregistered from '@/components/my/unregistered'
 /* harmony default export */ __webpack_exports__["a"] = ({
-  data() {
+  data: function data() {
     return {
       motto: 'Hello World',
       userInfo: {}
     };
   },
+
   methods: {
-    navigeteClick(pageKey) {
+    navigeteClick: function navigeteClick(pageKey) {
+      var _this = this;
+
       // 判断用户审核状态
       if (this.userAuditStatusState === 2) {
         // 审核中
@@ -208,15 +211,15 @@ if (false) {(function () {
           break;
         case 'register':
           // 由于微信用户要与PC用户互通，这里注册需要得到用户授权获取高级信息
-          this.$tool.checkUserInfoAuth().then(() => {
+          this.$tool.checkUserInfoAuth().then(function () {
             // 用户未授权，进到授权页
             console.log('已授权');
             wx.navigateTo({
               url: "./register/main"
             });
-          }, () => {
+          }, function () {
             console.log('未授权');
-            this.$tool.goToAuthPage();
+            _this.$tool.goToAuthPage();
           });
           break;
         case 'auditAdmin':
@@ -261,12 +264,12 @@ if (false) {(function () {
           break;
       }
     },
-    navigateToAuditRegist() {
+    navigateToAuditRegist: function navigateToAuditRegist() {
       wx.navigateTo({
         url: "./auditRegistration/main"
       });
     },
-    getUserInfo() {
+    getUserInfo: function getUserInfo() {
       // // 调用登录接口
       // wx.login({
       //   success: () => {
@@ -278,57 +281,60 @@ if (false) {(function () {
       //   }
       // })
     },
-    clickHandle(msg, ev) {
+    clickHandle: function clickHandle(msg, ev) {
       console.log('clickHandle:', msg, ev);
     },
-    ensureBtnClick() {
+    ensureBtnClick: function ensureBtnClick() {
       console.log(1111);
     }
   },
 
-  mounted() {
+  mounted: function mounted() {
     console.log(this.$store.state);
     // 调用应用实例的方法获取全局数据
     // this.getUserInfo()
   },
+
   computed: {
-    userAuditStatusState() {
+    userAuditStatusState: function userAuditStatusState() {
       return this.$store.state.userAuditStatus;
     },
+
     /**
      * 计算得到的用户权限树，每个权限的计算值
      */
-    myMessages() {
+    myMessages: function myMessages() {
       return this.$store.state.accessTree.my && this.$store.state.accessTree.my.myMessages;
     },
-    register() {
+    register: function register() {
       return this.$store.state.accessTree.my && this.$store.state.accessTree.my.register;
     },
-    userManagement() {
+    userManagement: function userManagement() {
       return this.$store.state.accessTree.my && this.$store.state.accessTree.my.userManagement;
     },
-    enpowerAdmins() {
+    enpowerAdmins: function enpowerAdmins() {
       return this.$store.state.accessTree.my && this.$store.state.accessTree.my.enpowerAdmins;
     },
-    logPage() {
+    logPage: function logPage() {
       return this.$store.state.accessTree.my && this.$store.state.accessTree.my.logPage;
     },
-    powerForInputRes() {
+    powerForInputRes: function powerForInputRes() {
       return this.$store.state.accessTree.my && this.$store.state.accessTree.my.powerForInputRes;
     },
-    powerForAuditRes() {
+    powerForAuditRes: function powerForAuditRes() {
       return this.$store.state.accessTree.my && this.$store.state.accessTree.my.powerForAuditRes;
     },
-    auditResourse() {
+    auditResourse: function auditResourse() {
       return this.$store.state.accessTree.my && this.$store.state.accessTree.my.auditResourse;
     },
+
     /* inputResourse () {
       return this.$store.state.accessTree.my && this.$store.state.accessTree.my.inputResourse;
     }, */
-    personalPage() {
+    personalPage: function personalPage() {
       return this.$store.state.accessTree.my && this.$store.state.accessTree.my.personalPage;
     },
-    about() {
+    about: function about() {
       return this.$store.state.accessTree.my && this.$store.state.accessTree.my.about;
     }
   }
@@ -336,7 +342,7 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 59:
+/***/ 170:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -558,11 +564,11 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-loader/node_modules/vue-hot-reload-api").rerender("data-v-65e1681a", esExports)
+     require("vue-hot-reload-api").rerender("data-v-c565458e", esExports)
   }
 }
 
 /***/ })
 
-},[55]);
+},[166]);
 //# sourceMappingURL=main.js.map

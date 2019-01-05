@@ -1,4 +1,4 @@
-import Vue from 'vue'
+﻿import Vue from 'vue'
 import { BASE_URL } from '@/config/api';
 /**
  * 小程序请求方法封装
@@ -19,27 +19,31 @@ function $http (queryObj) {
 		method: queryObj.method || "GET",// 默认为get
 		// success: queryObj.success || function () {},// 默认为空函数
 		success (res) {
-			if (queryObj.url.indexOf('rs') > -1) {
-				res = res.data[0]; // 数据结构返回内容为data下
-				res.data = JSON.parse(res.data);
-				if (res.state === 'successful') { // 请求正常
-					queryObj.success && queryObj.success(res);// 默认为空函数
-					wx.hideLoading();
-				} else { // 415 405 401
-					console.error(`后台接口返回state不为successful，错误信息${res.msg}`);
-					wx.hideLoading();
-				}
-			} else {
-				res = res.data; // 数据结构返回内容为data下
-				if (res.code === 1) { // 请求正常
-					queryObj.success && queryObj.success(res);// 默认为空函数
-					wx.hideLoading();
-				} else { // 415 405 401
-					console.error(`后台接口返回code不为1，错误信息${res.msg}`);
-					wx.hideLoading();
+			//if (queryObj.url.indexOf('rs') > -1) {
+			if(typeof(res.data) != undefined){
+				if(res.data[0]){
+					res = res.data[0]; // 数据结构返回内容为data下
+					res.data = JSON.parse(res.data);
+					if (res.state === 'successful') { // 请求正常
+						queryObj.success && queryObj.success(res);// 默认为空函数
+					} else { // 415 405 401
+						console.error(`后台接口返回state不为successful，错误信息${res.msg}`);
+					}
+				} 
+				else{
+					res = res.data; // 数据结构返回内容为data下
+					if (typeof(res.code) != undefined && res.code === 1) { // 请求正常
+						queryObj.success && queryObj.success(res);// 默认为空函数
+					
+					} else { // 415 405 401
+						console.error(`后台接口返回code不为1，错误信息${res.msg}`);
+					}
 				}
 			}
-			
+			else{
+				console.error(`后台接口返回数据格式错误，错误信息${"后台接口返回数据错误"}`);
+			}
+			wx.hideLoading();
 		},
 		fail () {
 			wx.hideLoading();

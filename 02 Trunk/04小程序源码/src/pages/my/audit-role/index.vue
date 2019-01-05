@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <div class="zan-panel zan-cell--access">
       <div class="zan-cell" @click='goToAuthList("add")'>
@@ -34,16 +34,17 @@ export default {
     }
   },
   onShow () {
-    this.getMulList();
+	if(this.roleKey !="")this.getMulList();
   },
   mounted () {
     let paramsObj = this.$tool.getOptions();
     this.roleKey = paramsObj.rolekey;
     this.roleName = this.$tool.getRoleNameByRoleKey(this.$config.$DATA.ROLE_KEY_MAP, this.roleKey);
-    this.getMulList();
+    //this.getMulList();
     wx.setNavigationBarTitle({
       title: `${this.roleName}`
-    })
+    });
+	this.getMulList();
   },
   methods: {
     /**
@@ -55,10 +56,11 @@ export default {
       })
     },
     /**
-     * 获取当前页面的可多选的人员列表
+     * 获取当前权限人员列表
      */
     getMulList () {
-      let API = '/wx/user/getUnUsersByRole.do';
+      //let API = '/wx/user/getUnUsersByRole.do';
+	let API = '/wx/user/getUsersByRole.do';
       this.$http({
         url: API,
         method: 'get',

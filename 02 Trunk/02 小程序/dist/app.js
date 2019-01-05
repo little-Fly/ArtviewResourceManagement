@@ -1,343 +1,14 @@
-require("common/manifest.js");
-require("common/vendor.js");
-global.webpackJsonp([3],[
-/* 0 */,
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */
+require("./common/manifest.js");
+require("./common/vendor.js");
+global.webpackJsonp([3],{
+
+/***/ 108:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__App__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__store_index__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_index__ = __webpack_require__(14);
-
-
-
-// import Vant from 'vant'
-// import 'vant/lib/vant-css/index.css'
-
-// //引用vantUI库
-// Vue.use(Vant)
-
-
-//引入 store
-
-//引入 config
-
-// 把 store 挂载到全局
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$store = __WEBPACK_IMPORTED_MODULE_3__store_index__["a" /* default */];
-
-// 把 config 挂载到全局
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$config = __WEBPACK_IMPORTED_MODULE_4__config_index__;
-
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$http = __WEBPACK_IMPORTED_MODULE_2__utils__["a" /* $http */];
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$tool = __WEBPACK_IMPORTED_MODULE_2__utils__["b" /* $tool */];
-
-__WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.productionTip = false;
-__WEBPACK_IMPORTED_MODULE_1__App__["a" /* default */].mpType = 'app';
-
-const app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a(__WEBPACK_IMPORTED_MODULE_1__App__["a" /* default */]);
-app.$mount();
-
-/***/ }),
-/* 6 */,
-/* 7 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_1_1_4_mpvue_loader_lib_selector_type_script_index_0_App_vue__ = __webpack_require__(9);
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(8)
-}
-var normalizeComponent = __webpack_require__(0)
-/* script */
-
-/* template */
-var __vue_template__ = null
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_1_1_4_mpvue_loader_lib_selector_type_script_index_0_App_vue__["a" /* default */],
-  __vue_template__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "src/App.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-loader/node_modules/vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-60565331", Component.options)
-  } else {
-    hotAPI.reload("data-v-60565331", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
-
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-
-/*
-  主页启动逻辑：
-  1. 拿code换取：
-    1. 自定义登录态，储存到公共状态管理，后面接口调用都要带上；
-    2. 用户注册信息：
-      1. 已注册用户
-        1. 审核中/被拒绝：页面一进来就toast提示
-        2. 审核已通过：拿到用户的角色信息，配置全局的权限对象
-      2. 用户未注册：
-  2. 
-*/
-/* harmony default export */ __webpack_exports__["a"] = ({
-  data() {
-    return {
-      // 用户审核状态
-      userAuditStatus: 1,
-      // 用户角色列表
-      userRoleList: []
-    };
-  },
-  created() {
-    wx.showLoading(this.$config.LOADING_PARAM_OBJ);
-    // 登录
-    wx.login({
-      success: res => {
-        wx.hideLoading();
-        this.$http({
-          url: '/wx/login.do',
-          method: 'post',
-          data: {
-            code: res.code
-          },
-          success: res => {
-            //公共状态管理自定义登录态
-            this.$store.commit('updateCustomLoginStatus', res.third_session);
-            //拿到识别码后，获取用户审核状态值 1:未注册 2：审核中 3:被拒绝 4: 已通过
-            this.updateUserRole(res.status);
-            // 如果已注册
-            if (this.userAuditStatus === 4) {
-              // 本地储存用户基础信息
-              this.$store.commit('updateUserInfo', res.userInfo);
-              // 拿用户的用户角色列表
-              this.updateRoleList(res.userInfo.roles);
-              // 更新用户权限树
-              // mockdata
-              // this.$store.commit('updateRoleAuthTree', ['root','admin','checker','writer','common','unregister']); // 超级权限
-              this.$store.commit('updateRoleAuthTree', ['admin']);
-              // this.$store.commit('updateRoleAuthTree', this.userRoleList);
-              this.$store.commit('updateUserRoleList', this.userRoleList);
-              console.log(this.userRoleList, this.$store);
-            } else {
-              // 其他三种状态的页面结构一样
-              // 同步公共状态管理
-              this.$store.commit('updateUserAuditStatus', this.userAuditStatus);
-              // mockdata
-              // this.$store.commit('updateRoleAuthTree', ['root','admin','checker','writer','common','unregister']); // 超级权限
-              this.$store.commit('updateRoleAuthTree', ['unregister']); // 游客 == 未注册
-            }
-          }
-        });
-      }
-    });
-    //APP启动第一步：判断app是否授权,如果授权，再根据（未注册，审核中，被拒绝）和审核通过进入不同的页面
-    /* wx.getSetting({
-      success: res => {
-        console.log(res);
-        if (!!res.authSetting['scope.userInfo']) {// 未授权
-          wx.redirectTo({
-            url: '../authorization/authorization',//跳转到授权页
-          })
-        } else {//已经授权，根据用户状态，判断进入哪个页面
-          
-          // 获取用户信息, 特别是用户状态
-          let getUsersInfo = () => {
-            wx.getUserInfo({
-              success: res => {
-                // 可以将 res 发送给后台解码出 unionId
-                app.globalData.userInfo = res.userInfo
-                //向后台查询用户开发者系统信息，以及此时状态，返回审核中，被拒绝 或 审核通过
-                wx.request({
-                  url: 'https://www.grosup.com/practice/user/info.do',
-                  // method: 'post',
-                  header: {
-                    'content-type': 'application/x-www-form-urlencoded',
-                    'third_session': app.globalData.userId
-                  },
-                  success: res => {
-                    if (res.data.msg == "当前用户未注册") {
-                      //未通过，显示注册页(未注册，审核中，被拒绝)
-                      wx.redirectTo({
-                        url: '../register/register'
-                      })
-                    }else{
-                      let saveFilterdData = (data) => {
-                        // this.globalData.userInfoInOurSystem.personInfo = res.data.data;
-                        //根据用户状态进行页面的不同显示，只有当用户通过审核时候才会显示个人信息页，否则显示注册页
-                        let userStatus//找到用户状态
-                        let userType//格式化用户角色
-                        let userRole//储存用户角色，用于审核通过状态展示对应页面
-                        let selectRole //中文格式角色，用于审核时同步当前角色
-                        userStatus = data.status
-                        userType = data.userType
-                        switch (userType) {
-                          case 0:
-                            userRole = "student",
-                              selectRole = "学生"
-                            break;
-                          case 1:
-                            userRole = "teacher",
-                              selectRole = "老师"
-                            break;
-                          default:
-                            userRole = "admin",
-                              selectRole = "管理员"
-                        }
-                        data.formatUserRole = userRole
-                        data.formatSelectRole = selectRole
-                         return data
-                      }
-                      //用户个人信息格式化后储存
-                      app.globalData.userInfoInOurSystem.personInfo = saveFilterdData(res.data.data)
-                      if (app.globalData.userInfoInOurSystem.personInfo.status == 1) {//通过审核
-                        //导航到main页
-                        // wx.redirectTo({
-                        //   url: '../main/main',
-                        // })
-                        //本页面为启动页，因此当小程序启动，判断是否展示授权或注册页时候，此页已经显示，故需要把页面先隐藏，当用户审核通过时候再展示
-                        let userInfo = app.globalData.userInfoInOurSystem.personInfo
-                        if (userInfo.status == 1) {
-                          let navigatorArray2Value = 'navigatorArray[1]'
-                          this.setData({
-                            ifshow: true,
-                            [navigatorArray2Value]: userInfo.formatUserRole
-                            // navigatorArray: ["my", userInfo.formatUserRole]
-                          })
-                        }
-                      } else {
-                        //未通过，显示注册页(未注册，审核中，被拒绝)
-                        wx.redirectTo({
-                          url: '../register/register'
-                        })
-                      }
-                    }
-                    
-                  },
-                  fail: () => {
-                    wx.showToast({
-                      title: '服务器请求异常，请检查网络或联系管理员！',
-                      icon: 'none'
-                    })
-                  }
-                })
-              }
-            })
-          }
-        }
-      }
-    }) */
-  },
-  methods: {
-    updateUserRole(status) {
-      let userAuditStatus;
-      // 存储格式化为前端自定义用户审核状态 1:未注册 2：审核中 3:被拒绝 4: 已通过
-      switch (status) {
-        case 1:
-          userAuditStatus = 4;
-          break;
-        case 2:
-          userAuditStatus = 3;
-          break;
-        case 0:
-          userAuditStatus = 2;
-          break;
-        case -1:
-          userAuditStatus = 1;
-          break;
-      }
-      // 同步公共状态管理
-      this.$store.commit('updateUserAuditStatus', userAuditStatus);
-      this.userAuditStatus = userAuditStatus;
-    },
-    updateRoleList(roles) {
-      // 遍历用户角色列表，本地储存
-      let roleList = [];
-      let roleListData = roles;
-      for (let i = 0, len = roleListData.length; i < len; i++) {
-        roleList.push(roleListData[i].roleKey);
-        /* // 过滤转化后台返回角色信息
-        switch (roleListData[i].roleKey) {
-          case 'root':
-            roleList.push('root');
-            break;
-          case 'admin':
-            roleList.push('admin');
-            break;
-          case 'checker':
-            roleList.push('checker');
-            break;
-          case 'writer':
-            roleList.push('writer');
-            break;
-          case 'common':
-            roleList.push('common');
-            break;
-          case 'visitor':
-            roleList.push('visitor');
-            break;
-        } */
-      }
-      this.userRoleList = roleList;
-    }
-  },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {}
-});
-
-/***/ }),
-/* 10 */,
-/* 11 */,
-/* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(62);
 // https://vuex.vuejs.org/zh-cn/intro.html
 // make sure to call Vue.use(Vuex) if using a module system
 
@@ -345,7 +16,7 @@ if (false) {(function () {
 
 __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */]);
 
-const store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
+var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
   state: {
     third_session: '', // 后台返回自定义登录态
     userInfo: {}, // 保存后台login接口返回的userInfo
@@ -360,23 +31,24 @@ const store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     accessTree: {} // 角色权限树
   },
   mutations: {
-    updateCustomLoginStatus(state, val) {
+    updateCustomLoginStatus: function updateCustomLoginStatus(state, val) {
       state.third_session = val;
     },
-    updateUserAuditStatus(state, val) {
+    updateUserAuditStatus: function updateUserAuditStatus(state, val) {
       state.userAuditStatus = val;
     },
+
     // 根据roleList更新角色权限树
-    updateRoleAuthTree(state, val) {
+    updateRoleAuthTree: function updateRoleAuthTree(state, val) {
       console.log('从后台获取到的权限列表数组');
       console.log(val);
       /**
        * 通过用户角色列表，返回用户每个页面的权限数组，再遍历生成最终的权限树
        */
-      let roleList = val; // 获取到用户的角色列表 用户角色列表 eg: ['root', 'admin']
-      let pageArr = ['my']; // 一起有多少个页面参与权限，若有增加的话，需要与accessItem，accessTree, itemTotal同步
+      var roleList = val; // 获取到用户的角色列表 用户角色列表 eg: ['root', 'admin']
+      var pageArr = ['my']; // 一起有多少个页面参与权限，若有增加的话，需要与accessItem，accessTree, itemTotal同步
       // 同步用户的角色权限树
-      let accessItem = { // 五种角色状态，在不同的页面拥有不同的权限
+      var accessItem = { // 五种角色状态，在不同的页面拥有不同的权限
         unregister: {
           my: ['myMessages', 'personalPage', 'about', 'register']
         },
@@ -399,7 +71,7 @@ const store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
           my: ['myMessages', 'personalPage', 'about']
         }
       };
-      let accessTree = {
+      var accessTree = {
         my: {
           myMessages: false, // common
           register: false, // unregister
@@ -414,13 +86,13 @@ const store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
           about: false // common
         }
         // 1. 权限数组合并
-      };let itemTotal = { // 配置对象
+      };var itemTotal = { // 配置对象
         my: []
       };
       // 先拼接
-      for (let i = 0, len1 = roleList.length; i < len1; i++) {
-        for (let j = 0, len2 = pageArr.length; j < len2; j++) {
-          let page = pageArr[j];
+      for (var i = 0, len1 = roleList.length; i < len1; i++) {
+        for (var j = 0, len2 = pageArr.length; j < len2; j++) {
+          var page = pageArr[j];
           // ['myMessages', 'personalPage', 'about', 'register'] 拼接 ['myMessages', 'personalPage', 'about', 'userManagement', 'enpowerAdmins']
           itemTotal[page] = itemTotal[page].concat(accessItem[roleList[i]][page]);
         }
@@ -440,12 +112,12 @@ const store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
         }
         return temp;
       }
-      for (let pageKey in itemTotal) {
+      for (var pageKey in itemTotal) {
         // 去重
         itemTotal[pageKey] = DeleteRepeat(itemTotal[pageKey]);
         // 遍历同步更新权限树
-        for (let i = 0, len = itemTotal[pageKey].length; i < len; i++) {
-          let pageAuthItem = itemTotal[pageKey][i];
+        for (var _i = 0, len = itemTotal[pageKey].length; _i < len; _i++) {
+          var pageAuthItem = itemTotal[pageKey][_i];
           accessTree[pageKey][pageAuthItem] = true;
         }
       }
@@ -473,16 +145,16 @@ const store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
       console.log(accessTree);
       state.accessTree = accessTree;
     },
-    updateUserInfo(state, val) {
+    updateUserInfo: function updateUserInfo(state, val) {
       state.userInfo = val;
     },
-    updateEncryptedObj(state, val) {
+    updateEncryptedObj: function updateEncryptedObj(state, val) {
       state.encryptedObj = val;
     },
-    updateWxUserInfo(state, val) {
+    updateWxUserInfo: function updateWxUserInfo(state, val) {
       state.wxUserInfo = val;
     },
-    updateUserRoleList(state, val) {
+    updateUserRoleList: function updateUserRoleList(state, val) {
       state.userRoleList = val;
     }
   }
@@ -491,16 +163,19 @@ const store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 /* harmony default export */ __webpack_exports__["a"] = (store);
 
 /***/ }),
-/* 13 */,
-/* 14 */
+
+/***/ 109:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api__ = __webpack_require__(4);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LOADING_PARAM_OBJ", function() { return LOADING_PARAM_OBJ; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PROJECT_NAME", function() { return PROJECT_NAME; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VERSION", function() { return VERSION; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api__ = __webpack_require__(52);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "API", function() { return __WEBPACK_IMPORTED_MODULE_0__api__["a"]; });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "BASE_URL", function() { return __WEBPACK_IMPORTED_MODULE_0__api__["b"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data__ = __webpack_require__(110);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "$DATA", function() { return __WEBPACK_IMPORTED_MODULE_1__data__["a"]; });
 
 // export { $menu } from './menu';
@@ -508,28 +183,48 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 // export { $SYSTEM } from './system';
 
 // 全局的loading 配置对象
-const LOADING_PARAM_OBJ = {
+var LOADING_PARAM_OBJ = {
   title: '加载中',
   mask: true
 };
-/* harmony export (immutable) */ __webpack_exports__["LOADING_PARAM_OBJ"] = LOADING_PARAM_OBJ;
 
-
-const PROJECT_NAME = '天天意境小程序系统';
-/* harmony export (immutable) */ __webpack_exports__["PROJECT_NAME"] = PROJECT_NAME;
-
-const VERSION = '1.0';
-/* harmony export (immutable) */ __webpack_exports__["VERSION"] = VERSION;
-
+var PROJECT_NAME = '天天意境小程序系统';
+var VERSION = '1.0';
 
 /***/ }),
-/* 15 */
+
+/***/ 110:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__city_js__ = __webpack_require__(16);
+/* unused harmony export CAMPER_RELATIVE_LIMIT */
+/* unused harmony export CAMPER_ALL_LIST */
+/* unused harmony export SEX_ARR */
+/* unused harmony export ACCOUNT_RELATIVE_ARR */
+/* unused harmony export CAMPER_RELATIVE_ARR */
+/* unused harmony export CAMPER_CARD */
+/* unused harmony export CAMPER_HEIGHT */
+/* unused harmony export CAMPER_WEIGHT */
+/* unused harmony export CAMPER_SHOOES */
+/* unused harmony export PAY_STATUS */
+/* unused harmony export PARTNER_STATUS */
+/* unused harmony export PARTNER_SOURCE */
+/* unused harmony export PARTNER_LIMIT */
+/* unused harmony export COURSE_TEAM_TYPE */
+/* unused harmony export ORDER_STATUS */
+/* unused harmony export SPECS_UNIT */
+/* unused harmony export COURSE_TYPE */
+/* unused harmony export CAMPER_TYPE */
+/* unused harmony export COST_TYPE */
+/* unused harmony export COUPON_TYPE */
+/* unused harmony export validateTypeArr */
+/* unused harmony export COUPON_STATUS */
+/* unused harmony export ACTIVITY_STATUS */
+/* unused harmony export ROLE_KEY_MAP */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return $DATA; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__city_js__ = __webpack_require__(111);
 
-const CAMPER_RELATIVE_LIMIT = [{
+var CAMPER_RELATIVE_LIMIT = [{
   id: 1020,
   name: '全部权限'
 }, {
@@ -539,10 +234,8 @@ const CAMPER_RELATIVE_LIMIT = [{
   id: 4,
   name: '仅为学员选课 '
 }];
-/* unused harmony export CAMPER_RELATIVE_LIMIT */
 
-
-const CAMPER_ALL_LIST = [{
+var CAMPER_ALL_LIST = [{
   name: '为学员选课购课',
   status: true
 }, {
@@ -573,34 +266,26 @@ const CAMPER_ALL_LIST = [{
   name: '管理学员亲属',
   status: false
 }];
-/* unused harmony export CAMPER_ALL_LIST */
 
-
-const SEX_ARR = [{
+var SEX_ARR = [{
   name: '男',
   id: 1
 }, {
   name: '女',
   id: 2
 }];
-/* unused harmony export SEX_ARR */
 
-
-const ACCOUNT_RELATIVE_ARR = [{
+var ACCOUNT_RELATIVE_ARR = [{
   name: '主账号',
   id: 1
 }, {
   name: '亲属关联',
   id: 2
 }];
-/* unused harmony export ACCOUNT_RELATIVE_ARR */
 
+var CAMPER_RELATIVE_ARR = ['爸爸', '妈妈', '爷爷', '奶奶', '外公', '外婆', '本人', '其他'];
 
-const CAMPER_RELATIVE_ARR = ['爸爸', '妈妈', '爷爷', '奶奶', '外公', '外婆', '本人', '其他'];
-/* unused harmony export CAMPER_RELATIVE_ARR */
-
-
-const CAMPER_CARD = [{
+var CAMPER_CARD = [{
   id: 0,
   name: '身份证'
 }, {
@@ -613,13 +298,11 @@ const CAMPER_CARD = [{
   id: 8,
   name: '台湾通行证'
 }];
-/* unused harmony export CAMPER_CARD */
 
-
-const CAMPER_HEIGHT = () => {
-  let HeightArr = [];
-  for (let i = 79; i <= 201; i++) {
-    let obj = {
+var CAMPER_HEIGHT = function CAMPER_HEIGHT() {
+  var HeightArr = [];
+  for (var i = 79; i <= 201; i++) {
+    var obj = {
       id: i,
       name: i + 'CM'
     };
@@ -633,13 +316,11 @@ const CAMPER_HEIGHT = () => {
   };
   return HeightArr;
 };
-/* unused harmony export CAMPER_HEIGHT */
 
-
-const CAMPER_WEIGHT = () => {
-  let WeightArr = [];
-  for (let i = 9; i <= 100; i++) {
-    let obj = {
+var CAMPER_WEIGHT = function CAMPER_WEIGHT() {
+  var WeightArr = [];
+  for (var i = 9; i <= 100; i++) {
+    var obj = {
       id: i,
       name: i + 'KG'
     };
@@ -653,13 +334,11 @@ const CAMPER_WEIGHT = () => {
   };
   return WeightArr;
 };
-/* unused harmony export CAMPER_WEIGHT */
 
-
-const CAMPER_SHOOES = () => {
-  let ShooesArr = [];
-  for (let i = 155; i <= 480; i += 5) {
-    let obj = {
+var CAMPER_SHOOES = function CAMPER_SHOOES() {
+  var ShooesArr = [];
+  for (var i = 155; i <= 480; i += 5) {
+    var obj = {
       id: i,
       name: i / 10 + '码'
     };
@@ -667,11 +346,9 @@ const CAMPER_SHOOES = () => {
   };
   return ShooesArr;
 };
-/* unused harmony export CAMPER_SHOOES */
-
 
 // 支付主体状态
-const PAY_STATUS = [{
+var PAY_STATUS = [{
   id: -1,
   name: '已禁用'
 }, {
@@ -684,33 +361,27 @@ const PAY_STATUS = [{
   id: 2,
   name: '已开通'
 }];
-/* unused harmony export PAY_STATUS */
-
 
 // 合作状态
-const PARTNER_STATUS = [{
+var PARTNER_STATUS = [{
   id: 1,
   name: '禁用'
 }, {
   id: 0,
   name: '启用'
 }];
-/* unused harmony export PARTNER_STATUS */
-
 
 // 继承来源
-const PARTNER_SOURCE = [{
+var PARTNER_SOURCE = [{
   id: 1,
   name: '继承父团队'
 }, {
   id: 0,
   name: '自行建立'
 }];
-/* unused harmony export PARTNER_SOURCE */
-
 
 // 合作权限
-const PARTNER_LIMIT = [{
+var PARTNER_LIMIT = [{
   id: 1,
   name: '课程'
 }, {
@@ -721,11 +392,9 @@ const PARTNER_LIMIT = [{
               name: '渠道'
              } */
 }];
-/* unused harmony export PARTNER_LIMIT */
-
 
 // 课程团队业务类型
-const COURSE_TEAM_TYPE = [{
+var COURSE_TEAM_TYPE = [{
   id: 1,
   name: '户外'
 }, {
@@ -735,11 +404,9 @@ const COURSE_TEAM_TYPE = [{
   id: 3,
   name: '全日制'
 }];
-/* unused harmony export COURSE_TEAM_TYPE */
-
 
 // 订单状态
-const ORDER_STATUS = [{
+var ORDER_STATUS = [{
   id: 0,
   name: '待付款'
 }, {
@@ -761,10 +428,8 @@ const ORDER_STATUS = [{
   id: 10,
   name: '已关闭'
 }];
-/* unused harmony export ORDER_STATUS */
 
-
-const SPECS_UNIT = [{
+var SPECS_UNIT = [{
   id: 1,
   name: '小时'
 }, {
@@ -774,10 +439,8 @@ const SPECS_UNIT = [{
   id: 3,
   name: '月'
 }];
-/* unused harmony export SPECS_UNIT */
 
-
-const COURSE_TYPE = [{
+var COURSE_TYPE = [{
   id: 1,
   name: '全日制课程'
 }, {
@@ -790,20 +453,16 @@ const COURSE_TYPE = [{
   id: 4,
   name: '单次课程'
 }];
-/* unused harmony export COURSE_TYPE */
 
-
-const CAMPER_TYPE = [{
+var CAMPER_TYPE = [{
   name: '小孩',
   id: 1
 }, {
   name: '成人',
   id: 2
 }];
-/* unused harmony export CAMPER_TYPE */
 
-
-const COST_TYPE = [{
+var COST_TYPE = [{
   name: '学费',
   id: 1
 }, {
@@ -822,30 +481,24 @@ const COST_TYPE = [{
   name: '一次性杂费',
   id: 6
 }];
-/* unused harmony export COST_TYPE */
 
-
-const COUPON_TYPE = [{
+var COUPON_TYPE = [{
   name: '代金券',
   id: 1
 }, {
   name: '折扣券',
   id: 2
 }];
-/* unused harmony export COUPON_TYPE */
 
-
-const validateTypeArr = [{
+var validateTypeArr = [{
   name: '固定期限',
   id: 2
 }, {
   name: '自领取起生效',
   id: 1
 }];
-/* unused harmony export validateTypeArr */
 
-
-const COUPON_STATUS = [{
+var COUPON_STATUS = [{
   name: '未使用',
   id: '0'
 }, {
@@ -855,10 +508,8 @@ const COUPON_STATUS = [{
   name: '已过期',
   id: '2'
 }];
-/* unused harmony export COUPON_STATUS */
 
-
-const ACTIVITY_STATUS = [{
+var ACTIVITY_STATUS = [{
   name: '未开始',
   id: '1'
 }, {
@@ -868,11 +519,9 @@ const ACTIVITY_STATUS = [{
   name: '已结束',
   id: '3'
 }];
-/* unused harmony export ACTIVITY_STATUS */
-
 
 // 全局的roleKey
-const ROLE_KEY_MAP = [{
+var ROLE_KEY_MAP = [{
   roleKey: 'root',
   roleName: '超级管理员'
 }, {
@@ -891,8 +540,6 @@ const ROLE_KEY_MAP = [{
   roleKey: 'visitor',
   roleName: '游客'
 }];
-/* unused harmony export ROLE_KEY_MAP */
-
 /*
   101 : 全日制营地-幼儿园
   102 : 全日制营地-430
@@ -904,42 +551,42 @@ const ROLE_KEY_MAP = [{
   301 : 常规兴趣班
   401 : 单次课程
  */
-const $DATA = {
-  ACCOUNT_RELATIVE_ARR,
-  CAMPER_CARD,
-  CAMPER_TYPE,
-  SEX_ARR,
-  CAMPER_RELATIVE_LIMIT,
-  CAMPER_ALL_LIST,
-  CAMPER_RELATIVE_ARR,
+var $DATA = {
+  ACCOUNT_RELATIVE_ARR: ACCOUNT_RELATIVE_ARR,
+  CAMPER_CARD: CAMPER_CARD,
+  CAMPER_TYPE: CAMPER_TYPE,
+  SEX_ARR: SEX_ARR,
+  CAMPER_RELATIVE_LIMIT: CAMPER_RELATIVE_LIMIT,
+  CAMPER_ALL_LIST: CAMPER_ALL_LIST,
+  CAMPER_RELATIVE_ARR: CAMPER_RELATIVE_ARR,
   CAMPER_HEIGHT: CAMPER_HEIGHT(),
   CAMPER_WEIGHT: CAMPER_WEIGHT(),
   CAMPER_SHOOES: CAMPER_SHOOES(),
   CITY: __WEBPACK_IMPORTED_MODULE_0__city_js__["a" /* CITY */],
-  PAY_STATUS,
-  PARTNER_STATUS,
-  PARTNER_SOURCE,
-  PARTNER_LIMIT,
-  COURSE_TEAM_TYPE,
-  ORDER_STATUS,
-  SPECS_UNIT,
-  COURSE_TYPE,
-  COST_TYPE,
-  COUPON_TYPE,
-  COUPON_STATUS,
-  ACTIVITY_STATUS,
-  validateTypeArr,
-  ROLE_KEY_MAP
+  PAY_STATUS: PAY_STATUS,
+  PARTNER_STATUS: PARTNER_STATUS,
+  PARTNER_SOURCE: PARTNER_SOURCE,
+  PARTNER_LIMIT: PARTNER_LIMIT,
+  COURSE_TEAM_TYPE: COURSE_TEAM_TYPE,
+  ORDER_STATUS: ORDER_STATUS,
+  SPECS_UNIT: SPECS_UNIT,
+  COURSE_TYPE: COURSE_TYPE,
+  COST_TYPE: COST_TYPE,
+  COUPON_TYPE: COUPON_TYPE,
+  COUPON_STATUS: COUPON_STATUS,
+  ACTIVITY_STATUS: ACTIVITY_STATUS,
+  validateTypeArr: validateTypeArr,
+  ROLE_KEY_MAP: ROLE_KEY_MAP
 };
-/* harmony export (immutable) */ __webpack_exports__["a"] = $DATA;
-
 
 /***/ }),
-/* 16 */
+
+/***/ 111:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-const CITY = [{
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CITY; });
+var CITY = [{
   'serial': '110000',
   'name': '北京市',
   'sub': [{
@@ -11845,9 +11492,337 @@ const CITY = [{
   'serial': '820000',
   'name': '澳门特别行政区'
 }];
-/* harmony export (immutable) */ __webpack_exports__["a"] = CITY;
 
+/***/ }),
+
+/***/ 63:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__App__ = __webpack_require__(65);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__utils__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__store_index__ = __webpack_require__(108);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__config_index__ = __webpack_require__(109);
+
+
+
+// import Vant from 'vant'
+// import 'vant/lib/vant-css/index.css'
+
+// //引用vantUI库
+// Vue.use(Vant)
+
+
+//引入 store
+
+//引入 config
+
+// 把 store 挂载到全局
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$store = __WEBPACK_IMPORTED_MODULE_3__store_index__["a" /* default */];
+
+// 把 config 挂载到全局
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$config = __WEBPACK_IMPORTED_MODULE_4__config_index__;
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$http = __WEBPACK_IMPORTED_MODULE_2__utils__["a" /* $http */];
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.$tool = __WEBPACK_IMPORTED_MODULE_2__utils__["b" /* $tool */];
+
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.config.productionTip = false;
+__WEBPACK_IMPORTED_MODULE_1__App__["a" /* default */].mpType = 'app';
+
+var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a(__WEBPACK_IMPORTED_MODULE_1__App__["a" /* default */]);
+app.$mount();
+
+/***/ }),
+
+/***/ 65:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_lib_selector_type_script_index_0_App_vue__ = __webpack_require__(67);
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(66)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+
+/* template */
+var __vue_template__ = null
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_lib_selector_type_script_index_0_App_vue__["a" /* default */],
+  __vue_template__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src\\App.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-05f05b72", Component.options)
+  } else {
+    hotAPI.reload("data-v-05f05b72", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+
+/***/ 66:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ 67:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+/*
+  主页启动逻辑：
+  1. 拿code换取：
+    1. 自定义登录态，储存到公共状态管理，后面接口调用都要带上；
+    2. 用户注册信息：
+      1. 已注册用户
+        1. 审核中/被拒绝：页面一进来就toast提示
+        2. 审核已通过：拿到用户的角色信息，配置全局的权限对象
+      2. 用户未注册：
+  2. 
+*/
+/* harmony default export */ __webpack_exports__["a"] = ({
+  data: function data() {
+    return {
+      // 用户审核状态
+      userAuditStatus: 1,
+      // 用户角色列表
+      userRoleList: []
+    };
+  },
+  created: function created() {
+    var _this = this;
+
+    wx.showLoading(this.$config.LOADING_PARAM_OBJ);
+    // 登录
+    wx.login({
+      success: function success(res) {
+        wx.hideLoading();
+        _this.$http({
+          url: '/wx/login.do',
+          method: 'post',
+          data: {
+            code: res.code
+          },
+          success: function success(res) {
+            //公共状态管理自定义登录态
+            _this.$store.commit('updateCustomLoginStatus', res.third_session);
+            //拿到识别码后，获取用户审核状态值 1:未注册 2：审核中 3:被拒绝 4: 已通过
+            _this.updateUserRole(res.status);
+            // 如果已注册
+            if (_this.userAuditStatus === 4) {
+              // 本地储存用户基础信息
+              _this.$store.commit('updateUserInfo', res.userInfo);
+              // 拿用户的用户角色列表
+              _this.updateRoleList(res.userInfo.roles);
+              // 更新用户权限树
+              // mockdata
+              // this.$store.commit('updateRoleAuthTree', ['root','admin','checker','writer','common','unregister']); // 超级权限
+              // this.$store.commit('updateRoleAuthTree', ['admin']);
+              _this.$store.commit('updateRoleAuthTree', _this.userRoleList);
+              _this.$store.commit('updateUserRoleList', _this.userRoleList);
+              console.log(_this.userRoleList, _this.$store);
+            } else {
+              // 其他三种状态的页面结构一样
+              // 同步公共状态管理
+              _this.$store.commit('updateUserAuditStatus', _this.userAuditStatus);
+              // mockdata
+              // this.$store.commit('updateRoleAuthTree', ['root','admin','checker','writer','common','unregister']); // 超级权限
+              _this.$store.commit('updateRoleAuthTree', ['unregister']); // 游客 == 未注册
+            }
+          }
+        });
+      }
+    });
+    //APP启动第一步：判断app是否授权,如果授权，再根据（未注册，审核中，被拒绝）和审核通过进入不同的页面
+    /* wx.getSetting({
+      success: res => {
+        console.log(res);
+        if (!!res.authSetting['scope.userInfo']) {// 未授权
+          wx.redirectTo({
+            url: '../authorization/authorization',//跳转到授权页
+          })
+        } else {//已经授权，根据用户状态，判断进入哪个页面
+          
+          // 获取用户信息, 特别是用户状态
+          let getUsersInfo = () => {
+            wx.getUserInfo({
+              success: res => {
+                // 可以将 res 发送给后台解码出 unionId
+                app.globalData.userInfo = res.userInfo
+                //向后台查询用户开发者系统信息，以及此时状态，返回审核中，被拒绝 或 审核通过
+                wx.request({
+                  url: 'https://www.grosup.com/practice/user/info.do',
+                  // method: 'post',
+                  header: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'third_session': app.globalData.userId
+                  },
+                  success: res => {
+                    if (res.data.msg == "当前用户未注册") {
+                      //未通过，显示注册页(未注册，审核中，被拒绝)
+                      wx.redirectTo({
+                        url: '../register/register'
+                      })
+                    }else{
+                      let saveFilterdData = (data) => {
+                        // this.globalData.userInfoInOurSystem.personInfo = res.data.data;
+                        //根据用户状态进行页面的不同显示，只有当用户通过审核时候才会显示个人信息页，否则显示注册页
+                        let userStatus//找到用户状态
+                        let userType//格式化用户角色
+                        let userRole//储存用户角色，用于审核通过状态展示对应页面
+                        let selectRole //中文格式角色，用于审核时同步当前角色
+                        userStatus = data.status
+                        userType = data.userType
+                        switch (userType) {
+                          case 0:
+                            userRole = "student",
+                              selectRole = "学生"
+                            break;
+                          case 1:
+                            userRole = "teacher",
+                              selectRole = "老师"
+                            break;
+                          default:
+                            userRole = "admin",
+                              selectRole = "管理员"
+                        }
+                        data.formatUserRole = userRole
+                        data.formatSelectRole = selectRole
+                          return data
+                      }
+                      //用户个人信息格式化后储存
+                      app.globalData.userInfoInOurSystem.personInfo = saveFilterdData(res.data.data)
+                      if (app.globalData.userInfoInOurSystem.personInfo.status == 1) {//通过审核
+                        //导航到main页
+                        // wx.redirectTo({
+                        //   url: '../main/main',
+                        // })
+                        //本页面为启动页，因此当小程序启动，判断是否展示授权或注册页时候，此页已经显示，故需要把页面先隐藏，当用户审核通过时候再展示
+                        let userInfo = app.globalData.userInfoInOurSystem.personInfo
+                        if (userInfo.status == 1) {
+                          let navigatorArray2Value = 'navigatorArray[1]'
+                          this.setData({
+                            ifshow: true,
+                            [navigatorArray2Value]: userInfo.formatUserRole
+                            // navigatorArray: ["my", userInfo.formatUserRole]
+                          })
+                        }
+                      } else {
+                        //未通过，显示注册页(未注册，审核中，被拒绝)
+                        wx.redirectTo({
+                          url: '../register/register'
+                        })
+                      }
+                    }
+                    
+                  },
+                  fail: () => {
+                    wx.showToast({
+                      title: '服务器请求异常，请检查网络或联系管理员！',
+                      icon: 'none'
+                    })
+                  }
+                })
+              }
+            })
+          }
+        }
+      }
+    }) */
+  },
+
+  methods: {
+    updateUserRole: function updateUserRole(status) {
+      var userAuditStatus = void 0;
+      // 存储格式化为前端自定义用户审核状态 1:未注册 2：审核中 3:被拒绝 4: 已通过
+      switch (status) {
+        case 1:
+          userAuditStatus = 4;
+          break;
+        case 2:
+          userAuditStatus = 3;
+          break;
+        case 0:
+          userAuditStatus = 2;
+          break;
+        case -1:
+          userAuditStatus = 1;
+          break;
+      }
+      // 同步公共状态管理
+      this.$store.commit('updateUserAuditStatus', userAuditStatus);
+      this.userAuditStatus = userAuditStatus;
+    },
+    updateRoleList: function updateRoleList(roles) {
+      // 遍历用户角色列表，本地储存
+      var roleList = [];
+      var roleListData = roles;
+      for (var i = 0, len = roleListData.length; i < len; i++) {
+        roleList.push(roleListData[i].roleKey);
+        /* // 过滤转化后台返回角色信息
+        switch (roleListData[i].roleKey) {
+          case 'root':
+            roleList.push('root');
+            break;
+          case 'admin':
+            roleList.push('admin');
+            break;
+          case 'checker':
+            roleList.push('checker');
+            break;
+          case 'writer':
+            roleList.push('writer');
+            break;
+          case 'common':
+            roleList.push('common');
+            break;
+          case 'visitor':
+            roleList.push('visitor');
+            break;
+        } */
+      }
+      this.userRoleList = roleList;
+    }
+  },
+  /**
+   * 生命周期函数--监听页面加载
+   */
+  onLoad: function onLoad(options) {}
+});
 
 /***/ })
-],[5]);
+
+},[63]);
 //# sourceMappingURL=app.js.map

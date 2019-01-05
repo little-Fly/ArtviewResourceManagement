@@ -1,9 +1,9 @@
-<template name="50cfb712">
-  <view class="_div data-v-936bffd0">
-    <view class="_div data-v-936bffd0 zan-panel">
-      <view class="_div data-v-936bffd0 zan-cell">
-        <view class="_div data-v-936bffd0 zan-cell__bd">天天资源版本号</view>
-        <view class="_div data-v-936bffd0 zan-cell__ft">1.0.0</view>
+<template name="1a3d26fe">
+  <view class="_div data-v-300b61f7">
+    <view class="_div data-v-300b61f7 zan-panel">
+      <view class="_div data-v-300b61f7 zan-cell">
+        <view class="_div data-v-300b61f7 zan-cell__bd">天天资源版本号</view>
+        <view class="_div data-v-300b61f7 zan-cell__ft">1.0.0</view>
       </view>
     </view>
   </view>
