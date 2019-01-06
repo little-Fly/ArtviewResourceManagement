@@ -30,6 +30,7 @@ public class UserBean {
     
     private String nickName;
     
+<<<<<<< HEAD
     public String getName() {
         return name;
     }
@@ -38,6 +39,8 @@ public class UserBean {
         this.name = name;
     }
 
+=======
+>>>>>>> 08bdb340e7487ee555cbfa46a1debda2d0482463
     private int gender;
     
     private String phone;

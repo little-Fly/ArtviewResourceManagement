@@ -103,7 +103,11 @@ public class PcLoginController {
             LOGGER.info("user value is" + JSONObject.fromObject(user));
             if (ObjectUtil.isNull(user)) {
                 // 用户未注册
+<<<<<<< HEAD
                 map.put("status", -1);
+=======
+                userInfo.put("status", -1);
+>>>>>>> 08bdb340e7487ee555cbfa46a1debda2d0482463
             } else {
                 map.put("status", user.getStatus());
                 map.put("userInfo", JSONObject.fromObject(user));
