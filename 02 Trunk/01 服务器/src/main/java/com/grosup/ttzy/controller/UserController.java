@@ -58,11 +58,7 @@ public class UserController {
             String gender = request.getParameter("gender");
             String reason = request.getParameter("reason");
             String phone = request.getParameter("phone");
-<<<<<<< HEAD
             String name = request.getParameter("name");
-=======
-            
->>>>>>> 08bdb340e7487ee555cbfa46a1debda2d0482463
             String iv = request.getParameter("iv");
             String encryptedData = request.getParameter("encryptedData");
             UserBean user = new UserBean();
@@ -70,10 +66,7 @@ public class UserController {
             user.setGender(Integer.parseInt(gender));
             user.setPhone(phone);
             user.setReason(reason);
-<<<<<<< HEAD
             user.setName(name);
-=======
->>>>>>> 08bdb340e7487ee555cbfa46a1debda2d0482463
             SessionBean sessionBean = sessionService.getOpenIdByThirdSession(third_session);
             String ret = AesCbcUtil.decrypt(encryptedData, sessionBean.getSession_key(), iv,
                     "UTF-8");
@@ -142,11 +135,8 @@ public class UserController {
                 List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
                 UserRoleBean userRoleBean = new UserRoleBean();
                 userRoleBean.setUid(uid);
-                userRoleBean.setRoleKey("visitor");
-<<<<<<< HEAD
+                userRoleBean.setRoleKey("common");
                 userRoles.add(userRoleBean);
-=======
->>>>>>> 08bdb340e7487ee555cbfa46a1debda2d0482463
                 roleService.BatchdelUserRole(userRoles);
             }
             result.put("code", CodeUtil.SUCCESS);
@@ -173,10 +163,7 @@ public class UserController {
                     JSONObject userInfo = new JSONObject();
                     userInfo.put("uid", user.getUid());
                     userInfo.put("nickName", user.getNickName());
-<<<<<<< HEAD
                     userInfo.put("name", user.getName());
-=======
->>>>>>> 08bdb340e7487ee555cbfa46a1debda2d0482463
                     userInfo.put("phone", user.getPhone());
                     userInfo.put("gender", user.getGender() == 1? "男":"女");
                     userInfo.put("reason", user.getReason());

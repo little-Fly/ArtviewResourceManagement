@@ -7,10 +7,7 @@
 		<result column="openId" jdbcType="VARCHAR" property="openId"/>
 		<result column="unionId" jdbcType="VARCHAR" property="unionId"/>
 		<result column="nickName" jdbcType="VARCHAR" property="nickName"/>
-<<<<<<< HEAD
 		<result column="name" jdbcType="VARCHAR" property="name"/>
-=======
->>>>>>> 08bdb340e7487ee555cbfa46a1debda2d0482463
 		<result column="gender" jdbcType="VARCHAR" property="gender"/>
 		<result column="phone" jdbcType="VARCHAR" property="phone"/>
 		<result column="reason" jdbcType="VARCHAR" property="reason"/>
@@ -48,11 +45,7 @@
     <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="uid">
           SELECT LAST_INSERT_ID()
       </selectKey>
-<<<<<<< HEAD
         insert into t_user (unionId,openId,name,nickName,gender,phone,reason,createTime,lastTime,status)
-=======
-        insert into t_user (unionId,openId,nickName,gender,phone,reason,createTime,lastTime,status)
->>>>>>> 08bdb340e7487ee555cbfa46a1debda2d0482463
         values (
         #{unionId},
         #{openId},
