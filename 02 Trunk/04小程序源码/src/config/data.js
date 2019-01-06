@@ -378,6 +378,33 @@ export const ACTIVITY_STATUS = [{
   id: '3'
 }];
 
+// 全局的roleKey
+export const ROLE_KEY_MAP = [
+  {
+    roleKey: 'root',
+    roleName: '超级管理员'
+  },
+  {
+    roleKey: 'admin',
+    roleName: '管理员'
+  },
+  {
+    roleKey: 'checker',
+    roleName: '审核人员'
+  },
+  {
+    roleKey: 'writer',
+    roleName: '录入人员'
+  },
+  {
+    roleKey: 'common',
+    roleName: '一般员工'
+  },
+  {
+    roleKey: 'visitor',
+    roleName: '游客'
+  }
+];
 /*
   101 : 全日制营地-幼儿园
   102 : 全日制营地-430
@@ -413,5 +440,6 @@ export const $DATA = {
   COUPON_TYPE,
   COUPON_STATUS,
   ACTIVITY_STATUS,
-  validateTypeArr
+  validateTypeArr,
+  ROLE_KEY_MAP
 };

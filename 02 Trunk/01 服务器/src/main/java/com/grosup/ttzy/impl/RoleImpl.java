@@ -24,6 +24,16 @@ public class RoleImpl extends AbstractDao implements RoleDao{
         return null;
     }
     /**
+     * 是否超管
+     */
+    public boolean isRoot(long uid) throws GrosupException{
+        int count = this.getSession().selectOne("com.grosup.ttzy.role.checkIsRoot", uid);
+        if (count > 0) {
+            return true;
+        }
+        return false;
+    }
+    /**
      * 是否管理员
      */
     public boolean isAdmin(long uid) throws GrosupException{
@@ -38,6 +48,26 @@ public class RoleImpl extends AbstractDao implements RoleDao{
      */
     public boolean isChecker(long uid) throws GrosupException{
         int count = this.getSession().selectOne("com.grosup.ttzy.role.checkIsChecker", uid);
+        if (count > 0) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * 是否普通员工
+     */
+    public boolean isCommon(long uid) throws GrosupException{
+        int count = this.getSession().selectOne("com.grosup.ttzy.role.checkIsCommon", uid);
+        if (count > 0) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * 是否超管
+     */
+    public boolean isVisitor(long uid) throws GrosupException{
+        int count = this.getSession().selectOne("com.grosup.ttzy.role.checkIsVisitor", uid);
         if (count > 0) {
             return true;
         }

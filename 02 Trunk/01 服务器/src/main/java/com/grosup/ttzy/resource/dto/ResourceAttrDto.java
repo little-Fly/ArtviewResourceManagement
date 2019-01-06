@@ -9,6 +9,7 @@ public class ResourceAttrDto {
 
 	private String attrKey; // varchar Y 主键，属性Key
 	private String typeKey; // varchar Y 资源类型Key
+	private int attrlen; // varchar Y 资源长度
 	private String attrName; // varchar Y 属性名
 	private String attrLevel; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 	private String attrType; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
@@ -34,6 +35,14 @@ public class ResourceAttrDto {
 		return attrName;
 	}
 
+	public int getAttrlen() {
+		return attrlen;
+	}
+
+	public void setAttrlen(int attrlen) {
+		this.attrlen = attrlen;
+	}
+	
 	public void setAttrName(String attrName) {
 		this.attrName = attrName;
 	}

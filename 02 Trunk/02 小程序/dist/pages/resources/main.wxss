@@ -1,2 +1,36 @@
 @import "../../common/vendor.wxss";
-.counter-warp{text-align:center;margin-top:200rpx}.home{display:inline-block;margin:200rpx auto;padding:10rpx 20rpx;color:blue;border:2rpx solid blue}
+
+page {
+  background-color: #fff;
+}
+.counter-warp {
+  text-align: center;
+  margin-top: 200rpx;
+}
+.home {
+  display: inline-block;
+  margin: 200rpx auto;
+  padding: 10rpx 20rpx;
+  color: blue;
+  border: 2rpx solid blue;
+}
+.container {
+  padding: 30rpx;
+}
+.resource-warp {
+  margin-left: -15rpx;
+  margin-right: -15rpx;
+}
+.res-item {
+  width: 33.3333333%;
+  padding: 0 15rpx 20rpx;
+  text-align: center;
+}
+.res-item .res-item__headimg {
+  width: 210rpx;
+  height: 210rpx;
+  vertical-align: bottom;
+}
+.res-item .res-name {
+  font-size: 30rpx;
+}

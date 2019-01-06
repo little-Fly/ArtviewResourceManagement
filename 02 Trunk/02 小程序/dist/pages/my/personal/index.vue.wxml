@@ -1,0 +1,22 @@
+<template name="1fd78c71">
+  <view class="_div data-v-314f5dab">
+    <view class="_div data-v-314f5dab zan-panel">
+      <view class="_div data-v-314f5dab zan-cell">
+        <view class="_div data-v-314f5dab zan-cell__bd">姓名</view>
+        <view class="_div data-v-314f5dab zan-cell__ft">{{userInfoState.nickName}}</view>
+      </view>
+      <view class="_div data-v-314f5dab zan-cell">
+        <view class="_div data-v-314f5dab zan-cell__bd">权限</view>
+        <view class="_div data-v-314f5dab zan-cell__ft">{{userRoleNames}}</view>
+      </view>
+      <view class="_div data-v-314f5dab zan-cell">
+        <view class="_div data-v-314f5dab zan-cell__bd">性别</view>
+        <view class="_div data-v-314f5dab zan-cell__ft">{{userInfoState.gender == 0 ? '女' : '男'}}</view>
+      </view>
+      <view class="_div data-v-314f5dab zan-cell">
+        <view class="_div data-v-314f5dab zan-cell__bd">电话</view>
+        <view class="_div data-v-314f5dab zan-cell__ft">{{userInfoState.phone}}</view>
+      </view>
+    </view>
+  </view>
+</template>

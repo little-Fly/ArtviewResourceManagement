@@ -1,16 +1,18 @@
 {
   "pages": [
     "pages/my/main",
-    "pages/resources/main",
-    "pages/my-team/main",
-    "pages/logs/main",
-    "pages/personal/main",
-    "pages/register/main",
     "pages/authorized/main",
-    "pages/about/main",
-    "pages/my-message/main",
-    "pages/audit-resource/main",
-    "pages/auditRegistration/main"
+    "pages/resources/main",
+    "pages/my/my-team/main",
+    "pages/my/logs/main",
+    "pages/my/personal/main",
+    "pages/my/register/main",
+    "pages/my/about/main",
+    "pages/my/my-message/main",
+    "pages/my/audit-resource/main",
+    "pages/my/audit-role/main",
+    "pages/my/audit-role-list/main",
+    "pages/my/auditRegistration/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

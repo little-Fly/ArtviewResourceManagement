@@ -2,6 +2,15 @@ package com.grosup.ttzy.beans;
 
 public class UserRoleBean {
     
+    public UserRoleBean() {
+        
+    }
+    
+    public UserRoleBean(long uid, String roleKey) {
+        this.uid = uid;
+        this.roleKey = roleKey;
+    }
+    
     private long id;
     
     private long uid;

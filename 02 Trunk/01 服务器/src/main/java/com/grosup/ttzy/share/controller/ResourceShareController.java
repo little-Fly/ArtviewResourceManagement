@@ -181,7 +181,7 @@ public class ResourceShareController implements MessageMapConstant{
 			{
 				resourceList.add(resourceDto.getResourceKey());
 			}
-			Collection<ResourceDetailDto> collection = resourceDetailService.get(resourceList);
+			Collection<ResourceDetailDto> collection = resourceDetailService.getByUser(resourceList);
 			JSONArray resourceDefJson = JSONArray.fromObject(collection);
 			messageMap.put(DATA, resourceDefJson.toString());
 			messageMap.put(STATE, STATE_SUCCESSFUL);

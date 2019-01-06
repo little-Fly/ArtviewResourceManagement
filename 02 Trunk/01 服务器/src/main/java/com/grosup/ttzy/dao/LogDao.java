@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.grosup.ttzy.beans.LogBean;
+import com.grosup.ttzy.beans.ReportBean;
 import com.grosup.ttzy.util.GrosupException;
 
 @Repository
@@ -17,5 +18,13 @@ public class LogDao extends AbstractDao {
     
     public List<LogBean> queryLogByPage(Map<String, Integer> pageMap) throws GrosupException{
         return this.getSession().selectList("com.grosup.ttzy.log.queryLogByPage", pageMap);
+    }
+    
+    public List<ReportBean> queryReport(Map<String, Object> pageMap) throws GrosupException{
+        return this.getSession().selectList("com.grosup.ttzy.log.queryReport", pageMap);
+    }
+    
+    public void reportAdd(ReportBean report) throws GrosupException{
+        this.getSession().insert("com.grosup.ttzy.log.reportAdd", report);
     }
 }

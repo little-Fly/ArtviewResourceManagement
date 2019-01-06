@@ -17,6 +17,11 @@
 		</collection>
 	</resultMap>
 	
+	<select id="checkIsRoot" resultType="int">
+       select count(*) from t_user_role 
+       where uid = #{uid} and roleKey='root'
+    </select>
+	
 	<select id="checkIsAdmin" resultType="int">
 	   select count(*) from t_user_role 
 	   where uid = #{uid} and roleKey='admin'
@@ -30,6 +35,16 @@
     <select id="checkIsWriter" resultType="int">
        select count(*) from t_user_role 
        where uid = #{uid} and roleKey='writer'
+    </select>
+    
+    <select id="checkIsCommon" resultType="int">
+       select count(*) from t_user_role 
+       where uid = #{uid} and roleKey='common'
+    </select>
+    
+    <select id="checkIsVisitor" resultType="int">
+       select count(*) from t_user_role 
+       where uid = #{uid} and roleKey='visitor'
     </select>
     
     <insert id="BatchAddUserRole" parameterType="list">

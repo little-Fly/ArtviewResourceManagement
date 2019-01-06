@@ -26,7 +26,23 @@ public class UserBean {
     
     private String unionId;
     
+    private String name;
+    
     private String nickName;
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    private int gender;
+    
+    private String phone;
+    
+    private String reason;
     
     private Date createTime;
     
@@ -112,11 +128,35 @@ public class UserBean {
         this.unionId = unionId;
     }
 
+    public int getGender() {
+        return gender;
+    }
+
+    public void setGender(int gender) {
+        this.gender = gender;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     public String toString() {
         return JSONBuilder.build().put("uid", this.uid)
                 .put("openId", this.openId).put("nickName", this.nickName)
                 .put("createTime", this.createTime).put("lastTime", this.lastTime)
-                .put("status", this.status)
+                .put("status", this.status).put("openId", this.openId).put("unionId", this.unionId)
                 .put("lastValidTime", this.lastValidTime).put("roles", this.roles).toString();
     }
 

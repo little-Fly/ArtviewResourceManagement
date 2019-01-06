@@ -25,6 +25,7 @@ public class ResourceDefDao implements ResourceConstant {
 	Map<String, ResourceDefDto> map = Collections.synchronizedMap(new HashMap<String, ResourceDefDto>());
 
 	private String typeKey = RESOURCE_DEF + "示例表ID";	//varchar	Y	主键，资源类型Key
+	private String logoUrl = "../static/img/model.jpg";//示例图片
 	private String name = "示例表名";	//varchar	Y	资源类型名称
 	private String remark = "示例表注释";	//varchar	N	备注
 	
@@ -32,6 +33,7 @@ public class ResourceDefDao implements ResourceConstant {
 	public void initMethod() {
 		ResourceDefDto resourceDefDto =new ResourceDefDto();
 		resourceDefDto.setTypeKey(typeKey);
+		resourceDefDto.setLogoUrl(logoUrl);
 		resourceDefDto.setName(name);
 		resourceDefDto.setRemark(remark);
 		map.put(typeKey, resourceDefDto);
