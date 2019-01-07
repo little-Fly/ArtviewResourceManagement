@@ -6,7 +6,7 @@
       </li>
     </ul>
     <div class="more-logs">
-      <span class="get-more-logs" @click="getLogList()">查看更多日志</span>
+      <span class="get-more-logs" @click="getLogList()">查看更多</span>
     </div>
   </div>
 </template>
@@ -16,7 +16,7 @@ export default {
   data () {
     return {
       logs: [],
-      pageSize: 30,
+      pageSize: 20,
       pageNumber: 1
     }
   },
@@ -46,7 +46,7 @@ export default {
           }
           else {
             wx.showToast({
-              title: "后面没有日志了！",
+              title: "后面没有了！",
               mask: true
             });
           }
@@ -70,9 +70,8 @@ page {
   width: 335px;
   margin-top: 10px;
   font-size: 15px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+
+  border-bottom: 1px solid #eee;
 }
 .more-logs {
   height: 32px;

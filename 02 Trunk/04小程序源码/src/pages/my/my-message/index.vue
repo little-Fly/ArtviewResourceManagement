@@ -1,53 +1,93 @@
-<template>
+﻿<template>
   <div>
-    <div class="zan-panel">
-      <div class="zan-cell">
-        <div class="zan-cell__icon zan-icon zan-icon-pending-evaluate" style="color:#f85;"></div>
-        <div class="zan-cell__bd">
-          <div class="zan-cell__text">系统通知</div>
-          <div class="zan-cell__desc">您的注册申请被超级审核员通过，欢迎加入天天意境！</div>
-          <div class="zan-cell__desc">2018/09/09</div>
-        </div>
-      </div>
-      <div class="zan-cell">
-        <div class="zan-cell__icon zan-icon zan-icon-pending-evaluate" style="color:#f85;"></div>
-        <div class="zan-cell__bd">
-          <div class="zan-cell__text">系统通知</div>
-          <div class="zan-cell__desc">您的注册申请被超级审核员拒绝！</div>
-          <div class="zan-cell__desc">拒绝理由：还没有想好</div>
-          <div class="zan-cell__desc">2018/09/09</div>
-        </div>
-      </div>
-      
+    <ul class="container msg-list">
+      <li v-for="(msg, index) in msgs" :key="index" class="msg-item">
+        {{msg.report}}<span class="space"></span>{{msg.date}}
+      </li>
+    </ul>
+    <div class="more-msgs">
+      <span class="get-more-msgs" @click="getMsgList()">查看更多</span>
     </div>
   </div>
 </template>
 
 <script>
-import { formatTime } from '@/utils/index'
-import card from '@/components/card'
-
 export default {
-  components: {
-    card
-  },
-
   data () {
     return {
-      logs: []
+      msgs: [],
+      pageSize: 20,
+      pageNumber: 1
     }
   },
+  mounted () {
+    this.getMsgList();
+  },
 
-  created () {
-    const logs = (wx.getStorageSync('logs') || [])
-    this.logs = logs.map(log => formatTime(new Date(log)))
+  //wx/log/queryReport.do
+  methods: {
+    /**
+     * 获取日志列表
+     */
+    getMsgList () {
+      this.$http({
+        url: '/wx/log/queryReport.do',
+        method: 'get',
+        data: {
+          uid: this.$store.state.userInfo.uid,
+          pageSize: this.pageSize,
+          pageNumber: this.pageNumber
+        },
+        success: res => {
+          //console.log(res);
+          if(res.data.length > 0){
+            this.pageNumber += 1;
+            for(var i=0; i<res.data.length; i++){
+              this.msgs.push(res.data[i]);
+            }
+          }
+          else {
+            wx.showToast({
+              title: "后面没有了！",
+              mask: true
+            });
+          }
+        }
+      });
+    }
   }
 }
 </script>
 
 <style lang=scss>
-  .zan-icon {
-    margin-right:15px;
-  }
-
+page {
+  background-color: #fff;
+}
+.msg-list {
+  display: flex;
+  flex-direction: column;
+  padding: 40rpx;
+}
+.msg-item {
+  width: 335px;
+  margin-top: 10px;
+  font-size: 15px;
+  border-bottom: 1px solid #eee;
+}
+.more-msgs {
+  height: 32px;
+  width: 100%;
+  font-size: 18px;
+  text-align: center;
+  line-height: 32px;
+}
+.get-more-msgs {
+  padding: 4px 7px;
+  color: white;
+  background-color: #E64340;
+  border-radius: 4px;
+}
+.space{
+  padding: 8px 8px;
+}
 </style>

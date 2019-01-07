@@ -1,30 +1,31 @@
-<template>
+﻿<template>
   <div class="userlist-wrap">
     <template v-for="(item, index) in userList">
       <div class="userlist-item-wrap" :key='index'>
         <div class="userlist-item clearfix" @click="expandUserMessage(index)">
-          {{item.nickName}}
+          {{item.name+"("+item.nickName+")"}}<span class="space"></span>{{item.gender}}<span class="space"></span>{{item.phone}}
           <div v-if="item.userStatus != '待审核'" class="inline-block">
             <template v-for="(citem, cindex) in item.roles">
               <span class="user_status_icon" :class="citem.roleKey" :key='cindex'>{{citem.roleName}}</span>
             </template>
+            <span class="user_status_icon for_clear_auth_button" @click="clickClearAuthBtn(index)">清空权限</span>
           </div>
           <div v-else class="fr">
-            <span class="user_status_icon for_audit">待审核</span>
+            <span class="user_status_icon for_audit" @click="clickOpenAuthBtn(index)">待审核</span>
           </div>
         </div>
         <div v-show="item.userStatus === '待审核' && item.showContent" class="collapse-body">
-          <div class="content-item">
-            <span class="item-title align-right inline-block">性别</span>：{{'男'}}
-          </div>
-          <div class="content-item">
-            <span class="item-title align-right inline-block">电话</span>：{{'18126450043'}}
-          </div>
-          <div class="content-item">
-            <span class="item-title align-right inline-block">注册理由</span>：{{'巴拉巴拉一大堆巴拉巴拉一大堆巴拉巴拉一大堆巴拉巴拉一大堆巴拉巴拉一大堆'}}
+          <div class="content-item register-reason">
+            <span class="item-title align-right inline-block">注册理由</span>：{{register.reason}}
           </div>
           <div class="content-item btn-wrap align-center">
             <button class="lr-mg-10" type='primary' size='mini' @click="clickAuthBtn(index, 'pass')">审核通过</button>
+          </div>
+          <div class="content-item  align-left">
+            <span class="item-title align-right inline-block">不过原因</span>：
+            <input class="refuse-input inline-block"  placeholder="如：非公司员工，请用实名，信息不完整......" type="text"  maxlength="24" v-model="register.auditRefuseText">
+          </div>
+          <div class="content-item btn-wrap align-center">
             <button class="lr-mg-10" type='warn' size='mini' @click="clickAuthBtn(index, 'refuse')">不能通过</button>
           </div>
         </div>
@@ -52,6 +53,10 @@ export default {
         rightText: '限购一份',
         color: '#38f',
         onclick: null
+      },
+      register:{
+         reason:'',
+         auditRefuseText:''
       }
     }
   },
@@ -68,6 +73,7 @@ export default {
       {
         "uid": 10,
         "nickName": "龚明辉",
+        "name": "龚明辉",
         "roles": [{
           "remark": "",
           "roleKey": "admin",
@@ -84,6 +90,7 @@ export default {
       }, {
         "uid": 11,
         "nickName": "薛丽飞",
+        "name": "薛利飞",
         "roles": [{
           "remark": "",
           "roleKey": "writer",
@@ -112,6 +119,9 @@ export default {
     expandUserMessage (index) {
       this.userList[index].showContent = !this.userList[index].showContent;
     },
+    clickOpenAuthBtn(index){
+      this.register.reason = this.userList[index].reason;
+    },
     /**
      * 审核按钮通过或者不通过按钮点击
      */
@@ -119,14 +129,22 @@ export default {
       console.log(index, this.userList);
       let sendData = {
         uid: this.userList[index].uid,
+        name: this.userList[index].name,
         nickName: this.userList[index].nickName
       };
       if (res === 'pass') {
         sendData.status = 1;
         sendData.refuse = ''
       } else {
+        if(this.register.auditRefuseText.length<1){
+          wx.showToast({
+            title: '请输入不通过原因！',
+            mask: true
+          });
+          return;
+        }
         sendData.status = 2;
-        sendData.refuse = ''
+        sendData.refuse = this.register.auditRefuseText;
       }
       this.$http({
         url: '/wx/user/changeUserStatus.do',
@@ -138,6 +156,35 @@ export default {
           wx.showToast({
             title: '操作成功'
           });
+        }
+      });
+    },
+    /**
+     * 清除注册用户的全部权限，将其变为游客
+     */
+    clickClearAuthBtn (index) {
+      let sendData = {
+        name: this.userList[index].name,
+        uid: this.userList[index].uid
+      };
+      this.$http({
+        url: '/wx/user/clear.do',
+        method: 'put',
+        data: sendData,
+        success: res => {
+          wx.hideLoading();
+          if(res.code == 1){
+            this.userList[index].userStatus = '被拒绝';
+            //this.onLoad();
+            wx.showToast({
+              title: '操作成功'
+            });
+          }
+          else{
+            wx.showToast({
+              title: '操作失败，请重试。'
+            });
+          }
         }
       });
     }
@@ -195,6 +242,12 @@ export default {
       color: white;
       background-color: #E64340;
     }
+    &.for_clear_auth_button{
+      padding: 2px 7px;
+      margin: 4px 7px;
+      color: white;
+      background-color: #E64340;
+    }
     &.admin{
       color: purple;
     }
@@ -207,5 +260,21 @@ export default {
     &.common{
       color: pink;
     }
+  }
+  .refuse-input{
+    vertical-align: middle;
+    border-radius: 4px;
+    font-size: 13px;
+    height: 18px;
+    width: 256px;
+    padding: 0 5px;
+    line-height: 18px;
+    border: 1px solid #999999;
+  }
+  .space{
+    margin: 0px 8px;
+  }
+  .register-reason{
+    color: #999999;
   }
 </style>

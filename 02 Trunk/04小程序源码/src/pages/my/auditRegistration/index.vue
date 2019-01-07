@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <div class="zan-panel">
       <div class="zan-row">
@@ -19,7 +19,7 @@
       </div>
       <div class="zan-row">
         <div class="zan-col zan-col-7 align-right">注册理由：</div>
-        <div class="zan-col zan-col-17">就啊收快递放假啦是肯德基就啊了空间发空间刷空间卢卡斯简单科技会计法上课</div>
+        <div class="zan-col zan-col-17">请输入申请注册用户的原因，如公司员工，工作需要</div>
       </div>
       <div class="zan-row">
         <div class="zan-col zan-col-7 align-right">微信号：</div>
@@ -49,7 +49,7 @@
       </div>
       <div class="zan-row">
         <div class="zan-col zan-col-7 align-right">注册理由：</div>
-        <div class="zan-col zan-col-17">就啊收快递放假啦是肯德基就啊了空间发空间刷空间卢卡斯简单科技会计法上课</div>
+        <div class="zan-col zan-col-17">请输入申请注册用户的原因，如公司员工，工作需要</div>
       </div>
       <div class="zan-row">
         <div class="zan-col zan-col-7 align-right">微信号：</div>
@@ -79,7 +79,7 @@
       </div>
       <div class="zan-row">
         <div class="zan-col zan-col-7 align-right">注册理由：</div>
-        <div class="zan-col zan-col-17">就啊收快递放假啦是肯德基就啊了空间发空间刷空间卢卡斯简单科技会计法上课</div>
+        <div class="zan-col zan-col-17">请输入申请注册用户的原因，如公司员工，工作需要</div>
       </div>
       <div class="zan-row">
         <div class="zan-col zan-col-7 align-right">微信号：</div>
