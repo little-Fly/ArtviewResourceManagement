@@ -10,6 +10,8 @@ public interface ResourceConstant {
 	
 	String RESOURCE_STATE_APPROVAL_ADD = "ApprovalAdd"; //审批添加状态
 	String RESOURCE_STATE_APPROVAL_DEL = "ApprovalDel"; //审批删除状态
+	String RESOURCE_STATE_APPROVAL_UPDATE = "ApprovalUpdate"; //审批删除状态
+	
 	String RESOURCE_STATE_APPROVA_REJECT = "ApprovalReject"; //审批驳回状态
 	String RESOURCE_STATE_AVAILABLE = "Available"; //可用状态
 	

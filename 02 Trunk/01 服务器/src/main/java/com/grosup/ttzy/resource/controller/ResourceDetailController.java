@@ -96,7 +96,7 @@ public class ResourceDetailController implements MessageMapConstant {
 
 	/**
 	 * /rs/detail/approvaladd.do
-	 * 
+	 * 	 需要有管理员权限 
 	 * @param resourcekey resourceKey
 	 * @return ["state":"successful"}]
 	 * @throws GrosupException
@@ -127,7 +127,7 @@ public class ResourceDetailController implements MessageMapConstant {
 
 	/**
 	 * /rs/detail/approvaldel.do
-	 * 
+	 * 	 需要有管理员权限 
 	 * @param resourcekey resourceKey
 	 * @return ["state":"successful"}]
 	 * @throws GrosupException
@@ -155,10 +155,41 @@ public class ResourceDetailController implements MessageMapConstant {
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
+	
+	/**
+	 * /rs/detail/approvalupdate.do
+	 * 	 需要有管理员权限 
+	 * @param resourcekey resourceKey
+	 * @return ["state":"successful"}]
+	 * @throws GrosupException
+	 */
+	@RequestMapping(value = "/approvalupdate.do", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String approvalUpdate(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
+		Map<String, String> messageMap = new HashMap<String, String>();
+		if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
+			String resourceKey = request.getParameter("resourcekey");
+			if (!StringUtil.isNullOrEmpty(resourceKey)) {
+				resourceDetailService.approvalUpdate(resourceKey);
+				messageMap.put(STATE, STATE_SUCCESSFUL);
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			}
+		} else {
+			messageMap.put(STATE, STATE_ERROR);
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+		}
+		JSONArray jsonobj = JSONArray.fromObject(messageMap);
+		return jsonobj.toString();
+	}
 
 	/**
 	 * /rs/detail/reject.do
-	 * 
+	 * 	 需要有管理员权限 
 	 * @param resourcekey resourceKey
 	 * @return ["state":"successful"}]
 	 * @throws GrosupException

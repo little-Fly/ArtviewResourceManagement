@@ -14,6 +14,8 @@ public interface ResourceDetailService {
 	public void approvalAdd(String resourceKey);
 
 	public void approvalDel(String resourceKey);
+	
+	public void approvalUpdate(String resourceKey);
 
 	public void reject(String resourceKey);
 

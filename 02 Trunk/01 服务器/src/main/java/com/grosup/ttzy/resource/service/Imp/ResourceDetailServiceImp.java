@@ -42,6 +42,11 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 		resourceDetailDao.approvalDel(resourceKey);
 	}
 
+	public void approvalUpdate(String resourceKey)
+	{
+		resourceDetailDao.approvalUpdate(resourceKey);
+	}
+	
 	public void reject(String resourceKey) {
 		resourceDetailDao.reject(resourceKey);
 	}
