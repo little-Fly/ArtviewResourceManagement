@@ -148,6 +148,25 @@ public class ResourceDetailDao implements ResourceConstant {
 			log.error("ResourceDetailDao approvalDel is error. resourceKey is:" + resourceKey);
 		}
 	}
+	
+	public void approvalUpdate(String resourceKey) {
+		if (!StringUtil.isNullOrEmpty(resourceKey)) {
+			List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+			for (ResourceDetailDto resourceDetailDto : list) {
+				if (resourceKey.equals(resourceDetailDto.getResourceKey())) {
+					if (RESOURCE_STATE_APPROVAL_UPDATE.equals(resourceDetailDto.getAttrState())) {
+						resourceDetailDto.setAttrState(RESOURCE_STATE_AVAILABLE);
+					}else
+					{
+						resourceDetaillist.add(resourceDetailDto);
+					}
+				}
+			}
+			list.removeAll(resourceDetaillist);
+		} else {
+			log.error("ResourceDetailDao approvalDel is error. resourceKey is:" + resourceKey);
+		}
+	}
 
 	public void reject(String resourceKey) {
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
@@ -173,10 +192,15 @@ public class ResourceDetailDao implements ResourceConstant {
 		}
 	}
 
+		
 	public void update(String resourceKey, Collection<ResourceDetailDto> collection) {
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-			del(resourceKey);
-			add(collection);
+			
+			for (ResourceDetailDto resourceDetailDto : collection) {
+				resourceDetailDto.setResourceKey(resourceKey);
+				resourceDetailDto.setAttrState(RESOURCE_STATE_APPROVAL_UPDATE);
+			}
+			list.addAll(collection);
 		} else {
 			log.error("ResourceDetailDao update is error. resourceKey is:" + resourceKey);
 		}
@@ -278,6 +302,29 @@ public class ResourceDetailDao implements ResourceConstant {
 						if (time >= start + len) {
 							break;
 						}
+					}
+				}
+			}
+		}
+		return resourceDetaillist;
+	}
+
+	public Collection<ResourceDetailDto> getAllPending(String typeKey, int start, int len) {
+
+		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+		int time = 0;
+		for (ResourceDetailDto resourceDetailDto : list) {
+			if (typeKey.equals(resourceDetailDto.getTypeKey())) {
+				if (RESOURCE_STATE_APPROVAL_DEL.equals(resourceDetailDto.getAttrState())
+						|| RESOURCE_STATE_APPROVAL_ADD.equals(resourceDetailDto.getAttrState())) {
+					if (time < start) {
+						time++;
+						continue;
+					} else {
+						resourceDetaillist.add(resourceDetailDto);
+					}
+					if (time >= start + len) {
+						break;
 					}
 				}
 			}

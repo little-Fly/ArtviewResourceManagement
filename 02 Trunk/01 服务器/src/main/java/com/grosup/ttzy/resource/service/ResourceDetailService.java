@@ -14,6 +14,8 @@ public interface ResourceDetailService {
 	public void approvalAdd(String resourceKey);
 
 	public void approvalDel(String resourceKey);
+	
+	public void approvalUpdate(String resourceKey);
 
 	public void reject(String resourceKey);
 
@@ -34,6 +36,8 @@ public interface ResourceDetailService {
 	public Collection<ResourceDetailDto> getAllByUser(String typeKey, int start, int len);
 	
 	public Collection<ResourceDetailDto> getAllByAdmin(String typeKey, int start, int len);
+	
+	public Collection<ResourceDetailDto> getAllPending(String typeKey, int start, int len);
 
 	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len);
 

@@ -42,6 +42,11 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 		resourceDetailDao.approvalDel(resourceKey);
 	}
 
+	public void approvalUpdate(String resourceKey)
+	{
+		resourceDetailDao.approvalUpdate(resourceKey);
+	}
+	
 	public void reject(String resourceKey) {
 		resourceDetailDao.reject(resourceKey);
 	}
@@ -89,5 +94,9 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 	
 	public Collection<ResourceDetailDto> getAllByAdmin(String typeKey, int start, int len) {
 		return resourceDetailDao.getAllByAdmin(typeKey, start, len);
+	}
+
+	public Collection<ResourceDetailDto> getAllPending(String typeKey, int start, int len) {
+		return resourceDetailDao.getAllPending(typeKey, start, len);
 	}
 }
