@@ -90,4 +90,8 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 	public Collection<ResourceDetailDto> getAllByAdmin(String typeKey, int start, int len) {
 		return resourceDetailDao.getAllByAdmin(typeKey, start, len);
 	}
+
+	public Collection<ResourceDetailDto> getAllPending(String typeKey, int start, int len) {
+		return resourceDetailDao.getAllPending(typeKey, start, len);
+	}
 }

@@ -188,6 +188,64 @@ public class ResourceDetailController implements MessageMapConstant {
 	}
 
 	/**
+	 * /rs/detail/getallpending.do  获取所有待审批的资源
+	 * 	 需要有管理员权限
+	 * @param typekey typeKey
+	 * @param start   start
+	 * @param len     len
+	 * @return [{"data":"[{\"attrKey\":\"RAt示例表头ID\",\"attrLevel\":\"0\",\"attrName\":\"示例表头\",\"attrType\":\"default\",\"attrValue\":\"值\",\"resourceKey\":\"RDt示例值ID\",\"typeKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 * @throws GrosupException
+	 */
+	@RequestMapping(value = "/getallpending.do", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String getAllPending(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
+
+		Map<String, String> messageMap = new HashMap<String, String>();
+		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+			int start = 0;
+			int len = 10;
+			String startStr = request.getParameter("start");
+			String lenStr = request.getParameter("len");
+			try {
+				start = Integer.parseInt(startStr);
+			} catch (NumberFormatException e) {
+				log.error("getAll " + MESSAGE_PARAM_ETER + "startStr:\"" + startStr + "\"");
+			}
+			try {
+				len = Integer.parseInt(lenStr);
+			} catch (NumberFormatException e) {
+				log.error("getAll " + MESSAGE_PARAM_ETER + "lenStr:\"" + lenStr + "\"");
+			}
+			String typeKey = request.getParameter("typekey");
+			if (!StringUtil.isNullOrEmpty(typeKey)) {
+
+				Collection<ResourceDetailDto> collection = resourceDetailService.getAllByAdmin(typeKey, start, len);
+
+				if (collection != null) {
+					JSONArray resourceDetailJson = JSONArray.fromObject(collection);
+					messageMap.put(DATA, resourceDetailJson.toString());
+					messageMap.put(STATE, STATE_SUCCESSFUL);
+				} else {
+					messageMap.put(STATE, STATE_ERROR);
+					messageMap.put(MESSAGE, MESSAGE_LIST_ETER);
+					log.error("getAll " + MESSAGE_LIST_ETER);
+				}
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "typeKey:\"" + typeKey + "\"");
+				log.error("getAll " + MESSAGE_PARAM_ETER + "typeKey:\"" + typeKey + "\"");
+			}
+		} else {
+			messageMap.put(STATE, STATE_ERROR);
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+		}
+		JSONArray jsonobj = JSONArray.fromObject(messageMap);
+		return jsonobj.toString();
+	}
+
+	/**
 	 * /rs/detail/del.do
 	 * 
 	 * @param resourcekey resourceKey

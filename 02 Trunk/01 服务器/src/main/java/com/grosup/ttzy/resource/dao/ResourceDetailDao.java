@@ -285,6 +285,29 @@ public class ResourceDetailDao implements ResourceConstant {
 		return resourceDetaillist;
 	}
 
+	public Collection<ResourceDetailDto> getAllPending(String typeKey, int start, int len) {
+
+		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+		int time = 0;
+		for (ResourceDetailDto resourceDetailDto : list) {
+			if (typeKey.equals(resourceDetailDto.getTypeKey())) {
+				if (RESOURCE_STATE_APPROVAL_DEL.equals(resourceDetailDto.getAttrState())
+						|| RESOURCE_STATE_APPROVAL_ADD.equals(resourceDetailDto.getAttrState())) {
+					if (time < start) {
+						time++;
+						continue;
+					} else {
+						resourceDetaillist.add(resourceDetailDto);
+					}
+					if (time >= start + len) {
+						break;
+					}
+				}
+			}
+		}
+		return resourceDetaillist;
+	}
+
 	public Collection<ResourceDetailDto> getAllByAdmin(String typeKey, int start, int len) {
 
 		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
