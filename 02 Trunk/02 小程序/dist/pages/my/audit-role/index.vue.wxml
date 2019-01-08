@@ -1,0 +1,18 @@
+<template name="77e42dd9">
+  <view class="_div data-v-0aac9893">
+    <view class="_div data-v-0aac9893 zan-panel zan-cell--access">
+      <view class="_div data-v-0aac9893 zan-cell" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}">
+        <view class="_div data-v-0aac9893 zan-cell__icon zan-icon zan-icon-description" style="color:#4b0;"></view>
+        <view class="_div data-v-0aac9893 zan-cell__bd">授权新{{roleName}}</view>
+        <view class="_div data-v-0aac9893 zan-cell__ft"></view>
+      </view>
+    </view>
+    <view class="_div data-v-0aac9893 zan-panel zan-cell--access" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}">
+      <view class="_div data-v-0aac9893 zan-cell">
+        <view class="_div data-v-0aac9893 zan-cell__icon zan-icon zan-icon-description" style="color:#f85;"></view>
+        <view class="_div data-v-0aac9893 zan-cell__bd">取消{{roleName}}授权</view>
+        <view class="_div data-v-0aac9893 zan-cell__ft"></view>
+      </view>
+    </view>
+  </view>
+</template>

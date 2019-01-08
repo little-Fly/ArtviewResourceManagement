@@ -1,0 +1,12 @@
+<template name="6989023f">
+  <view class="_div data-v-99504c0e zan-dialog {{[zanDialogObj.show === true ? 'zan-dialog--show' : '']}}">
+    <view class="_div data-v-99504c0e zan-dialog--mask"></view>
+    <view class="_div data-v-99504c0e zan-dialog--container">
+      <view wx:if="{{zanDialogObj.title}}" class="_div data-v-99504c0e zan-dialog__header">{{ zanDialogObj.title }}</view>
+      <view class="_div data-v-99504c0e zan-dialog__content {{[title ? 'zan-dialog__content--title' : '']}}">{{ zanDialogObj.content }}</view>
+      <view class="_div data-v-99504c0e zan-dialog__footer">
+        <block wx:key="item.text + '-' + item.type" key="{{item.text + '-' + item.type}}" wx:for="{{zanDialogObj.buttons}}" wx:for-index="index" wx:for-item="item"><button class="_button data-v-99504c0e zan-dialog__button zan-btn" data-type="{{item.type}}" bindtap="handleProxy" data-eventid="{{'0-'+index}}" data-comkey="{{$k}}" style=" {{computedColor[index]}}">{{ item.text }}</button></block>
+      </view>
+    </view>
+  </view>
+</template>

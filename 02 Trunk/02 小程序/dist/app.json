@@ -1,0 +1,44 @@
+{
+  "pages": [
+    "pages/my/main",
+    "pages/authorized/main",
+    "pages/resources/main",
+    "pages/my/my-team/main",
+    "pages/my/logs/main",
+    "pages/my/personal/main",
+    "pages/my/register/main",
+    "pages/my/about/main",
+    "pages/my/my-message/main",
+    "pages/my/audit-resource/main",
+    "pages/my/audit-role/main",
+    "pages/my/audit-role-list/main",
+    "pages/my/auditRegistration/main"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "天天资源",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#eee"
+  },
+  "tabBar": {
+    "backgroundColor": "#fafafa",
+    "borderStyle": "white",
+    "selectedColor": "#b4282d",
+    "color": "#666",
+    "list": [
+      {
+        "pagePath": "pages/resources/main",
+        "iconPath": "static/images/ic_menu_sort_nor.png",
+        "selectedIconPath": "static/images/ic_menu_sort_pressed.png",
+        "text": "资源"
+      },
+      {
+        "pagePath": "pages/my/main",
+        "iconPath": "static/images/ic_menu_me_nor.png",
+        "selectedIconPath": "static/images/ic_menu_me_pressed.png",
+        "text": "我的"
+      }
+    ]
+  }
+}

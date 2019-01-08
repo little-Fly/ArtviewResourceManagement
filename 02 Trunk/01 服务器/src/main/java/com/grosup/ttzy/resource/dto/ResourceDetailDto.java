@@ -1,4 +1,5 @@
 package com.grosup.ttzy.resource.dto;
+
 /**
  * 
  * @author Administrator
@@ -13,6 +14,8 @@ public class ResourceDetailDto {
 	private String attrLevel; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 	private String attrType; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 	private String attrValue; // varchar Y 属性值
+	private String attrState; // varchar Y 状态
+	private String attrLastState; // varchar Y 状态
 
 	public String getResourceKey() {
 		return resourceKey;
@@ -67,7 +70,20 @@ public class ResourceDetailDto {
 	}
 
 	public void setAttrValue(String attrValue) {
+		attrLastState = this.attrValue;
 		this.attrValue = attrValue;
+	}
+
+	public String getAttrState() {
+		return attrState;
+	}
+
+	public String getAttrLastState() {
+		return attrLastState;
+	}
+
+	public void setAttrState(String attrState) {
+		this.attrState = attrState;
 	}
 
 }

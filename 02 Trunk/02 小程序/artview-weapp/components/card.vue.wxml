@@ -1,7 +1,0 @@
-<template name="bed02fee">
-  <view class="_div data-v-28c7210f">
-    <view class="_p data-v-28c7210f card">
-      {{text}}
-    </view>
-  </view>
-</template>

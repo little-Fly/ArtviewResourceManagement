@@ -15,10 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.grosup.ttzy.dao.RoleDao;
 import com.grosup.ttzy.resource.common.MessageMapConstant;
 import com.grosup.ttzy.resource.dto.ResourceDetailDto;
 import com.grosup.ttzy.resource.service.ResourceDetailService;
+import com.grosup.ttzy.util.GrosupException;
 import com.grosup.ttzy.util.StringUtil;
+import com.grosup.ttzy.util.TtzyUtil;
 
 import net.sf.json.JSONArray;
 
@@ -31,19 +34,28 @@ public class ResourceDetailController implements MessageMapConstant {
 	@Autowired
 	ResourceDetailService resourceDetailService;
 
+	@Autowired
+	RoleDao roleDao;
+
 	@RequestMapping(value = "/create.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String create(HttpServletRequest request, HttpServletResponse response) {
+	public String create(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String json = request.getParameter("json");
-		if (!StringUtil.isNullOrEmpty(json)) {
-			resourceDetailService.create(json);
-			messageMap.put(STATE, STATE_SUCCESSFUL);
+		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+			String json = request.getParameter("json");
+			if (!StringUtil.isNullOrEmpty(json)) {
+				resourceDetailService.create(json);
+				messageMap.put(STATE, STATE_SUCCESSFUL);
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+				log.error("create " + MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
-			log.error("create " + MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
@@ -51,22 +63,125 @@ public class ResourceDetailController implements MessageMapConstant {
 
 	/**
 	 * /rs/detail/add.do
+	 * 
 	 * @param json [{"attrKey":"RAt示例表头ID","attrLevel":"0","attrName":"示例表头","attrType":"default","attrValue":"值","resourceKey":"RDt示例值ID","typeKey":"RDf示例表ID"}]]
 	 * @return ["state":"successful"}]
+	 * @throws GrosupException
 	 */
 	@RequestMapping(value = "/add.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String add(HttpServletRequest request, HttpServletResponse response) {
+	public String add(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
+
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String json = request.getParameter("json");
-		if (!StringUtil.isNullOrEmpty(json)) {
-			resourceDetailService.add(json);
-			messageMap.put(STATE, STATE_SUCCESSFUL);
+		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+			String json = request.getParameter("json");
+			if (!StringUtil.isNullOrEmpty(json)) {
+				resourceDetailService.add(json);
+				messageMap.put(STATE, STATE_SUCCESSFUL);
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+				log.error("add " + MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
-			log.error("add " + MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+		}
+
+		JSONArray jsonobj = JSONArray.fromObject(messageMap);
+		return jsonobj.toString();
+	}
+
+	/**
+	 * /rs/detail/approvaladd.do
+	 * 
+	 * @param resourcekey resourceKey
+	 * @return ["state":"successful"}]
+	 * @throws GrosupException
+	 */
+	@RequestMapping(value = "/approvaladd.do", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String approvalAdd(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
+		Map<String, String> messageMap = new HashMap<String, String>();
+		if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
+			String resourceKey = request.getParameter("resourcekey");
+			if (!StringUtil.isNullOrEmpty(resourceKey)) {
+				resourceDetailService.approvalAdd(resourceKey);
+				messageMap.put(STATE, STATE_SUCCESSFUL);
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			}
+		} else {
+			messageMap.put(STATE, STATE_ERROR);
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+		}
+		JSONArray jsonobj = JSONArray.fromObject(messageMap);
+		return jsonobj.toString();
+	}
+
+	/**
+	 * /rs/detail/approvaldel.do
+	 * 
+	 * @param resourcekey resourceKey
+	 * @return ["state":"successful"}]
+	 * @throws GrosupException
+	 */
+	@RequestMapping(value = "/approvaldel.do", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String approvalDel(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
+		Map<String, String> messageMap = new HashMap<String, String>();
+		if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
+			String resourceKey = request.getParameter("resourcekey");
+			if (!StringUtil.isNullOrEmpty(resourceKey)) {
+				resourceDetailService.approvalDel(resourceKey);
+				messageMap.put(STATE, STATE_SUCCESSFUL);
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			}
+		} else {
+			messageMap.put(STATE, STATE_ERROR);
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+		}
+		JSONArray jsonobj = JSONArray.fromObject(messageMap);
+		return jsonobj.toString();
+	}
+
+	/**
+	 * /rs/detail/reject.do
+	 * 
+	 * @param resourcekey resourceKey
+	 * @return ["state":"successful"}]
+	 * @throws GrosupException
+	 */
+	@RequestMapping(value = "/reject.do", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String reject(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
+		Map<String, String> messageMap = new HashMap<String, String>();
+		if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
+			String resourceKey = request.getParameter("resourcekey");
+			if (!StringUtil.isNullOrEmpty(resourceKey)) {
+				resourceDetailService.reject(resourceKey);
+				messageMap.put(STATE, STATE_SUCCESSFUL);
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			}
+		} else {
+			messageMap.put(STATE, STATE_ERROR);
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
@@ -74,49 +189,65 @@ public class ResourceDetailController implements MessageMapConstant {
 
 	/**
 	 * /rs/detail/del.do
+	 * 
 	 * @param resourcekey resourceKey
 	 * @return ["state":"successful"}]
+	 * @throws GrosupException
 	 */
 	@RequestMapping(value = "/del.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String del(HttpServletRequest request, HttpServletResponse response) {
+	public String del(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String resourceKey = request.getParameter("resourcekey");
-		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-			resourceDetailService.del(resourceKey);
-			messageMap.put(STATE, STATE_SUCCESSFUL);
+		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+			String resourceKey = request.getParameter("resourcekey");
+			if (!StringUtil.isNullOrEmpty(resourceKey)) {
+				resourceDetailService.del(resourceKey);
+				messageMap.put(STATE, STATE_SUCCESSFUL);
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-			log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
-	
+
 	/**
 	 * /rs/detail/update.do
+	 * 
 	 * @param json [{"attrKey":"RAt示例表头ID","attrLevel":"0","attrName":"示例表头","attrType":"default","attrValue":"值","resourceKey":"RDt示例值ID","typeKey":"RDf示例表ID"}]]
 	 * @return ["state":"successful"}]
+	 * @throws GrosupException
 	 */
 	@RequestMapping(value = "/update.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String update(HttpServletRequest request, HttpServletResponse response) {
+	public String update(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String resourceKey = request.getParameter("resourcekey");
-		String json = request.getParameter("json");
+		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+			String resourceKey = request.getParameter("resourcekey");
+			String json = request.getParameter("json");
 
-		if (!StringUtil.isNullOrEmpty(resourceKey) && !StringUtil.isNullOrEmpty(json)) {
-			resourceDetailService.update(resourceKey, json);
-			messageMap.put(STATE, STATE_SUCCESSFUL);
+			if (!StringUtil.isNullOrEmpty(resourceKey) && !StringUtil.isNullOrEmpty(json)) {
+				resourceDetailService.update(resourceKey, json);
+				messageMap.put(STATE, STATE_SUCCESSFUL);
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE,
+						MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"" + " json:\"" + json + "\"");
+				log.error("update " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"" + " json:\"" + json
+						+ "\"");
+			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE,
-					MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"" + " json:\"" + json + "\"");
-			log.error(
-					"update " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"" + " json:\"" + json + "\"");
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
@@ -124,17 +255,63 @@ public class ResourceDetailController implements MessageMapConstant {
 
 	/**
 	 * /rs/detail/get.do
+	 * 
 	 * @param resourcekey resourceKey
 	 * @return [{"data":"[{\"attrKey\":\"RAt示例表头ID\",\"attrLevel\":\"0\",\"attrName\":\"示例表头\",\"attrType\":\"default\",\"attrValue\":\"值\",\"resourceKey\":\"RDt示例值ID\",\"typeKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 * @throws GrosupException
 	 */
 	@RequestMapping(value = "/get.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String get(HttpServletRequest request, HttpServletResponse response) {
+	public String get(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
+		Map<String, String> messageMap = new HashMap<String, String>();
+		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+			String resourceKey = request.getParameter("resourcekey");
+			if (!StringUtil.isNullOrEmpty(resourceKey)) {
+				List<ResourceDetailDto> resourceDetailList = resourceDetailService.get(resourceKey);
+				if (resourceDetailList != null) {
+					JSONArray resourceDetailJson = JSONArray.fromObject(resourceDetailList);
+					messageMap.put(DATA, resourceDetailJson.toString());
+					messageMap.put(STATE, STATE_SUCCESSFUL);
+				} else {
+					messageMap.put(STATE, STATE_ERROR);
+					messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "resourceKey:\"" + resourceKey + "\"");
+					log.error("get " + MESSAGE_DTO_ETER + "resourceKey:\"" + resourceKey + "\"");
+				}
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				log.error("get " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			}
+		} else {
+			messageMap.put(STATE, STATE_ERROR);
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+		}
+		JSONArray jsonobj = JSONArray.fromObject(messageMap);
+		return jsonobj.toString();
+	}
+
+	/**
+	 * /rs/detail/getbyuser.do
+	 * 
+	 * @param resourcekey resourceKey
+	 * @return [{"data":"[{\"attrKey\":\"RAt示例表头ID\",\"attrLevel\":\"0\",\"attrName\":\"示例表头\",\"attrType\":\"default\",\"attrValue\":\"值\",\"resourceKey\":\"RDt示例值ID\",\"typeKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 * @throws GrosupException
+	 */
+	@RequestMapping(value = "/getbyuser.do", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String getByUser(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
 		String resourceKey = request.getParameter("resourcekey");
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-			List<ResourceDetailDto> resourceDetailList = resourceDetailService.get(resourceKey);
+			List<ResourceDetailDto> resourceDetailList;
+			if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
+				resourceDetailList = resourceDetailService.getByAdmin(resourceKey);
+			} else {
+				resourceDetailList = resourceDetailService.getByUser(resourceKey);
+			}
 			if (resourceDetailList != null) {
 				JSONArray resourceDetailJson = JSONArray.fromObject(resourceDetailList);
 				messageMap.put(DATA, resourceDetailJson.toString());
@@ -147,7 +324,7 @@ public class ResourceDetailController implements MessageMapConstant {
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
 			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-			log.error("update " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			log.error("get " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
@@ -155,15 +332,73 @@ public class ResourceDetailController implements MessageMapConstant {
 
 	/**
 	 * /rs/detail/getall.do
+	 * 
 	 * @param typekey typeKey
-	 * @param start start
-	 * @param len len
+	 * @param start   start
+	 * @param len     len
 	 * @return [{"data":"[{\"attrKey\":\"RAt示例表头ID\",\"attrLevel\":\"0\",\"attrName\":\"示例表头\",\"attrType\":\"default\",\"attrValue\":\"值\",\"resourceKey\":\"RDt示例值ID\",\"typeKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 * @throws GrosupException
 	 */
 	@RequestMapping(value = "/getall.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String getAll(HttpServletRequest request, HttpServletResponse response) {
+	public String getAll(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
+		Map<String, String> messageMap = new HashMap<String, String>();
+		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+			int start = 0;
+			int len = 10;
+			String startStr = request.getParameter("start");
+			String lenStr = request.getParameter("len");
+			try {
+				start = Integer.parseInt(startStr);
+			} catch (NumberFormatException e) {
+				log.error("getAll " + MESSAGE_PARAM_ETER + "startStr:\"" + startStr + "\"");
+			}
+			try {
+				len = Integer.parseInt(lenStr);
+			} catch (NumberFormatException e) {
+				log.error("getAll " + MESSAGE_PARAM_ETER + "lenStr:\"" + lenStr + "\"");
+			}
+			String typeKey = request.getParameter("typekey");
+			if (!StringUtil.isNullOrEmpty(typeKey)) {
+
+				Collection<ResourceDetailDto> collection = resourceDetailService.getAll(typeKey, start, len);
+				if (collection != null) {
+					JSONArray resourceDetailJson = JSONArray.fromObject(collection);
+					messageMap.put(DATA, resourceDetailJson.toString());
+					messageMap.put(STATE, STATE_SUCCESSFUL);
+				} else {
+					messageMap.put(STATE, STATE_ERROR);
+					messageMap.put(MESSAGE, MESSAGE_LIST_ETER);
+					log.error("getAll " + MESSAGE_LIST_ETER);
+				}
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "typeKey:\"" + typeKey + "\"");
+				log.error("getAll " + MESSAGE_PARAM_ETER + "typeKey:\"" + typeKey + "\"");
+			}
+		} else {
+			messageMap.put(STATE, STATE_ERROR);
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+			log.error("add " + MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
+		}
+		JSONArray jsonobj = JSONArray.fromObject(messageMap);
+		return jsonobj.toString();
+	}
+
+	/**
+	 * /rs/detail/getallbyuser.do
+	 * 
+	 * @param typekey typeKey
+	 * @param start   start
+	 * @param len     len
+	 * @return [{"data":"[{\"attrKey\":\"RAt示例表头ID\",\"attrLevel\":\"0\",\"attrName\":\"示例表头\",\"attrType\":\"default\",\"attrValue\":\"值\",\"resourceKey\":\"RDt示例值ID\",\"typeKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 * @throws GrosupException
+	 */
+	@RequestMapping(value = "/getallbyuser.do", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String getAllByUser(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
 		int start = 0;
 		int len = 10;
@@ -172,17 +407,23 @@ public class ResourceDetailController implements MessageMapConstant {
 		try {
 			start = Integer.parseInt(startStr);
 		} catch (NumberFormatException e) {
-			log.error("update " + MESSAGE_PARAM_ETER + "startStr:\"" + startStr + "\"");
+			log.error("getAll " + MESSAGE_PARAM_ETER + "startStr:\"" + startStr + "\"");
 		}
 		try {
 			len = Integer.parseInt(lenStr);
 		} catch (NumberFormatException e) {
-			log.error("update " + MESSAGE_PARAM_ETER + "lenStr:\"" + lenStr + "\"");
+			log.error("getAll " + MESSAGE_PARAM_ETER + "lenStr:\"" + lenStr + "\"");
 		}
 		String typeKey = request.getParameter("typekey");
 		if (!StringUtil.isNullOrEmpty(typeKey)) {
 
-			Collection<ResourceDetailDto> collection = resourceDetailService.getAll(typeKey, start, len);
+			Collection<ResourceDetailDto> collection;
+			if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
+				collection = resourceDetailService.getAllByAdmin(typeKey, start, len);
+			} else {
+				collection = resourceDetailService.getAllByUser(typeKey, start, len);
+			}
+
 			if (collection != null) {
 				JSONArray resourceDetailJson = JSONArray.fromObject(collection);
 				messageMap.put(DATA, resourceDetailJson.toString());

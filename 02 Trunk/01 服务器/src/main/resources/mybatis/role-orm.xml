@@ -17,6 +17,11 @@
 		</collection>
 	</resultMap>
 	
+	<select id="checkIsRoot" resultType="int">
+       select count(*) from t_user_role 
+       where uid = #{uid} and roleKey='root'
+    </select>
+	
 	<select id="checkIsAdmin" resultType="int">
 	   select count(*) from t_user_role 
 	   where uid = #{uid} and roleKey='admin'
@@ -32,10 +37,26 @@
        where uid = #{uid} and roleKey='writer'
     </select>
     
+    <select id="checkIsCommon" resultType="int">
+       select count(*) from t_user_role 
+       where uid = #{uid} and roleKey='common'
+    </select>
+    
+    <select id="checkIsVisitor" resultType="int">
+       select count(*) from t_user_role 
+       where uid = #{uid} and roleKey='visitor'
+    </select>
+    
     <insert id="BatchAddUserRole" parameterType="list">
-        insert into t_user_role (id, uid, roleKey) values
-        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
-            #{item.uid}, #{item.roleKey}
+        insert into t_user_role (uid, roleKey) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.uid}, #{item.roleKey})
         </foreach>
     </insert>
+    <delete id="BatchdelUserRole" parameterType="list">
+        delete from t_user_role where (uid,roleKey) in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            (#{item.uid},#{item.roleKey})
+        </foreach>
+    </delete>
 </mapper>

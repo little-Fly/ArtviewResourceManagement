@@ -1,6 +1,7 @@
 package com.grosup.ttzy.controller;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +12,6 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.grosup.ttzy.beans.SessionBean;
 import com.grosup.ttzy.beans.UserBean;
+import com.grosup.ttzy.beans.UserRoleBean;
 import com.grosup.ttzy.impl.RoleImpl;
+import com.grosup.ttzy.service.RoleService;
 import com.grosup.ttzy.service.SessionService;
 import com.grosup.ttzy.service.UserService;
 import com.grosup.ttzy.util.AesCbcUtil;
@@ -42,6 +44,9 @@ public class UserController {
     @Autowired
     private SessionService sessionService;
     
+    @Autowired
+    private RoleService roleService;
+    
     @RequestMapping(method = RequestMethod.POST, value = "/add.do")
     @ResponseBody
     public JSONObject userAdd(HttpServletRequest request) {
@@ -50,10 +55,18 @@ public class UserController {
         try {
             String third_session = request.getHeader("third_session");
             String nickName = request.getParameter("nickName");
+            String gender = request.getParameter("gender");
+            String reason = request.getParameter("reason");
+            String phone = request.getParameter("phone");
+            String name = request.getParameter("name");
             String iv = request.getParameter("iv");
             String encryptedData = request.getParameter("encryptedData");
             UserBean user = new UserBean();
             user.setNickName(nickName);
+            user.setGender(Integer.parseInt(gender));
+            user.setPhone(phone);
+            user.setReason(reason);
+            user.setName(name);
             SessionBean sessionBean = sessionService.getOpenIdByThirdSession(third_session);
             String ret = AesCbcUtil.decrypt(encryptedData, sessionBean.getSession_key(), iv,
                     "UTF-8");
@@ -64,8 +77,19 @@ public class UserController {
             JSONObject userInfoJSON = JSONObject.fromObject(ret);
             LOGGER.info("ret value = " + userInfoJSON.toString());
             String unionId = (String) userInfoJSON.get("unionId");
+            String openId = (String) userInfoJSON.get("openId");
             user.setUnionId(unionId);
-            userService.userAdd(user);
+            user.setOpenId(openId);
+            LOGGER.info("user value = " + user.toString());
+            long uid = userService.userAdd(user);
+            //设置角色为游客
+            List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
+            UserRoleBean userRoleBean = new UserRoleBean();
+            userRoleBean.setUid(uid);
+            userRoleBean.setRoleKey("visitor");
+            userRoles.add(userRoleBean);
+            roleService.BatchAddUserRole(userRoles);
+            
             result.put("code", CodeUtil.SUCCESS);
         } catch (Exception e) {
             result.put("code", CodeUtil.ERROR);
@@ -107,6 +131,14 @@ public class UserController {
         JSONObject result = new JSONObject();
         try {
             userService.changeUserStatus(uid, nickName, status, refuse);
+            if (status == 1) {
+                List<UserRoleBean> userRoles = new ArrayList<UserRoleBean>();
+                UserRoleBean userRoleBean = new UserRoleBean();
+                userRoleBean.setUid(uid);
+                userRoleBean.setRoleKey("common");
+                userRoles.add(userRoleBean);
+                roleService.BatchdelUserRole(userRoles);
+            }
             result.put("code", CodeUtil.SUCCESS);
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);
@@ -131,6 +163,10 @@ public class UserController {
                     JSONObject userInfo = new JSONObject();
                     userInfo.put("uid", user.getUid());
                     userInfo.put("nickName", user.getNickName());
+                    userInfo.put("name", user.getName());
+                    userInfo.put("phone", user.getPhone());
+                    userInfo.put("gender", user.getGender() == 1? "男":"女");
+                    userInfo.put("reason", user.getReason());
                     userInfo.put("roles", JSONArray.fromObject(user.getRoles()));
                     userInfo.put("createTime", sdf.format(user.getCreateTime()));
                     switch (user.getStatus()) {
@@ -216,6 +252,37 @@ public class UserController {
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);
             LOGGER.error("查询人员异常", e);
+        }
+        return result;
+    }
+    
+    /**
+     * 清空权限
+     * @param roleKey
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT, value = "/clear.do")
+    @ResponseBody
+    public JSONObject clearUser(@RequestParam long uid, @RequestParam String name) {
+        JSONObject result = new JSONObject();
+        try {
+            List<UserRoleBean> users = new ArrayList<UserRoleBean>();
+            users.add(new UserRoleBean(uid, "root"));
+            users.add(new UserRoleBean(uid, "admin"));
+            users.add(new UserRoleBean(uid, "checker"));
+            users.add(new UserRoleBean(uid, "writer"));
+            users.add(new UserRoleBean(uid, "common"));
+            roleImpl.BatchdelUserRole(users);
+            
+            List<UserRoleBean> visitorUser = new ArrayList<UserRoleBean>();
+            visitorUser.add(new UserRoleBean(uid, "visitor"));
+            roleImpl.BatchAddUserRole(visitorUser);
+            userService.changeUserStatus(uid, name, 2, "人员离职");
+            
+            result.put("code", CodeUtil.SUCCESS);
+        } catch (GrosupException e) {
+            result.put("code", CodeUtil.ERROR);
+            LOGGER.error("清空权限异常", e);
         }
         return result;
     }

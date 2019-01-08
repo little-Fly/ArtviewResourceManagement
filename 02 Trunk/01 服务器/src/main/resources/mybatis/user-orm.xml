@@ -5,7 +5,12 @@
 	<resultMap type="com.grosup.ttzy.beans.UserBean" id="BaseResultMap">
 		<id column="uid" jdbcType="VARCHAR" property="uid"/>
 		<result column="openId" jdbcType="VARCHAR" property="openId"/>
+		<result column="unionId" jdbcType="VARCHAR" property="unionId"/>
 		<result column="nickName" jdbcType="VARCHAR" property="nickName"/>
+		<result column="name" jdbcType="VARCHAR" property="name"/>
+		<result column="gender" jdbcType="VARCHAR" property="gender"/>
+		<result column="phone" jdbcType="VARCHAR" property="phone"/>
+		<result column="reason" jdbcType="VARCHAR" property="reason"/>
 		<result column="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
 		<result column="lastTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="lastTime"/>
 		<result column="status" jdbcType="INTEGER" property="status"/>
@@ -29,16 +34,26 @@
 			openId = #{openId}
 		</if>
 	</where>
+	<where>
+        <if test="unionId != null and unionId != ''">
+            unionId = #{unionId}
+        </if>
+    </where>
     </select>
     <!-- 人员注册 -->
     <insert id="userAdd" parameterType="com.grosup.ttzy.beans.UserBean">
     <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="uid">
           SELECT LAST_INSERT_ID()
       </selectKey>
-        insert into t_user (openId,nickName,createTime,lastTime,status)
+        insert into t_user (unionId,openId,name,nickName,gender,phone,reason,createTime,lastTime,status)
         values (
+        #{unionId},
         #{openId},
+        #{name},
         #{nickName},
+        #{gender},
+        #{phone},
+        #{reason},
         #{createTime,jdbcType=TIMESTAMP},
         #{lastTime,jdbcType=TIMESTAMP},
         #{status})
@@ -76,11 +91,14 @@
         RIGHT JOIN t_user tu ON tur.uid = tu.uid
         WHERE tur.roleKey = #{roleKey}
     </select>
-    <!-- 通过角色key查询该不在该角色下人员 -->
+    <!-- 通过角色key查询不在该角色下人员 -->
     <select id="getUnUsersByRole" parameterType="java.lang.String" resultType="com.grosup.ttzy.beans.UserBean">
-        SELECT tur.roleKey,tu.* from t_user_role tur
-        RIGHT JOIN t_user tu ON tur.uid = tu.uid
-        WHERE tur.roleKey != #{roleKey}
+	select * FROM (SELECT tu.*, GROUP_CONCAT(roleKey) as roleKeys from
+	t_user_role, t_user tu
+	where tu.uid = t_user_role.uid
+	GROUP BY uid) as middle
+	WHERE not FIND_IN_SET(#{roleKey},roleKeys)
+	and status = 1
     </select>
     
 </mapper>
