@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <div class="zan-panel">
       <zan-field v-bind="Object.assign({}, {rightTitle: true, maxLength: 20}, handleFunctions, registerObj.name)" :value="formObj.name"/>
@@ -28,6 +28,7 @@ export default {
 
   data () {
     return {
+      nickName:'',
       // 页面的注册配置对象
       registerObj: {
         name: {
@@ -95,6 +96,7 @@ export default {
           });
           // 存储用户敏感信息之加密码
           this.$store.commit('updateWxUserInfo', res.userInfo);
+          this.nickName = res.userInfo.nickName;
         },
         fail (res) {
           console.error(res);
@@ -136,7 +138,8 @@ export default {
     // 点击注册按钮
     submitRegisterMessage () {
       let sendData = {
-        nickName: this.formObj.name,
+        nickName: this.nickName,
+        name: this.formObj.name,
         gender: this.formObj.sex,
         phone: this.formObj.phone,
         reason: this.formObj.reason,
