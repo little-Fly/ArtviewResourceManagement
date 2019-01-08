@@ -4,6 +4,7 @@ import Login from "@/pages/Login";
 import Redirect from "@/pages/Redirect";
 import Main from "@/pages/Main";
 import AssetsManager from "@/pages/AssetsManager";
+import NoAuthority from "@/pages/NoAuthority";
 
 Vue.use(Router);
 
@@ -28,6 +29,11 @@ export default new Router({
             path: "/Redirect",
             name: "Redirect",
             component: Redirect
+        },
+        {
+            path: "/NoAuthority",
+            name: "NoAuthority",
+            component: NoAuthority
         },
         {
             path: "/assets",

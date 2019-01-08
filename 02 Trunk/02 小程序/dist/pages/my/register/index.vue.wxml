@@ -1,0 +1,13 @@
+<import src="/components/zan/field.vue.wxml" /><template name="5e7a130b">
+  <view class="_div data-v-1064e40f">
+    <view class="_div data-v-1064e40f zan-panel"><template data="{{...$root[$kk+'0'], $root}}" is="1ab180d6"></template>
+      <view class="_div data-v-1064e40f zan-cell zan-field">
+        <view class="_div data-v-1064e40f zan-field__title align-right">性别</view>
+        <picker class="_picker data-v-1064e40f zan-field__input zan-field__bd" bindchange="handleProxy" range-key="sexName" value="{{selectSexIndex}}" range="{{objectArray}}" data-eventid="{{'0'}}" data-comkey="{{$k}}">
+          {{objectArray[selectSexIndex].sexName}}
+        </picker>
+      </view> <template data="{{...$root[$kk+'1'], $root}}" is="1ab180d6"></template> <template data="{{...$root[$kk+'2'], $root}}" is="1ab180d6"></template>
+    </view>
+    <view class="_div data-v-1064e40f zan-panel"><button class="_button data-v-1064e40f zan-btn zan-btn--primary" disabled="{{loadingStatus}}" loading="{{loadingStatus}}" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}">提交审核</button></view>
+  </view>
+</template>

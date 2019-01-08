@@ -1,0 +1,24 @@
+<template name="385cbad0">
+  <view class="_div data-v-f7aeebd8">
+    <view class="_div data-v-f7aeebd8 zan-panel zan-cell--access">
+      <view class="_div data-v-f7aeebd8 zan-cell" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}">
+        <view class="_div data-v-f7aeebd8 zan-cell__icon zan-icon zan-icon-description" style="color:#4b0;"></view>
+        <view class="_div data-v-f7aeebd8 zan-cell__bd">授权新{{roleName}}</view>
+        <view class="_div data-v-f7aeebd8 zan-cell__ft"></view>
+      </view>
+    </view>
+    <view class="_div data-v-f7aeebd8 zan-panel zan-cell--access" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}">
+      <view class="_div data-v-f7aeebd8 zan-cell">
+        <view class="_div data-v-f7aeebd8 zan-cell__icon zan-icon zan-icon-description" style="color:#f85;"></view>
+        <view class="_div data-v-f7aeebd8 zan-cell__bd">取消{{roleName}}授权</view>
+        <view class="_div data-v-f7aeebd8 zan-cell__ft"></view>
+      </view>
+    </view>
+    <view class="_div data-v-f7aeebd8 zan-panel">
+      <view wx:key="index" key="{{index}}" class="_div data-v-f7aeebd8 zan-cell" wx:for="{{userListForSelect}}" wx:for-index="index" wx:for-item="item">
+        <view class="_div data-v-f7aeebd8 zan-cell__icon zan-icon zan-icon-contact" style="color:#666;"></view>
+        <view class="_div data-v-f7aeebd8 zan-cell__bd">{{item.nickName}}</view>
+      </view>
+    </view>
+  </view>
+</template>

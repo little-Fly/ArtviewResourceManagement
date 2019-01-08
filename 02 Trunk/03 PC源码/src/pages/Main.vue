@@ -40,7 +40,7 @@
 							</li>
 						</ul>
 					</div>
-					<div class="bottom-btn tc" @click="goAssets">
+					<div class="bottom-btn tc" @click="goAssets" v-if="canWrite">
 						<img src="@/assets/image/sourceM.png" alt="icon" width="30" height="30">
 						资源类别管理
 					</div>
@@ -48,7 +48,7 @@
 				<el-main>
 					<div class="main-head">
 						<div class="title">资源录入</div>
-						<ul class="btns fr">
+						<ul class="btns fr" v-if="canWrite">
 							<li class="fl"><span class="operate-btn type-in" @click="addSource"></span></li>
 							<li class="fl"><span class="operate-btn delete" @click="deleteConfirm"></span></li>
 							<li class="fl"><span class="operate-btn update" @click="updateSource"></span></li>
@@ -66,7 +66,16 @@
 									width="55">
 							</el-table-column>
 							<template v-for="(col ,index) in attrData">
-								<el-table-column :prop="col.attrKey" :label="col.attrName"></el-table-column>
+								<el-table-column
+										:prop="col.attrKey"
+										:label="col.attrName">
+									<template slot-scope="scope">
+										<img v-if="(scope.row[col.attrKey]+'').indexOf('RFl') === 0"
+										     :src="`https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=`+scope.row[col.attrKey]"
+										     alt="" width="40" height="40">
+										<span v-else>{{scope.row[col.attrKey]}}</span>
+									</template>
+								</el-table-column>
 							</template>
 						</el-table>
 					</div>
@@ -83,20 +92,24 @@
 						<el-form :model="addForm">
 							<el-form-item :label="item.attrName" :label-width="formLabelWidth"
 							              v-for="(item,key) in attrData" :key="key">
-								<el-input v-model="addForm[item.attrKey]" auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item class="tc" v-show="operatingMode === 'add'">
 								<el-upload
+										v-if="item.attrType === 'picture'||item.attrType === 'video'"
 										class="upload-demo"
 										ref="upload"
 										:limit="1"
 										:multiple="false"
 										:on-success="uploadSuc"
 										:on-error="uploadFail"
-										action="https://www.hwyst.net/ttzy/rs/file/add.do"
-										:auto-upload="false">
+										:before-upload="beforeUpload(item,key)"
+										:action="item.url"
+										:auto-upload="true">
 									<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
 								</el-upload>
+								<el-input v-model="addForm[item.attrKey]"
+								          v-if="item.attrType !== 'picture'&&item.attrType !== 'video'"
+								          :maxlength="item.attrlen > 0 ? item.attrlen :100"
+								          :placeholder="item.attrlen >0 ? `限制${item.attrlen}个字符` :``"
+								          auto-complete="off"></el-input>
 							</el-form-item>
 						</el-form>
 						<div slot="footer" class="dialog-footer">
@@ -114,6 +127,7 @@
         name: "main-content",
         data() {
             return {
+                canWrite: false,
                 attrTypeList: [],
                 searchType: "",
                 searchOptions: [],
@@ -129,7 +143,8 @@
                 currentActiveItem: "",
                 addDetailData: [],
                 operatingMode: "", // 当前行为 是add、update
-                fileArr: []
+                fileArr: [],
+                currentUploadAttrKey: ""
             };
         },
         methods: {
@@ -159,15 +174,6 @@
                         this.$message.error(error.message);
                     });
             },
-            /**
-             * [{
-             *      resourceKey,
-             *      attrKey的值
-             * },{
-             *      resourceKey,
-             *      attrKey的值
-             * }]
-             */
             getResTableDetail(start, len) {
                 let json = {
                     typekey: this.currentTypeKey,
@@ -179,8 +185,15 @@
                     .then((response) => {
                         if (response.status === 200) {
                             let detail = response.data;
-                            let json = JSON.parse(detail[0].data);
-                            this.getLineData(json);
+                            if (detail.length > 0) {
+                                if (detail[0].state === "error") {
+                                    this.$message.error(detail[0].message);
+                                    return;
+                                }
+                                let json = JSON.parse(detail[0].data);
+                                // console.log("表格数据11", json);
+                                this.getLineData(json);
+                            }
                         }
                     }, (error) => {
                         this.$message.error(error.message);
@@ -209,6 +222,7 @@
                     }
                 }
                 this.tableData = arr;
+                // console.log("表格数据", arr);
             },
             /**
              * 新增资源按钮
@@ -235,11 +249,17 @@
                     if (this.addForm.hasOwnProperty(key) &&
                         key !== "title" &&
                         key !== "resourceKey") {
-                        json.push({
+                        let obj = {
                             "attrKey": key,
                             "attrValue": this.addForm[key],
                             "typeKey": this.currentTypeKey,
-                        });
+                        };
+                        for (let i = 0; i < this.attrData.length; i++) {
+                            if (this.attrData[i].attrKey === obj.attrKey) {
+                                obj.attrType = this.attrData[i].attrType;
+                            }
+                        }
+                        json.push(obj);
                     }
                 }
                 if (json.length === 0) {
@@ -257,13 +277,21 @@
                     };
                     if (this.operatingMode === "add") {
                         this.addDetailFun(params);
-                        this.$refs.upload.submit(); // 上传图片
                     } else if (this.operatingMode === "update") {
                         this.updateDetailFun(json);
                     }
                 }).catch(() => {
 
                 });
+            },
+            beforeUpload(item, i) {
+                let url = `https://www.hwyst.net/ttzy/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
+                this.$set(this.attrData[i], "url", url);
+                if (this.addForm[item.attrKey] && this.addForm[item.attrKey] !== "") {
+                    return;
+                }
+                this.addForm[item.attrKey] = "";
+                this.currentUploadAttrKey = item.attrKey;
             },
             addDetailFun(data) {
                 this.$ajax.detail
@@ -399,6 +427,7 @@
              */
             exit() {
                 this.$router.push("/login");
+                sessionStorage.removeItem("myRoles");
             },
             getDefAll() {
                 let params = {
@@ -445,28 +474,26 @@
                         this.$message.error(error.message);
                     });
             },
-            uploadSuc() {
+            uploadSuc(response) {
+                this.addForm[this.currentUploadAttrKey] = response[0].data;
                 console.log("upload success");
             },
             uploadFail() {
                 console.log("upload Fail");
-            }
+            },
         },
         mounted() {
-            this.getDefAll();
-            // let params = {
-            //     filekey: "RFlExamplesFile",
-            // };
-            // this.$ajax.file
-            //     .getFiles(params)
-            //     .then((response) => {
-            //         if (response.status === 200) {
-            //             let data = response.data;
-            //             console.log(JSON.parse(data[0].data));
-            //         }
-            //     }, (error) => {
-            //         this.$message.error(error.message);
-            //     });
+            this.$chargeAuthority().then((t) => {
+                console.log(t);
+                this.getDefAll();
+                if (t === "writer") {
+                    this.canWrite = true;
+                }
+            }, (ee) => {
+                console.log(ee);
+                this.$router.replace("/");
+            });
+            // this.getLoadPic();
         }
     };
 </script>
@@ -474,7 +501,7 @@
 <style lang="scss" type="text/scss" scoped>
 	$herderH: 60px;
 	.el-header {
-		background: #36474F;
+		background: #e5e5e5;
 		.logo {
 			height: $herderH;
 			line-height: $herderH;
@@ -560,7 +587,7 @@
 
 	.el-aside {
 		height: calc(100vh - 60px);
-		background: #273238;
+		background: #365562;
 		box-sizing: border-box;
 		border-top: 1px solid #F43E04;
 		position: relative;

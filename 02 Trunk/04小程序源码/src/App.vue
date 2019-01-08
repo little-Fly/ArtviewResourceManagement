@@ -14,13 +14,17 @@ export default {
   data () {
     return {
       // 用户审核状态
-      userAuditStatus: 1
+      userAuditStatus: 1,
+      // 用户角色列表
+      userRoleList: []
     }
   },
   created () {
+    wx.showLoading(this.$config.LOADING_PARAM_OBJ);
     // 登录
     wx.login({
       success: res => {
+        wx.hideLoading();
         this.$http({
           url: '/wx/login.do',
           method: 'post',
@@ -31,15 +35,26 @@ export default {
             //公共状态管理自定义登录态
             this.$store.commit('updateCustomLoginStatus', res.third_session);
             //拿到识别码后，获取用户审核状态值 1:未注册 2：审核中 3:被拒绝 4: 已通过
-            this.updateUserRole(res.userStatus);
+            this.updateUserRole(res.status);
             // 如果已注册
             if (this.userAuditStatus === 4) {
               // 本地储存用户基础信息
               this.$store.commit('updateUserInfo', res.userInfo);
               // 拿用户的用户角色列表
-              // this.updateRoleList(res.userInfo.roles);
-            } else {
-              this.$store.commit('updateRoleList', ['unregister']);
+              this.updateRoleList(res.userInfo.roles);
+              // 更新用户权限树
+              // mockdata
+              // this.$store.commit('updateRoleAuthTree', ['root','admin','checker','writer','common','unregister']); // 超级权限
+              // this.$store.commit('updateRoleAuthTree', ['admin']);
+              this.$store.commit('updateRoleAuthTree', this.userRoleList);
+              this.$store.commit('updateUserRoleList', this.userRoleList);
+              console.log(this.userRoleList, this.$store);
+            } else { // 其他三种状态的页面结构一样
+              // 同步公共状态管理
+              this.$store.commit('updateUserAuditStatus', this.userAuditStatus);
+              // mockdata
+              // this.$store.commit('updateRoleAuthTree', ['root','admin','checker','writer','common','unregister']); // 超级权限
+              this.$store.commit('updateRoleAuthTree', ['unregister']); // 游客 == 未注册
             }
           }
         });
@@ -144,19 +159,20 @@ export default {
     }) */
   },
   methods: {
-    updateUserRole (userAuditStatus) {
-      // 存储格式化为前端自定义用户审核状态
-      switch (userAuditStatus) {
-        case 'checked':
+    updateUserRole (status) {
+      let userAuditStatus;
+      // 存储格式化为前端自定义用户审核状态 1:未注册 2：审核中 3:被拒绝 4: 已通过
+      switch (status) {
+        case 1:
           userAuditStatus = 4;
           break;
-        case 'unchecked':
+        case 2:
           userAuditStatus = 3;
           break;
-        case 'unchecked':
+        case 0:
           userAuditStatus = 2;
           break;
-        case 'unchecked':
+        case -1:
           userAuditStatus = 1;
           break;
       }
@@ -169,24 +185,30 @@ export default {
       let roleList = [];
       let roleListData = roles;
       for (let i = 0, len = roleListData.length; i < len; i ++) {
-        // 过滤转化后台返回角色信息
-        switch (roleList[i].roleType) {
-          case 0:
-            roleList.push('super');
+        roleList.push(roleListData[i].roleKey);
+        /* // 过滤转化后台返回角色信息
+        switch (roleListData[i].roleKey) {
+          case 'root':
+            roleList.push('root');
             break;
-          case 1:
+          case 'admin':
             roleList.push('admin');
             break;
-          case 2:
-            roleList.push('auditor');
+          case 'checker':
+            roleList.push('checker');
             break;
-          case 3:
-            roleList.push('inputer');
+          case 'writer':
+            roleList.push('writer');
             break;
-        }
+          case 'common':
+            roleList.push('common');
+            break;
+          case 'visitor':
+            roleList.push('visitor');
+            break;
+        } */
       }
-      // 同步到公共状态管理
-      this.$store.commit('updateRoleList', roleList);
+      this.userRoleList = roleList;
     }
   },
   /**
@@ -198,9 +220,12 @@ export default {
 
 <style lang=scss>
 @import './assets/zanui-css/zanui.wxss';
-page{
+page {
   min-height: 100%;
   background-color: #eee;
+}
+view {
+  box-sizing: border-box;
 }
 .align-right{
   text-align: right;
@@ -211,6 +236,40 @@ page{
 .full-width {
   width: 100%
 }
+.inline-block {
+  display: inline-block;
+}
+.lr-mg-5 {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.lr-mg-10 {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.fr {
+  float: right;
+}
+.fl {
+  float: left;
+}
+.clearfix {
+  &::before,&::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+/* 行内元素两边对其 */
+.keith {
+  text-align: justify;
+  &::after {
+    display: inline-block;
+    width: 100%;
+    content: '';
+  }
+}
+
 /* .container {
   display: flex;
   flex-direction: column;

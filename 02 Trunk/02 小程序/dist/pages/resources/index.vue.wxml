@@ -1,1 +1,13 @@
-<template name="3f9d0c58"><view class="_div data-v-b91ca566 counter-warp"></view></template>
+<template name="debd8346">
+  <view class="_div data-v-61dc874e container">
+    <view class="_div data-v-61dc874e resource-warp clearfix">
+      <block wx:for="{{resList}}" wx:for-index="index" wx:for-item="item">
+        <view class="_div data-v-61dc874e res-item fl" key="{{'res_items_' + index}}">
+          <image wx:if="{{item.logoUrl}}" class="_img data-v-61dc874e res-item__headimg" src="{{logoUrl}}" alt></image>
+          <image wx:else class="_img data-v-61dc874e res-item__headimg" src="/assets/images/resource_init.png" alt></image>
+          <view class="_div data-v-61dc874e res-name">{{item.name}}</view>
+        </view>
+      </block>
+    </view>
+  </view>
+</template>

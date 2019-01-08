@@ -42,6 +42,12 @@
                 this.$router.push("/main");
                 this.headerActive = 2;
             }
+        },
+        mounted() {
+            this.$chargeAuthority().then(() => {
+            }, () => {
+                this.$router.replace("/");
+            });
         }
 
     };

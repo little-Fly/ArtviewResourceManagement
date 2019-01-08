@@ -1,5 +1,2 @@
-
 <import src="/components/card.vue.wxml" />
-<import src="/components/zan/capsule.vue.wxml" />
-<import src="/components/zan/dialog.vue.wxml" />
 <import src="/components/zan/field.vue.wxml" />

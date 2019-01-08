@@ -26,11 +26,15 @@ export default {
   methods: {
     getUserInfo (e) {
       // 根据返回是否有用户敏感信息判断用户是否拒绝授权
-      console.log(e);
-      if(e.target.encryptedData) { // 用户已授权
+      console.log(JSON.stringify(e));
+      if(e.target.encryptedData) { // 用户点击允许授权
         // 返回进入到授权页的前一页
         wx.navigateBack();
-      } else {
+        // 授权成功直接进入到注册页
+        wx.navigateTo({
+          url: "../my/register/main"
+        })
+      } else { // 用户点击拒绝
         this.authStatus = 'refused'
       }
     }
