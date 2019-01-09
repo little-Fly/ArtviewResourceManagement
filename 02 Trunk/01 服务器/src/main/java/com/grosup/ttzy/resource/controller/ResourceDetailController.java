@@ -251,7 +251,7 @@ public class ResourceDetailController implements MessageMapConstant {
 			String typeKey = request.getParameter("typekey");
 			if (!StringUtil.isNullOrEmpty(typeKey)) {
 
-				Collection<ResourceDetailDto> collection = resourceDetailService.getAllByAdmin(typeKey, start, len);
+				Collection<ResourceDetailDto> collection = resourceDetailService.getAllPending(typeKey, start, len);
 
 				if (collection != null) {
 					JSONArray resourceDetailJson = JSONArray.fromObject(collection);
