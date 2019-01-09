@@ -245,6 +245,7 @@ public class UserController {
                 JSONObject userInfo = new JSONObject();
                 userInfo.put("uid", user.getUid());
                 userInfo.put("nickName", user.getNickName());
+                userInfo.put("name", user.getName());
                 data.add(userInfo);
             }
             result.put("code", CodeUtil.SUCCESS);
@@ -258,7 +259,7 @@ public class UserController {
     
     /**
      * 清空权限
-     * @param roleKey
+     * @param
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "/clear.do")
