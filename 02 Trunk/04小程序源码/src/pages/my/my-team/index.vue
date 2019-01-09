@@ -3,30 +3,43 @@
     <template v-for="(item, index) in userList">
       <div class="userlist-item-wrap" :key='index'>
         <div class="userlist-item clearfix" @click="expandUserMessage(index)">
-          {{item.name+"("+item.nickName+")"}}<span class="space"></span>{{item.gender}}<span class="space"></span>{{item.phone}}
           <div v-if="item.userStatus != '待审核'" class="inline-block">
-            <template v-for="(citem, cindex) in item.roles">
-              <span class="user_status_icon" :class="citem.roleKey" :key='cindex'>{{citem.roleName}}</span>
-            </template>
-            <span class="user_status_icon for_clear_auth_button" @click="clickClearAuthBtn(index)">清空权限</span>
+            <div class="user-info-title inline-block">
+              <div class="user-info inline-block">
+                {{item.name+"("+item.nickName+")"}}<span class="space"></span>{{item.gender}}<span class="space"></span>{{item.phone}}
+              </div>
+              <span v-if="item.roles[0].roleKey != 'visitor'" class="user_status_icon for_clear_auth_button align-right" @click="clickClearAuthBtn(index)">清空权限</span>
+            </div>
+            <div>
+              <template v-for="(citem, cindex) in item.roles">
+                <img v-if="citem.roleKey == 'visitor'" class="roleKey-image"  src="../../../assets/images/visitor.png" alt="">
+                <img v-if="citem.roleKey == 'common'" class="roleKey-image" src="../../../assets/images/common.png" alt="">
+                <img v-if="citem.roleKey == 'admin'" class="roleKey-image" src="../../../assets/images/admin.png" alt="">
+                <img v-if="citem.roleKey == 'writer'" class="roleKey-image" src="../../../assets/images/writer.png" alt="">
+                <img v-if="citem.roleKey == 'checker'" class="roleKey-image" src="../../../assets/images/auditor.png" alt="">
+              </template>
+            </div>
           </div>
-          <div v-else class="fr">
-            <span class="user_status_icon for_audit" @click="clickOpenAuthBtn(index)">待审核</span>
+          <div v-else class="inline-block user-info-title">
+            <div class="user-info inline-block">
+                {{item.name+"("+item.nickName+")"}}<span class="space"></span>{{item.gender}}<span class="space"></span>{{item.phone}}
+            </div>
+            <span class="space inline-block">待审核</span>
           </div>
         </div>
         <div v-show="item.userStatus === '待审核' && item.showContent" class="collapse-body">
-          <div class="content-item register-reason">
+          <div class="content-item">
             <span class="item-title align-right inline-block">注册理由</span>：{{register.reason}}
           </div>
-          <div class="content-item btn-wrap align-center">
+          <div class="content-item btn-wrap">
+            <span class="space"></span>
             <button class="lr-mg-10" type='primary' size='mini' @click="clickAuthBtn(index, 'pass')">审核通过</button>
-          </div>
-          <div class="content-item  align-left">
-            <span class="item-title align-right inline-block">不过原因</span>：
-            <input class="refuse-input inline-block"  placeholder="如：非公司员工，请用实名，信息不完整......" type="text"  maxlength="24" v-model="register.auditRefuseText">
-          </div>
-          <div class="content-item btn-wrap align-center">
+            <span class="space"></span>
             <button class="lr-mg-10" type='warn' size='mini' @click="clickAuthBtn(index, 'refuse')">不能通过</button>
+          </div>
+          <div class="content-item inline-block">
+            <span class="refuse-reason-title inline-block">不过原因：</span>
+            <textarea class="refuse-input inline-block"  placeholder="如：非公司员工，请用实名，信息不完整......" type="text" v-model="register.auditRefuseText"></textarea>
           </div>
         </div>
       </div>
@@ -48,12 +61,6 @@ export default {
   data () {
     return {
       userList: [],
-      data: {
-        leftText: '1折',
-        rightText: '限购一份',
-        color: '#38f',
-        onclick: null
-      },
       register:{
          reason:'',
          auditRefuseText:''
@@ -63,12 +70,31 @@ export default {
 
   mounted () {
     function formatUserList (userList) {
+      let theList = [];
       // 为每一个用户添加信息展示状态
       for (let i = 0, len = userList.length; i < len; i++) {
         userList[i].showContent = false;
       }
-      return userList;
-    }
+      //把待审核的信息提到最前面来
+      for(var i=0; i < userList.length; i++){
+        if(userList[i].userStatus == "待审核"){
+          theList.push(userList[i]);
+        }
+      }
+      //然后是所有注册用户
+      for(var i=0; i < userList.length; i++){
+        if(userList[i].userStatus != "被拒绝" && userList[i].roles[0].roleKey != "visitor"){
+          theList.push(userList[i]);
+        }
+      }
+      //最后是游客
+      for(var i=0; i < userList.length; i++){
+        if(userList[i].userStatus != "待审核" && userList[i].roles[0].roleKey == "visitor"){
+          theList.push(userList[i]);
+        }
+      }
+      return theList;
+    };
     let res1 = [
       {
         "uid": 10,
@@ -100,9 +126,9 @@ export default {
         "createTime": "20180927 23:34:29",
         "userStatus": "被拒绝"
       }
-    ]
+    ];
     // mockdata
-    this.userList = formatUserList(res1);
+    //this.userList = formatUserList(res1);
     this.$http({
       url: '/wx/user/queryUsers.do',
       method: 'get',
@@ -112,21 +138,20 @@ export default {
       }
     });
   },
+
   methods: {
     /**
      * 展开用户信息，只有当用户状态是待审核时候才能审核
      */
     expandUserMessage (index) {
       this.userList[index].showContent = !this.userList[index].showContent;
-    },
-    clickOpenAuthBtn(index){
       this.register.reason = this.userList[index].reason;
     },
     /**
      * 审核按钮通过或者不通过按钮点击
      */
     clickAuthBtn (index, res) {
-      console.log(index, this.userList);
+      //console.log(index, this.userList);
       let sendData = {
         uid: this.userList[index].uid,
         name: this.userList[index].name,
@@ -169,7 +194,7 @@ export default {
       };
       this.$http({
         url: '/wx/user/clear.do',
-        method: 'put',
+        method: 'post',
         data: sendData,
         success: res => {
           wx.hideLoading();
@@ -223,6 +248,7 @@ export default {
         width: 70px;
       }
     }
+    magin-bottom: 8px;
   }
   .zan-cell {
     display: block;
@@ -238,7 +264,7 @@ export default {
     line-height: 15px;
     &.for_audit {
       padding: 2px 7px;
-      margin: 0 7px;
+      margin: 2px 7px;
       color: white;
       background-color: #E64340;
     }
@@ -248,33 +274,35 @@ export default {
       color: white;
       background-color: #E64340;
     }
-    &.admin{
-      color: purple;
-    }
-    &.checker{
-      color: orange;
-    }
-    &.writer{
-      color: gold;
-    }
-    &.common{
-      color: pink;
-    }
   }
   .refuse-input{
-    vertical-align: middle;
-    border-radius: 4px;
-    font-size: 13px;
-    height: 18px;
+    font-size: 15px;
+    color: #000;
+    height: 64px;
     width: 256px;
     padding: 0 5px;
-    line-height: 18px;
     border: 1px solid #999999;
+    maxlength: 32px;
+    fixed: true;
   }
   .space{
+    height: 16px;
     margin: 0px 8px;
   }
-  .register-reason{
-    color: #999999;
+  .roleKey-image{
+    width: 20px;
+    height: 20px;
+    margin-right:4px;
+  }
+  .user-info{
+    width: 272px;
+    word-break : break-all;
+  }
+  .refuse-reason-title{
+    height: 64px;
+    text-align : right;
+    vertical-align: top;
+    margin-left: 16px;
+    margin-bottom: 4px;
   }
 </style>
