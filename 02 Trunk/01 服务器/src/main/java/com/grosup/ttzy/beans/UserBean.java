@@ -26,6 +26,8 @@ public class UserBean {
     
     private String unionId;
     
+    private String name;
+    
     private String nickName;
     
     private int gender;
@@ -140,6 +142,14 @@ public class UserBean {
 
     public void setReason(String reason) {
         this.reason = reason;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String toString() {

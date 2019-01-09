@@ -2,38 +2,39 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.grosup.ttzy.user">
 
-	<resultMap type="com.grosup.ttzy.beans.UserBean" id="BaseResultMap">
-		<id column="uid" jdbcType="VARCHAR" property="uid"/>
-		<result column="openId" jdbcType="VARCHAR" property="openId"/>
-		<result column="unionId" jdbcType="VARCHAR" property="unionId"/>
-		<result column="nickName" jdbcType="VARCHAR" property="nickName"/>
-		<result column="gender" jdbcType="VARCHAR" property="gender"/>
-		<result column="phone" jdbcType="VARCHAR" property="phone"/>
-		<result column="reason" jdbcType="VARCHAR" property="reason"/>
-		<result column="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
-		<result column="lastTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="lastTime"/>
-		<result column="status" jdbcType="INTEGER" property="status"/>
-		<collection property="roles" ofType="com.grosup.ttzy.beans.RoleBean">
+    <resultMap type="com.grosup.ttzy.beans.UserBean" id="BaseResultMap">
+        <id column="uid" jdbcType="VARCHAR" property="uid"/>
+        <result column="openId" jdbcType="VARCHAR" property="openId"/>
+        <result column="unionId" jdbcType="VARCHAR" property="unionId"/>
+        <result column="nickName" jdbcType="VARCHAR" property="nickName"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="gender" jdbcType="VARCHAR" property="gender"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="reason" jdbcType="VARCHAR" property="reason"/>
+        <result column="createTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="createTime"/>
+        <result column="lastTime" jdbcType="TIMESTAMP" javaType="java.util.Date" property="lastTime"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <collection property="roles" ofType="com.grosup.ttzy.beans.RoleBean">
             <result column="roleKey" jdbcType="VARCHAR" property="roleKey"/>
             <result column="roleName" jdbcType="VARCHAR" property="roleName"/>
             <result column="roleType" jdbcType="VARCHAR" property="roleType"/>
             <result column="remark" jdbcType="VARCHAR" property="remark"/>
-		</collection>
-	</resultMap>
-	<select id="getUserInfo" parameterType="map" resultMap="BaseResultMap">
+        </collection>
+    </resultMap>
+    <select id="getUserInfo" parameterType="map" resultMap="BaseResultMap">
 
-	select tur.*,ttur.roleKey,tro.roleName FROM
-	t_user tur
-	LEFT JOIN t_user_role ttur ON
-	ttur.uid = tur.uid
-	LEFT JOIN t_role tro ON
-	ttur.roleKey = tro.roleKey
-	<where>
-		<if test="openId != null and openId != ''">
-			openId = #{openId}
-		</if>
-	</where>
-	<where>
+    select tur.*,ttur.roleKey,tro.roleName FROM
+    t_user tur
+    LEFT JOIN t_user_role ttur ON
+    ttur.uid = tur.uid
+    LEFT JOIN t_role tro ON
+    ttur.roleKey = tro.roleKey
+    <where>
+        <if test="openId != null and openId != ''">
+            openId = #{openId}
+        </if>
+    </where>
+    <where>
         <if test="unionId != null and unionId != ''">
             unionId = #{unionId}
         </if>
@@ -44,10 +45,11 @@
     <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="uid">
           SELECT LAST_INSERT_ID()
       </selectKey>
-        insert into t_user (unionId,openId,nickName,gender,phone,reason,createTime,lastTime,status)
+        insert into t_user (unionId,openId,name,nickName,gender,phone,reason,createTime,lastTime,status)
         values (
         #{unionId},
         #{openId},
+        #{name},
         #{nickName},
         #{gender},
         #{phone},
@@ -71,16 +73,16 @@
     
     <!-- 查获取公司人员的信息不包含超管 -->
     <select id="queryUsers" resultMap="BaseResultMap">
-	select * from (
-	select ttur.roleKey,tur.*,tro.roleName FROM
-	t_user_role ttur
-	LEFT JOIN t_user tur ON
-	ttur.uid = tur.uid
-	LEFT JOIN t_role tro ON
-	ttur.roleKey = tro.roleKey
-	) as middle
-	where middle.roleKey != 'root' 
-<!-- 	and status = 1 -->
+    select * from (
+    select ttur.roleKey,tur.*,tro.roleName FROM
+    t_user_role ttur
+    LEFT JOIN t_user tur ON
+    ttur.uid = tur.uid
+    LEFT JOIN t_role tro ON
+    ttur.roleKey = tro.roleKey
+    ) as middle
+    where middle.roleKey != 'root' 
+<!--    and status = 1 -->
     </select>
     
     <!-- 通过角色key查询该角色下人员 -->
@@ -91,12 +93,12 @@
     </select>
     <!-- 通过角色key查询不在该角色下人员 -->
     <select id="getUnUsersByRole" parameterType="java.lang.String" resultType="com.grosup.ttzy.beans.UserBean">
-	select * FROM (SELECT tu.*, GROUP_CONCAT(roleKey) as roleKeys from
-	t_user_role, t_user tu
-	where tu.uid = t_user_role.uid
-	GROUP BY uid) as middle
-	WHERE not FIND_IN_SET(#{roleKey},roleKeys)
-	and status = 1
+    select * FROM (SELECT tu.*, GROUP_CONCAT(roleKey) as roleKeys from
+    t_user_role, t_user tu
+    where tu.uid = t_user_role.uid
+    GROUP BY uid) as middle
+    WHERE not FIND_IN_SET(#{roleKey},roleKeys)
+    and status = 1
     </select>
     
 </mapper>
