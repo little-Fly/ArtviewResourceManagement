@@ -70,7 +70,6 @@ public class ResourceDetailDto {
 	}
 
 	public void setAttrValue(String attrValue) {
-		attrLastState = this.attrValue;
 		this.attrValue = attrValue;
 	}
 
@@ -83,6 +82,7 @@ public class ResourceDetailDto {
 	}
 
 	public void setAttrState(String attrState) {
+		attrLastState = this.attrState;
 		this.attrState = attrState;
 	}
 
