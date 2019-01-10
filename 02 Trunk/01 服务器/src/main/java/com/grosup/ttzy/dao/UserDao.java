@@ -19,6 +19,10 @@ public class UserDao extends AbstractDao {
         this.getSession().insert("com.grosup.ttzy.user.userAdd", userBean);
         return userBean.getUid();
     }
+
+    public void userDel(String openId) throws GrosupException{
+        this.getSession().delete("com.grosup.ttzy.user.userDel", openId);
+    }
     /**
      * 查询待审核人员
      */

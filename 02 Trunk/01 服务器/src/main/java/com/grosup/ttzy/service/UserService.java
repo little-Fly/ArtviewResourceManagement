@@ -43,6 +43,10 @@ public class UserService {
         TtzyUtil.saveLog(logBean);
         return uid;
     }
+
+    public void userDel(String openId) throws GrosupException{
+        userDao.userDel(openId);
+    }
     
     /**
      * 查询待审核人员
