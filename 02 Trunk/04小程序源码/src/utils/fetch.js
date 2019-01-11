@@ -27,7 +27,7 @@ function $http (queryObj) {
                                       queryObj.success && queryObj.success(resData);// 默认为空函数
                                     } else { // 415 405 401
                                       console.error(`后台接口返回code不为1，错误信息${resData.msg}`);
-                                      wx.showToast({title: '操作失败：${resData.msg}'});
+                                      wx.showModal({title: '错误', content: '${resData.msg}', showCancel: false});
                                     }
                                   }
                                   else if(typeof(resData.state) != "undefined"){
@@ -36,12 +36,12 @@ function $http (queryObj) {
                                       queryObj.success && queryObj.success(resData);// 默认为空函数
                                     } else { // 415 405 401
                                       console.error(`后台接口返回state不为successful，错误信息${resData.msg}`);
-                                      wx.showToast({title: '操作失败：${resData.msg}'});
+                                      wx.showModal({title: '错误', content: '${resData.msg}', showCancel: false});
                                     }
                                   }
                                  else{
                                    console.error(`后台接口返回数据格式错误`);
-                                   wx.showToast({title: '操作失败：后台接口返回数据格式错误'});
+                                   wx.showModal({title: '错误', content: '服务器返回数据格式错误', showCancel: false});
                                  }
                                  wx.hideLoading();
 		},
@@ -56,7 +56,6 @@ function $http (queryObj) {
 			}
 		},
 		complete (res) {
-                                  wx.hideLoading();
 			console.log(res);
 			if (res.statusCode !== 200) {
 				// 说明请求失败
