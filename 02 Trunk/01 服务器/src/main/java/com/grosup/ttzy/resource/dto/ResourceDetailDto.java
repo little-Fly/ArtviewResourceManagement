@@ -16,6 +16,8 @@ public class ResourceDetailDto {
 	private String attrValue; // varchar Y 属性值
 	private String attrState; // varchar Y 状态
 	private String attrLastState; // varchar Y 状态
+	private String approvalUser;// 審批人
+	private String approvalMess;// 審批意見
 
 	public String getResourceKey() {
 		return resourceKey;
@@ -82,8 +84,26 @@ public class ResourceDetailDto {
 	}
 
 	public void setAttrState(String attrState) {
-		attrLastState = this.attrState;
-		this.attrState = attrState;
+		if (this.attrState != attrState) {
+			attrLastState = this.attrState;
+			this.attrState = attrState;
+		}
+	}
+
+	public String getApprovalUser() {
+		return approvalUser;
+	}
+
+	public void setApprovalUser(String approvalUser) {
+		this.approvalUser = approvalUser;
+	}
+
+	public String getApprovalMess() {
+		return approvalMess;
+	}
+
+	public void setApprovalMess(String approvalMess) {
+		this.approvalMess = approvalMess;
 	}
 
 }

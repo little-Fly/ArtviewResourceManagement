@@ -98,6 +98,7 @@ public class ResourceDetailController implements MessageMapConstant {
 	 * /rs/detail/approvaladd.do
 	 * 	 需要有管理员权限 
 	 * @param resourcekey resourceKey
+	 * @param approvalmess approvalMess
 	 * @return ["state":"successful"}]
 	 * @throws GrosupException
 	 */
@@ -108,13 +109,14 @@ public class ResourceDetailController implements MessageMapConstant {
 		Map<String, String> messageMap = new HashMap<String, String>();
 		if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
 			String resourceKey = request.getParameter("resourcekey");
-			if (!StringUtil.isNullOrEmpty(resourceKey)) {
-				resourceDetailService.approvalAdd(resourceKey);
+			String approvalMess = request.getParameter("approvalmess");
+			if (!StringUtil.isNullOrEmpty(resourceKey)&&!StringUtil.isNullOrEmpty(approvalMess)) {
+				resourceDetailService.approvalAdd(resourceKey, approvalMess);
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"" + "approvalmess:\"" + approvalMess + "\" ");
+				log.error("del " + MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"" + "approvalmess:\"" + approvalMess + "\" ");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
@@ -129,6 +131,7 @@ public class ResourceDetailController implements MessageMapConstant {
 	 * /rs/detail/approvaldel.do
 	 * 	 需要有管理员权限 
 	 * @param resourcekey resourceKey
+	 * @param approvalmess approvalMess
 	 * @return ["state":"successful"}]
 	 * @throws GrosupException
 	 */
@@ -139,13 +142,14 @@ public class ResourceDetailController implements MessageMapConstant {
 		Map<String, String> messageMap = new HashMap<String, String>();
 		if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
 			String resourceKey = request.getParameter("resourcekey");
-			if (!StringUtil.isNullOrEmpty(resourceKey)) {
-				resourceDetailService.approvalDel(resourceKey);
+			String approvalMess = request.getParameter("approvalmess");
+			if (!StringUtil.isNullOrEmpty(resourceKey)&&!StringUtil.isNullOrEmpty(approvalMess)) {
+				resourceDetailService.approvalDel(resourceKey, approvalMess);
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"" + "approvalmess:\"" + approvalMess + "\" ");
+				log.error("del " + MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"" + "approvalmess:\"" + approvalMess + "\" ");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
@@ -160,6 +164,7 @@ public class ResourceDetailController implements MessageMapConstant {
 	 * /rs/detail/approvalupdate.do
 	 * 	 需要有管理员权限 
 	 * @param resourcekey resourceKey
+	 * @param approvalmess approvalMess
 	 * @return ["state":"successful"}]
 	 * @throws GrosupException
 	 */
@@ -170,13 +175,14 @@ public class ResourceDetailController implements MessageMapConstant {
 		Map<String, String> messageMap = new HashMap<String, String>();
 		if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
 			String resourceKey = request.getParameter("resourcekey");
-			if (!StringUtil.isNullOrEmpty(resourceKey)) {
-				resourceDetailService.approvalUpdate(resourceKey);
+			String approvalMess = request.getParameter("approvalmess");
+			if (!StringUtil.isNullOrEmpty(resourceKey)&&!StringUtil.isNullOrEmpty(approvalMess)) {
+				resourceDetailService.approvalUpdate(resourceKey, approvalMess);
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"" + "approvalmess:\"" + approvalMess + "\" ");
+				log.error("del " + MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"" + "approvalmess:\"" + approvalMess + "\" ");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
@@ -191,6 +197,7 @@ public class ResourceDetailController implements MessageMapConstant {
 	 * /rs/detail/reject.do
 	 * 	 需要有管理员权限 
 	 * @param resourcekey resourceKey
+	 * @param approvalmess approvalMess
 	 * @return ["state":"successful"}]
 	 * @throws GrosupException
 	 */
@@ -199,15 +206,17 @@ public class ResourceDetailController implements MessageMapConstant {
 	@ResponseBody
 	public String reject(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
+		
 		if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
 			String resourceKey = request.getParameter("resourcekey");
-			if (!StringUtil.isNullOrEmpty(resourceKey)) {
-				resourceDetailService.reject(resourceKey);
+			String approvalMess = request.getParameter("approvalmess");
+			if (!StringUtil.isNullOrEmpty(resourceKey)&&!StringUtil.isNullOrEmpty(approvalMess)) {
+				resourceDetailService.reject(resourceKey, approvalMess);
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\" " + "approvalmess:\"" + approvalMess + "\" ");
+				log.error("del " + MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"" + "approvalmess:\"" + approvalMess + "\" ");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
@@ -295,8 +304,8 @@ public class ResourceDetailController implements MessageMapConstant {
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"");
+				log.error("del " + MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
@@ -329,8 +338,8 @@ public class ResourceDetailController implements MessageMapConstant {
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
 				messageMap.put(MESSAGE,
-						MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"" + " json:\"" + json + "\"");
-				log.error("update " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"" + " json:\"" + json
+						MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"" + " json:\"" + json + "\"");
+				log.error("update " + MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"" + " json:\"" + json
 						+ "\"");
 			}
 		} else {
@@ -364,13 +373,13 @@ public class ResourceDetailController implements MessageMapConstant {
 					messageMap.put(STATE, STATE_SUCCESSFUL);
 				} else {
 					messageMap.put(STATE, STATE_ERROR);
-					messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "resourceKey:\"" + resourceKey + "\"");
-					log.error("get " + MESSAGE_DTO_ETER + "resourceKey:\"" + resourceKey + "\"");
+					messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "resourcekey:\"" + resourceKey + "\"");
+					log.error("get " + MESSAGE_DTO_ETER + "resourcekey:\"" + resourceKey + "\"");
 				}
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-				log.error("get " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"");
+				log.error("get " + MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
@@ -407,13 +416,13 @@ public class ResourceDetailController implements MessageMapConstant {
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "resourceKey:\"" + resourceKey + "\"");
-				log.error("get " + MESSAGE_DTO_ETER + "resourceKey:\"" + resourceKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "resourcekey:\"" + resourceKey + "\"");
+				log.error("get " + MESSAGE_DTO_ETER + "resourcekey:\"" + resourceKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
-			log.error("get " + MESSAGE_PARAM_ETER + "resourceKey:\"" + resourceKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"");
+			log.error("get " + MESSAGE_PARAM_ETER + "resourcekey:\"" + resourceKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
