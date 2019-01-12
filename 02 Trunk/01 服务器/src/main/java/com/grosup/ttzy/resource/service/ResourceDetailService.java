@@ -11,13 +11,13 @@ public interface ResourceDetailService {
 
 	public void add(String json);
 
-	public void approvalAdd(String resourceKey);
+	public void approvalAdd(String resourceKey, String approvalMess);
 
-	public void approvalDel(String resourceKey);
+	public void approvalDel(String resourceKey, String approvalMess);
 	
-	public void approvalUpdate(String resourceKey);
+	public void approvalUpdate(String resourceKey, String approvalMess);
 
-	public void reject(String resourceKey);
+	public void reject(String resourceKey, String approvalMess);
 
 	public void del(String resourceKey);
 
