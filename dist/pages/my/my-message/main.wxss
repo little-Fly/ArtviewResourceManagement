@@ -1,0 +1,32 @@
+@import "../../../common/vendor.wxss";
+
+page {
+  background-color: #fff;
+}
+.msg-list {
+  display: flex;
+  flex-direction: column;
+  padding: 40rpx;
+}
+.msg-item {
+  width: 670rpx;
+  margin-top: 20rpx;
+  font-size: 30rpx;
+  border-bottom: 2rpx solid #eee;
+}
+.more-msgs {
+  height: 64rpx;
+  width: 100%;
+  font-size: 36rpx;
+  text-align: center;
+  line-height: 64rpx;
+}
+.get-more-msgs {
+  padding: 8rpx 14rpx;
+  color: white;
+  background-color: #E64340;
+  border-radius: 8rpx;
+}
+.space {
+  padding: 16rpx 16rpx;
+}

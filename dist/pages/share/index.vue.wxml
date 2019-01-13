@@ -1,0 +1,27 @@
+<template name="07c916d2">
+  <view class="_div data-v-3a47e0f0 resourcelist-wrap">
+    <view class="_div data-v-3a47e0f0 function-btn-box"><label class="_span data-v-3a47e0f0 function-btn for-select-template" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}">选取模板</label> <label class="_span data-v-3a47e0f0 space"></label><label class="_span data-v-3a47e0f0 space"></label> <label class="_span data-v-3a47e0f0 function-btn for-create-page" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}">生成分享页面</label></view>
+    <block wx:for="{{shRsList}}" wx:for-index="index" wx:for-item="item">
+      <view class="_div data-v-3a47e0f0 resourcelist-item-wrap" key="{{index}}">
+        <view class="_div data-v-3a47e0f0 icon-group-box">
+          <image class="_image data-v-3a47e0f0 rs-icon" src="../../assets/images/delete.png" alt></image> <label class="_span data-v-3a47e0f0 space"></label>
+          <image class="_image data-v-3a47e0f0 rs-icon" src="../../assets/images/up.png" alt></image>
+          <image class="_image data-v-3a47e0f0 rs-icon" src="../../assets/images/down.png" alt></image>
+        </view>
+        <view class="_div data-v-3a47e0f0 inline-block">
+          <block wx:for="{{item}}" wx:for-index="inx" wx:for-item="ss">
+            <view key="{{inx}}" class="_div data-v-3a47e0f0">
+              <view wx:if="{{ss.attrType == 'picture'}}" class="_div data-v-3a47e0f0 resource-image  content-item"></view>
+              <view wx:elif="{{ss.attrType == 'video'}}" class="_div data-v-3a47e0f0 resource-video  content-item"></view>
+              <view wx:else class="_div data-v-3a47e0f0 content-item inline-block"><label class="_span data-v-3a47e0f0 item-title align-right inline-block">{{ss.attrName}}</label>：{{ss.attrValue}}
+              </view>
+            </view>
+          </block>
+          <view class="_div data-v-3a47e0f0 resource-image  content-item">
+            <image class="_image data-v-3a47e0f0 resource-image" src="../../assets/images/resource_init.png" alt></image>
+          </view>
+        </view>
+      </view>
+    </block>
+  </view>
+</template>
