@@ -1,7 +1,0 @@
-<template name="6aab1482">
-  <view class="_div data-v-5c22d468">
-    <view class="_div data-v-5c22d468">天天资源</view>
-    <view class="_div data-v-5c22d468">企业内部资源管理工具软件</view>
-    <view class="_div data-v-5c22d468">九天云工作室@制作</view> <button wx:if="{{canIUse}}" type="{{authStatus == 'refused' ? 'warn' : 'primary'}}" open-type="getUserInfo" bindgetuserinfo="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}" class="_button data-v-5c22d468">{{authStatus == 'refused' ? '点击重新授权' : '授权登录'}}</button>
-  </view>
-</template>
