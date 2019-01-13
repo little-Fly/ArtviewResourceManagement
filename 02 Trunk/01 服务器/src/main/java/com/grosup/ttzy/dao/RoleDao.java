@@ -25,6 +25,12 @@ public interface RoleDao {
     
     public boolean isWriter(@Param("uid") long uid) throws GrosupException;
     
+    public boolean isRoot(@Param("uid") long uid) throws GrosupException;
+    
+    public boolean isCommon(@Param("uid") long uid) throws GrosupException;
+
+    public boolean isVisitor(@Param("uid") long uid) throws GrosupException;
+    
     public void BatchAddUserRole(@Param("userRoles") List<UserRoleBean> userRoles) throws GrosupException;
     
     public void BatchdelUserRole(@Param("userRoles") List<UserRoleBean> userRoles) throws GrosupException;

@@ -46,7 +46,7 @@ public class ResourceDetailDao implements ResourceConstant {
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		attrValue = "行1值1"; // varchar Y 属性值
-		initResourceDetailDto();
+		initResourceDetailDto(RESOURCE_STATE_AVAILABLE);
 		resourceKey = RESOURCE_DETAIL + "示例值ID"; // long Y 主键，资源Id
 		attrKey = RESOURCE_ATTR + "示例表头ID2"; // varchar Y 主键，属性Key
 		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
@@ -54,7 +54,7 @@ public class ResourceDetailDao implements ResourceConstant {
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		attrValue = "行1值2"; // varchar Y 属性值
-		initResourceDetailDto();
+		initResourceDetailDto(RESOURCE_STATE_AVAILABLE);
 		resourceKey = RESOURCE_DETAIL + "示例值ID"; // long Y 主键，资源Id
 		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key
 		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
@@ -62,7 +62,7 @@ public class ResourceDetailDao implements ResourceConstant {
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		attrValue = "行1值3"; // varchar Y 属性值
-		initResourceDetailDto();
+		initResourceDetailDto(RESOURCE_STATE_AVAILABLE);
 
 		resourceKey = RESOURCE_DETAIL + "示例值ID2"; // long Y 主键，资源Id
 		attrKey = RESOURCE_ATTR + "示例表头ID1"; // varchar Y 主键，属性Key
@@ -71,7 +71,7 @@ public class ResourceDetailDao implements ResourceConstant {
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		attrValue = "行2值1"; // varchar Y 属性值
-		initResourceDetailDto();
+		initResourceDetailDto(RESOURCE_STATE_AVAILABLE);
 		resourceKey = RESOURCE_DETAIL + "示例值ID2"; // long Y 主键，资源Id
 		attrKey = RESOURCE_ATTR + "示例表头ID2"; // varchar Y 主键，属性Key
 		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
@@ -79,7 +79,7 @@ public class ResourceDetailDao implements ResourceConstant {
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		attrValue = "行2值2"; // varchar Y 属性值
-		initResourceDetailDto();
+		initResourceDetailDto(RESOURCE_STATE_AVAILABLE);
 		resourceKey = RESOURCE_DETAIL + "示例值ID2"; // long Y 主键，资源Id
 		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key
 		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
@@ -87,10 +87,86 @@ public class ResourceDetailDao implements ResourceConstant {
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		attrValue = "行2值3"; // varchar Y 属性值
-		initResourceDetailDto();
+		initResourceDetailDto(RESOURCE_STATE_AVAILABLE);
+
+		resourceKey = RESOURCE_DETAIL + "示例值ID2add"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID1"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头1"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2add值1"; // varchar Y 属性值
+		initResourceDetailDto(RESOURCE_STATE_APPROVAL_ADD);
+		resourceKey = RESOURCE_DETAIL + "示例值ID2add"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID2"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头2"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2add值2"; // varchar Y 属性值
+		initResourceDetailDto(RESOURCE_STATE_APPROVAL_ADD);
+		resourceKey = RESOURCE_DETAIL + "示例值ID2add"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头3"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2add值3"; // varchar Y 属性值
+		initResourceDetailDto(RESOURCE_STATE_APPROVAL_ADD);
+
+		resourceKey = RESOURCE_DETAIL + "示例值ID2del"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID1"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头1"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2del值1"; // varchar Y 属性值
+		initResourceDetailDto(RESOURCE_STATE_APPROVAL_DEL);
+		resourceKey = RESOURCE_DETAIL + "示例值ID2del"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID2"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头2"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2del值2"; // varchar Y 属性值
+		initResourceDetailDto(RESOURCE_STATE_APPROVAL_DEL);
+		resourceKey = RESOURCE_DETAIL + "示例值ID2del"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头3"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2del值3"; // varchar Y 属性值
+		initResourceDetailDto(RESOURCE_STATE_APPROVAL_DEL);
+
+		resourceKey = RESOURCE_DETAIL + "示例值ID2update"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID1"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头1"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2update值1"; // varchar Y 属性值
+		initResourceDetailDto(RESOURCE_STATE_APPROVAL_UPDATE);
+		resourceKey = RESOURCE_DETAIL + "示例值ID2update"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID2"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头2"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2update值2"; // varchar Y 属性值
+		initResourceDetailDto(RESOURCE_STATE_APPROVAL_UPDATE);
+		resourceKey = RESOURCE_DETAIL + "示例值ID2update"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头3"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		attrValue = "行2update值3"; // varchar Y 属性值
+		initResourceDetailDto(RESOURCE_STATE_APPROVAL_UPDATE);
 	}
 
-	public void initResourceDetailDto() {
+	public void initResourceDetailDto(String state) {
+
 		ResourceDetailDto resourceDetailDto = new ResourceDetailDto();
 		resourceDetailDto.setTypeKey(typeKey);
 		resourceDetailDto.setAttrKey(attrKey);
@@ -100,7 +176,7 @@ public class ResourceDetailDao implements ResourceConstant {
 		resourceDetailDto.setAttrType(attrType);
 		resourceDetailDto.setAttrValue(attrValue);
 		list.add(resourceDetailDto);
-		resourceDetailDto.setAttrState(RESOURCE_STATE_AVAILABLE);
+		resourceDetailDto.setAttrState(state);
 	}
 
 	public Collection<ResourceDetailDto> create(String json) {
@@ -119,12 +195,13 @@ public class ResourceDetailDao implements ResourceConstant {
 		list.addAll(collection);
 	}
 
-	public void approvalAdd(String resourceKey) {
+	public void approvalAdd(String resourceKey, String approvalMess) {
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
 			for (ResourceDetailDto resourceDetailDto : list) {
 				if (resourceKey.equals(resourceDetailDto.getResourceKey())) {
 					if (RESOURCE_STATE_APPROVAL_ADD.equals(resourceDetailDto.getAttrState())) {
 						resourceDetailDto.setAttrState(RESOURCE_STATE_AVAILABLE);
+						resourceDetailDto.setApprovalMess(approvalMess);
 					}
 				}
 			}
@@ -133,13 +210,14 @@ public class ResourceDetailDao implements ResourceConstant {
 		}
 	}
 
-	public void approvalDel(String resourceKey) {
+	public void approvalDel(String resourceKey, String approvalMess) {
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
 			List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
 			for (ResourceDetailDto resourceDetailDto : list) {
 				if (resourceKey.equals(resourceDetailDto.getResourceKey())) {
 					if (RESOURCE_STATE_APPROVAL_DEL.equals(resourceDetailDto.getAttrState())) {
 						resourceDetaillist.add(resourceDetailDto);
+						resourceDetailDto.setApprovalMess(approvalMess);
 					}
 				}
 			}
@@ -149,11 +227,35 @@ public class ResourceDetailDao implements ResourceConstant {
 		}
 	}
 
-	public void reject(String resourceKey) {
+	public void approvalUpdate(String resourceKey, String approvalMess) {
+		if (!StringUtil.isNullOrEmpty(resourceKey)) {
+			List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+			boolean bflag = false;
+			for (ResourceDetailDto resourceDetailDto : list) {
+				if (resourceKey.equals(resourceDetailDto.getResourceKey())) {
+					if (RESOURCE_STATE_APPROVAL_UPDATE.equals(resourceDetailDto.getAttrState())) {
+						resourceDetailDto.setAttrState(RESOURCE_STATE_AVAILABLE);
+						resourceDetailDto.setApprovalMess(approvalMess);
+						bflag = true;
+					} else {
+						resourceDetaillist.add(resourceDetailDto);
+					}
+				}
+			}
+			if (bflag) {
+				list.removeAll(resourceDetaillist);
+			}
+		} else {
+			log.error("ResourceDetailDao approvalDel is error. resourceKey is:" + resourceKey);
+		}
+	}
+
+	public void reject(String resourceKey, String approvalMess) {
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
 			for (ResourceDetailDto resourceDetailDto : list) {
 				if (resourceKey.equals(resourceDetailDto.getResourceKey())) {
 					resourceDetailDto.setAttrState(RESOURCE_STATE_APPROVA_REJECT);
+					resourceDetailDto.setApprovalMess(approvalMess);
 				}
 			}
 		} else {
@@ -175,8 +277,12 @@ public class ResourceDetailDao implements ResourceConstant {
 
 	public void update(String resourceKey, Collection<ResourceDetailDto> collection) {
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-			del(resourceKey);
-			add(collection);
+
+			for (ResourceDetailDto resourceDetailDto : collection) {
+				resourceDetailDto.setResourceKey(resourceKey);
+				resourceDetailDto.setAttrState(RESOURCE_STATE_APPROVAL_UPDATE);
+			}
+			list.addAll(collection);
 		} else {
 			log.error("ResourceDetailDao update is error. resourceKey is:" + resourceKey);
 		}
@@ -244,18 +350,20 @@ public class ResourceDetailDao implements ResourceConstant {
 	public Collection<ResourceDetailDto> getAll(String typeKey, int start, int len) {
 
 		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
-		int time = 0;
+		Set<String> resourceKeylist = new HashSet<String>();
+		Set<String> resourceKeybreaklist = new HashSet<String>();
 		for (ResourceDetailDto resourceDetailDto : list) {
 			if (typeKey.equals(resourceDetailDto.getTypeKey())) {
-				if (time < start) {
-					time++;
+				if (resourceKeylist.size() >= len && !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
 					continue;
-				} else {
+				}
+				if (resourceKeybreaklist.size() >= start
+						&& !resourceKeybreaklist.contains(resourceDetailDto.getResourceKey())) {
 					resourceDetaillist.add(resourceDetailDto);
+					resourceKeylist.add(resourceDetailDto.getResourceKey());
+					continue;
 				}
-				if (time >= start + len) {
-					break;
-				}
+				resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
 			}
 		}
 		return resourceDetaillist;
@@ -264,21 +372,51 @@ public class ResourceDetailDao implements ResourceConstant {
 	public Collection<ResourceDetailDto> getAllByUser(String typeKey, int start, int len) {
 
 		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
-		int time = 0;
+		Set<String> resourceKeylist = new HashSet<String>();
+		Set<String> resourceKeybreaklist = new HashSet<String>();
 		for (ResourceDetailDto resourceDetailDto : list) {
 			if (typeKey.equals(resourceDetailDto.getTypeKey())) {
 				if (RESOURCE_STATE_AVAILABLE.equals(resourceDetailDto.getAttrState())) {
 					if (!RESOURCE_LEVEL_2.equals(resourceDetailDto.getAttrLevel())) {
-						if (time < start) {
-							time++;
+						if (resourceKeylist.size() >= len
+								&& !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
 							continue;
-						} else {
+						}
+						if (resourceKeybreaklist.size() >= start
+								&& !resourceKeybreaklist.contains(resourceDetailDto.getResourceKey())) {
 							resourceDetaillist.add(resourceDetailDto);
+							resourceKeylist.add(resourceDetailDto.getResourceKey());
+							continue;
 						}
-						if (time >= start + len) {
-							break;
-						}
+						resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
 					}
+				}
+			}
+		}
+		return resourceDetaillist;
+	}
+
+	public Collection<ResourceDetailDto> getAllPending(String typeKey, int start, int len) {
+
+		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+		Set<String> resourceKeylist = new HashSet<String>();
+		Set<String> resourceKeybreaklist = new HashSet<String>();
+		for (ResourceDetailDto resourceDetailDto : list) {
+			if (typeKey.equals(resourceDetailDto.getTypeKey())) {
+				if (RESOURCE_STATE_APPROVAL_DEL.equals(resourceDetailDto.getAttrState())
+						|| RESOURCE_STATE_APPROVAL_ADD.equals(resourceDetailDto.getAttrState())
+						|| RESOURCE_STATE_APPROVAL_UPDATE.equals(resourceDetailDto.getAttrState())) {
+					if (resourceKeylist.size() >= len
+							&& !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
+						continue;
+					}
+					if (resourceKeybreaklist.size() >= start
+							&& !resourceKeybreaklist.contains(resourceDetailDto.getResourceKey())) {
+						resourceDetaillist.add(resourceDetailDto);
+						resourceKeylist.add(resourceDetailDto.getResourceKey());
+						continue;
+					}
+					resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
 				}
 			}
 		}
@@ -288,19 +426,22 @@ public class ResourceDetailDao implements ResourceConstant {
 	public Collection<ResourceDetailDto> getAllByAdmin(String typeKey, int start, int len) {
 
 		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
-		int time = 0;
+		Set<String> resourceKeylist = new HashSet<String>();
+		Set<String> resourceKeybreaklist = new HashSet<String>();
 		for (ResourceDetailDto resourceDetailDto : list) {
 			if (typeKey.equals(resourceDetailDto.getTypeKey())) {
 				if (RESOURCE_STATE_AVAILABLE.equals(resourceDetailDto.getAttrState())) {
-					if (time < start) {
-						time++;
+					if (resourceKeylist.size() >= len
+							&& !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
 						continue;
-					} else {
+					}
+					if (resourceKeybreaklist.size() >= start
+							&& !resourceKeybreaklist.contains(resourceDetailDto.getResourceKey())) {
 						resourceDetaillist.add(resourceDetailDto);
+						resourceKeylist.add(resourceDetailDto.getResourceKey());
+						continue;
 					}
-					if (time >= start + len) {
-						break;
-					}
+					resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
 				}
 			}
 		}
@@ -345,18 +486,121 @@ public class ResourceDetailDao implements ResourceConstant {
 			}
 
 			List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
-			int time = 0;
+			Set<String> resourceKeylist = new HashSet<String>();
+			Set<String> resourceKeybreaklist = new HashSet<String>();
 			for (ResourceDetailDto resourceDetailDto : alllist) {
 				if (!delResourceKeySet.contains(resourceDetailDto.getResourceKey())) {
-					if (time < start) {
-						time++;
+					if (resourceKeylist.size() >= len
+							&& !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
 						continue;
-					} else {
+					}
+					if (resourceKeybreaklist.size() >= start
+							&& !resourceKeybreaklist.contains(resourceDetailDto.getResourceKey())) {
 						resourceDetaillist.add(resourceDetailDto);
+						resourceKeylist.add(resourceDetailDto.getResourceKey());
+						continue;
 					}
-					if (time >= start + len) {
-						break;
+					resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
+				}
+			}
+			return resourceDetaillist;
+		}
+	}
+
+	public Collection<ResourceDetailDto> searchByUser(String typeKey, Map<String, String> searchKeyMap, int start,
+			int len) {
+
+		if (searchKeyMap == null || searchKeyMap.size() == 0) {
+			return getAll(typeKey, start, len);
+		} else {
+			Collection<ResourceDetailDto> alllist = getAll(typeKey);
+			Set<String> delResourceKeySet = new HashSet<String>();
+			String attrName;
+			String attrValue;
+			String searchAttrValue;
+			for (ResourceDetailDto resourceDetailDto : alllist) {
+
+				attrName = resourceDetailDto.getAttrName();
+				attrValue = resourceDetailDto.getAttrValue();
+				if (attrName != null) {
+					searchAttrValue = searchKeyMap.get(attrName);
+					if (searchAttrValue == null) {
+						continue;
 					}
+
+					if (attrValue == null || attrValue.indexOf(searchAttrValue) < 0) {
+						delResourceKeySet.add(resourceDetailDto.getResourceKey());
+					}
+				}
+			}
+
+			List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+			Set<String> resourceKeylist = new HashSet<String>();
+			Set<String> resourceKeybreaklist = new HashSet<String>();
+			for (ResourceDetailDto resourceDetailDto : alllist) {
+				if (!RESOURCE_LEVEL_2.equals(resourceDetailDto.getAttrLevel())) {
+					if (!delResourceKeySet.contains(resourceDetailDto.getResourceKey())) {
+						if (resourceKeylist.size() >= len
+								&& !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
+							continue;
+						}
+						if (resourceKeybreaklist.size() >= start
+								&& !resourceKeybreaklist.contains(resourceDetailDto.getResourceKey())) {
+							resourceDetaillist.add(resourceDetailDto);
+							resourceKeylist.add(resourceDetailDto.getResourceKey());
+							continue;
+						}
+						resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
+					}
+				}
+			}
+			return resourceDetaillist;
+		}
+	}
+
+	public Collection<ResourceDetailDto> searchByAdmin(String typeKey, Map<String, String> searchKeyMap, int start,
+			int len) {
+
+		if (searchKeyMap == null || searchKeyMap.size() == 0) {
+			return getAll(typeKey, start, len);
+		} else {
+			Collection<ResourceDetailDto> alllist = getAll(typeKey);
+			Set<String> delResourceKeySet = new HashSet<String>();
+			String attrName;
+			String attrValue;
+			String searchAttrValue;
+			for (ResourceDetailDto resourceDetailDto : alllist) {
+
+				attrName = resourceDetailDto.getAttrName();
+				attrValue = resourceDetailDto.getAttrValue();
+				if (attrName != null) {
+					searchAttrValue = searchKeyMap.get(attrName);
+					if (searchAttrValue == null) {
+						continue;
+					}
+
+					if (attrValue == null || attrValue.indexOf(searchAttrValue) < 0) {
+						delResourceKeySet.add(resourceDetailDto.getResourceKey());
+					}
+				}
+			}
+
+			List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+			Set<String> resourceKeylist = new HashSet<String>();
+			Set<String> resourceKeybreaklist = new HashSet<String>();
+			for (ResourceDetailDto resourceDetailDto : alllist) {
+				if (!delResourceKeySet.contains(resourceDetailDto.getResourceKey())) {
+					if (resourceKeylist.size() >= len
+							&& !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
+						continue;
+					}
+					if (resourceKeybreaklist.size() >= start
+							&& !resourceKeybreaklist.contains(resourceDetailDto.getResourceKey())) {
+						resourceDetaillist.add(resourceDetailDto);
+						resourceKeylist.add(resourceDetailDto.getResourceKey());
+						continue;
+					}
+					resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
 				}
 			}
 			return resourceDetaillist;

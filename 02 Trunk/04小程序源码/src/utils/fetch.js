@@ -19,31 +19,31 @@ function $http (queryObj) {
 		method: queryObj.method || "GET",// 默认为get
 		// success: queryObj.success || function () {},// 默认为空函数
 		success (res) {
-			//if (queryObj.url.indexOf('rs') > -1) {
-			if(typeof(res.data) != undefined){
-				if(res.data[0]){
-					res = res.data[0]; // 数据结构返回内容为data下
-					res.data = JSON.parse(res.data);
-					if (res.state === 'successful') { // 请求正常
-						queryObj.success && queryObj.success(res);// 默认为空函数
-					} else { // 415 405 401
-						console.error(`后台接口返回state不为successful，错误信息${res.msg}`);
-					}
-				} 
-				else{
-					res = res.data; // 数据结构返回内容为data下
-					if (typeof(res.code) != undefined && res.code === 1) { // 请求正常
-						queryObj.success && queryObj.success(res);// 默认为空函数
-					
-					} else { // 415 405 401
-						console.error(`后台接口返回code不为1，错误信息${res.msg}`);
-					}
-				}
-			}
-			else{
-				console.error(`后台接口返回数据格式错误，错误信息${"后台接口返回数据错误"}`);
-			}
-			wx.hideLoading();
+                                  var resData = '';
+                                  if(res.data.length > 0)resData = res.data[0];
+                                  else resData = res.data;
+                                  if(typeof(resData.code) != "undefined"){
+                                    if (resData.code === 1) { // 请求正常
+                                      queryObj.success && queryObj.success(resData);// 默认为空函数
+                                    } else { // 415 405 401
+                                      console.error(`后台接口返回code不为1，错误信息${resData.msg}`);
+                                      wx.showModal({title: '错误', content: '${resData.msg}', showCancel: false});
+                                    }
+                                  }
+                                  else if(typeof(resData.state) != "undefined"){
+                                    if(typeof(resData.data) != "undefined")resData.data = JSON.parse(resData.data);
+                                    if (resData.state === 'successful') { // 请求正常
+                                      queryObj.success && queryObj.success(resData);// 默认为空函数
+                                    } else { // 415 405 401
+                                      console.error(`后台接口返回state不为successful，错误信息${resData.msg}`);
+                                      wx.showModal({title: '错误', content: '${resData.msg}', showCancel: false});
+                                    }
+                                  }
+                                 else{
+                                   console.error(`后台接口返回数据格式错误`);
+                                   wx.showModal({title: '错误', content: '服务器返回数据格式错误', showCancel: false});
+                                 }
+                                 wx.hideLoading();
 		},
 		fail () {
 			wx.hideLoading();

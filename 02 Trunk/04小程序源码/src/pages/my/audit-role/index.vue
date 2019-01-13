@@ -17,7 +17,7 @@
     <div class="zan-panel">
       <div v-for="(item, index) of userListForSelect" :key="index" class="zan-cell">
         <div class="zan-cell__icon zan-icon zan-icon-contact" style="color:#666;"></div>
-        <div class="zan-cell__bd">{{item.nickName}}</div>
+        <div class="zan-cell__bd">{{item.name}}</div>
       </div>
     </div>
   </div>

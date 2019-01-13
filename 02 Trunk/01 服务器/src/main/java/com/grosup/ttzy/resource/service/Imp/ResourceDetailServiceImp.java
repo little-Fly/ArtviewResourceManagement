@@ -34,16 +34,21 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 
 	}
 
-	public void approvalAdd(String resourceKey) {
-		resourceDetailDao.approvalAdd(resourceKey);
+	public void approvalAdd(String resourceKey, String approvalMess) {
+		resourceDetailDao.approvalAdd(resourceKey, approvalMess);
 	}
 
-	public void approvalDel(String resourceKey) {
-		resourceDetailDao.approvalDel(resourceKey);
+	public void approvalDel(String resourceKey, String approvalMess) {
+		resourceDetailDao.approvalDel(resourceKey, approvalMess);
 	}
 
-	public void reject(String resourceKey) {
-		resourceDetailDao.reject(resourceKey);
+	public void approvalUpdate(String resourceKey, String approvalMess)
+	{
+		resourceDetailDao.approvalUpdate(resourceKey, approvalMess);
+	}
+	
+	public void reject(String resourceKey, String approvalMess) {
+		resourceDetailDao.reject(resourceKey, approvalMess);
 	}
 	
 	public void del(String resourceKey) {
@@ -79,10 +84,6 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 		return resourceDetailDao.getAll(typeKey, start, len);
 	}
 
-	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len) {
-		return resourceDetailDao.search(typeKey, searchKeyMap, start, len);
-	}
-
 	public Collection<ResourceDetailDto> getAllByUser(String typeKey, int start, int len) {
 		return resourceDetailDao.getAllByUser(typeKey, start, len);
 	}
@@ -90,4 +91,23 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 	public Collection<ResourceDetailDto> getAllByAdmin(String typeKey, int start, int len) {
 		return resourceDetailDao.getAllByAdmin(typeKey, start, len);
 	}
+
+	public Collection<ResourceDetailDto> getAllPending(String typeKey, int start, int len) {
+		return resourceDetailDao.getAllPending(typeKey, start, len);
+	}
+	
+	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len) {
+		return resourceDetailDao.search(typeKey, searchKeyMap, start, len);
+	}
+	
+	public Collection<ResourceDetailDto> searchByUser(String typeKey, Map<String, String> searchKeyMap, int start, int len)
+	{
+		return resourceDetailDao.searchByUser(typeKey, searchKeyMap, start, len);
+	}
+	
+	public Collection<ResourceDetailDto> searchByAdmin(String typeKey, Map<String, String> searchKeyMap, int start, int len)
+	{
+		return resourceDetailDao.searchByAdmin(typeKey, searchKeyMap, start, len);
+	}
+
 }

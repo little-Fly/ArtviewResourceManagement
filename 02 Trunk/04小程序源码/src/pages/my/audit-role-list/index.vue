@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div>
     <div class="zan-panel">
       <button :disabled="userListForSelect && !userListForSelect.length" @click="ensureOperate" :type="operateKey == 'add' ? 'primary' : 'warn'">{{operateKey === 'add' ? '授权' : '取消授权'}}</button>
@@ -7,7 +7,7 @@
       <checkbox-group @change="selecteUserChange">
         <div v-for="(item, index) of userListForSelect" :key="index" class="zan-cell">
           <div class="zan-cell__icon zan-icon zan-icon-contact" style="color:#666;"></div>
-          <div class="zan-cell__bd">{{item.nickName}}</div>
+          <div class="zan-cell__bd">{{item.name}}</div>
           <div class="zan-cell__ft">
             <checkbox  :value="item.uid"/>
           </div>
