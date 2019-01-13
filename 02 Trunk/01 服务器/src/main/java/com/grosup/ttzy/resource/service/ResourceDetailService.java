@@ -40,5 +40,9 @@ public interface ResourceDetailService {
 	public Collection<ResourceDetailDto> getAllPending(String typeKey, int start, int len);
 
 	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len);
+	
+	public Collection<ResourceDetailDto> searchByUser(String typeKey, Map<String, String> searchKeyMap, int start, int len);
+	
+	public Collection<ResourceDetailDto> searchByAdmin(String typeKey, Map<String, String> searchKeyMap, int start, int len);
 
 }

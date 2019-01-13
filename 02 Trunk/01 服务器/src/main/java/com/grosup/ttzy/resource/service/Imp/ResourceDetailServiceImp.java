@@ -84,10 +84,6 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 		return resourceDetailDao.getAll(typeKey, start, len);
 	}
 
-	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len) {
-		return resourceDetailDao.search(typeKey, searchKeyMap, start, len);
-	}
-
 	public Collection<ResourceDetailDto> getAllByUser(String typeKey, int start, int len) {
 		return resourceDetailDao.getAllByUser(typeKey, start, len);
 	}
@@ -99,4 +95,19 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 	public Collection<ResourceDetailDto> getAllPending(String typeKey, int start, int len) {
 		return resourceDetailDao.getAllPending(typeKey, start, len);
 	}
+	
+	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len) {
+		return resourceDetailDao.search(typeKey, searchKeyMap, start, len);
+	}
+	
+	public Collection<ResourceDetailDto> searchByUser(String typeKey, Map<String, String> searchKeyMap, int start, int len)
+	{
+		return resourceDetailDao.searchByUser(typeKey, searchKeyMap, start, len);
+	}
+	
+	public Collection<ResourceDetailDto> searchByAdmin(String typeKey, Map<String, String> searchKeyMap, int start, int len)
+	{
+		return resourceDetailDao.searchByAdmin(typeKey, searchKeyMap, start, len);
+	}
+
 }

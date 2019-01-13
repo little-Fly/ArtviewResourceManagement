@@ -15,13 +15,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.grosup.ttzy.dao.RoleDao;
 import com.grosup.ttzy.resource.common.MessageMapConstant;
 import com.grosup.ttzy.resource.dto.ResourceDetailDto;
 import com.grosup.ttzy.resource.service.ResourceDetailService;
 import com.grosup.ttzy.share.dto.ResourceDto;
 import com.grosup.ttzy.share.dto.ResourceShareDto;
 import com.grosup.ttzy.share.service.ResourceShareService;
+import com.grosup.ttzy.util.GrosupException;
 import com.grosup.ttzy.util.StringUtil;
+import com.grosup.ttzy.util.TtzyUtil;
 
 import net.sf.json.JSONArray;
 
@@ -36,6 +39,9 @@ public class ResourceShareController implements MessageMapConstant{
 
 	@Autowired
 	ResourceDetailService resourceDetailService;
+	
+	@Autowired
+	RoleDao roleDao;
 	
 	/**
 	 * /rs/share/add.do
@@ -141,21 +147,27 @@ public class ResourceShareController implements MessageMapConstant{
 	/**
 	 * /rs/share/getall.do
 	 * @return [{"data":"[{\"lastTime\":1538382729506,\"resourceListJson\":\"[{\\\"typeKey\\\":\\\"RDf示例表ID\\\", \\\"resourceKey\\\":\\\"RDt示例值ID\\\"}]\",\"sendTime\":1538382729506,\"sendUser\":\"示例分享人\",\"shareKey\":\"RSrtemplatekey\",\"templateName\":\"default\"}]","state":"successful"}]
+	 * @throws GrosupException 
 	 */
 	@RequestMapping(value = "/getall.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String getAll(HttpServletRequest request, HttpServletResponse response) {
+	public String getAll(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		Collection<ResourceShareDto> collection = resourceShareService.getAll();
-		if (collection != null) {
-			JSONArray resourceDefJson = JSONArray.fromObject(collection);
-			messageMap.put(DATA, resourceDefJson.toString());
-			messageMap.put(STATE, STATE_SUCCESSFUL);
+		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+			Collection<ResourceShareDto> collection = resourceShareService.getAll();
+			if (collection != null) {
+				JSONArray resourceDefJson = JSONArray.fromObject(collection);
+				messageMap.put(DATA, resourceDefJson.toString());
+				messageMap.put(STATE, STATE_SUCCESSFUL);
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_LIST_ETER);
+				log.error("getAll "+MESSAGE_LIST_ETER);
+			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_LIST_ETER);
-			log.error("getAll "+MESSAGE_LIST_ETER);
+			messageMap.put(MESSAGE, MESSAGE_AUTHORITY_ETER + TtzyUtil.getUid(request));
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
