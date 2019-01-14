@@ -43,11 +43,7 @@
 <script>
 
 export default {
-  provide(){
-    return {
-      reload : this.reload
-   }
-  },
+
   data () {
     return {
       typeKey: '',
@@ -60,7 +56,9 @@ export default {
       shRsList: [] //待分享资源列表
     }
   },
-
+  onShow(){
+    this.shCount = this.$store.state.myShareBag.length;
+  },
   mounted () {
     let paramsObj = this.$tool.getOptions();
     this.typeKey = paramsObj.typeKey;
@@ -72,9 +70,7 @@ export default {
   },
   
   methods: {
-    reload(){
-      this.shCount = this.$store.state.myShareBag.length;
-    },
+
     searchResourceBtn(){
       
     },
