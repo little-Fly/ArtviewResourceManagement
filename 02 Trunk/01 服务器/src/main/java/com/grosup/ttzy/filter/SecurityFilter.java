@@ -34,6 +34,7 @@ public class SecurityFilter implements Filter {
             HttpServletRequest sRequest = (HttpServletRequest) request;
             HttpServletResponse sResponse = (HttpServletResponse) response;
             String url = sRequest.getRequestURI();
+            logger.info("url =" + url);
             //角色审核接口,管理员与超级管理员可访问
             if (url.matches("/ttzy/wx/user/queryUnchecked.do")) {
                 long uid = TtzyUtil.getUid(sRequest);
@@ -49,7 +50,7 @@ public class SecurityFilter implements Filter {
                 chain.doFilter(sRequest, sResponse);
             }
         } catch (Exception e) {
-            logger.error(e);
+            logger.error("权限拦截异常", e);
         }
         
     }

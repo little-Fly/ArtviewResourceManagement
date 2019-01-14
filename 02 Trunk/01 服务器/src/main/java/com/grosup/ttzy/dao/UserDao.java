@@ -20,6 +20,10 @@ public class UserDao extends AbstractDao {
         return userBean.getUid();
     }
 
+    public void userUpdate(UserBean userBean) throws GrosupException{
+        this.getSession().update("com.grosup.ttzy.user.userUpdate", userBean);
+    }
+
     public void userDel(String openId) throws GrosupException{
         this.getSession().delete("com.grosup.ttzy.user.userDel", openId);
     }

@@ -38,10 +38,14 @@ public class UserService {
         userBean.setLastTime(createTime);
         long uid = userDao.userAdd(userBean);
         //记录日志
-        String remark = userBean.getNickName()+ "于" + sdf.format(createTime) + "注册成功";
+        String remark = userBean.getNickName()+ "于" + sdf.format(createTime) + "申请注册";
         LogBean logBean = TtzyUtil.createLog(uid, createTime, "注册", remark);
         TtzyUtil.saveLog(logBean);
         return uid;
+    }
+
+    public void userUpdate(UserBean userBean) throws GrosupException{
+        userDao.userUpdate(userBean);
     }
 
     public void userDel(String openId) throws GrosupException{
@@ -56,7 +60,6 @@ public class UserService {
     }
     /**
      * 人员审核
-     * @param param
      * @throws GrosupException
      */
     public void changeUserStatus(long uid, String nickName, int status, String refuse) throws GrosupException{
