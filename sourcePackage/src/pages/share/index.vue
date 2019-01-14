@@ -8,10 +8,10 @@
     <template v-for="(item, index) in shRsList">
       <div class="resourcelist-item-wrap" :key='index'>
         <div class="icon-group-box">
-          <image  class="rs-icon" src="../../assets/images/delete.png" alt=""></image>
+          <image  class="rs-icon" src="../../assets/images/delete.png" alt="" @click="delResource(index)"></image>
           <span class="space"></span>
-          <image  class="rs-icon" src="../../assets/images/up.png" alt=""></image>
-          <image  class="rs-icon" src="../../assets/images/down.png" alt=""></image>
+          <image  class="rs-icon" src="../../assets/images/up.png" alt="" @click="upResource(index)"></image>
+          <image  class="rs-icon" src="../../assets/images/down.png" alt="" @click="downResource(index)"></image>
         </div>
         <div class="inline-block">
           <template v-for="(ss, inx) in item">
@@ -46,8 +46,7 @@ export default {
   },
 
   mounted () {
-    let paramsObj = this.$tool.getOptions();
-    this.shRsList = JSON.parse(paramsObj.shRsList);
+   this.shRsList = this.$store.state.myShareBag;
   },
   methods: {
 
@@ -58,52 +57,33 @@ export default {
       
     },
     /*
-    *从接口拿到的资源数据是一维平铺，这里根据sourceKey进行二维处理
+    *从资源包里删除一条资源
     */
-    changTheSourceArray(data){
-      var saList = [];
-      var dList = [];
-      for(;;){
-        if(data.length < 1)break;
-        var key = data[0].resourceKey;
-        dList.push(data[0]);
-        data.splice(0,1);
-        var i=0;
-        for(;;){
-          if(key == data[i].resourceKey){
-            dList.push(data[i]);
-            data.splice(i,1);
-          }
-          else i++;
-          if(data.length == 0)break;
-          if(i >= data.length)break;
-        }
-        saList.push(dList);
-        dList = [];
-      }
-      return saList;
+    delResource(index){
+      this.shRsList.splice(index, 1);
+      this.$store.state.myShareBag = this.shRsList;
     },
 
     /*
-     *获取某资源类别下的资源
+     *把资源包里的这条资源向前移动一个位置
      */
-    getrsTypevalue(typeKey){
-       this.$http({
-        url: '/rs/detail/getallbyuser.do',
-        method: 'get',
-        data: {
-          typekey: typeKey,
-          start: (this.page-1)*this.rowNumbers,
-          len: this.rowNumbers},
-        success: res => {
-          var rData = this.changTheSourceArray(res.data);
-          for(var i=0; i<rData.length; i++){
-             this.rsList.push(rData[i]);
-          }
-          if(rData.length > 0)this.page++;
-          wx.hideLoading();
-        }
-      });
+    upResource(index){
+       if(index == 0){
+         wx.showToast({title: '到顶了'});
+         return;
+       }
+       this.shRsList.splice(index + 1, 0, this.shRsList[index - 1]);
+       this.shRsList.splice(index - 1, 1);
+      this.$store.state.myShareBag = this.shRsList;
+    },
+    downResource(index){
+       if((index + 1) >= this.shRsList.length){
+         wx.showToast({title: '到底了'});
+         return;
+       }
+       this.shRsList.splice(index + 2, 0, this.shRsList[index]);
+       this.shRsList.splice(index, 1);
+      this.$store.state.myShareBag = this.shRsList;
     },
 
     /**

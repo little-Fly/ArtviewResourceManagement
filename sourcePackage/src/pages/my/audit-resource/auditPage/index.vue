@@ -23,6 +23,9 @@
         <div  class="resource-image">
           <image  class="resource-image" src="../../../../assets/images/resource_init.png" alt=""></image>
         </div>
+        <div class="content-item inline-block">
+          <span class="item-title align-right inline-block">查看权限</span>：{{item.authorize}}
+        </div>
         <div class="line-block">
           <div class="line-fill inline-block">
             <span class="audit-input-title inline-block">审核意见：</span>
@@ -163,6 +166,7 @@ export default {
                    attrName: auditList[j][0].attrName, 
                    attrValue:auditList[j][0].attrValue},
                 data: vdata,
+                authorize: this.getAuthorizeWord(auditList[j][0].attrLevel),
                 auditText: ''
              });
            }
@@ -177,7 +181,11 @@ export default {
         }
       });
     },
-
+    getAuthorizeWord(attrLevel){
+      if(attrLevel == 2)return "管理员";
+      else if(attrLevel == 1)return "员工";
+      return "任何人";
+    },
     /**
      * 审核按钮通过按钮点击
      */

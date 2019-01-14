@@ -4,7 +4,7 @@
       <div class="userlist-item-wrap" :key='index'>
         <div class="userlist-item clearfix" @click="expandUserMessage(index)">
           <div v-if="item.userStatus != '待审核'" class="inline-block">
-            <div class="user-info-title inline-block">
+            <div class="user-info-title">
               <div class="user-info inline-block">
                 {{item.name+"("+item.nickName+")"}}<span class="space"></span>{{item.gender}}<span class="space"></span>{{item.phone}}
               </div>
@@ -20,7 +20,7 @@
               </template>
             </div>
           </div>
-          <div v-else class="inline-block user-info-title">
+          <div v-else class="user-info-title">
             <div class="user-info inline-block">
                 {{item.name+"("+item.nickName+")"}}<span class="space"></span>{{item.gender}}<span class="space"></span>{{item.phone}}
             </div>
@@ -293,6 +293,9 @@ export default {
     width: 20px;
     height: 20px;
     margin-right:4px;
+  }
+  .user-info-title{
+    display: flex;
   }
   .user-info{
     width: 264px;

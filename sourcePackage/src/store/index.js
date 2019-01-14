@@ -1,4 +1,4 @@
-// https://vuex.vuejs.org/zh-cn/intro.html
+﻿// https://vuex.vuejs.org/zh-cn/intro.html
 // make sure to call Vue.use(Vuex) if using a module system
 import Vue from 'vue'
 import Vuex from 'vuex'
@@ -18,6 +18,7 @@ const store = new Vuex.Store({
     userRoleList: [],
     userAuditStatus: 1, // 用户审核状态 1:未注册 2：审核中 3:被拒绝 4: 已通过
     accessTree: {}, // 角色权限树
+    myShareBag: [],//待分享的资源列表
   },
   mutations: {
     updateCustomLoginStatus (state, val) {
