@@ -91,7 +91,8 @@
 					<el-dialog :title="addForm.title" width="30%" :visible.sync="dialogFormVisible">
 						<el-form :model="addForm">
 							<el-form-item :label="item.attrName" :label-width="formLabelWidth"
-							              v-for="(item,key) in attrData" :key="key">
+							              v-for="(item,key) in attrData" :key="key"
+							              v-if="item.attrKey !== 'attrState' && item.attrKey !== 'approvalMess'&& item.attrKey !== 'approvalUser'">
 								<el-upload
 										v-if="item.attrType === 'picture'||item.attrType === 'video'"
 										class="upload-demo"
@@ -109,6 +110,12 @@
 								          v-if="item.attrType !== 'picture'&&item.attrType !== 'video'"
 								          :maxlength="item.attrlen > 0 ? item.attrlen :100"
 								          :placeholder="item.attrlen >0 ? `限制${item.attrlen}个字符` :``"
+								          auto-complete="off"></el-input>
+							</el-form-item>
+							<el-form-item label="数据级别" :label-width="formLabelWidth">
+								<el-input v-model="attrLevel" @blur="inputModalBlur"
+								          placeholder="0:任何人可见;1:成员可见;2:管理员可见"
+								          type="number" max="2" min="0"
 								          auto-complete="off"></el-input>
 							</el-form-item>
 						</el-form>
@@ -144,7 +151,8 @@
                 addDetailData: [],
                 operatingMode: "", // 当前行为 是add、update
                 fileArr: [],
-                currentUploadAttrKey: ""
+                currentUploadAttrKey: "",
+                attrLevel: ""
             };
         },
         methods: {
@@ -168,6 +176,14 @@
                         if (response.status === 200) {
                             let data = response.data;
                             this.attrData = JSON.parse(data[0].data);
+                            if (this.attrData.length > 0) {
+                                let arr = [
+                                    {attrKey: "attrState", attrName: "审核状态"},
+                                    {attrKey: "approvalMess", attrName: "审核意见"},
+                                    {attrKey: "approvalUser", attrName: "审核人"}
+                                ];
+                                this.attrData = [...this.attrData, ...arr];
+                            }
                             this.getResTableDetail(0, 10);
                         }
                     }, (error) => {
@@ -191,7 +207,7 @@
                                     return;
                                 }
                                 let json = JSON.parse(detail[0].data);
-                                // console.log("表格数据11", json);
+                                console.log("表格数据11", json);
                                 this.getLineData(json);
                             }
                         }
@@ -217,12 +233,14 @@
                     }
                     obj[data[i].attrKey] = data[i].attrValue;
                     obj.resourceKey = data[i].resourceKey;
+                    obj.approvalMess = data[i].approvalMess;
+                    obj.approvalUser = data[i].approvalUser;
+                    obj.attrState = data[i].attrState;
                     if (i === dataLen - 1) {
                         arr[index - 1] = obj;
                     }
                 }
                 this.tableData = arr;
-                // console.log("表格数据", arr);
             },
             /**
              * 新增资源按钮
@@ -234,6 +252,7 @@
                 this.dialogFormVisible = true;
             },
             clearForm() {
+                this.attrLevel = "";
                 for (let key in this.addForm) {
                     if (this.addForm.hasOwnProperty(key) && key !== "title") {
                         this.addForm[key] = "";
@@ -246,6 +265,11 @@
             submitAudit() {
                 let json = [];
                 for (let key in this.addForm) {
+                    if (key === "attrState"
+                        || key === "approvalMess"
+                        || key === "approvalUser") {
+                        break;
+                    }
                     if (this.addForm.hasOwnProperty(key) &&
                         key !== "title" &&
                         key !== "resourceKey") {
@@ -253,6 +277,7 @@
                             "attrKey": key,
                             "attrValue": this.addForm[key],
                             "typeKey": this.currentTypeKey,
+                            attrLevel: this.attrLevel
                         };
                         for (let i = 0; i < this.attrData.length; i++) {
                             if (this.attrData[i].attrKey === obj.attrKey) {
@@ -337,6 +362,9 @@
                 this.addForm.title = `修改${this.currentActiveItem}资源`;
                 this.dialogFormVisible = true;
                 for (let i = 0; i < this.attrData.length; i++) {
+                    if (this.attrData[i].attrLevel) {
+                        this.attrLevel = this.attrData[i].attrLevel;
+                    }
                     let key = this.attrData[i].attrKey;
                     this.addForm[key] = this.multipleSelection[0][key];
                 }
@@ -481,6 +509,9 @@
             uploadFail() {
                 console.log("upload Fail");
             },
+            inputModalBlur() {
+                this.attrLevel = this.attrLevel < 0 ? 0 : this.attrLevel > 2 ? 2 : this.attrLevel;
+            }
         },
         mounted() {
             this.$chargeAuthority().then((t) => {

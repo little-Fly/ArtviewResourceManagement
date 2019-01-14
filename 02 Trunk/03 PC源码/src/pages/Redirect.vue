@@ -43,7 +43,7 @@
                     .then((response) => {
                         if (response.status === 200) {
                             let data = response.data;
-                            console.log(data);
+                            // console.log(data);
                             if (data.msg === "success") {
                                 console.log(data.userInfo);
                                 if (data.userInfo) {
