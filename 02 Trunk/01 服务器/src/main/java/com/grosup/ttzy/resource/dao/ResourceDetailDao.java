@@ -461,135 +461,89 @@ public class ResourceDetailDao implements ResourceConstant {
 
 	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len) {
 
-		if (searchKeyMap == null || searchKeyMap.size() == 0) {
-			return getAll(typeKey, start, len);
-		} else {
-			Collection<ResourceDetailDto> alllist = getAll(typeKey);
-			Set<String> delResourceKeySet = new HashSet<String>();
-			String attrName;
-			String attrValue;
-			String searchAttrValue;
-			for (ResourceDetailDto resourceDetailDto : alllist) {
+		Collection<ResourceDetailDto> alllist = getAll(typeKey);
+		Set<String> delResourceKeySet = new HashSet<String>();
+		Set<String> addResourceKeySet = new HashSet<String>();
+		String attrName;
+		String attrValue;
+		String searchAttrValue;
+		for (ResourceDetailDto resourceDetailDto : alllist) {
 
-				attrName = resourceDetailDto.getAttrName();
-				attrValue = resourceDetailDto.getAttrValue();
-				if (attrName != null) {
-					searchAttrValue = searchKeyMap.get(attrName);
-					if (searchAttrValue == null) {
-						continue;
-					}
-
-					if (attrValue == null || attrValue.indexOf(searchAttrValue) < 0) {
-						delResourceKeySet.add(resourceDetailDto.getResourceKey());
-					}
+			resourceKey = resourceDetailDto.getResourceKey();
+			attrName = resourceDetailDto.getAttrName();
+			attrValue = resourceDetailDto.getAttrValue();
+			if (attrName != null) {
+				searchAttrValue = searchKeyMap.get(attrName);
+				if (searchAttrValue == null) {
+					continue;
+				}
+				if (attrValue != null && attrValue.indexOf(searchAttrValue) > -1) {
+					addResourceKeySet.add(resourceDetailDto.getResourceKey());
+				} else {
+					delResourceKeySet.add(resourceDetailDto.getResourceKey());
 				}
 			}
-
-			List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
-			Set<String> resourceKeylist = new HashSet<String>();
-			Set<String> resourceKeybreaklist = new HashSet<String>();
-			for (ResourceDetailDto resourceDetailDto : alllist) {
-				if (!delResourceKeySet.contains(resourceDetailDto.getResourceKey())) {
-					if (resourceKeylist.size() >= len
-							&& !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
-						continue;
-					}
-					if (resourceKeybreaklist.size() >= start
-							&& !resourceKeybreaklist.contains(resourceDetailDto.getResourceKey())) {
-						resourceDetaillist.add(resourceDetailDto);
-						resourceKeylist.add(resourceDetailDto.getResourceKey());
-						continue;
-					}
-					resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
-				}
-			}
-			return resourceDetaillist;
 		}
+		addResourceKeySet.removeAll(delResourceKeySet);
+		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+		Set<String> resourceKeylist = new HashSet<String>();
+		Set<String> resourceKeybreaklist = new HashSet<String>();
+		for (ResourceDetailDto resourceDetailDto : alllist) {
+			if (addResourceKeySet.contains(resourceDetailDto.getResourceKey())) {
+				if (resourceKeylist.size() >= len && !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
+					continue;
+				}
+				if (resourceKeybreaklist.size() >= start
+						&& !resourceKeybreaklist.contains(resourceDetailDto.getResourceKey())) {
+					resourceDetaillist.add(resourceDetailDto);
+					resourceKeylist.add(resourceDetailDto.getResourceKey());
+					continue;
+				}
+				resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
+			}
+		}
+		return resourceDetaillist;
 	}
 
 	public Collection<ResourceDetailDto> searchByUser(String typeKey, Map<String, String> searchKeyMap, int start,
 			int len) {
 
-		if (searchKeyMap == null || searchKeyMap.size() == 0) {
-			return getAll(typeKey, start, len);
-		} else {
-			Collection<ResourceDetailDto> alllist = getAll(typeKey);
-			Set<String> delResourceKeySet = new HashSet<String>();
-			String attrName;
-			String attrValue;
-			String searchAttrValue;
-			for (ResourceDetailDto resourceDetailDto : alllist) {
+		Collection<ResourceDetailDto> alllist = getAll(typeKey);
+		Set<String> delResourceKeySet = new HashSet<String>();
+		Set<String> addResourceKeySet = new HashSet<String>();
+		String attrName;
+		String attrValue;
+		String searchAttrValue;
+		for (ResourceDetailDto resourceDetailDto : alllist) {
 
-				attrName = resourceDetailDto.getAttrName();
-				attrValue = resourceDetailDto.getAttrValue();
-				if (attrName != null) {
-					searchAttrValue = searchKeyMap.get(attrName);
-					if (searchAttrValue == null) {
-						continue;
-					}
+			resourceKey = resourceDetailDto.getResourceKey();
+			attrName = resourceDetailDto.getAttrName();
+			attrValue = resourceDetailDto.getAttrValue();
 
-					if (attrValue == null || attrValue.indexOf(searchAttrValue) < 0) {
-						delResourceKeySet.add(resourceDetailDto.getResourceKey());
-					}
+			if (attrName != null) {
+				searchAttrValue = searchKeyMap.get(attrName);
+				if (searchAttrValue == null) {
+					continue;
 				}
-			}
-
-			List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
-			Set<String> resourceKeylist = new HashSet<String>();
-			Set<String> resourceKeybreaklist = new HashSet<String>();
-			for (ResourceDetailDto resourceDetailDto : alllist) {
 				if (!RESOURCE_LEVEL_2.equals(resourceDetailDto.getAttrLevel())) {
-					if (!delResourceKeySet.contains(resourceDetailDto.getResourceKey())) {
-						if (resourceKeylist.size() >= len
-								&& !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
-							continue;
-						}
-						if (resourceKeybreaklist.size() >= start
-								&& !resourceKeybreaklist.contains(resourceDetailDto.getResourceKey())) {
-							resourceDetaillist.add(resourceDetailDto);
-							resourceKeylist.add(resourceDetailDto.getResourceKey());
-							continue;
-						}
-						resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
-					}
-				}
-			}
-			return resourceDetaillist;
-		}
-	}
-
-	public Collection<ResourceDetailDto> searchByAdmin(String typeKey, Map<String, String> searchKeyMap, int start,
-			int len) {
-
-		if (searchKeyMap == null || searchKeyMap.size() == 0) {
-			return getAll(typeKey, start, len);
-		} else {
-			Collection<ResourceDetailDto> alllist = getAll(typeKey);
-			Set<String> delResourceKeySet = new HashSet<String>();
-			String attrName;
-			String attrValue;
-			String searchAttrValue;
-			for (ResourceDetailDto resourceDetailDto : alllist) {
-
-				attrName = resourceDetailDto.getAttrName();
-				attrValue = resourceDetailDto.getAttrValue();
-				if (attrName != null) {
-					searchAttrValue = searchKeyMap.get(attrName);
-					if (searchAttrValue == null) {
-						continue;
-					}
-
-					if (attrValue == null || attrValue.indexOf(searchAttrValue) < 0) {
+					if (attrValue != null && attrValue.indexOf(searchAttrValue) > -1) {
+						addResourceKeySet.add(resourceDetailDto.getResourceKey());
+					} else {
 						delResourceKeySet.add(resourceDetailDto.getResourceKey());
 					}
+				} else {
+					delResourceKeySet.add(resourceDetailDto.getResourceKey());
 				}
 			}
+		}
+		addResourceKeySet.removeAll(delResourceKeySet);
 
-			List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
-			Set<String> resourceKeylist = new HashSet<String>();
-			Set<String> resourceKeybreaklist = new HashSet<String>();
-			for (ResourceDetailDto resourceDetailDto : alllist) {
-				if (!delResourceKeySet.contains(resourceDetailDto.getResourceKey())) {
+		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+		Set<String> resourceKeylist = new HashSet<String>();
+		Set<String> resourceKeybreaklist = new HashSet<String>();
+		for (ResourceDetailDto resourceDetailDto : alllist) {
+			if (delResourceKeySet.contains(resourceDetailDto.getResourceKey())) {
+				if (!RESOURCE_LEVEL_2.equals(resourceDetailDto.getAttrLevel())) {
 					if (resourceKeylist.size() >= len
 							&& !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
 						continue;
@@ -603,8 +557,58 @@ public class ResourceDetailDao implements ResourceConstant {
 					resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
 				}
 			}
-			return resourceDetaillist;
 		}
+		return resourceDetaillist;
+
+	}
+
+	public Collection<ResourceDetailDto> searchByAdmin(String typeKey, Map<String, String> searchKeyMap, int start,
+			int len) {
+
+		Collection<ResourceDetailDto> alllist = getAll(typeKey);
+		Set<String> delResourceKeySet = new HashSet<String>();
+		Set<String> addResourceKeySet = new HashSet<String>();
+		String attrName;
+		String attrValue;
+		String searchAttrValue;
+		for (ResourceDetailDto resourceDetailDto : alllist) {
+
+			resourceKey = resourceDetailDto.getResourceKey();
+			attrName = resourceDetailDto.getAttrName();
+			attrValue = resourceDetailDto.getAttrValue();
+			if (attrName != null) {
+				searchAttrValue = searchKeyMap.get(attrName);
+				if (searchAttrValue == null) {
+					continue;
+				}
+				if (attrValue != null && attrValue.indexOf(searchAttrValue) > -1) {
+					addResourceKeySet.add(resourceDetailDto.getResourceKey());
+				} else {
+					delResourceKeySet.add(resourceDetailDto.getResourceKey());
+				}
+			}
+		}
+		addResourceKeySet.removeAll(delResourceKeySet);
+
+		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
+		Set<String> resourceKeylist = new HashSet<String>();
+		Set<String> resourceKeybreaklist = new HashSet<String>();
+		for (ResourceDetailDto resourceDetailDto : alllist) {
+			if (delResourceKeySet.contains(resourceDetailDto.getResourceKey())) {
+				if (resourceKeylist.size() >= len && !resourceKeylist.contains(resourceDetailDto.getResourceKey())) {
+					continue;
+				}
+				if (resourceKeybreaklist.size() >= start
+						&& !resourceKeybreaklist.contains(resourceDetailDto.getResourceKey())) {
+					resourceDetaillist.add(resourceDetailDto);
+					resourceKeylist.add(resourceDetailDto.getResourceKey());
+					continue;
+				}
+				resourceKeybreaklist.add(resourceDetailDto.getResourceKey());
+			}
+		}
+		return resourceDetaillist;
+
 	}
 
 }
