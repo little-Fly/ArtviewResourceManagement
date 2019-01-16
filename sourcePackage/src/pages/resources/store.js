@@ -7,7 +7,8 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    count: 0
+    count: 0,
+    rsResearchWord: '',//资源搜索条件字
   },
   mutations: {
     increment: (state) => {

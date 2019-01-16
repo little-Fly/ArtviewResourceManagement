@@ -2,7 +2,7 @@
   <div class="resourcelist-wrap">
     <div class="search-box">
       <div class="search-input-box">
-        <input class="search-input" type="text" v-model="searchText" maxlength="36" placeholder="请输入关键字"></input>
+        <input class="search-input" type="text" v-model="searchText" maxlength="36" placeholder="如：姓名：张三, 性别：女" @confirm="searchResourceBtn()"></input>
         <div class="search-btn" @click="searchResourceBtn()">搜索</div>
       </div>
       <div class="add-search-conditions" @click="addSearchConditions()">增加搜索条件</div>
@@ -49,19 +49,24 @@ export default {
       typeKey: '',
       typeName: '',
       searchText: '',
+      isForAdd: false,
+      isSearchGet: false,
       page: 1,
       rowNumbers: 2,
       rsList:[], //待审核资源列表
       shCount: 0, //分享包里已选分享资源的数量
-      shRsList: [] //待分享资源列表
+      shRsList: [], //待分享资源列表
+      attrList: ''  //表头名列表
     }
   },
   onShow(){
     this.shCount = this.$store.state.myShareBag.length;
+    if(this.isForAdd)this.searchText=this.$store.state.rsResearchWord;
   },
   mounted () {
     let paramsObj = this.$tool.getOptions();
     this.typeKey = paramsObj.typeKey;
+    this.$store.state.rsResearchWord = ' ';
     this.typeName = paramsObj.typeName;
     wx.setNavigationBarTitle({title: this.typeName + "资源浏览"});
     this.rsList = [];
@@ -70,12 +75,87 @@ export default {
   },
   
   methods: {
-
+    /*
+     *把搜索字符串存入全局变量
+     */
+    saveSerchWord(){
+      this.searchText = this.searchText.replace(/ /g, '');
+      this.$store.state.rsResearchWord = this.searchText;
+    },
+    /*
+     *把全局存放的搜索字符串结构化
+     */
+    cutTheResearchWord(){
+      var words = this.$store.state.rsResearchWord;
+      words = words.replace(/ /g, '');
+      words = words.replace(/,/g, '，');
+      words = words.replace(/:/g, '：');
+      var wList = words.split('，');
+      var searchWordList = [];
+    /*
+     *送往后台的搜索条件字符串
+     *searchWordList = [{
+     *    name: "示例表头1", //属性字表头名
+     *    word: "匹配我" //在此列中将要匹配的内容
+     *}]
+     */
+      for(var i=0; i<wList.length; i++){
+        var atList = wList[i].split('：');
+        if(atList.length == 2){
+          searchWordList.push({
+            name: atList[0],//表头名
+            word: atList[1] //匹配关键字
+          });
+        }
+      }
+      return searchWordList;
+    },
+    getAttrList(){
+      var aList = [];
+      for(var i=0; i<this. rsList[0].length; i++){
+        if(this.rsList[0][i].attrType == "default")
+          aList.push(this.rsList[0][i].attrName);
+      }
+      this.attrList = {aList: aList};
+    },
     searchResourceBtn(){
-      
+      this.saveSerchWord();
+      if(!this.$store.state.rsResearchWord){
+        this.getrsTypevalue(this.typeKey);
+        return;
+      }
+      if(!this.isSearchGet){
+        this.isSearchGet = true;
+        this.page = 1;
+      }
+      var searchList = this.cutTheResearchWord();
+      this.$http({
+        url: '/rs/search/searchbyuser.do',
+        method: 'get',
+        data: {
+          typekey: this.typeKey,
+          start: (this.page-1)*this.rowNumbers,
+          len: this.rowNumbers,
+          searchkey: this.cutTheResearchWord()
+        },
+        success: res => {
+          var rData = this.changTheSourceArray(res.data);
+          for(var i=0; i<rData.length; i++){
+             this.rsList.push(rData[i]);
+          }
+          if(rData.length > 0){
+            this.page++;
+            this.getAttrList();
+          }
+          wx.hideLoading();
+        }
+      });
     },
     addSearchConditions(){
-      
+      this.saveSerchWord();
+      var alist = JSON.stringify(this.attrList);
+      wx.navigateTo({url: "../searchView/main?attrList=" + alist});
+      this.isForAdd = true;
     },
     /*
     *从接口拿到的资源数据是一维平铺，这里根据sourceKey进行二维处理
@@ -108,6 +188,10 @@ export default {
      *获取某资源类别下的资源
      */
     getrsTypevalue(typeKey){
+       if(this.isSearchGet){
+         this.isSearchGet = false;
+         this.page = 1;
+       }
        this.$http({
         url: '/rs/detail/getallbyuser.do',
         method: 'get',
@@ -120,7 +204,10 @@ export default {
           for(var i=0; i<rData.length; i++){
              this.rsList.push(rData[i]);
           }
-          if(rData.length > 0)this.page++;
+          if(rData.length > 0){
+            this.page++;
+            this.getAttrList();
+          }
           wx.hideLoading();
         }
       });
@@ -158,13 +245,11 @@ export default {
        wx.navigateTo({url: "../../share/main"});
     },
     /**
-     * 获取更多待资源条目
+     * 获取更多资源条目
      */
     getMoreListBtn(){
-      this.requestCount = 0;
-      for(var i=0; i<this.rsTypeList.length; i++){
-         this.getrsTypevalue(this.typeKey);
-      }
+      if(this.isSearchGet)this.searchResourceBtn();
+      else this.getrsTypevalue(this.typeKey);
     }
   }
 }
@@ -193,6 +278,7 @@ export default {
     line-height: 30px;
     border-radius: 8px;
     background-color: #fff;
+    padding: 0 2px;
   }
   .search-btn{
     font-size: 16px;
