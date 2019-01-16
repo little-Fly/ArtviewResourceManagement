@@ -58,6 +58,14 @@
         #{lastTime,jdbcType=TIMESTAMP},
         #{status})
     </insert>
+    <update id="userUpdate" parameterType="com.grosup.ttzy.beans.UserBean">
+        update t_user set name = #{name},gender = #{gender},phone=#{phone},reason=#{reason},status=#{status}
+        where uid = #{uid}
+    </update>
+
+    <delete id="userDel" parameterType="java.lang.String">
+        delete from t_user where openId = #{openId}
+    </delete>
     
     <!-- 获取待审核人员的信息 -->
     <select id="queryUnCheckedUser" parameterType="map" resultType="com.grosup.ttzy.beans.UserBean">

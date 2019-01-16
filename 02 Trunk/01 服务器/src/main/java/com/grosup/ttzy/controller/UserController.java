@@ -12,6 +12,7 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,6 +50,7 @@ public class UserController {
     
     @RequestMapping(method = RequestMethod.POST, value = "/add.do")
     @ResponseBody
+    @Transactional
     public JSONObject userAdd(HttpServletRequest request) {
         LOGGER.info("Begin user add...");
         JSONObject result = new JSONObject();
@@ -74,6 +76,9 @@ public class UserController {
                 LOGGER.error("解密用户信息失败....");
                 throw new Exception();
             }
+            //注册之前先删除
+            userService.userDel(sessionBean.getOpenId());
+
             JSONObject userInfoJSON = JSONObject.fromObject(ret);
             LOGGER.info("ret value = " + userInfoJSON.toString());
             String unionId = (String) userInfoJSON.get("unionId");
@@ -98,7 +103,31 @@ public class UserController {
         }
         return result;
     }
-    
+
+    @RequestMapping(method = RequestMethod.POST, value = "/update.do")
+    @ResponseBody
+    public JSONObject userUpdate(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        try {
+            String gender = request.getParameter("gender");
+            String reason = request.getParameter("reason");
+            String phone = request.getParameter("phone");
+            String name = request.getParameter("name");
+            UserBean user = new UserBean();
+            user.setGender(Integer.parseInt(gender));
+            user.setPhone(phone);
+            user.setReason(reason);
+            user.setName(name);
+            user.setStatus(0);
+            userService.userUpdate(user);
+            result.put("code", CodeUtil.SUCCESS);
+        } catch (GrosupException e) {
+            result.put("code", CodeUtil.ERROR);
+            LOGGER.error("修改人员异常", e);
+        }
+        return result;
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/queryUnchecked")
     @ResponseBody
     public JSONObject queryUnCheckedUser() {
@@ -112,6 +141,7 @@ public class UserController {
                 for (UserBean userBean : uncheckUsers) {
                     JSONObject user = new JSONObject();
                     user.put("nickName", userBean.getNickName());
+                    user.put("name", userBean.getName());
                     user.put("uid", userBean.getUid());
                     data.add(user);
                 }
@@ -214,6 +244,7 @@ public class UserController {
                 JSONObject userInfo = new JSONObject();
                 userInfo.put("uid", user.getUid());
                 userInfo.put("nickName", user.getNickName());
+                userInfo.put("name", user.getName());
                 data.add(userInfo);
             }
             result.put("code", CodeUtil.SUCCESS);
@@ -245,6 +276,7 @@ public class UserController {
                 JSONObject userInfo = new JSONObject();
                 userInfo.put("uid", user.getUid());
                 userInfo.put("nickName", user.getNickName());
+                userInfo.put("name", user.getName());
                 data.add(userInfo);
             }
             result.put("code", CodeUtil.SUCCESS);
@@ -258,7 +290,7 @@ public class UserController {
     
     /**
      * 清空权限
-     * @param roleKey
+     * @param
      * @return
      */
     @RequestMapping(method = RequestMethod.POST, value = "/clear.do")

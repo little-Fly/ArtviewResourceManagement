@@ -68,6 +68,9 @@ public class LogController {
         JSONObject result = new JSONObject();
         JSONArray data = new JSONArray();
         try {
+            logger.info("uid = " + uid);
+            logger.info("pageSize = " + pageSize);
+            logger.info("pageNumber = " + pageNumber);
             Map<String, Object> pageMap = new HashMap<String, Object>();
             pageMap.put("indexStart", pageSize * (pageNumber-1));
             pageMap.put("pageSize", pageSize);
