@@ -23,24 +23,20 @@ export default {
     }
   },
   computed: {
-    userRoleListState () {
-      return this.$store.state.userRoleList;
-    },
+
   },
   mounted () {
     // 请求资源列表
     this.getResourseListData();
     this.isRoleVisitor();
   },
-  methods: {
-    //判断访问用户是不是游客, 黑名单方式
+  methods: {  
+
+    //判断访问用户是不是游客
     isRoleVisitor() {
-      if(this.$store.state.userRoleList.length < 1)return;
-      var vst=0; //
-      for (var i=0; i<this.$store.state.userRoleList.length;  i++) {
-        if(this.$store.state.userRoleList[i].roleName == "visitor")vst = 1;
+      if(this.$store.state.userAuditStatus == 4){
+        this.isVisitor = false;
       }
-      if(vst == 0)this.isVisitor = false;
     },
     getResourseListData () {
       this.$http({
@@ -59,22 +55,29 @@ export default {
       wx.navigateTo({url: "resourceView/main?typeKey=" + typeKey+"&typeName="+name})
     },
     clickVisitorTap(){
-      wx.showModal({
-        title: '提示', 
-        content: '你还没有进行实名注册，不能查看资源内容！/n现在注册？',
-        success: res =>{
-          if(res.confirm){//有两个注册入口，这里是其中之一
-            // 由于微信用户要与PC用户互通，这里注册需要得到用户授权获取高级信息
-            this.$tool.checkUserInfoAuth().then(() => {
+      if(this.$store.state.userAuditStatus == 1 || this.$store.state.userAuditStatus == 3){
+        var ctent = '你还没有进行实名注册，不能查看资源内容！现在注册？';
+        if(this.$store.state.userAuditStatus == 3)ctent = '你的注册被管理员拒绝，不能查看资源内容！可以到我的消息查看原因，也可以重新注册，现在注册？';
+        wx.showModal({
+          title: '提示', 
+          content: ctent,
+          success: res =>{
+            if(res.confirm){//有两个注册入口，这里是其中之一
+              // 由于微信用户要与PC用户互通，这里注册需要得到用户授权获取高级信息
+              this.$tool.checkUserInfoAuth().then(() => {
               // 用户未授权，进到授权页
-              console.log('已授权');
-              wx.navigateTo({url: "../my/register/main"})
-            }, () => {
-              this.$tool.goToAuthPage();
-            });
+                console.log('已授权');
+                wx.navigateTo({url: "../my/register/main"});
+              }, () => {
+                this.$tool.goToAuthPage();
+              });
+            }
           }
-        }
-      });
+        });
+      }
+      else if(this.$store.state.userAuditStatus == 2){
+        wx.showModal({title: '提示', content: '你的注册申请管理员还没有审批，不能查看资源！', showCancel: false});
+      }
     }
   }
 }
