@@ -168,6 +168,11 @@ public class UserController {
                 userRoleBean.setRoleKey("visitor");
                 userRoles.add(userRoleBean);
                 roleService.BatchdelUserRole(userRoles);
+
+                List<UserRoleBean> userRolesAdd = new ArrayList<UserRoleBean>();
+                userRoleBean.setRoleKey("common");
+                userRolesAdd.add(userRoleBean);
+                roleService.BatchAddUserRole(userRolesAdd);
             }
             result.put("code", CodeUtil.SUCCESS);
         } catch (GrosupException e) {
