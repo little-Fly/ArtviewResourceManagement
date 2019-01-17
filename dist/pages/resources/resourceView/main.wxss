@@ -1,0 +1,100 @@
+@import "../../../common/vendor.wxss";
+
+page {
+  background-color: #fff;
+}
+.search-box {
+  width: 100%;
+  background-color: #dddddd;
+  margin-bottom: 32rpx;
+}
+.search-input-box {
+  display: flex;
+  align-items: center;
+  margin: 8rpx 32rpx;
+  height: 72rpx;
+}
+.search-input {
+  width: 576rpx;
+  font-size: 32rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  border-radius: 16rpx;
+  background-color: #fff;
+}
+.search-btn {
+  font-size: 32rpx;
+  padding-left: 32rpx;
+}
+.add-search-conditions {
+  width: 100%;
+  height: 96rpx;
+  text-align: center;
+  font-size: 32rpx;
+  color: #fff;
+  line-height: 96rpx;
+  background-color: #f6923c;
+}
+.audit-btn {
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+  height: 60rpx;
+  padding: 0 30rpx;
+  line-height: 60rpx;
+}
+.audit-btn.for-ok {
+  color: white;
+  background-color: #67c23a;
+}
+.audit-btn.for-modify {
+  color: white;
+  background-color: #f6923c;
+}
+.audit-btn.for-refuse {
+  color: white;
+  background-color: #f56c6c;
+  margin-right: 0;
+}
+.space {
+  margin: 0 16rpx;
+}
+.line-block {
+  width: 100%;
+  margin: 32rpx 0;
+}
+.line-fill {
+  width: 100%;
+  padding: 16rpx 0;
+}
+.content-item {
+  padding: 16rpx 0;
+  font-size: 30rpx;
+}
+.resourcelist-wrap {
+  margin-bottom: 24rpx;
+}
+.resourcelist-item-wrap {
+  padding-bottom: 24rpx;
+  margin: 0 32rpx;
+  border-bottom: 2rpx solid #f56c6c;
+}
+.attr-type {
+  padding: 16rpx 0;
+  font-size: 32rpx;
+  color: #E64340;
+}
+.resource-name {
+  padding: 16rpx 0;
+  font-size: 40rpx;
+}
+.resource-image {
+  display: inline-block;
+  padding: 16rpx 0;
+  width: 200rpx;
+  height: 200rpx;
+}
+.sh-count {
+  color: #ff0000;
+}

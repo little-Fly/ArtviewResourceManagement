@@ -1,0 +1,82 @@
+@import "../../common/vendor.wxss";
+
+page {
+  background-color: #fff;
+}
+.function-btn-box {
+  display: inline-block;
+  width: 100%;
+  padding: 16rpx 32rpx;
+  vertical-align: middle;
+  text-align: right;
+}
+.function-btn {
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+  height: 60rpx;
+  padding: 0 30rpx;
+  line-height: 60rpx;
+  color: white;
+}
+.function-btn.for-select-template {
+  background-color: #67c23a;
+}
+.function-btn.for-create-page {
+  background-color: #f56c6c;
+  margin-right: 0;
+}
+.space {
+  margin: 0 16rpx;
+}
+.line-block {
+  width: 100%;
+  margin: 32rpx 0;
+}
+.line-fill {
+  width: 100%;
+  padding: 16rpx 0;
+}
+.content-item {
+  margin-left: 32rpx;
+  padding: 16rpx 0;
+  font-size: 30rpx;
+}
+.icon-group-box {
+  padding-top: 16rpx;
+  width: 40rpx;
+  display: inline-block;
+}
+.rs-icon {
+  width: 40rpx;
+  height: 40rpx;
+}
+.resourcelist-wrap {
+  margin: 0 32rpx;
+  margin-bottom: 24rpx;
+}
+.resourcelist-item-wrap {
+  display: flex;
+  width: 100%;
+  padding-bottom: 24rpx;
+  border-top: 2rpx solid #f56c6c;
+}
+.attr-type {
+  padding: 16rpx 0;
+  font-size: 32rpx;
+  color: #E64340;
+}
+.resource-name {
+  padding: 16rpx 0;
+  font-size: 40rpx;
+}
+.resource-image {
+  display: inline-block;
+  padding: 16rpx 0;
+  width: 200rpx;
+  height: 200rpx;
+}
+.sh-count {
+  color: #ff0000;
+}

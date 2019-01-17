@@ -1,0 +1,10 @@
+<template name="5c9a730e">
+  <view class="_div data-v-af337b5c">
+    <view class="_ul data-v-af337b5c container msg-list">
+      <view wx:key="index" key="{{index}}" class="_li data-v-af337b5c msg-item" wx:for="{{msgs}}" wx:for-index="index" wx:for-item="msg">
+        {{msg.report}}<label class="_span data-v-af337b5c space"></label>{{msg.date}}
+      </view>
+    </view>
+    <view class="_div data-v-af337b5c more-msgs"><label class="_span data-v-af337b5c get-more-msgs" bindtap="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}">查看更多</label></view>
+  </view>
+</template>

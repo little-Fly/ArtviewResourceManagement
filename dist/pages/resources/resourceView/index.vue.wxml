@@ -1,0 +1,27 @@
+<template name="1b11408e">
+  <view class="_div data-v-734ce4ca resourcelist-wrap">
+    <view class="_div data-v-734ce4ca search-box">
+      <view class="_div data-v-734ce4ca search-input-box"><input class="_input data-v-734ce4ca search-input" type="text" value="{{searchText}}" bindinput="handleProxy" maxlength="36" placeholder="请输入关键字" data-eventid="{{'0'}}" data-comkey="{{$k}}" />
+        <view class="_div data-v-734ce4ca search-btn" bindtap="handleProxy" data-eventid="{{'1'}}" data-comkey="{{$k}}">搜索</view>
+      </view>
+      <view class="_div data-v-734ce4ca add-search-conditions" bindtap="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}">增加搜索条件</view>
+    </view>
+    <block wx:for="{{rsList}}" wx:for-index="index" wx:for-item="item">
+      <view class="_div data-v-734ce4ca resourcelist-item-wrap content-item" key="{{index}}">
+        <block wx:for="{{item}}" wx:for-index="inx" wx:for-item="ss">
+          <view key="{{inx}}" class="_div data-v-734ce4ca">
+            <view wx:if="{{ss.attrType == 'picture'}}" class="_div data-v-734ce4ca resource-image"></view>
+            <view wx:elif="{{ss.attrType == 'video'}}" class="_div data-v-734ce4ca resource-video"></view>
+            <view wx:else class="_div data-v-734ce4ca content-item inline-block"><label class="_span data-v-734ce4ca item-title align-right inline-block">{{ss.attrName}}</label>：{{ss.attrValue}}
+            </view>
+          </view>
+        </block>
+        <view class="_div data-v-734ce4ca resource-image">
+          <image class="_image data-v-734ce4ca resource-image" src="../../../assets/images/resource_init.png" alt></image>
+        </view>
+        <view class="_div data-v-734ce4ca line-fill inline-block"><label class="_span data-v-734ce4ca audit-btn for-ok" bindtap="handleProxy" data-eventid="{{'3-'+index}}" data-comkey="{{$k}}">加入分享包 <label class="_span data-v-734ce4ca sh-count">{{shCount}}</label></label> <label class="_span data-v-734ce4ca space"></label><label class="_span data-v-734ce4ca space"></label><label class="_span data-v-734ce4ca space"></label><label class="_span data-v-734ce4ca space"></label> <label class="_span data-v-734ce4ca audit-btn for-refuse" bindtap="handleProxy" data-eventid="{{'4-'+index}}" data-comkey="{{$k}}">去分享</label></view>
+      </view>
+    </block>
+    <view class="_div data-v-734ce4ca line-block align-center inline-block"><label class="_span data-v-734ce4ca audit-btn for-ok" bindtap="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}">获取更多</label></view>
+  </view>
+</template>

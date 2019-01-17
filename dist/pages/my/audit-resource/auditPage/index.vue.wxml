@@ -1,0 +1,20 @@
+<template name="c8bb36d4">
+  <view class="_div data-v-556a8e32 resourcelist-wrap">
+    <block wx:for="{{rsList}}" wx:for-index="index" wx:for-item="item">
+      <view class="_div data-v-556a8e32 resourcelist-item-wrap content-item" key="{{index}}">
+        <view class="_div data-v-556a8e32 attr-type "><label class="_span data-v-556a8e32 align-right inline-block">资源类型</label>：{{item.typeName}}
+        </view>
+        <view class="_div data-v-556a8e32 resource-name">{{item.theFirstAttr.attrValue}}</view>
+        <block wx:for="{{item.data}}" wx:for-index="inx" wx:for-item="ss">
+          <view key="{{inx}}" class="_div data-v-556a8e32">
+            <view wx:if="{{ss.attrType == 'picture'}}" class="_div data-v-556a8e32 resource-image"></view>
+            <view wx:elif="{{ss.attrType == 'video'}}" class="_div data-v-556a8e32 resource-video"></view>
+            <view wx:else class="_div data-v-556a8e32 content-item inline-block"><label class="_span data-v-556a8e32 item-title align-right inline-block">{{ss.attrName}}</label>：{{ss.attrValue}}
+            </view>
+          </view>
+        </block>
+        <view class="_div data-v-556a8e32 resource-image">
+          <image class="_image data-v-556a8e32 resource-image" src="../../../../assets/images/resource_init.png" alt></image>
+        </view>
+        <view class="_div data-v-556a8e32 line-block">
+          <view class="_div data-v-556a8e32 line-fill inline-block"><label class="_span data-v-556a8e32 audit-input-title inline-block">审核意见：</label> <textarea class="_textarea data-v-556a8e32 audit-input inline-block" maxlength="128" placeholder="如：同意，请核实单价，请完善备注说明，这个不发了......" type="text" value="{{item.auditText}}" bindinput="handleProxy" data-eventid="{{'0-'+index}}" data-comkey="{{$k}}" /></view> <view wx:if="{{operType != 'ApprovalDel'}}" class="_div data-v-556a8e32 line-fill inline-block"><label class="_span data-v-556a8e32 audit-btn for-ok" bindtap="handleProxy" data-eventid="{{'1-'+index}}" data-comkey="{{$k}}">审核通过并发布</label> <label class="_span data-v-556a8e32 space"></label><label class="_span data-v-556a8e32 space"></label><label class="_span data-v-556a8e32 space"></label><label class="_span data-v-556a8e32 space"></label> <label class="_span data-v-556a8e32 audit-btn for-refuse" bindtap="handleProxy" data-eventid="{{'2-'+index}}" data-comkey="{{$k}}">不通过</label></view><view wx:else class="_div data-v-556a8e32 line-fill inline-block"><label class="_span data-v-556a8e32 audit-btn for-ok" bindtap="handleProxy" data-eventid="{{'3-'+index}}" data-comkey="{{$k}}">同意并立即删除</label> <label class="_span data-v-556a8e32 space"></label><label class="_span data-v-556a8e32 space"></label><label class="_span data-v-556a8e32 space"></label><label class="_span data-v-556a8e32 space"></label> <label class="_span data-v-556a8e32 audit-btn for-refuse" bindtap="handleProxy" data-eventid="{{'4-'+index}}" data-comkey="{{$k}}">不同意</label></view></view></view></block> <view wx:if="{{canMore == 'true'}}" class="_div data-v-556a8e32 line-block align-center inline-block"><label class="_span data-v-556a8e32 audit-btn for-ok" bindtap="handleProxy" data-eventid="{{'5'}}" data-comkey="{{$k}}">获取更多</label></view></view></template>

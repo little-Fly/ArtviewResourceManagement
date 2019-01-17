@@ -1,0 +1,1 @@
+<import src="/pages/my/audit-resource/auditPage/index.vue.wxml" /><template is="c8bb36d4" data="{{ ...$root['0'], $root }}"/>

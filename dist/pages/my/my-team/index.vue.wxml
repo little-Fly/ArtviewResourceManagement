@@ -1,0 +1,32 @@
+<template name="49adefdc">
+  <view class="_div data-v-4206b170 userlist-wrap">
+    <block wx:for="{{userList}}" wx:for-index="index" wx:for-item="item">
+      <view class="_div data-v-4206b170 userlist-item-wrap" key="{{index}}">
+        <view class="_div data-v-4206b170 userlist-item clearfix" bindtap="handleProxy" data-eventid="{{'1-'+index}}" data-comkey="{{$k}}">
+          <view wx:if="{{item.userStatus != '待审核'}}" class="_div data-v-4206b170 inline-block">
+            <view class="_div data-v-4206b170 user-info-title inline-block">
+              <view class="_div data-v-4206b170 user-info inline-block">
+                {{item.name+"("+item.nickName+")"}}<label class="_span data-v-4206b170 space"></label>{{item.gender}}<label class="_span data-v-4206b170 space"></label>{{item.phone}}
+              </view> <label wx:if="{{item.roles[0].roleKey != 'visitor'}}" class="_span data-v-4206b170 user_status_icon for_clear_auth_button align-right" bindtap="handleProxy" data-eventid="{{'0-'+index}}" data-comkey="{{$k}}">清空权限</label>
+            </view>
+            <view class="_div data-v-4206b170">
+              <block wx:for="{{item.roles}}" wx:for-index="cindex" wx:for-item="citem">
+                <image wx:if="{{citem.roleKey == 'visitor'}}" class="_img data-v-4206b170 roleKey-image" src="/assets/images/visitor.png" alt></image>
+                <image wx:if="{{citem.roleKey == 'common'}}" class="_img data-v-4206b170 roleKey-image" src="/assets/images/common.png" alt></image>
+                <image wx:if="{{citem.roleKey == 'admin'}}" class="_img data-v-4206b170 roleKey-image" src="/assets/images/admin.png" alt></image>
+                <image wx:if="{{citem.roleKey == 'writer'}}" class="_img data-v-4206b170 roleKey-image" src="/assets/images/writer.png" alt></image>
+                <image wx:if="{{citem.roleKey == 'checker'}}" class="_img data-v-4206b170 roleKey-image" src="/assets/images/auditor.png" alt></image>
+              </block>
+            </view>
+          </view>
+          <view wx:else class="_div data-v-4206b170 inline-block user-info-title">
+            <view class="_div data-v-4206b170 user-info inline-block">
+              {{item.name+"("+item.nickName+")"}}<label class="_span data-v-4206b170 space"></label>{{item.gender}}<label class="_span data-v-4206b170 space"></label>{{item.phone}}
+            </view> <label class="_span data-v-4206b170 space inline-block">待审核</label>
+          </view>
+        </view>
+        <view hidden="{{!(item.userStatus === '待审核' && item.showContent)}}" class="_div data-v-4206b170 collapse-body">
+          <view class="_div data-v-4206b170 content-item"><label class="_span data-v-4206b170 item-title align-right inline-block">注册理由</label>：{{register.reason}}
+          </view>
+          <view class="_div data-v-4206b170 content-item btn-wrap"><label class="_span data-v-4206b170 space"></label> <button class="_button data-v-4206b170 lr-mg-10" type="primary" size="mini" bindtap="handleProxy" data-eventid="{{'2-'+index}}" data-comkey="{{$k}}">审核通过</button> <label class="_span data-v-4206b170 space"></label> <button class="_button data-v-4206b170 lr-mg-10" type="warn" size="mini" bindtap="handleProxy" data-eventid="{{'3-'+index}}" data-comkey="{{$k}}">不能通过</button></view>
+          <view class="_div data-v-4206b170 content-item inline-block"><label class="_span data-v-4206b170 refuse-reason-title inline-block">不过原因：</label> <textarea class="_textarea data-v-4206b170 refuse-input inline-block" maxlength="128" placeholder="如：非公司员工，请用实名，信息不完整......" type="text" value="{{register.auditRefuseText}}" bindinput="handleProxy" data-eventid="{{'4-'+index}}" data-comkey="{{$k}}" /></view></view></view></block></view></template>
