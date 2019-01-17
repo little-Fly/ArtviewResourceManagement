@@ -58,6 +58,10 @@
 						<el-table :data="tableData"
 						          height="100%"
 						          stripe
+						          :header-cell-style="{
+							            color: '#000',
+	                                    fontSize: '1.1rem'
+									}"
 						          border
 						          @selection-change="handleSelectionChange"
 						          style="width: 100%">
@@ -68,12 +72,13 @@
 							<template v-for="(col ,index) in attrData">
 								<el-table-column
 										:prop="col.attrKey"
+										align="center"
 										:label="col.attrName">
 									<template slot-scope="scope">
 										<img v-if="(scope.row[col.attrKey]+'').indexOf('RFl') === 0"
 										     :src="`https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=`+scope.row[col.attrKey]"
 										     alt="" width="40" height="40">
-										<span v-else>{{scope.row[col.attrKey]}}</span>
+										<span v-else>{{scope.row[col.attrKey] | stateFilters}}</span>
 									</template>
 								</el-table-column>
 							</template>
@@ -155,6 +160,31 @@
                 attrLevel: ""
             };
         },
+        filters: {
+            stateFilters(data) {
+                let text = data;
+                switch (data) {
+                    case "Available":
+                        text = "可用";
+                        break;
+                    case "ApprovalAdd":
+                        text = "同意添加";
+                        break;
+                    case "ApprovalDel":
+                        text = "同意删除";
+                        break;
+                    case "ApprovalUpdate":
+                        text = "同意修改";
+                        break;
+                    case "ApprovalReject":
+                        text = "驳回";
+                        break;
+                    default:
+                        break;
+                }
+                return text;
+            }
+        },
         methods: {
             /**
              * 点击资源类别 获取资源
@@ -184,6 +214,7 @@
                                 ];
                                 this.attrData = [...this.attrData, ...arr];
                             }
+                            /*********************************************************************************/
                             this.getResTableDetail(0, 10);
                         }
                     }, (error) => {
@@ -354,6 +385,25 @@
                     this.$message({
                         type: "warning",
                         message: "请先选择需要修改的数据!"
+                    });
+                    return;
+                }
+                let canUpdate = false;
+                switch (this.multipleSelection[0].attrState) {
+                    case "ApprovalReject":
+                        canUpdate = true;
+                        break;
+                    case "Available":
+                    case "ApprovalAdd":
+                    case "ApprovalDel":
+                    case "ApprovalUpdate":
+                    default:
+                        break;
+                }
+                if (!canUpdate) {
+                    this.$message({
+                        type: "warning",
+                        message: "审核通过的数据不能修改!"
                     });
                     return;
                 }
