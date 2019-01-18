@@ -1,0 +1,20 @@
+{{max-resource-number=10}}	：	描述模板支持的最大资源数量10
+resource-1	：	描述页面上的第1个资源展示块
+resource-1-open	：	描述页面上的第1个资源展示块，处于显示状态
+resource-3-close	：	描述页面上的第3个资源展示块，处于隐藏状态
+resource-1-col-1-name	:	资源1中的第1个表头名
+resource-1-value-1	：	资源1中的第1个表头下的内容
+resource-3-col-2-name	:	资源3中的第2个表头名
+resource-3-value-2	：	资源3中的第2个表头下的内容
+resource-2-picture-close	：	资源2中的图片隐藏
+resource-2-picture-url	：	资源2中的图片url
+resource-2-vedio-open	:	资源2中的视频打开
+resource-2-video-url		：	资源2中的视频url
+
+操作说明：
+1、读取最大支持资源数，资源包中的资源大于这个数的部分，就丢掉；
+2、通过替换字符串的方式，依次将资源包中的属性值替换到相应位置；
+3、模板中未定义的表头，其资源属性值丢掉；
+4、通过替换字符串的方式，打开要显示的资源块，图片，视频；
+5、生产分享文件HTML
+6、分享文件、图片、视频必须是公开可访问
