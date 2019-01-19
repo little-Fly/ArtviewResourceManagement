@@ -86,6 +86,7 @@ export default {
       this.formObj.name = this.$store.state.userInfo.name;
       this.formObj.phone = this.$store.state.userInfo.phone;
       this.formObj.reason = this.$store.state.userInfo.reason;
+      this.selectSexIndex = this.$store.state.userInfo.gender;
     }
   },
   methods: {

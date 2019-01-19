@@ -59,9 +59,11 @@ export default {
             //拿到识别码后，获取用户审核状态值 1:未注册 2：审核中 3:被拒绝 4: 已通过
             this.updateUserRole(res.status);
             // 如果已注册
-            if (this.userAuditStatus === 4) {
+            if(this.userAuditStatus != 1){
               // 本地储存用户基础信息
-              this.$store.commit('updateUserInfo', res.userInfo);
+              this.$store.commit('updateUserInfo', res.userInfo);              
+            }
+            if (this.userAuditStatus === 4) {
               // 拿用户的用户角色列表
               this.updateRoleList(res.userInfo.roles);
               // 更新用户权限树
@@ -70,7 +72,6 @@ export default {
               console.log(this.userRoleList, this.$store);
             } else { // 其他三种状态的页面结构一样
               // 同步公共状态管理
-              this.$store.commit('updateUserAuditStatus', this.userAuditStatus);
               this.$store.commit('updateRoleAuthTree', ['unregister']); // 游客 == 未注册
             }
              // 请求资源列表
