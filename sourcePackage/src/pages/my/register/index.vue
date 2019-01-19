@@ -3,7 +3,7 @@
     <div class="zan-panel">
       <zan-field v-bind="Object.assign({}, {rightTitle: true, maxLength: 20}, handleFunctions, registerObj.name)" :value="formObj.name"/>
       <div class="zan-cell zan-field">
-        <div class="zan-field__title align-right">性别</div>
+        <div class="zan-field__title align-right">性别：</div>
         <picker class="zan-field__input zan-field__bd" @change="bindPickerChange" range-key='sexName' :value="selectSexIndex" :range="objectArray">
           {{objectArray[selectSexIndex].sexName}}
         </picker>
@@ -33,19 +33,19 @@ export default {
       registerObj: {
         name: {
           // focus: true,
-          title: '姓名',
+          title: '姓名：',
           placeholder: '请输入您的名字',
           componentId: 'name'
         },
         phone: {
           error: true,
-          title: '联系电话',
+          title: '联系电话：',
           inputType: 'number',
           placeholder: '请输入手机号',
           componentId: 'phone'
         },
         reason: {
-          title: '注册理由',
+          title: '注册理由：',
           type: 'textarea',
           placeholder: '请输入申请注册的原因',
           componentId: 'reason'
