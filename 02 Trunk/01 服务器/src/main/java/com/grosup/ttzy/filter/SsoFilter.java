@@ -47,13 +47,14 @@ public abstract class SsoFilter implements Filter {
 	public final void doFilter(ServletRequest sRequest,
 			ServletResponse sResponse, FilterChain chain) throws IOException,
 			ServletException {
-		log.debug("SSO: Do Befor Fiter.");
+		log.info("SSO: Do Befor Fiter.");
 
 		HttpServletRequest request = (HttpServletRequest) sRequest;
 		HttpServletResponse response = (HttpServletResponse) sResponse;
 		this.doBeforFilter(request, response);
 		// System.out.println(RequestUtil.getCurrentUrl(request));
 
+		log.info("request url is," + request.getRequestURI());
 		// 如果URL属于排除之列，直接执行嵌套Filter和Filter后期操作，并且返回。
 		if (this.isExcludeUrl(request)) {
 			chain.doFilter(request, response);
