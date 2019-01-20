@@ -1,5 +1,7 @@
 
 
+
+
 	$(document).ready(function(){
 		
 		init();
@@ -11,21 +13,24 @@
 				  share(data[0].data);
 			  }else
 			  {
-				  error(data[0]);
+				  errorAll(data[0]);
 			  }
 		});
 	});
 
-	function init()
+	function share(jsonstr)
 	{
-		$("#noshare").css("width",document.body.clientWidth);
-		$("#noshare").hide();
-		$("#shareDiv").hide();
+		var data = $.parseJSON(jsonstr)[0];
+		$("#shareDiv").css("width",document.body.clientWidth);
+		loading(data.shareName);
+		getResource(data.resourceListJson)
+		show();
 	}
 
+	
 	function getResource(resourceKey)
 	{
-		$.getJSON("../../../rs/share/getresource.do", { resourceKey: resourceKey, time: getMyTime() },
+		$.getJSON("../../../rs/share/getresource.do", { "resourcekey": resourceKey, time: getMyTime() },
           function(data){
 
 		  if(data[0].state=="successful")
@@ -33,29 +38,9 @@
 			  addShare(data[0].data);
 		  }else
 		  {
-			  error(data[0]);
+			  errorAll($.parseJSON(data[0])[0]);
 		  }
 		});
-	}
-
-	function share(jsonstr)
-	{
-		var data = $.parseJSON(jsonstr)[0];
-		$("#shareDiv").css("width",document.body.clientWidth);
-		$("#noshare").hide();
-		$("#shareDiv").show();
-		document.title=data.shareName;
-		getResource(data.resourceListJson)
-
-	}
-
-	function error(jsonstr)
-	{
-		var data = $.parseJSON(jsonstr)[0];
-		$("#noshare").css("width",document.body.clientWidth);
-		$("#noshare").show();
-		$("#shareDiv").hide();
-		$("#shareDiv").append("<br>" + data.message);
 	}
 	
     function addShare(jsonstr)
@@ -66,14 +51,13 @@
 		{
 			if(data[i].attrType == "default")
 			{
-				$($("#table_share").children()[1]).append("<p>"+data[i].attrName+" : "+data[i].attrValue+"</p>");
-			}else if(data[i].attrType == "1")
+				addTextResources(data[i].resourceKey, data[i].attrName, data[i].attrValue);
+			}else if(data[i].attrType == "picture")
 			{
-				var $td = $("#table_default").clone();       //增加一行,克隆第一个对象
-				$td.show();
-				$($td.children[0]).append(data[i].attrName);
-				$($td.children[1]).append(data[i].attrValue);
-				$(".table").append($td);
+				addpictureResources(data[i].resourceKey, data[i].attrName, data[i].attrValue);
+			}else if(data[i].attrType == "video")
+			{
+				addVideoResources(data[i].resourceKey, data[i].attrName, data[i].attrValue);
 			}
 		}
 	}
