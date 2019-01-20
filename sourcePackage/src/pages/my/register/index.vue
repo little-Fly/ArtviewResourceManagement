@@ -173,15 +173,18 @@ export default {
         iv: this.$store.state.encryptedObj.iv,
         encryptedData: this.$store.state.encryptedObj.encryptedData
       };
-      this.$store.commit('updateUserInfo', sendData);      // 本地储存用户基础信息
       if(this.$store.state.userAuditStatus == 3){//用户注册被拒绝了，这里他再次提交
         sendUrl = '/wx/user/update.do';
         sendData = {
+          uid: this.$store.state.userInfo.uid,
           name: this.formObj.name,
           gender: this.formObj.sex,
           phone: this.formObj.phone,
           reason: this.formObj.reason
         };
+      }
+      else{ //首次注册
+         this.$store.commit('updateUserInfo', sendData);      // 本地储存用户基础信息
       }
       console.log(sendData);
       this.$http({
