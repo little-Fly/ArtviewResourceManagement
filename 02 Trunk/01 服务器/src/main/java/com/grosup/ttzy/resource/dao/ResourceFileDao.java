@@ -23,18 +23,36 @@ public class ResourceFileDao implements ResourceConstant {
 
 	Map<String, ResourceFileDto> map = Collections.synchronizedMap(new HashMap<String, ResourceFileDto>());
 
-	private String resourceKey = RESOURCE_DETAIL + "示例值ID"; // long Y 主键，资源Id
+	private String resourceKey = RESOURCE_DETAIL + "picture"; // long Y 主键，资源Id
 	private String attrKey = RESOURCE_ATTR + "示例表头ID"; // varchar Y 主键，属性Key
 	private String typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
 	private String attrName = "示例表头"; // varchar Y 属性名
-	private String fileKey = RESOURCE_FILE + "ExamplesFile"; // varchar Y 主键，资源Id
+	private String fileKey = RESOURCE_FILE + "picture"; // varchar Y 主键，资源Id
 	private String directory = ""; // varchar Y 存储的目录
-	private String relativePath = RESOURCE_FILE + "ExamplesFile.png"; // varchar 相对路径
+	private String relativePath = RESOURCE_FILE + "1381901148036.jpg"; // varchar 相对路径
 	private long lastmodifytime = 0; // long Y 最后修改时间
 
 	@PostConstruct
 	public void initMethod() {
 		ResourceFileDto resourceFileDto = new ResourceFileDto();
+		resourceFileDto.setTypeKey(typeKey);
+		resourceFileDto.setAttrKey(attrKey);
+		resourceFileDto.setResourceKey(resourceKey);
+		resourceFileDto.setAttrName(attrName);
+		resourceFileDto.setFileKey(fileKey);
+		resourceFileDto.setDirectory(directory);
+		resourceFileDto.setRelativePath(relativePath);
+		resourceFileDto.setLastmodifytime(lastmodifytime);
+		map.put(fileKey, resourceFileDto);
+		resourceFileDto = new ResourceFileDto();
+		resourceKey = RESOURCE_DETAIL + "video"; // long Y 主键，资源Id
+		attrKey = RESOURCE_ATTR + "示例表头ID"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头"; // varchar Y 属性名
+		fileKey = RESOURCE_FILE + "video"; // varchar Y 主键，资源Id
+		directory = ""; // varchar Y 存储的目录
+		relativePath = RESOURCE_FILE + "EP40.mp4"; // varchar 相对路径
+		lastmodifytime = 0; // long Y 最后修改时间
 		resourceFileDto.setTypeKey(typeKey);
 		resourceFileDto.setAttrKey(attrKey);
 		resourceFileDto.setResourceKey(resourceKey);

@@ -22,14 +22,14 @@ public class ResourceShareServiceImp implements ResourceShareService {
 		resourceShareDao.create(json);
 	}
 
-	public void add(String json) {
+	public ResourceShareDto add(String json) {
 		ResourceShareDto resourceDefDto = resourceShareDao.create(json);
 		if (resourceDefDto != null) {
 			resourceShareDao.add(resourceDefDto);
 		} else {
 			log.error("resourceDefService add resourceDefDto is null. shareKey json:" + json);
 		}
-
+		return resourceDefDto;
 	}
 
 	public void del(String shareKey) {
