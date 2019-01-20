@@ -15,6 +15,7 @@
 <script src="../../../static/js/jquery-3.3.1.js"></script>
 <script src="../share-v1r1c00.js"></script>
 <link href="../share-v1r1c00.css" rel='stylesheet' />
+<script src="../../../static/js/qrcode.js"></script>
 <style type="text/css">
 </style>
 
@@ -28,6 +29,7 @@
 		$("#noshare").hide();
 		$("#loading").hide();
 		$("#shareDiv").hide();
+		$("#qrCodeAll").hide();
 	}
 
 	function loading(title) {
@@ -41,6 +43,12 @@
 		$("#noshare").hide();
 		$("#loading").hide();
 		$("#shareDiv").show();
+		var url = window.location.href;
+		new QRCode(document.getElementById('qrCode'), url);
+		$("#qrCodeAll").show();
+		var margin = ($("#qrCode").height() - $("#qrCodeIco").height()) / 2; //控制Logo图标的位置
+		$("#qrCodeIco").css("margin", margin);
+		
 	}
 
 	function errorAll(data) {
@@ -107,6 +115,13 @@
 	<div id='shareDiv' class='swipe'></div>
 	<div id='loading'>数据请求中。</div>
 	<div id='noshare'>内容不存在，资源已下线。</div>
+	
+	<div id="qrCodeAll">
+	<p>分享内容，请截图二维码部分转发</p>
+	<div id="qrCode">
+	<img id="qrCodeIco" src="../../../static/favicon.png" style="position: absolute;width: 30px; height: 30px;" />
+	</div>
+	</div>
 	<table id='shareTable' class="table" border="0">
 		<thead>
 			<tr>
