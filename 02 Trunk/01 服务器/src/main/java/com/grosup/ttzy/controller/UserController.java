@@ -109,11 +109,13 @@ public class UserController {
     public JSONObject userUpdate(HttpServletRequest request) {
         JSONObject result = new JSONObject();
         try {
+            long uid = Long.parseLong(request.getParameter("uid"));
             String gender = request.getParameter("gender");
             String reason = request.getParameter("reason");
             String phone = request.getParameter("phone");
             String name = request.getParameter("name");
             UserBean user = new UserBean();
+            user.setUid(uid);
             user.setGender(Integer.parseInt(gender));
             user.setPhone(phone);
             user.setReason(reason);
