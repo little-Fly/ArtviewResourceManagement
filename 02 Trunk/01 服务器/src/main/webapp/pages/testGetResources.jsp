@@ -104,6 +104,8 @@
 			str+=data[i].resourceKey;
 			str+=": ";
 			str+=data[i].attrValue;
+			str+="， 状态：";
+			str+=data[i].attrState;
 			str+="</br>";
 		}
 		
