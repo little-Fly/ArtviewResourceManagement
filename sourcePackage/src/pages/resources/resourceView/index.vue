@@ -244,7 +244,7 @@ export default {
         wx.showModal({title: '提示', content: '选些资源才能打开分享包', showCancel: false});
         return;
       }
-       wx.navigateTo({url: "../../share/main"});
+       wx.navigateTo({url: "../../share/main?rsTypeName=" + this.typeName});
     },
     /**
      * 获取更多资源条目

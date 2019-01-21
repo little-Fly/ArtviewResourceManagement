@@ -2,7 +2,9 @@
   <div class="resourcelist-wrap">
     <div class="function-btn-box">
       <span class="function-btn for-select-template" @click="selectTemplate()">选取模板</span>
-      <span class="space"></span><span class="space"></span>
+      <span class="space"></span>
+      <span class="function-btn for-select-template" @click="creatShareBitmap()">生成二维码</span>
+      <span class="space"></span>
       <span class="function-btn for-create-page" @click="createSharePage()">生成分享页面</span>
     </div>
     <template v-for="(item, index) in shRsList">
@@ -36,15 +38,23 @@
 export default {
   data () {
     return {
-      shRsList: [] //待分享资源列表
+      shRsList: [], //待分享资源列表
+      srTypeName: ''
     }
   },
 
   mounted () {
-   this.shRsList = this.$store.state.myShareBag;
+    let paramsObj = this.$tool.getOptions();
+    this.rsTypeName = paramsObj.rsTypeName;
+    this.shRsList = this.$store.state.myShareBag;
   },
+
   methods: {
 
+    creatShareBitmap(){
+      var tUrl = "https://www.hwyst.net/ttzy/pages/share/template/template0.jsp";
+      wx.navigateTo({url: "erweima/main?shareUrl=" + tUrl + "&rsTypeName=" + this.rsTypeName}) ;
+    },
     searchResourceBtn(){
       
     },
