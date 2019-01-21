@@ -2,7 +2,9 @@
   <div class="resourcelist-wrap">
     <div class="function-btn-box">
       <span class="function-btn for-select-template" @click="selectTemplate()">选取模板</span>
-      <span class="space"></span><span class="space"></span>
+      <span class="space"></span>
+      <span class="function-btn for-select-template" @click="creatShareBitmap()">生成二维码</span>
+      <span class="space"></span>
       <span class="function-btn for-create-page" @click="createSharePage()">生成分享页面</span>
     </div>
     <template v-for="(item, index) in shRsList">
@@ -13,24 +15,19 @@
           <image  class="rs-icon" src="../../assets/images/up.png" alt="" @click="upResource(index)"></image>
           <image  class="rs-icon" src="../../assets/images/down.png" alt="" @click="downResource(index)"></image>
         </div>
-        <div class="inline-block">
+        <div class="item-box">
           <template v-for="(ss, inx) in item">
-            <div :key='inx'>
-              <div v-if="ss.attrType == 'picture'" class="resource-image  content-item">
-
+              <div v-if="ss.attrType == 'picture'" class="content-item">
+                <image  class="resource-image" :src="ss.attrValue" alt=""></image>
               </div>
-              <div v-else-if="ss.attrType == 'video'" class="resource-video  content-item">
-              
+              <div v-else-if="ss.attrType == 'video'" class="content-item">
+                <video :src="ss.attrValue" controls="controls" width="100%" height="180"></video>
               </div>
-              <div v-else class="content-item inline-block">
-                <span class="item-title align-right inline-block">{{ss.attrName}}</span>：{{ss.attrValue}}
+              <div v-else class="content-item">
+                <span class="item-title">{{ss.attrName}}：</span>
+                <span class="item-value">{{ss.attrValue}}</span>
               </div>
-            </div>
           </template>
-        
-          <div  class="resource-image  content-item">
-            <image  class="resource-image" src="../../assets/images/resource_init.png" alt=""></image>
-          </div>
         </div>
       </div>
     </template>
@@ -41,15 +38,23 @@
 export default {
   data () {
     return {
-      shRsList: [] //待分享资源列表
+      shRsList: [], //待分享资源列表
+      srTypeName: ''
     }
   },
 
   mounted () {
-   this.shRsList = this.$store.state.myShareBag;
+    let paramsObj = this.$tool.getOptions();
+    this.rsTypeName = paramsObj.rsTypeName;
+    this.shRsList = this.$store.state.myShareBag;
   },
+
   methods: {
 
+    creatShareBitmap(){
+      var tUrl = "https://www.hwyst.net/ttzy/pages/share/template/template0.jsp";
+      wx.navigateTo({url: "erweima/main?shareUrl=" + tUrl + "&rsTypeName=" + this.rsTypeName}) ;
+    },
     searchResourceBtn(){
       
     },
@@ -126,6 +131,7 @@ export default {
 <style  lang="scss" rel="stylesheet/scss" scope>
   
   page{
+   width:100%;
     background-color: #fff;
   }
   .function-btn-box{
@@ -163,11 +169,6 @@ export default {
     width: 100%;
     padding: 8px 0px;
   }
-  .content-item{
-    margin-left: 16px;
-    padding: 8px 0px;
-    font-size: 15px;
-  }
   .icon-group-box{
     padding-top: 8px;
     width: 20px;
@@ -177,30 +178,48 @@ export default {
     width: 20px;
     height: 20px;
   }
+  .content-item{
+    width: 100%;
+    display: flex;
+    padding: 8px 0px;
+    font-size: 15px;
+  }
+  .item-title{
+    display: inline-block;
+    width: 15%;
+    text-align: right;
+    word-break: break-all;
+  }
+  .item-value{
+    display: inline-block;
+    width: 85%;
+    text-align: left;
+    word-break: break-all;
+    margin: 0 8px;
+  }
   .resourcelist-wrap {
-    margin: 0 16px;
+    width: 100%;
     margin-bottom: 12px;
   }
   .resourcelist-item-wrap{
     display: flex;
-    width: 100%;
-    padding-bottom: 12px;
+    width:90%;
+    padding-top: 16px;
     border-top: 1px solid #f56c6c;
+    margin-left: 20px;
+  }
+  .item-box{
+    width:100%;
+    padding-left: 8px;
   }
   .attr-type{
     padding: 8px 0px;
     font-size: 16px;
     color: #E64340;
   }
-  .resource-name{
-    padding: 8px 0px;
-    font-size: 20px;
-  }
   .resource-image{
-    display: inline-block;
-    padding: 8px 0px;
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: 180px;
   }
   .sh-count{
     color: #ff0000;

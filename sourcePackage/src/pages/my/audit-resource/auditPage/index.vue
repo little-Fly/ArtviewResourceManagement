@@ -1,33 +1,30 @@
 ﻿<template>
   <div class="resourcelist-wrap">
     <template v-for="(item, index) in rsList">
-      <div class="resourcelist-item-wrap content-item" :key='index'>
+      <div class="resourcelist-item-wrap" :key='index'>
         <div class="attr-type ">
           <span class="align-right inline-block">资源类型</span>：{{item.typeName}}
         </div>
-        <div class="resource-name">{{item.theFirstAttr.attrValue}}</div>
-        
         <template v-for="(ss, inx) in item.data">
           <div :key='inx'>
-            <div v-if="ss.attrType == 'picture'" class="resource-image">
-              
+            <div v-if="ss.attrType == 'picture'" class="content-item">
+              <image  class="resource-image" :src="ss.attrValue" alt=""></image>
+              <span class="item-level">{{ss.attrLevel}}</span>
             </div>
-            <div v-else-if="ss.attrType == 'video'" class="resource-video">
-              
+            <div v-else-if="ss.attrType == 'video'" class="content-item">
+              <video :src="ss.attrValue" controls="controls" width="85%" height="180"></video>
+              <span class="item-level">{{ss.attrLevel}}</span>
             </div>
-            <div v-else class="content-item inline-block">
-              <span class="item-title align-right inline-block">{{ss.attrName}}</span>：{{ss.attrValue}}
+            <div v-else class="content-item">
+              <span class="item-title">{{ss.attrName}}：</span>
+              <span class="item-value">{{ss.attrValue}}</span>
+              <span class="item-level">{{ss.attrLevel}}</span>
             </div>
           </div>
         </template>
-        <div  class="resource-image">
-          <image  class="resource-image" src="../../../../assets/images/resource_init.png" alt=""></image>
-        </div>
-        <div class="content-item inline-block">
-          <span class="item-title align-right inline-block">查看权限</span>：{{item.authorize}}
-        </div>
+
         <div class="line-block">
-          <div class="line-fill inline-block">
+          <div class="content-item">
             <span class="audit-input-title inline-block">审核意见：</span>
             <textarea class="audit-input inline-block" maxlength="128"  placeholder="如：同意，请核实单价，请完善备注说明，这个不发了......" type="text" v-model="item.auditText"></textarea>
           </div>
@@ -56,6 +53,7 @@ export default {
 
   data () {
     return {
+      sampleImg: "../../../../assets/images/resource_init.png",
       operType:'',
       page: 1,
       rowNumbers: 5,
@@ -95,11 +93,10 @@ export default {
       for(;;){
         if(data.length < 1)break;
         var key = data[0].resourceKey;
-        dList.push(data[0]);
-        data.splice(0,1);
         var i=0;
         for(;;){
           if(key == data[i].resourceKey){
+            data[i].attrLevel = this.getAuthorizeWord(data[i].attrLevel);
             dList.push(data[i]);
             data.splice(i,1);
           }
@@ -156,17 +153,9 @@ export default {
           var auditList = this.attrStateFilter(this.operType, saList);
           wx.hideLoading();
           for(var j=0; j<auditList.length; j++){
-             var vdata = [];
-             for(var i=1; i<auditList[j].length; i++){
-               vdata.push(auditList[j][i]);
-             }
              this.rsList.push({
                 typeName: typeName, 
-                theFirstAttr: {
-                   attrName: auditList[j][0].attrName, 
-                   attrValue:auditList[j][0].attrValue},
-                data: vdata,
-                authorize: this.getAuthorizeWord(auditList[j][0].attrLevel),
+                data: auditList[j],
                 auditText: ''
              });
            }
@@ -252,6 +241,7 @@ export default {
 <style  lang="scss" rel="stylesheet/scss" scope>
   
   page{
+    width:100%;
     background-color: #fff;
   }
   .audit-btn{
@@ -279,20 +269,13 @@ export default {
   .audit-input{
     font-size: 13px;
     height: 48px;
-    width: 256px;
+    width: 254px;
     padding: 0 5px;
     line-height: 18px;
     border: 1px solid #999999;
     maxlength: 32px;
     fixed: true;
     color: #000;
-  }
-  .audit-input-title{
-    padding-top: 0;
-    margin-top: 0;
-    height: 48px;
-    text-align : right;
-    vertical-align: top;
   }
   .space{
     margin: 0px 8px;
@@ -306,13 +289,35 @@ export default {
     padding: 8px 0px;
   }
   .content-item{
+    width: 100%;
+    display: flex;
     padding: 8px 0px;
     font-size: 15px;
   }
+  .item-title{
+    display: inline-block;
+    width: 15%;
+    text-align: right;
+    word-break: break-all;
+  }
+  .item-value{
+    display: inline-block;
+    width: 70%;
+    text-align: left;
+    word-break: break-all;
+    margin: 0 8px;
+  }
+  .item-level{
+    display: inline-block;
+    width: 15%;
+    text-align: right;
+  }
   .resourcelist-wrap {
+    width: 100%;
     margin-bottom: 12px;
   }
   .resourcelist-item-wrap{
+    width:90%;
     padding-bottom: 12px;
     margin: 0 16px;
     border-bottom: 1px solid #f56c6c;
@@ -327,7 +332,7 @@ export default {
     font-size: 20px;
   }
   .resource-image{
-    width: 100px;
-    height: 100px;
+    width: 85%;
+    height: 180px;
   }
 </style>

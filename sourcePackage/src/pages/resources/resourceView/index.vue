@@ -8,23 +8,21 @@
       <div class="add-search-conditions" @click="addSearchConditions()">增加搜索条件</div>
     </div>
     <template v-for="(item, index) in rsList">
-      <div class="resourcelist-item-wrap content-item" :key='index'>
+      <div class="resourcelist-item-wrap" :key='index'>
         <template v-for="(ss, inx) in item">
           <div :key='inx'>
-            <div v-if="ss.attrType == 'picture'" class="resource-image">
-              
+            <div v-if="ss.attrType == 'picture'" class="content-item">
+              <image  class="resource-image" :src="ss.attrValue" alt=""></image>
             </div>
-            <div v-else-if="ss.attrType == 'video'" class="resource-video">
-              
+            <div v-else-if="ss.attrType == 'video'" class="content-item">
+              <video :src="ss.attrValue" controls="controls" width="100%" height="180"></video>
             </div>
-            <div v-else class="content-item inline-block">
-              <span class="item-title align-right inline-block">{{ss.attrName}}</span>：{{ss.attrValue}}
+            <div v-else class="content-item">
+              <span class="item-title">{{ss.attrName}}：</span>
+              <span class="item-value">{{ss.attrValue}}</span>
             </div>
           </div>
         </template>
-        <div  class="resource-image">
-          <image  class="resource-image" src="../../../assets/images/resource_init.png" alt=""></image>
-        </div>
         <div class="line-fill inline-block">
             <span class="audit-btn for-ok" @click="addShareBagBtn(index)">加入分享包
               <span class="sh-count">{{shCount}}</span>
@@ -92,13 +90,6 @@ export default {
       words = words.replace(/:/g, '：');
       var wList = words.split('，');
       var searchWordList = [];
-    /*
-     *送往后台的搜索条件字符串
-     *searchWordList = [{
-     *    name: "示例表头1", //属性字表头名
-     *    word: "匹配我" //在此列中将要匹配的内容
-     *}]
-     */
       for(var i=0; i<wList.length; i++){
         var atList = wList[i].split('：');
         if(atList.length == 2){
@@ -129,6 +120,17 @@ export default {
         this.page = 1;
       }
       var searchList = this.cutTheResearchWord();
+    /*
+     *送往后台的搜索条件字符串
+     *    searchkey: {"示例表头1":"add", "示例表头2":"2"}, //JSON - 属性字表头名 : 在此列中将要匹配的内容
+     */
+      var sendData = "{";
+      for(var i=0; i<searchList.length; i++){
+        sendData +='\"' + searchList[i].name + '\"' + ":" + '\"' + searchList[i].word + '\"';
+        if((i+1) < searchList.length)sendData += ",";
+      }
+      sendData += "}";
+      sendData = JSON.parse(sendData);
       this.$http({
         url: '/rs/search/searchbyuser.do',
         method: 'get',
@@ -136,9 +138,10 @@ export default {
           typekey: this.typeKey,
           start: (this.page-1)*this.rowNumbers,
           len: this.rowNumbers,
-          searchkey: this.cutTheResearchWord()
+          searchkey: sendData
         },
         success: res => {
+          this.rsList = [];
           var rData = this.changTheSourceArray(res.data);
           for(var i=0; i<rData.length; i++){
              this.rsList.push(rData[i]);
@@ -148,6 +151,7 @@ export default {
             this.getAttrList();
           }
           wx.hideLoading();
+          if(this.rsList.length < 1)wx.showToast({title: '没有找到', icon: "loading"});
         }
       });
     },
@@ -166,8 +170,6 @@ export default {
       for(;;){
         if(data.length < 1)break;
         var key = data[0].resourceKey;
-        dList.push(data[0]);
-        data.splice(0,1);
         var i=0;
         for(;;){
           if(key == data[i].resourceKey){
@@ -242,7 +244,7 @@ export default {
         wx.showModal({title: '提示', content: '选些资源才能打开分享包', showCancel: false});
         return;
       }
-       wx.navigateTo({url: "../../share/main"});
+       wx.navigateTo({url: "../../share/main?rsTypeName=" + this.typeName});
     },
     /**
      * 获取更多资源条目
@@ -258,6 +260,7 @@ export default {
 <style  lang="scss" rel="stylesheet/scss" scope>
   
   page{
+    width:100%;
     background-color: #fff;
   }
   .search-box{
@@ -327,31 +330,37 @@ export default {
     padding: 8px 0px;
   }
   .content-item{
+    width: 100%;
+    display: flex;
     padding: 8px 0px;
     font-size: 15px;
   }
+  .item-title{
+    display: inline-block;
+    width: 15%;
+    text-align: right;
+    word-break: break-all;
+  }
+  .item-value{
+    display: inline-block;
+    width: 85%;
+    text-align: left;
+    word-break: break-all;
+    margin: 0 8px;
+  }
   .resourcelist-wrap {
+    width: 100%;
     margin-bottom: 12px;
   }
   .resourcelist-item-wrap{
+    width:90%;
     padding-bottom: 12px;
-    margin: 0 16px;
+    margin: 16px;
     border-bottom: 1px solid #f56c6c;
   }
-  .attr-type{
-    padding: 8px 0px;
-    font-size: 16px;
-    color: #E64340;
-  }
-  .resource-name{
-    padding: 8px 0px;
-    font-size: 20px;
-  }
   .resource-image{
-    display: inline-block;
-    padding: 8px 0px;
-    width: 100px;
-    height: 100px;
+    width: 100%;
+    height: 180px;
   }
   .sh-count{
     color: #ff0000;

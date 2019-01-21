@@ -1,9 +1,10 @@
 ﻿{
   "pages": [
+    "pages/resources/main",
     "pages/my/main",
     "pages/authorized/main",
-    "pages/resources/main",
     "pages/resources/resourceView/main",
+    "pages/resources/searchView/main",
     "pages/share/main",
     "pages/my/my-team/main",
     "pages/my/logs/main",

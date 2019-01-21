@@ -3,7 +3,7 @@
     <div class="zan-panel">
       <zan-field v-bind="Object.assign({}, {rightTitle: true, maxLength: 20}, handleFunctions, registerObj.name)" :value="formObj.name"/>
       <div class="zan-cell zan-field">
-        <div class="zan-field__title align-right">性别</div>
+        <div class="zan-field__title align-right">性别：</div>
         <picker class="zan-field__input zan-field__bd" @change="bindPickerChange" range-key='sexName' :value="selectSexIndex" :range="objectArray">
           {{objectArray[selectSexIndex].sexName}}
         </picker>
@@ -33,19 +33,19 @@ export default {
       registerObj: {
         name: {
           // focus: true,
-          title: '姓名',
+          title: '姓名：',
           placeholder: '请输入您的名字',
           componentId: 'name'
         },
         phone: {
           error: true,
-          title: '联系电话',
+          title: '联系电话：',
           inputType: 'number',
           placeholder: '请输入手机号',
           componentId: 'phone'
         },
         reason: {
-          title: '注册理由',
+          title: '注册理由：',
           type: 'textarea',
           placeholder: '请输入申请注册的原因',
           componentId: 'reason'
@@ -80,7 +80,14 @@ export default {
     }
   },
   mounted () {
-    this.getWxUserInfo(); // 不能放在created中，页面一加载就会执行，还没有调用户授权接口的话就会报错
+    if(this.$store.state.userAuditStatus == 1){//用户第一次注册提交
+      this.getWxUserInfo(); // 不能放在created中，页面一加载就会执行，还没有调用户授权接口的话就会报错
+    } else if(this.$store.state.userAuditStatus == 3){ //用户注册被拒绝了，他又进了注册页面
+      this.formObj.name = this.$store.state.userInfo.name;
+      this.formObj.phone = this.$store.state.userInfo.phone;
+      this.formObj.reason = this.$store.state.userInfo.reason;
+      this.selectSexIndex = this.$store.state.userInfo.gender;
+    }
   },
   methods: {
     // 获取用户的授权后的敏感数据, 同步到全局
@@ -135,9 +142,29 @@ export default {
       // this.formObj[componentId] = target.value;
       // console.log('[zan:field:blur]', componentId, target, detail)
     },
+    inputCheck(){
+      this.formObj.name = this.formObj.name.replace(/ /g,"");
+      this.formObj.phone = this.formObj.phone.replace(/ /g,"");
+      this.formObj.reason = this.formObj.reason.replace(/ /g,"");
+      if(this.formObj.name.length < 1){
+        wx.showModal({title: '提示', content: '姓名不能为空！', showCancel: false});
+        return false;
+      }
+      if(this.formObj.phone.length < 1){
+        wx.showModal({title: '提示', content: '电话不能为空！', showCancel: false});
+        return false;
+      }
+      if(this.formObj.reason.length < 1){
+        wx.showModal({title: '提示', content: '注册原因不能为空！', showCancel: false});
+        return false;
+      }
+      return true;
+    },
     // 点击注册按钮
     submitRegisterMessage () {
-      let sendData = {
+      if(this.inputCheck() == false)return;
+      var sendUrl = '/wx/user/add.do';
+      var sendData = {
         nickName: this.nickName,
         name: this.formObj.name,
         gender: this.formObj.sex,
@@ -146,14 +173,26 @@ export default {
         iv: this.$store.state.encryptedObj.iv,
         encryptedData: this.$store.state.encryptedObj.encryptedData
       };
-      // 本地储存用户基础信息
-      this.$store.commit('updateUserInfo', sendData);
+      if(this.$store.state.userAuditStatus == 3){//用户注册被拒绝了，这里他再次提交
+        sendUrl = '/wx/user/update.do';
+        sendData = {
+          uid: this.$store.state.userInfo.uid,
+          name: this.formObj.name,
+          gender: this.formObj.sex,
+          phone: this.formObj.phone,
+          reason: this.formObj.reason
+        };
+      }
+      else{ //首次注册
+         this.$store.commit('updateUserInfo', sendData);      // 本地储存用户基础信息
+      }
       console.log(sendData);
       this.$http({
-        url: '/wx/user/add.do',
+        url: sendUrl,
         method: 'post',
         data: sendData,
         success: res => {
+          wx.hideLoading();
           wx.showModal({
             title: '审核',
             content: '您的信息已提交到管理员审核，请耐心等候！',
@@ -168,8 +207,6 @@ export default {
               }
             }
           });
-        },
-        fail:() => {
         }
       });
     }
