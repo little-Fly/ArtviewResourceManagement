@@ -3,9 +3,9 @@
     <div class="resource-warp clearfix">
       <template v-for="(item, index) in resList">
         <div class="res-item fl" :key="'res_items_' + index">
-          <image v-if="isVisitor" class="res-item__headimg" src="../../assets/images/resourcebk.png" alt=""" @click="clickVisitorTap()"></image>
-          <image v-else-if="item.logoUrl" class="res-item__headimg" src="../../assets/images/resource_init.png" alt="" @click="clickResourceTap(item.typeKey, item.name)"></image>
-          <image v-else class="res-item__headimg" src="../../assets/images/resourcebk.png" alt=""></image>
+          <img v-if="isVisitor" class="res-item__headimg" src="../../assets/images/resourcebk.png" alt="" @click="clickVisitorTap()">
+          <img v-else-if="item.logoUrl" class="res-item__headimg" src="../../assets/images/resource_init.png" alt="" @click="clickResourceTap(item.typeKey, item.name)">
+          <img v-else class="res-item__headimg" src="../../assets/images/resourcebk.png" alt="">
           <div class="res-name">{{item.name}}</div>
         </div>
       </template>
