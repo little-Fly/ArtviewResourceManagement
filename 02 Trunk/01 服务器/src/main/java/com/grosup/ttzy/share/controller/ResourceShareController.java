@@ -56,7 +56,8 @@ public class ResourceShareController implements MessageMapConstant{
 		Map<String, String> messageMap = new HashMap<String, String>();
 		String json = request.getParameter("json");
 		if (!StringUtil.isNullOrEmpty(json)) {
-			resourceShareService.add(json);
+			ResourceShareDto ResourceShareDto = resourceShareService.add(json);
+			messageMap.put("id", ResourceShareDto.getShareKey());
 			messageMap.put(STATE, STATE_SUCCESSFUL);
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
@@ -174,7 +175,7 @@ public class ResourceShareController implements MessageMapConstant{
 	}
 	
 	/**
-	 * /rs/share/getall.do
+	 * /rs/share/getresource.do
 	 * @return [{"data":"[{\"lastTime\":1538382729506,\"resourceListJson\":\"[{\\\"typeKey\\\":\\\"RDf示例表ID\\\", \\\"resourceKey\\\":\\\"RDt示例值ID\\\"}]\",\"sendTime\":1538382729506,\"sendUser\":\"示例分享人\",\"shareKey\":\"RSrtemplatekey\",\"templateName\":\"default\"}]","state":"successful"}]
 	 */
 	@RequestMapping(value = "/getresource.do", method = { RequestMethod.GET,
@@ -182,7 +183,7 @@ public class ResourceShareController implements MessageMapConstant{
 	@ResponseBody
 	public String getResource(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String resourceKey = request.getParameter("resourceKey");
+		String resourceKey = request.getParameter("resourcekey");
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
 			JSONArray jsonArray = JSONArray.fromObject(resourceKey);
 			Collection<ResourceDto> resourceDtoList = (Collection<ResourceDto>) JSONArray.toCollection(jsonArray,

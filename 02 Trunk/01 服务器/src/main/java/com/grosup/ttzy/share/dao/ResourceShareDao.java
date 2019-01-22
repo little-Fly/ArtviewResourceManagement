@@ -26,7 +26,7 @@ public class ResourceShareDao implements ResourceConstant {
 
 	private String shareKey = RESOURCE_SHARE + "templatekey"; // 分享ID，用于访问和获取
 	private String resourceListJson = 
-			"[{\"resourceKey\":\""+ RESOURCE_DETAIL + "示例值ID" + "\"}]"; // 分享的资源列表Json格式
+			"[{\"typeKey\":\"RDf示例表ID\", \"resourceKey\":\"RDt示例值ID\"}, {\"typeKey\":\"RDf示例表ID\", \"resourceKey\":\"RDt示例值ID2\"}]"; // 分享的资源列表Json格式
 	private String sendUser = "示例分享人"; // 分享人
 	private String templateName = "template0"; // 模板名称
 

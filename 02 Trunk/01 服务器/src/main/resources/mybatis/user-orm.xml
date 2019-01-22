@@ -81,15 +81,15 @@
     
     <!-- 查获取公司人员的信息不包含超管 -->
     <select id="queryUsers" resultMap="BaseResultMap">
-    select * from (
-    select ttur.roleKey,tur.*,tro.roleName FROM
-    t_user_role ttur
-    LEFT JOIN t_user tur ON
-    ttur.uid = tur.uid
-    LEFT JOIN t_role tro ON
-    ttur.roleKey = tro.roleKey
-    ) as middle
-    where middle.roleKey != 'root' 
+        select * from (
+        select ttur.roleKey,tur.*,tro.roleName FROM
+        t_user tur
+        LEFT JOIN t_user_role ttur ON
+        ttur.uid = tur.uid
+        LEFT JOIN t_role tro ON
+        ttur.roleKey = tro.roleKey
+        ) as middle
+        where middle.roleKey != 'root'
 <!--    and status = 1 -->
     </select>
     

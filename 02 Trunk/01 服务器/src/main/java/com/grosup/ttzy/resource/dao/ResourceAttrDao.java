@@ -44,14 +44,21 @@ public class ResourceAttrDao implements ResourceConstant {
 		initResourceAttrDto();
 		attrKey = RESOURCE_ATTR + "示例表头ID2"; // varchar Y 主键，属性Key
 		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
-		attrName = "示例表头1"; // varchar Y 属性名
+		attrName = "示例表头2"; // varchar Y 属性名
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		remark = "示例表头备注"; // varchar N 备注
 		initResourceAttrDto();
 		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key
 		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
-		attrName = "示例表头1"; // varchar Y 属性名
+		attrName = "示例表头3"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		remark = "示例表头备注"; // varchar N 备注
+		initResourceAttrDto();
+		attrKey = RESOURCE_ATTR + "示例表头ID4"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头4"; // varchar Y 属性名
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		remark = "示例表头备注"; // varchar N 备注

@@ -8,7 +8,7 @@ import com.grosup.ttzy.share.dto.ResourceShareDto;
 public interface ResourceShareService {
 	public void create(String json);
 
-	public void add(String json);
+	public ResourceShareDto add(String json);
 
 	public void del(String shareKey);
 
