@@ -10,10 +10,10 @@
     <template v-for="(item, index) in shRsList">
       <div class="resourcelist-item-wrap" :key='index'>
         <div class="icon-group-box">
-          <image  class="rs-icon" src="../../assets/images/delete.png" alt="" @click="delResource(index)"></image>
+          <img  class="rs-icon" src="../../assets/images/delete.png" alt="" @click="delResource(index)">
           <span class="space"></span>
-          <image  class="rs-icon" src="../../assets/images/up.png" alt="" @click="upResource(index)"></image>
-          <image  class="rs-icon" src="../../assets/images/down.png" alt="" @click="downResource(index)"></image>
+          <img  class="rs-icon" src="../../assets/images/up.png" alt="" @click="upResource(index)">
+          <img  class="rs-icon" src="../../assets/images/down.png" alt="" @click="downResource(index)">
         </div>
         <div class="item-box">
           <template v-for="(ss, inx) in item">
