@@ -231,8 +231,8 @@ Vue.prototype.$chargeAuthority = () => {
             attrLevel: "0",
             attrName: "示例表头2",
             attrState: "Available",
-            attrType: "default",
-            attrValue: "行1值2",
+            attrType: "picture",
+            attrValue: "/ttzy/rs/file/getfile.do?filekey=RFlpicture",
             resourceKey: "RDt示例值ID",
             typeKey: "RDf示例表ID"
 
@@ -245,15 +245,25 @@ Vue.prototype.$chargeAuthority = () => {
             attrLevel: "0",
             attrName: "示例表头3",
             attrState: "Available",
+            attrType: "video",
+            attrValue: "RFlvideo",
+            resourceKey: "RDt示例值ID",
+            typeKey: "RDf示例表ID",
+        },
+        {
+            approvalMess: "",
+            approvalUser: "",
+            attrKey: "RAt示例表头ID4",
+            attrLastState: "",
+            attrLevel: "2",
+            attrName: "示例表头4",
+            attrState: "ApprovalAdd",
             attrType: "default",
-            attrValue: "行1值3",
+            attrValue: "44",
             resourceKey: "RDt示例值ID",
             typeKey: "RDf示例表ID"
-
         }
     ];
-
-
     return new Promise((resolve, reject) => {
         let role = sessionStorage.getItem("myRoles");
         if (!role || role === "") {

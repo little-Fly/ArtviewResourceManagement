@@ -82,10 +82,12 @@
 			}
 		}
 		.qr{
-			width: 100%;
+			position: fixed;
+			left: 50%;
+			top: 50%;
+			width: 400px;
 			height: 350px;
-			padding-top: 50px;
-			vertical-align: middle;
+			transform: translate(-50%,-50%);
 			.tips{
 				color: #FF3D00;
 				font-size: 30px;
@@ -93,10 +95,12 @@
 			}
 		}
 		.footer{
-			padding-top: 75px;
+			position: fixed;
+			left: 50%;
+			bottom: 10vh;
+			transform: translateX(-50%);
 			width: 75vw;
 			height: 1px;
-			margin-left: -25%;
 			p{
 				width: 37.5vw;
 				color: #333;
