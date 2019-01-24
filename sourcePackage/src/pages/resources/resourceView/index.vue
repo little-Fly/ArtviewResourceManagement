@@ -33,7 +33,7 @@
       </div>
     </template>
     <div  class="line-block align-center inline-block">
-      <span class="audit-btn for-ok" @click="getrsTypevalue(typeKey)">获取更多</span>
+      <span class="audit-btn for-ok" @click="getMoreListBtn()">获取更多</span>
     </div>
   </div>
 </template>
@@ -49,6 +49,7 @@ export default {
       searchText: '',
       isForAdd: false,
       isSearchGet: false,
+      isMoreSearchGet: false,
       page: 1,
       rowNumbers: 2,
       rsList:[], //待审核资源列表
@@ -111,13 +112,22 @@ export default {
     },
     searchResourceBtn(){
       this.saveSerchWord();
+      this.isMoreSearchGet = false;
+      this.isSearchGet = true;
+      this.page = 1;
+      this.isMoreSearchGet = false;
+      this.searchResource();
+    },
+    searchResource(){
       if(!this.$store.state.rsResearchWord){
+        this.isSearchGet = false;
+        this.page = 1;
+        this.rsList = [];
         this.getrsTypevalue(this.typeKey);
         return;
       }
-      if(!this.isSearchGet){
-        this.isSearchGet = true;
-        this.page = 1;
+      if(!this.isMoreSearchGet){
+          this.rsList = [];
       }
       var searchList = this.cutTheResearchWord();
     /*
@@ -141,7 +151,7 @@ export default {
           searchkey: sendData
         },
         success: res => {
-          this.rsList = [];
+          wx.hideLoading();
           var rData = this.changTheSourceArray(res.data);
           for(var i=0; i<rData.length; i++){
              this.rsList.push(rData[i]);
@@ -150,8 +160,10 @@ export default {
             this.page++;
             this.getAttrList();
           }
-          wx.hideLoading();
-          if(this.rsList.length < 1)wx.showToast({title: '没有找到', icon: "loading"});
+          else{
+            wx.showToast({title: '后面没有了', icon: "none"});
+          }
+          if(this.rsList.length<1)wx.showToast({title: '没找到内容', icon: "none"});
         }
       });
     },
@@ -190,10 +202,6 @@ export default {
      *获取某资源类别下的资源
      */
     getrsTypevalue(typeKey){
-       if(this.isSearchGet){
-         this.isSearchGet = false;
-         this.page = 1;
-       }
        this.$http({
         url: '/rs/detail/getallbyuser.do',
         method: 'get',
@@ -250,7 +258,10 @@ export default {
      * 获取更多资源条目
      */
     getMoreListBtn(){
-      if(this.isSearchGet)this.searchResourceBtn();
+      if(this.isSearchGet){
+        this.isMoreSearchGet = true;
+        this.searchResource();
+      } 
       else this.getrsTypevalue(this.typeKey);
     }
   }
