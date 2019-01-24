@@ -58,6 +58,10 @@
 						<el-table :data="tableData"
 						          height="100%"
 						          stripe
+						          :header-cell-style="{
+							            color: '#000',
+	                                    fontSize: '1.1rem'
+									}"
 						          border
 						          @selection-change="handleSelectionChange"
 						          style="width: 100%">
@@ -68,12 +72,10 @@
 							<template v-for="(col ,index) in attrData">
 								<el-table-column
 										:prop="col.attrKey"
+										align="center"
 										:label="col.attrName">
 									<template slot-scope="scope">
-										<img v-if="(scope.row[col.attrKey]+'').indexOf('RFl') === 0"
-										     :src="`https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=`+scope.row[col.attrKey]"
-										     alt="" width="40" height="40">
-										<span v-else>{{scope.row[col.attrKey]}}</span>
+										<div v-html="$options.filters.stateFilters(scope.row[col.attrKey])"></div>
 									</template>
 								</el-table-column>
 							</template>
@@ -123,6 +125,13 @@
 							<el-button type="primary" @click="submitAudit">提交审核</el-button>
 						</div>
 					</el-dialog>
+					<el-dialog title="搜索" width="30%" :visible.sync="searchVisible">
+						<el-form :model="addForm">
+							<el-form-item :label="key" :label-width="formLabelWidth"
+							              v-for="(item,key) in searchData" :key="key">
+							</el-form-item>
+						</el-form>
+					</el-dialog>
 				</el-main>
 			</el-container>
 		</el-container>
@@ -140,6 +149,7 @@
                 searchOptions: [],
                 searchInput: "",
                 dialogFormVisible: false,
+                searchVisible: false,
                 formLabelWidth: "100px",
                 addForm: {},
                 multipleSelection: [],
@@ -152,8 +162,62 @@
                 operatingMode: "", // 当前行为 是add、update
                 fileArr: [],
                 currentUploadAttrKey: "",
-                attrLevel: ""
+                attrLevel: "",
+                searchData: {
+                    "姓名": "张三",
+                    "年龄": "张三",
+                    "性别": "张三"
+                }
             };
+        },
+        filters: {
+            stateFilters(data) {
+                if (!data) {
+                    return "";
+                }
+                let text = "";
+                if (typeof data === "object") {
+                    switch (data.attrType) {
+                        case "default":
+                            text = data.attrValue;
+                            break;
+                        case "picture":
+                            let imgUrl = data.attrValue.indexOf("/ttzy/rs/file/getfile.do?filekey") === -1
+                                ? `https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=${data.attrValue}`
+                                : data.attrValue;
+                            text = `<img src="${imgUrl}" style="width: 100px;height: 100px">`;
+                            break;
+                        case "video":
+                            let url = data.attrValue.indexOf("/ttzy/rs/file/getfile.do?filekey") === -1
+                                ? `https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=${data.attrValue}`
+                                : data.attrValue;
+                            text = `<video src="${url}" controls="controls" style="width: 100px;height: 100px"></video>`;
+                            break;
+                    }
+                } else {
+                    switch (data) {
+                        case "Available":
+                            text = "可用";
+                            break;
+                        case "ApprovalAdd":
+                            text = "同意添加";
+                            break;
+                        case "ApprovalDel":
+                            text = "同意删除";
+                            break;
+                        case "ApprovalUpdate":
+                            text = "同意修改";
+                            break;
+                        case "ApprovalReject":
+                            text = "驳回";
+                            break;
+                        default:
+                            text = data.attrValue;
+                            break;
+                    }
+                }
+                return text;
+            }
         },
         methods: {
             /**
@@ -184,6 +248,9 @@
                                 ];
                                 this.attrData = [...this.attrData, ...arr];
                             }
+                            // this.getLineData(json);
+                            // return;
+                            /*********************************************************************************/
                             this.getResTableDetail(0, 10);
                         }
                     }, (error) => {
@@ -231,7 +298,8 @@
                         index++;
                         obj = {};
                     }
-                    obj[data[i].attrKey] = data[i].attrValue;
+                    // obj[data[i].attrKey] = data[i].attrValue;
+                    obj[data[i].attrKey] = data[i];
                     obj.resourceKey = data[i].resourceKey;
                     obj.approvalMess = data[i].approvalMess;
                     obj.approvalUser = data[i].approvalUser;
@@ -354,6 +422,25 @@
                     this.$message({
                         type: "warning",
                         message: "请先选择需要修改的数据!"
+                    });
+                    return;
+                }
+                let canUpdate = false;
+                switch (this.multipleSelection[0].attrState) {
+                    case "ApprovalReject":
+                        canUpdate = true;
+                        break;
+                    case "Available":
+                    case "ApprovalAdd":
+                    case "ApprovalDel":
+                    case "ApprovalUpdate":
+                    default:
+                        break;
+                }
+                if (!canUpdate) {
+                    this.$message({
+                        type: "warning",
+                        message: "审核通过的数据不能修改!"
                     });
                     return;
                 }
