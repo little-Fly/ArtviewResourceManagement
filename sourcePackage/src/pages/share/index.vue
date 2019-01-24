@@ -17,16 +17,16 @@
         </div>
         <div class="item-box">
           <template v-for="(ss, inx) in item">
-              <div v-if="ss.attrType == 'picture'" class="content-item">
-                <image  class="resource-image" :src="ss.attrValue" alt=""></image>
-              </div>
-              <div v-else-if="ss.attrType == 'video'" class="content-item">
-                <video :src="ss.attrValue" controls="controls" width="100%" height="180"></video>
-              </div>
-              <div v-else class="content-item">
-                <span class="item-title">{{ss.attrName}}：</span>
-                <span class="item-value">{{ss.attrValue}}</span>
-              </div>
+            <div v-if="ss.attrType == 'picture'" class="content-item" :key="'pic' + inx">
+              <img  class="resource-image" :src="ss.attrValue" alt="">
+            </div>
+            <div v-else-if="ss.attrType == 'video'" class="content-item" :key="'vdo' + inx">
+              <video :src="ss.attrValue" controls="controls" width="100%" height="180"></video>
+            </div>
+            <div v-else class="content-item" :key="'ctt' + inx">
+              <span class="item-title">{{ss.attrName}}：</span>
+              <span class="item-value">{{ss.attrValue}}</span>
+            </div>
           </template>
         </div>
       </div>
@@ -50,10 +50,18 @@ export default {
   },
 
   methods: {
+    /* 选模版 */
+    selectTemplate () {
 
+    },
     creatShareBitmap(){
       var tUrl = "https://www.hwyst.net/ttzy/pages/share/template/template0.jsp";
       wx.navigateTo({url: "erweima/main?shareUrl=" + tUrl + "&rsTypeName=" + this.rsTypeName}) ;
+    },
+    createSharePage () {
+      wx.navigateTo({
+        url: "/pages/share/sharePage/main"
+      });
     },
     searchResourceBtn(){
       

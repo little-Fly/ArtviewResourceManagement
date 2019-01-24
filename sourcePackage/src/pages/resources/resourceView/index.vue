@@ -2,7 +2,7 @@
   <div class="resourcelist-wrap">
     <div class="search-box">
       <div class="search-input-box">
-        <input class="search-input" type="text" v-model="searchText" maxlength="36" placeholder="如：姓名：张三, 性别：女" @confirm="searchResourceBtn()"></input>
+        <input class="search-input" type="text" v-model="searchText" maxlength="36" placeholder="如：姓名：张三, 性别：女" @confirm="searchResourceBtn()">
         <div class="search-btn" @click="searchResourceBtn()">搜索</div>
       </div>
       <div class="add-search-conditions" @click="addSearchConditions()">增加搜索条件</div>
@@ -27,7 +27,7 @@
             <span class="audit-btn for-ok" @click="addShareBagBtn(index)">加入分享包
               <span class="sh-count">{{shCount}}</span>
             </span>
-            <span class="space"></span></span><span class="space"></span></span><span class="space"></span></span><span class="space"></span>
+            <span class="space"></span><span class="space"></span><span class="space"></span><span class="space"></span>
             <span class="audit-btn for-refuse" @click="clickGotoShareBtn()">去分享</span>
         </div>
       </div>
