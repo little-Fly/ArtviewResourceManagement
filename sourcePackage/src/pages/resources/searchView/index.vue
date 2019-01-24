@@ -6,7 +6,7 @@
         <div class="condition-item"  :key='index'>
           <span>{{item.name}}</span>
           <span class="condition-equal">：</span>
-          <input class="input-value"  placeholder="请输入关键字"  v-model="item.word" maxlength="16" ></input>
+          <input class="input-value"  placeholder="请输入关键字"  v-model="item.word" maxlength="16" >
           <checkbox class="condition-check" :checked="item.check"   :value="index" />
         </div>
       </template>

@@ -1,27 +1,30 @@
+// 全局的roleKey
+export const ROLE_KEY_MAP = [
+  {
+    roleKey: 'root',
+    roleName: '超级管理员'
+  },
+  {
+    roleKey: 'admin',
+    roleName: '管理员'
+  },
+  {
+    roleKey: 'checker',
+    roleName: '审核人员'
+  },
+  {
+    roleKey: 'writer',
+    roleName: '录入人员'
+  },
+  {
+    roleKey: 'common',
+    roleName: '一般员工'
+  },
+  {
+    roleKey: 'visitor',
+    roleName: '游客'
+  }
+];
 export const $DATA = {
-  ACCOUNT_RELATIVE_ARR,
-  CAMPER_CARD,
-  CAMPER_TYPE,
-  SEX_ARR,
-  CAMPER_RELATIVE_LIMIT,
-  CAMPER_ALL_LIST,
-  CAMPER_RELATIVE_ARR,
-  CAMPER_HEIGHT: CAMPER_HEIGHT(),
-  CAMPER_WEIGHT: CAMPER_WEIGHT(),
-  CAMPER_SHOOES: CAMPER_SHOOES(),
-  CITY,
-  PAY_STATUS,
-  PARTNER_STATUS,
-  PARTNER_SOURCE,
-  PARTNER_LIMIT,
-  COURSE_TEAM_TYPE,
-  ORDER_STATUS,
-  SPECS_UNIT,
-  COURSE_TYPE,
-  COST_TYPE,
-  COUPON_TYPE,
-  COUPON_STATUS,
-  ACTIVITY_STATUS,
-  validateTypeArr,
   ROLE_KEY_MAP
 };
