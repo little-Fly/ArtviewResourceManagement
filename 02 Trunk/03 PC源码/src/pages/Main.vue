@@ -7,10 +7,9 @@
 						<img width="150" src="@/assets/image/logo.png" style="margin-top: -10px" alt="logo">
 					</el-col>
 					<el-col :span="12" :offset="2" class="search-content">
-						<el-input placeholder="输入关键字" v-model="searchInput">
+						<el-input placeholder="输入关键字" @focus="searchFocus">
 							<el-select v-model="searchType"
 							           slot="prepend"
-							           disabled
 							           placeholder="选择资源类型">
 								<el-option
 										v-for="item in searchOptions"
@@ -21,7 +20,7 @@
 							</el-select>
 							<el-button
 									slot="append"
-									icon="el-icon-search" @click.native="search">搜索
+									icon="el-icon-search" @click.native="searchFocus">搜索
 							</el-button>
 						</el-input>
 					</el-col>
@@ -125,10 +124,16 @@
 							<el-button type="primary" @click="submitAudit">提交审核</el-button>
 						</div>
 					</el-dialog>
-					<el-dialog title="搜索" width="30%" :visible.sync="searchVisible">
+					<el-dialog title="请输入搜索条件" width="30%" :visible.sync="searchVisible">
 						<el-form :model="addForm">
-							<el-form-item :label="key" :label-width="formLabelWidth"
+							<el-form-item :label="'查询条件'+(key+1)" :label-width="formLabelWidth"
 							              v-for="(item,key) in searchData" :key="key">
+								<el-input placeholder="请输入属性名,如:姓名" v-model="item.attr"></el-input>
+								<el-input placeholder="请输入属性值,如:张三" v-model="item.value"></el-input>
+							</el-form-item>
+							<el-form-item class="tc">
+								<el-button type="info" @click="addSearchItem">增加搜索条件</el-button>
+								<el-button type="primary" @click="searchFun">搜索</el-button>
 							</el-form-item>
 						</el-form>
 					</el-dialog>
@@ -147,7 +152,6 @@
                 attrTypeList: [],
                 searchType: "",
                 searchOptions: [],
-                searchInput: "",
                 dialogFormVisible: false,
                 searchVisible: false,
                 formLabelWidth: "100px",
@@ -163,11 +167,7 @@
                 fileArr: [],
                 currentUploadAttrKey: "",
                 attrLevel: "",
-                searchData: {
-                    "姓名": "张三",
-                    "年龄": "张三",
-                    "性别": "张三"
-                }
+                searchData: [{attr: "", value: ""}]
             };
         },
         filters: {
@@ -220,6 +220,70 @@
             }
         },
         methods: {
+            /**
+             * 搜索获取焦点
+             */
+            addSearchItem() {
+                this.searchData.push({attr: "", value: ""});
+            },
+            searchFocus() {
+                this.searchData = [{attr: "", value: ""}];
+                this.searchVisible = true;
+            },
+            searchFun() {
+                let obj = {};
+                for (let i = 0; i < this.searchData.length; i++) {
+                    if (this.searchData[i].attr.trim() === "" || this.searchData[i].value.trim() === "") {
+                        this.$message.warning("搜索条件不能为空");
+                        return;
+                    }
+                    obj[this.searchData[i].attr] = this.searchData[i].value;
+                }
+                let json = {
+                    typekey: this.searchType,
+                    searchkey: decodeURI(encodeURI(JSON.stringify(obj)))
+                };
+                this.$ajax.search
+                    .searchAll(json)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            if (data[0].state === "error") {
+                                this.$message.error(data[0].message);
+                            } else {
+                                console.log("searchAll", data);
+                                let jsonD = JSON.parse(data[0].data);
+                                this.getSearchAttr(jsonD);
+                            }
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
+            getSearchAttr(json) {
+                let params = {
+                    typekey: this.searchType
+                };
+                this.$ajax.attr
+                    .getAttrAll(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            this.attrData = JSON.parse(data[0].data);
+                            if (this.attrData.length > 0) {
+                                let arr = [
+                                    {attrKey: "attrState", attrName: "审核状态"},
+                                    {attrKey: "approvalMess", attrName: "审核意见"},
+                                    {attrKey: "approvalUser", attrName: "审核人"}
+                                ];
+                                this.attrData = [...this.attrData, ...arr];
+                            }
+                            this.getLineData(json);
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
             /**
              * 点击资源类别 获取资源
              */
@@ -544,9 +608,9 @@
                 this.$router.push("/login");
                 sessionStorage.removeItem("myRoles");
             },
-            getDefAll() {
+            getDefAll(def) {
                 let params = {
-                    typekey: "RDf示例表ID",
+                    typekey: def ? def : "",
                 };
                 this.$ajax.def
                     .getDefAll(params)
@@ -557,32 +621,6 @@
                             this.searchOptions = this.attrTypeList;
                             if (this.attrTypeList.length > 0) {
                                 this.getResTable(this.attrTypeList[0], 0);
-                            }
-                        }
-                    }, (error) => {
-                        this.$message.error(error.message);
-                    });
-            },
-            /**
-             * 搜索
-             */
-            search() {
-                let json = {
-                    typekey: this.searchType,
-                    start: 0,
-                    len: 10,
-                    searchkey: {"searchKeyMap": "[{\"RDt示例值ID\":\"1234\"}]"}
-                };
-                this.$ajax.search
-                    .searchAll(json)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            let data = response.data;
-                            if (data[0].state === "error") {
-                                this.$message.error(data[0].message);
-                            } else {
-                                let json = JSON.parse(data[0].data);
-                                this.getLineData(json);
                             }
                         }
                     }, (error) => {
