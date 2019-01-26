@@ -20,6 +20,8 @@ export default {
 
 <style lang=scss>
 @import './assets/zanui-css/zanui.wxss';
+@import './assets/scss/app.scss';
+
 page {
   min-height: 100%;
   background-color: #eee;
@@ -69,13 +71,4 @@ view {
     content: '';
   }
 }
-
-/* .container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 200rpx 0;
-  box-sizing: border-box;
-} */
 </style>

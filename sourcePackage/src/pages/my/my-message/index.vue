@@ -87,7 +87,4 @@ page {
   background-color: #E64340;
   border-radius: 4px;
 }
-.space{
-  padding: 8px 8px;
-}
 </style>

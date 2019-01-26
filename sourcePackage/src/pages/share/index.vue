@@ -1,10 +1,6 @@
 ﻿<template>
   <div class="resourcelist-wrap">
     <div class="function-btn-box">
-      <span class="function-btn for-select-template" @click="selectTemplate()">选取模板</span>
-      <span class="space"></span>
-      <span class="function-btn for-select-template" @click="creatShareBitmap()">生成二维码</span>
-      <span class="space"></span>
       <span class="function-btn for-create-page" @click="createSharePage()">生成分享页面</span>
     </div>
     <template v-for="(item, index) in shRsList">
@@ -50,17 +46,9 @@ export default {
   },
 
   methods: {
-    /* 选模版 */
-    selectTemplate () {
-
-    },
-    creatShareBitmap(){
-      var tUrl = "https://www.hwyst.net/ttzy/pages/share/template/template0.jsp";
-      wx.navigateTo({url: "erweima/main?shareUrl=" + tUrl + "&rsTypeName=" + this.rsTypeName}) ;
-    },
     createSharePage () {
       wx.navigateTo({
-        url: "/pages/share/sharePage/main"
+        url: "/pages/share/resTemplate/main?rsTypeName=" + this.rsTypeName
       });
     },
     searchResourceBtn(){
@@ -141,33 +129,6 @@ export default {
   page{
    width:100%;
     background-color: #fff;
-  }
-  .function-btn-box{
-    display: inline-block;
-    width: 100%;
-    padding: 8px 16px;
-    vertical-align: middle;
-    text-align: right;
-  }
-  .function-btn{
-    display: inline-block;
-    vertical-align: middle;
-    border-radius: 4px;
-    font-size: 15px;
-    height: 30px;
-    padding: 0 15px;
-    line-height: 30px;
-    color: white;
-    &.for-select-template {
-      background-color: #67c23a;
-    }
-    &.for-create-page {
-      background-color: #f56c6c;
-      margin-right: 0px;
-    }
-  }
-  .space{
-    margin: 0px 8px;
   }
   .line-block{
     width: 100%;

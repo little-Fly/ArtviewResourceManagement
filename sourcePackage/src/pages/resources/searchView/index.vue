@@ -113,9 +113,6 @@ export default {
   page {
     background-color: #fff;
   }
-  .space{
-    margin: 0px 8px;
-  }
   .add-condition-btn{
     color: white;
     background-color: #67c23a;

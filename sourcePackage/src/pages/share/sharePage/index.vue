@@ -1,7 +1,5 @@
 <template>
-  <div>
-    请选择模版：
-  </div>
+  <web-view src="https://mp.weixin.qq.com/"></web-view>
 </template>
 
 <script>
