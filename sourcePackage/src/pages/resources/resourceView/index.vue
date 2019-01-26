@@ -329,9 +329,6 @@ export default {
       margin-right: 0px;
     }
   }
-  .space{
-    margin: 0px 8px;
-  }
   .line-block{
     width: 100%;
     margin: 16px 0;

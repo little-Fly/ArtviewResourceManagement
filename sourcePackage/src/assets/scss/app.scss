@@ -5,69 +5,6 @@
 /*
   页面公共样式
 */
-@font-face {
-  font-family: 'iconfont';
-  /* project id 534128 */
-  src: url('//at.alicdn.com/t/font_534128_w0sd98g2nzq.eot');
-  src: url('//at.alicdn.com/t/font_534128_w0sd98g2nzq.eot?#iefix') format('embedded-opentype'), url('//at.alicdn.com/t/font_534128_w0sd98g2nzq.woff') format('woff'), url('//at.alicdn.com/t/font_534128_w0sd98g2nzq.ttf') format('truetype'), url('//at.alicdn.com/t/font_534128_w0sd98g2nzq.svg#iconfont') format('svg');
-}
-
-.iconfont {
-  font-family: "iconfont" !important;
-  font-size: 16px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-icon_:before {
-  content: "\e61c";
-}
-
-.icon-shezhi:before {
-  content: "\e643";
-}
-
-.icon-shouye:before {
-  content: "\e65f";
-}
-
-.icon-shequ:before {
-  content: "\e660";
-}
-
-.icon-pingjiaxitong:before {
-  content: "\e661";
-}
-
-.icon-huwai:before {
-  content: "\e662";
-}
-
-.icon-customermanagement_:before {
-  content: "\e6b7";
-}
-
-.icon-tuikuan:before {
-  content: "\e719";
-}
-
-.icon-zhangdan:before {
-  content: "\e718";
-}
-
-.icon-course-manageme:before {
-  content: "\e717";
-}
-
-.icon-dingdan:before {
-  content: "\e716";
-}
-
-.icon-hetong:before {
-  content: "\e739";
-}
-
 .ellipsis {
     overflow: hidden;
     white-space: nowrap;
@@ -129,10 +66,10 @@
     }
 }
 .m-14-top{
-    margin-top: 14px;
+  margin-top: 14px;
 }
 .w-140{
-    width: 140px !important;
+  width: 140px !important;
 }
 .m-w-80{
   width: 100px !important;
@@ -210,4 +147,73 @@ tbody .self-td {
   text-align: center;
   @include font-style(16px, $fontColorTip, 32px);
 
+}
+
+.function-btn-box{
+  display: inline-block;
+  width: 100%;
+  padding: 8px 16px;
+  vertical-align: middle;
+  text-align: right;
+}
+.function-btn{
+  display: inline-block;
+  vertical-align: middle;
+  border-radius: 4px;
+  font-size: 15px;
+  height: 30px;
+  padding: 0 15px;
+  line-height: 30px;
+  color: white;
+  &.for-select-template {
+    background-color: #67c23a;
+  }
+  &.for-create-page {
+    background-color: #f56c6c;
+    margin-right: 0px;
+  }
+}
+.space{
+  margin: 0px 8px;
+}
+
+/* 浮动相关 */
+.clearfix {
+  &::before,&::after{
+    display: block;
+    content: '';
+    clear: both;
+  }
+}
+.fr {
+  float: right;
+}
+.fl {
+  float: left;
+}
+
+
+
+// 内边距
+@for $i from 0 through 50 {
+  .pt-#{$i * 2} {
+    padding-top: (2px * $i);
+  }
+  .pb-#{$i * 2} {
+    padding-bottom: (2px * $i);
+  }
+  .pl-#{$i * 2} {
+    padding-left: (2px * $i);
+  }
+  .pr-#{$i * 2} {
+    padding-right: (2px * $i);
+  }
+}
+.pr-pl-15 {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.pr-pl-10 {
+  padding-left: 10px;
+  padding-right: 10px;
 }

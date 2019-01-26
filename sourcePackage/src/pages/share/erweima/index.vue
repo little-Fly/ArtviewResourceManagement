@@ -132,33 +132,6 @@ export default {
     margin: 32px auto;
   }
   
-  .function-btn-box{
-    display: inline-block;
-    width: 100%;
-    padding: 8px 16px;
-    vertical-align: middle;
-    text-align: right;
-  }
-  .function-btn{
-    display: inline-block;
-    vertical-align: middle;
-    border-radius: 4px;
-    font-size: 15px;
-    height: 30px;
-    padding: 0 15px;
-    line-height: 30px;
-    color: white;
-    &.for-select-template {
-      background-color: #67c23a;
-    }
-    &.for-create-page {
-      background-color: #f56c6c;
-      margin-right: 0px;
-    }
-  }
-  .space{
-    margin: 0px 8px;
-  }
   .line-block{
     width: 100%;
     margin: 16px 0;

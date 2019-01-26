@@ -16,17 +16,6 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-*,
-*::before,
-*::after {
-    box-sizing: inherit;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-
-*:focus {
-    outline: 0;
-}
-
 h1,
 h2,
 h3,

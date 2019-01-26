@@ -277,9 +277,6 @@ export default {
     fixed: true;
     color: #000;
   }
-  .space{
-    margin: 0px 8px;
-  }
   .line-block{
     width: 100%;
     margin: 16px 0;
