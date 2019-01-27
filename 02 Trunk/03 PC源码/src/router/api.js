@@ -3,7 +3,7 @@ import axios from "axios";
 import qs from "qs";
 
 const PRODUCT = "https://www.hwyst.net/";
-const LOCAL = "url/" + "";
+const LOCAL = "url/";
 const HOST = PRODUCT;
 
 // 设置请求头
