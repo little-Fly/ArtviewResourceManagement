@@ -78,7 +78,7 @@ public class ResourceDetailDao implements ResourceConstant {
 		attrName = "示例表头2"; // varchar Y 属性名
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 		attrType = "picture"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
-		attrValue = "/ttzy/rs/file/getfile.do?filekey=RFlpicture"; // varchar Y 属性值
+		attrValue = "/rs/file/getfile.do?filekey=RFlpicture"; // varchar Y 属性值
 		initResourceDetailDto(RESOURCE_STATE_AVAILABLE);
 		resourceKey = RESOURCE_DETAIL + "示例值ID2"; // long Y 主键，资源Id
 		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key
@@ -86,7 +86,7 @@ public class ResourceDetailDao implements ResourceConstant {
 		attrName = "示例表头3"; // varchar Y 属性名
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 		attrType = "video"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
-		attrValue = "/ttzy/rs/file/getfile.do?filekey=RFlvideo"; // varchar Y 属性值
+		attrValue = "/rs/file/getfile.do?filekey=RFlvideo"; // varchar Y 属性值
 		initResourceDetailDto(RESOURCE_STATE_AVAILABLE);
 		resourceKey = RESOURCE_DETAIL + "示例值ID2"; // long Y 主键，资源Id
 		attrKey = RESOURCE_ATTR + "示例表头ID4"; // varchar Y 主键，属性Key
@@ -111,7 +111,7 @@ public class ResourceDetailDao implements ResourceConstant {
 		attrName = "示例表头2"; // varchar Y 属性名
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
 		attrType = "video"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
-		attrValue = "/ttzy/rs/file/getfile.do?filekey=RFl示例视频"; // varchar Y 属性值
+		attrValue = "/rs/file/getfile.do?filekey=RFl示例视频"; // varchar Y 属性值
 		initResourceDetailDto(RESOURCE_STATE_APPROVAL_ADD);
 		resourceKey = RESOURCE_DETAIL + "示例值ID2add"; // long Y 主键，资源Id
 		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key

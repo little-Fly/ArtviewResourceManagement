@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.grosup.ttzy.resource.dao.ResourceDetailDao;
 import com.grosup.ttzy.resource.dto.ResourceDetailDto;
+import com.grosup.ttzy.resource.service.ResourceAttrService;
 import com.grosup.ttzy.resource.service.ResourceDetailService;
 
 @Service
@@ -19,7 +20,7 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 
 	@Autowired
 	private ResourceDetailDao resourceDetailDao;
-
+	
 	public void create(String json) {
 		resourceDetailDao.create(json);
 	}
@@ -62,6 +63,12 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 		} else {
 			log.error("ResourceDetailService update resourceDetailDto is null. resourceKey json:" + json);
 		}
+	}
+	
+	
+	public void updateAttrName(String newAttrKey, String newAttrName)
+	{
+		resourceDetailDao.updateAttrName(newAttrKey, newAttrName);
 	}
 
 	public List<ResourceDetailDto> get(String resourceKey) {
