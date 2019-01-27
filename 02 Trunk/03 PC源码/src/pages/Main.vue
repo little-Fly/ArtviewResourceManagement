@@ -105,7 +105,9 @@
 										:before-upload="beforeUpload(item,key)"
 										:action="item.url"
 										:auto-upload="true">
-									<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+									<el-button slot="trigger" @click="chooseFile(item)" size="small" type="primary">
+										选取文件
+									</el-button>
 								</el-upload>
 								<el-input v-model="addForm[item.attrKey]"
 								          v-if="item.attrType !== 'picture'&&item.attrType !== 'video'"
@@ -182,12 +184,20 @@
                             text = data.attrValue;
                             break;
                         case "picture":
+                            if (data.attrValue === "") {
+                                text = `无`;
+                                break;
+                            }
                             let imgUrl = data.attrValue.indexOf("/ttzy/rs/file/getfile.do?filekey") === -1
                                 ? `https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=${data.attrValue}`
                                 : data.attrValue;
                             text = `<img src="${imgUrl}" style="width: 100px;height: 100px">`;
                             break;
                         case "video":
+                            if (data.attrValue === "") {
+                                text = `无`;
+                                break;
+                            }
                             let url = data.attrValue.indexOf("/ttzy/rs/file/getfile.do?filekey") === -1
                                 ? `https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=${data.attrValue}`
                                 : data.attrValue;
@@ -200,13 +210,13 @@
                             text = "可用";
                             break;
                         case "ApprovalAdd":
-                            text = "同意添加";
+                            text = "待审核添加";
                             break;
                         case "ApprovalDel":
-                            text = "同意删除";
+                            text = "待审核删除";
                             break;
                         case "ApprovalUpdate":
-                            text = "同意修改";
+                            text = "待审核修改";
                             break;
                         case "ApprovalReject":
                             text = "驳回";
@@ -251,8 +261,9 @@
                             if (data[0].state === "error") {
                                 this.$message.error(data[0].message);
                             } else {
-                                console.log("searchAll", data);
+                                // console.log("searchAll", data);
                                 let jsonD = JSON.parse(data[0].data);
+                                this.searchVisible = false;
                                 this.getSearchAttr(jsonD);
                             }
                         }
@@ -338,7 +349,7 @@
                                     return;
                                 }
                                 let json = JSON.parse(detail[0].data);
-                                console.log("表格数据11", json);
+                                // console.log("表格数据11", json);
                                 this.getLineData(json);
                             }
                         }
@@ -378,6 +389,11 @@
              * 新增资源按钮
              */
             addSource() {
+                if (this.$refs.upload) {
+                    for (let i = 0; i < this.$refs.upload.length; i++) {
+                        this.$refs.upload[i].clearFiles();
+                    }
+                }
                 this.operatingMode = "add";
                 this.clearForm();
                 this.addForm.title = `新增${this.currentActiveItem}资源`;
@@ -407,6 +423,7 @@
                         key !== "resourceKey") {
                         let obj = {
                             "attrKey": key,
+                            "attrName": "",
                             "attrValue": this.addForm[key],
                             "typeKey": this.currentTypeKey,
                             attrLevel: this.attrLevel
@@ -414,6 +431,7 @@
                         for (let i = 0; i < this.attrData.length; i++) {
                             if (this.attrData[i].attrKey === obj.attrKey) {
                                 obj.attrType = this.attrData[i].attrType;
+                                obj.attrName = this.attrData[i].attrName;
                             }
                         }
                         json.push(obj);
@@ -441,14 +459,16 @@
 
                 });
             },
-            beforeUpload(item, i) {
-                let url = `https://www.hwyst.net/ttzy/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
-                this.$set(this.attrData[i], "url", url);
+            chooseFile(item) {
                 if (this.addForm[item.attrKey] && this.addForm[item.attrKey] !== "") {
                     return;
                 }
                 this.addForm[item.attrKey] = "";
                 this.currentUploadAttrKey = item.attrKey;
+            },
+            beforeUpload(item, i) {
+                let url = `https://www.hwyst.net/ttzy/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
+                this.$set(this.attrData[i], "url", url);
             },
             addDetailFun(data) {
                 this.$ajax.detail
@@ -581,7 +601,7 @@
                                     this.$message.error(data[0].message);
                                 } else {
                                     this.getTableByType();
-                                    this.$message.success("删除成功");
+                                    this.$message.success("请等待审核");
                                 }
                             }
                         });
