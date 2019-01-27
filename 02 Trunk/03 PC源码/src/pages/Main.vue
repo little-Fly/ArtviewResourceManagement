@@ -7,10 +7,9 @@
 						<img width="150" src="@/assets/image/logo.png" style="margin-top: -10px" alt="logo">
 					</el-col>
 					<el-col :span="12" :offset="2" class="search-content">
-						<el-input placeholder="输入关键字" v-model="searchInput">
+						<el-input placeholder="输入关键字" @focus="searchFocus">
 							<el-select v-model="searchType"
 							           slot="prepend"
-							           disabled
 							           placeholder="选择资源类型">
 								<el-option
 										v-for="item in searchOptions"
@@ -21,7 +20,7 @@
 							</el-select>
 							<el-button
 									slot="append"
-									icon="el-icon-search" @click.native="search">搜索
+									icon="el-icon-search" @click.native="searchFocus">搜索
 							</el-button>
 						</el-input>
 					</el-col>
@@ -106,7 +105,9 @@
 										:before-upload="beforeUpload(item,key)"
 										:action="item.url"
 										:auto-upload="true">
-									<el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+									<el-button slot="trigger" @click="chooseFile(item)" size="small" type="primary">
+										选取文件
+									</el-button>
 								</el-upload>
 								<el-input v-model="addForm[item.attrKey]"
 								          v-if="item.attrType !== 'picture'&&item.attrType !== 'video'"
@@ -125,10 +126,16 @@
 							<el-button type="primary" @click="submitAudit">提交审核</el-button>
 						</div>
 					</el-dialog>
-					<el-dialog title="搜索" width="30%" :visible.sync="searchVisible">
+					<el-dialog title="请输入搜索条件" width="30%" :visible.sync="searchVisible">
 						<el-form :model="addForm">
-							<el-form-item :label="key" :label-width="formLabelWidth"
+							<el-form-item :label="'查询条件'+(key+1)" :label-width="formLabelWidth"
 							              v-for="(item,key) in searchData" :key="key">
+								<el-input placeholder="请输入属性名,如:姓名" v-model="item.attr"></el-input>
+								<el-input placeholder="请输入属性值,如:张三" v-model="item.value"></el-input>
+							</el-form-item>
+							<el-form-item class="tc">
+								<el-button type="info" @click="addSearchItem">增加搜索条件</el-button>
+								<el-button type="primary" @click="searchFun">搜索</el-button>
 							</el-form-item>
 						</el-form>
 					</el-dialog>
@@ -147,7 +154,6 @@
                 attrTypeList: [],
                 searchType: "",
                 searchOptions: [],
-                searchInput: "",
                 dialogFormVisible: false,
                 searchVisible: false,
                 formLabelWidth: "100px",
@@ -163,11 +169,7 @@
                 fileArr: [],
                 currentUploadAttrKey: "",
                 attrLevel: "",
-                searchData: {
-                    "姓名": "张三",
-                    "年龄": "张三",
-                    "性别": "张三"
-                }
+                searchData: [{attr: "", value: ""}]
             };
         },
         filters: {
@@ -182,12 +184,20 @@
                             text = data.attrValue;
                             break;
                         case "picture":
+                            if (data.attrValue === "") {
+                                text = `无`;
+                                break;
+                            }
                             let imgUrl = data.attrValue.indexOf("/ttzy/rs/file/getfile.do?filekey") === -1
                                 ? `https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=${data.attrValue}`
                                 : data.attrValue;
                             text = `<img src="${imgUrl}" style="width: 100px;height: 100px">`;
                             break;
                         case "video":
+                            if (data.attrValue === "") {
+                                text = `无`;
+                                break;
+                            }
                             let url = data.attrValue.indexOf("/ttzy/rs/file/getfile.do?filekey") === -1
                                 ? `https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=${data.attrValue}`
                                 : data.attrValue;
@@ -200,13 +210,13 @@
                             text = "可用";
                             break;
                         case "ApprovalAdd":
-                            text = "同意添加";
+                            text = "待审核添加";
                             break;
                         case "ApprovalDel":
-                            text = "同意删除";
+                            text = "待审核删除";
                             break;
                         case "ApprovalUpdate":
-                            text = "同意修改";
+                            text = "待审核修改";
                             break;
                         case "ApprovalReject":
                             text = "驳回";
@@ -220,6 +230,71 @@
             }
         },
         methods: {
+            /**
+             * 搜索获取焦点
+             */
+            addSearchItem() {
+                this.searchData.push({attr: "", value: ""});
+            },
+            searchFocus() {
+                this.searchData = [{attr: "", value: ""}];
+                this.searchVisible = true;
+            },
+            searchFun() {
+                let obj = {};
+                for (let i = 0; i < this.searchData.length; i++) {
+                    if (this.searchData[i].attr.trim() === "" || this.searchData[i].value.trim() === "") {
+                        this.$message.warning("搜索条件不能为空");
+                        return;
+                    }
+                    obj[this.searchData[i].attr] = this.searchData[i].value;
+                }
+                let json = {
+                    typekey: this.searchType,
+                    searchkey: decodeURI(encodeURI(JSON.stringify(obj)))
+                };
+                this.$ajax.search
+                    .searchAll(json)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            if (data[0].state === "error") {
+                                this.$message.error(data[0].message);
+                            } else {
+                                // console.log("searchAll", data);
+                                let jsonD = JSON.parse(data[0].data);
+                                this.searchVisible = false;
+                                this.getSearchAttr(jsonD);
+                            }
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
+            getSearchAttr(json) {
+                let params = {
+                    typekey: this.searchType
+                };
+                this.$ajax.attr
+                    .getAttrAll(params)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            this.attrData = JSON.parse(data[0].data);
+                            if (this.attrData.length > 0) {
+                                let arr = [
+                                    {attrKey: "attrState", attrName: "审核状态"},
+                                    {attrKey: "approvalMess", attrName: "审核意见"},
+                                    {attrKey: "approvalUser", attrName: "审核人"}
+                                ];
+                                this.attrData = [...this.attrData, ...arr];
+                            }
+                            this.getLineData(json);
+                        }
+                    }, (error) => {
+                        this.$message.error(error.message);
+                    });
+            },
             /**
              * 点击资源类别 获取资源
              */
@@ -274,7 +349,7 @@
                                     return;
                                 }
                                 let json = JSON.parse(detail[0].data);
-                                console.log("表格数据11", json);
+                                // console.log("表格数据11", json);
                                 this.getLineData(json);
                             }
                         }
@@ -314,6 +389,11 @@
              * 新增资源按钮
              */
             addSource() {
+                if (this.$refs.upload) {
+                    for (let i = 0; i < this.$refs.upload.length; i++) {
+                        this.$refs.upload[i].clearFiles();
+                    }
+                }
                 this.operatingMode = "add";
                 this.clearForm();
                 this.addForm.title = `新增${this.currentActiveItem}资源`;
@@ -343,6 +423,7 @@
                         key !== "resourceKey") {
                         let obj = {
                             "attrKey": key,
+                            "attrName": "",
                             "attrValue": this.addForm[key],
                             "typeKey": this.currentTypeKey,
                             attrLevel: this.attrLevel
@@ -350,6 +431,7 @@
                         for (let i = 0; i < this.attrData.length; i++) {
                             if (this.attrData[i].attrKey === obj.attrKey) {
                                 obj.attrType = this.attrData[i].attrType;
+                                obj.attrName = this.attrData[i].attrName;
                             }
                         }
                         json.push(obj);
@@ -377,14 +459,16 @@
 
                 });
             },
-            beforeUpload(item, i) {
-                let url = `https://www.hwyst.net/ttzy/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
-                this.$set(this.attrData[i], "url", url);
+            chooseFile(item) {
                 if (this.addForm[item.attrKey] && this.addForm[item.attrKey] !== "") {
                     return;
                 }
                 this.addForm[item.attrKey] = "";
                 this.currentUploadAttrKey = item.attrKey;
+            },
+            beforeUpload(item, i) {
+                let url = `https://www.hwyst.net/ttzy/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
+                this.$set(this.attrData[i], "url", url);
             },
             addDetailFun(data) {
                 this.$ajax.detail
@@ -517,7 +601,7 @@
                                     this.$message.error(data[0].message);
                                 } else {
                                     this.getTableByType();
-                                    this.$message.success("删除成功");
+                                    this.$message.success("请等待审核");
                                 }
                             }
                         });
@@ -544,9 +628,9 @@
                 this.$router.push("/login");
                 sessionStorage.removeItem("myRoles");
             },
-            getDefAll() {
+            getDefAll(def) {
                 let params = {
-                    typekey: "RDf示例表ID",
+                    typekey: def ? def : "",
                 };
                 this.$ajax.def
                     .getDefAll(params)
@@ -557,32 +641,6 @@
                             this.searchOptions = this.attrTypeList;
                             if (this.attrTypeList.length > 0) {
                                 this.getResTable(this.attrTypeList[0], 0);
-                            }
-                        }
-                    }, (error) => {
-                        this.$message.error(error.message);
-                    });
-            },
-            /**
-             * 搜索
-             */
-            search() {
-                let json = {
-                    typekey: this.searchType,
-                    start: 0,
-                    len: 10,
-                    searchkey: {"searchKeyMap": "[{\"RDt示例值ID\":\"1234\"}]"}
-                };
-                this.$ajax.search
-                    .searchAll(json)
-                    .then((response) => {
-                        if (response.status === 200) {
-                            let data = response.data;
-                            if (data[0].state === "error") {
-                                this.$message.error(data[0].message);
-                            } else {
-                                let json = JSON.parse(data[0].data);
-                                this.getLineData(json);
                             }
                         }
                     }, (error) => {
