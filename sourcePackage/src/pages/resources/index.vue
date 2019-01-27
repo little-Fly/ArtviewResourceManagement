@@ -14,7 +14,7 @@
 </template>
 
 <script>
-
+import { BASE_URL } from '@/config/api';
 export default {
   data () {
     return {
@@ -139,7 +139,7 @@ export default {
           console.log(res);
           this.resList = res.data;
           for(var i=0; i<this.resList.length; i++){
-            if(this.resList[i].logoUrl)this.resList[i].logoUrl = this.$store.state.HOSTurl + this.resList[i].logoUrl;
+            if(this.resList[i].logoUrl)this.resList[i].logoUrl = BASE_URL + this.resList[i].logoUrl;
             else this.resList[i].logoUrl = "../../assets/images/resourcebk.png";
           }
         }
