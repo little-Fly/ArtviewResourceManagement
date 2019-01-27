@@ -22,7 +22,9 @@ public interface ResourceDetailService {
 	public void del(String resourceKey);
 
 	public void update(String resourceKey, String json);
-
+	
+	public void updateAttrName(String newAttrKey, String newAttrName);
+	
 	public List<ResourceDetailDto> get(String resourceKey);
 
 	public List<ResourceDetailDto> getByUser(String resourceKey);

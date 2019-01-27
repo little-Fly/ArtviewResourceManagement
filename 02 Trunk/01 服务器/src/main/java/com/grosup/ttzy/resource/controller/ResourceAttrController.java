@@ -112,8 +112,8 @@ public class ResourceAttrController implements MessageMapConstant {
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "attrKey:\"" + attrKey + "\"");
-				log.error("del " + MESSAGE_PARAM_ETER + "attrKey:\"" + attrKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "attrkey:\"" + attrKey + "\"");
+				log.error("del " + MESSAGE_PARAM_ETER + "attrkey:\"" + attrKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
@@ -177,13 +177,13 @@ public class ResourceAttrController implements MessageMapConstant {
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "attrKey:\"" + attrKey + "\"");
-				log.error("get " + MESSAGE_DTO_ETER + "attrKey:\"" + attrKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "attrkey:\"" + attrKey + "\"");
+				log.error("get " + MESSAGE_DTO_ETER + "attrkey:\"" + attrKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "attrKey:\"" + attrKey + "\"");
-			log.error("get " + MESSAGE_PARAM_ETER + "attrKey:\"" + attrKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "attrkey:\"" + attrKey + "\"");
+			log.error("get " + MESSAGE_PARAM_ETER + "attrkey:\"" + attrKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();

@@ -96,8 +96,7 @@ public class ResourceDetailDao implements ResourceConstant {
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		attrValue = "行2值4"; // varchar Y 属性值
 		initResourceDetailDto(RESOURCE_STATE_AVAILABLE);
-		
-		
+
 		resourceKey = RESOURCE_DETAIL + "示例值ID2add"; // long Y 主键，资源Id
 		attrKey = RESOURCE_ATTR + "示例表头ID1"; // varchar Y 主键，属性Key
 		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
@@ -284,6 +283,17 @@ public class ResourceDetailDao implements ResourceConstant {
 		}
 	}
 
+	public void updateAttrName(String newAttrKey, String newAttrName)
+	{
+		for (ResourceDetailDto resourceDetailDto : list) {
+			String attrKey = resourceDetailDto.getAttrKey();
+			if(attrKey.equals(newAttrKey))
+			{
+				resourceDetailDto.setAttrName(newAttrName);
+			}
+		}
+	}
+	
 	public void update(String resourceKey, Collection<ResourceDetailDto> collection) {
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
 
@@ -473,16 +483,15 @@ public class ResourceDetailDao implements ResourceConstant {
 		Collection<ResourceDetailDto> alllist = getAll(typeKey);
 		Set<String> delResourceKeySet = new HashSet<String>();
 		Set<String> addResourceKeySet = new HashSet<String>();
-		String attrName;
+		String attrKey;
 		String attrValue;
 		String searchAttrValue;
 		for (ResourceDetailDto resourceDetailDto : alllist) {
 
-			resourceKey = resourceDetailDto.getResourceKey();
-			attrName = resourceDetailDto.getAttrName();
+			attrKey = resourceDetailDto.getAttrKey();
 			attrValue = resourceDetailDto.getAttrValue();
-			if (attrName != null) {
-				searchAttrValue = searchKeyMap.get(attrName);
+			if (attrKey != null) {
+				searchAttrValue = searchKeyMap.get(attrKey);
 				if (searchAttrValue == null) {
 					continue;
 				}
@@ -520,18 +529,16 @@ public class ResourceDetailDao implements ResourceConstant {
 		Collection<ResourceDetailDto> alllist = getAll(typeKey);
 		Set<String> delResourceKeySet = new HashSet<String>();
 		Set<String> addResourceKeySet = new HashSet<String>();
-		String attrName;
+		String attrKey;
 		String attrValue;
 		String searchAttrValue;
 		for (ResourceDetailDto resourceDetailDto : alllist) {
 			if (RESOURCE_STATE_AVAILABLE.equals(resourceDetailDto.getAttrState())) {
-
 				resourceKey = resourceDetailDto.getResourceKey();
-				attrName = resourceDetailDto.getAttrName();
+				attrKey = resourceDetailDto.getAttrKey();
 				attrValue = resourceDetailDto.getAttrValue();
-	
-				if (attrName != null) {
-					searchAttrValue = searchKeyMap.get(attrName);
+				if (attrKey != null) {
+					searchAttrValue = searchKeyMap.get(attrKey);
 					if (searchAttrValue == null) {
 						continue;
 					}
@@ -579,17 +586,15 @@ public class ResourceDetailDao implements ResourceConstant {
 		Collection<ResourceDetailDto> alllist = getAll(typeKey);
 		Set<String> delResourceKeySet = new HashSet<String>();
 		Set<String> addResourceKeySet = new HashSet<String>();
-		String attrName;
+		String attrKey;
 		String attrValue;
 		String searchAttrValue;
 		for (ResourceDetailDto resourceDetailDto : alllist) {
-
 			if (RESOURCE_STATE_AVAILABLE.equals(resourceDetailDto.getAttrState())) {
-				resourceKey = resourceDetailDto.getResourceKey();
-				attrName = resourceDetailDto.getAttrName();
+				attrKey = resourceDetailDto.getAttrKey();
 				attrValue = resourceDetailDto.getAttrValue();
-				if (attrName != null) {
-					searchAttrValue = searchKeyMap.get(attrName);
+				if (attrKey != null) {
+					searchAttrValue = searchKeyMap.get(attrKey);
 					if (searchAttrValue == null) {
 						continue;
 					}
