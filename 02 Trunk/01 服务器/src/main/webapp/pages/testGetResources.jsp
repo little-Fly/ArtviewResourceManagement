@@ -141,6 +141,8 @@
 </script>
 </head>
 <body>
+<a href="https://www.hwyst.net/ttzy/pages/share/template/template0.jsp?sharekey=RSrtemplatekey" >template</a>
+<a href="https://www.hwyst.net/ttzy/rs/search/searchbyuser.do?typekey=RDf%E7%A4%BA%E4%BE%8B%E8%A1%A8ID&searchkey={%22RAt%E7%A4%BA%E4%BE%8B%E8%A1%A8%E5%A4%B4ID1%22:%22%E8%A1%8C2%E5%80%BC1%22}" >searchbyuser</a>
 
 </body>
 </html>

@@ -96,13 +96,19 @@ public class ResourceAttrDao implements ResourceConstant {
 		}
 	}
 
-	public void update(ResourceAttrDto resourceAttrDto) {
-		String AttrKey = resourceAttrDto.getAttrKey();
+	public ResourceAttrDto update(ResourceAttrDto newResourceAttrDto) {
+		String AttrKey = newResourceAttrDto.getAttrKey();
 		if (!StringUtil.isNullOrEmpty(AttrKey)) {
-			map.put(AttrKey, resourceAttrDto);
+			ResourceAttrDto resourceAttrDto = map.get(AttrKey);
+			if(null == resourceAttrDto)
+			{
+				return resourceAttrDto;
+			}
+			map.put(AttrKey, newResourceAttrDto);
 		} else {
 			log.error("ResourceAttrDao update is error. AttrKey is:" + AttrKey);
 		}
+		return newResourceAttrDto;
 	}
 
 	public ResourceAttrDto get(String key) {
