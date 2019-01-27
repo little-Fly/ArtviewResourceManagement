@@ -1,7 +1,21 @@
 ﻿<template>
   <div class="resourcelist-wrap">
+    <div class="clearfix pt-10 pb-10 pr-pl-15">
+      <div class="fl">选择模版：</div>
+      <div class="fr">
+        <picker @change="tPickerChange" :value="tIndex" :range="tArray" range-key="tempName">
+          <view class="picker">
+            <span class="" v-if="tIndex === -1">请选择</span>
+            <span v-else>{{tArray[tIndex].tempName}}</span>
+          </view>
+        </picker>
+      </div>
+    </div>
     <div class="function-btn-box">
-      <span class="function-btn for-create-page" @click="createSharePage()">生成分享页面</span>
+      <span class="function-btn for-select-template" @click="creatShareBitmap()">生成二维码</span>
+      <span class="space"></span>
+      <span class="function-btn for-create-page" @click="PreviewSharePage()">预览分享页面</span>
+      <!-- <span class="function-btn for-create-page" @click="createSharePage()">生成分享页面</span> -->
     </div>
     <template v-for="(item, index) in shRsList">
       <div class="resourcelist-item-wrap" :key='index'>
@@ -35,7 +49,26 @@ export default {
   data () {
     return {
       shRsList: [], //待分享资源列表
-      srTypeName: ''
+      srTypeName: '',
+      tIndex: -1,
+      tArray: [
+        {
+          tId: 'io394riw3brw8h837rhw3briwu1',
+          name: '模版一'
+        },
+        {
+          tId: 'io394riw3brw8h837rhw3briwu2',
+          name: '模版二'
+        },
+        {
+          tId: 'io394riw3brw8h837rhw3briwu3',
+          name: '模版三'
+        },
+        {
+          tId: 'io394riw3brw8h837rhw3briwu4',
+          name: '模版四'
+        }
+      ]
     }
   },
 
@@ -43,13 +76,50 @@ export default {
     let paramsObj = this.$tool.getOptions();
     this.rsTypeName = paramsObj.rsTypeName;
     this.shRsList = this.$store.state.myShareBag;
+    // 获取可用的模版列表
+    let templateList = this.getTemplateList();
   },
 
   methods: {
-    createSharePage () {
+    tPickerChange (e) {
+      this.tIndex = e.target.value;
+    },
+    creatShareBitmap(){
+      if (this.checkTemplateSelect()) {
+        var tUrl = "https://www.hwyst.net/ttzy/pages/share/template/template0.jsp";
+        wx.navigateTo({url: "/pages/share/erweima/main?shareUrl=" + tUrl + "&rsTypeName=" + this.rsTypeName});
+      }
+    },
+    PreviewSharePage () {
+      if (this.checkTemplateSelect()) {
+        wx.navigateTo({
+          url: "/pages/share/sharePage/main"
+        });
+      }
+    },
+    /* createSharePage () {
       wx.navigateTo({
         url: "/pages/share/resTemplate/main?rsTypeName=" + this.rsTypeName
       });
+    }, */
+    checkTemplateSelect () {
+      let res = true;
+      if (this.tIndex === -1) {
+        res = false;
+        wx.showToast({
+          icon: 'none',
+          title: '请先选择模版',
+          mask: true
+        });
+      } else if (!(this.shRsList.length > 0)) {
+        res = false;
+        wx.showToast({
+          icon: 'none',
+          title: '资源不能为空',
+          mask: true
+        });
+      }
+      return res;
     },
     searchResourceBtn(){
       
@@ -119,6 +189,21 @@ export default {
       for(var i=0; i<this.rsTypeList.length; i++){
          this.getrsTypevalue(this.typeKey);
       }
+    },
+    /**
+     * 获取模版列表
+     */
+    getTemplateList () {
+      let url = '/rs/sharetemp/getall.do'
+      this.$http({
+        url: url,
+        method: 'get',
+        success: res => {
+          // tempFilePath:"template0.jsp", tempKey:"RSTdefault", tempName:"default模板"
+          console.log(res);
+          this.tArray = res.data;
+        }
+      });
     }
   }
 }
