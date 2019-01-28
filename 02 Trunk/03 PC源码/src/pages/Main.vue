@@ -188,8 +188,8 @@
                                 text = `无`;
                                 break;
                             }
-                            let imgUrl = data.attrValue.indexOf("/ttzy/rs/file/getfile.do?filekey") === -1
-                                ? `https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=${data.attrValue}`
+                            let imgUrl = data.attrValue.indexOf("/rs/file/getfile.do?filekey") === -1
+                                ? `https://www.hwyst.net/rs/file/getfile.do?filekey=${data.attrValue}`
                                 : data.attrValue;
                             text = `<img src="${imgUrl}" style="width: 100px;height: 100px">`;
                             break;
@@ -198,8 +198,8 @@
                                 text = `无`;
                                 break;
                             }
-                            let url = data.attrValue.indexOf("/ttzy/rs/file/getfile.do?filekey") === -1
-                                ? `https://www.hwyst.net/ttzy/rs/file/getfile.do?filekey=${data.attrValue}`
+                            let url = data.attrValue.indexOf("/rs/file/getfile.do?filekey") === -1
+                                ? `https://www.hwyst.net/rs/file/getfile.do?filekey=${data.attrValue}`
                                 : data.attrValue;
                             text = `<video src="${url}" controls="controls" style="width: 100px;height: 100px"></video>`;
                             break;
@@ -467,7 +467,7 @@
                 this.currentUploadAttrKey = item.attrKey;
             },
             beforeUpload(item, i) {
-                let url = `https://www.hwyst.net/ttzy/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
+                let url = `https://www.hwyst.net/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
                 this.$set(this.attrData[i], "url", url);
             },
             addDetailFun(data) {

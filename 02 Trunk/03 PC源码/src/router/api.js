@@ -2,8 +2,8 @@ import Vue from "vue";
 import axios from "axios";
 import qs from "qs";
 
-const PRODUCT = "https://www.hwyst.net/ttzy/";
-const LOCAL = "url/" + "ttzy/";
+const PRODUCT = "https://www.hwyst.net/";
+const LOCAL = "url/";
 const HOST = PRODUCT;
 
 // 设置请求头
@@ -35,8 +35,8 @@ const API = {
 
     GET_FILE: "/rs/file/get.do"
 };
-// https://www.hwyst.net/ttzy/rs/file/add.do
-// https://www.hwyst.net/ttzy/pages/testUpload.jsp
+// https://www.hwyst.net/rs/file/add.do
+// https://www.hwyst.net/pages/testUpload.jsp
 
 axios.defaults.baseURL = HOST;
 
@@ -232,7 +232,7 @@ Vue.prototype.$chargeAuthority = () => {
             attrName: "示例表头2",
             attrState: "Available",
             attrType: "picture",
-            attrValue: "/ttzy/rs/file/getfile.do?filekey=RFlpicture",
+            attrValue: "/rs/file/getfile.do?filekey=RFlpicture",
             resourceKey: "RDt示例值ID",
             typeKey: "RDf示例表ID"
 
