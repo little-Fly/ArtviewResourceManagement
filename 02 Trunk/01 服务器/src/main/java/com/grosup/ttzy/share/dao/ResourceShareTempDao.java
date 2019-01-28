@@ -26,7 +26,7 @@ public class ResourceShareTempDao implements ResourceConstant {
 
 	private String tempKey=RESOURCE_SHARE_TEMP + "default"; //模板ID
 	private String tempName="default模板"; //模板名稱
-	private String tempFilePath="template0.jsp"; //模板filepath
+	private String tempFilePath="/pages/share/template/template0.jsp"; //模板filepath
 	
 
 	@PostConstruct
