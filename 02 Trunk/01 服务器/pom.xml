@@ -175,7 +175,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
-		<finalName>ttzy</finalName>
+		<finalName>ROOT</finalName>
 	</build>
 	<profiles>
 		<profile>

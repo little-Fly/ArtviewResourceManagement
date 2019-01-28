@@ -36,7 +36,7 @@ public class SecurityFilter implements Filter {
             String url = sRequest.getRequestURI();
             logger.info("url =" + url);
             //角色审核接口,管理员与超级管理员可访问
-            if (url.matches("/ttzy/wx/user/queryUnchecked.do")) {
+            if (url.matches("/wx/user/queryUnchecked.do")) {
                 long uid = TtzyUtil.getUid(sRequest);
                 logger.info("uid = " + uid);
                 logger.info("roleDao = " + roleDao);
