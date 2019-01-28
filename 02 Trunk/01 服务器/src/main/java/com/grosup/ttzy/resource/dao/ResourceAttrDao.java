@@ -82,18 +82,20 @@ public class ResourceAttrDao implements ResourceConstant {
 		return resourceAttrDto;
 	}
 
-	public void add(ResourceAttrDto resourceAttrDto) {
+	public ResourceAttrDto add(ResourceAttrDto resourceAttrDto) {
 		String attrKey = RESOURCE_ATTR + IdUtils.getIncreaseIdByCurrentTimeMillis();
 		resourceAttrDto.setAttrKey(attrKey);
 		map.put(attrKey, resourceAttrDto);
+		return resourceAttrDto;
 	}
 
-	public void del(String attrKey) {
+	public ResourceAttrDto del(String attrKey) {
 		if (!StringUtil.isNullOrEmpty(attrKey)) {
-			map.remove(attrKey);
+			return map.remove(attrKey);
 		} else {
 			log.error("ResourceAttrDao del is error. AttrKey is:" + attrKey);
 		}
+		return null;
 	}
 
 	public ResourceAttrDto update(ResourceAttrDto newResourceAttrDto) {

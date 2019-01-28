@@ -194,13 +194,14 @@ public class ResourceDetailDao implements ResourceConstant {
 		return collection;
 	}
 
-	public void add(Collection<ResourceDetailDto> collection) {
+	public Collection<ResourceDetailDto> add(Collection<ResourceDetailDto> collection) {
 		String resourceKey = RESOURCE_DETAIL + IdUtils.getIncreaseIdByCurrentTimeMillis();
 		for (ResourceDetailDto resourceDetailDto : collection) {
 			resourceDetailDto.setResourceKey(resourceKey);
 			resourceDetailDto.setAttrState(RESOURCE_STATE_APPROVAL_ADD);
 		}
 		list.addAll(collection);
+		return collection;
 	}
 
 	public void approvalAdd(String resourceKey, String approvalMess) {

@@ -18,32 +18,33 @@ public class ResourceDefServiceImp implements ResourceDefService {
 	@Autowired
 	private ResourceDefDao resourceDefDao;
 
-	public void create(String json) {
-		resourceDefDao.create(json);
+	public ResourceDefDto create(String json) {
+		return resourceDefDao.create(json);
 	}
 
-	public void add(String json) {
+	public ResourceDefDto add(String json) {
 		ResourceDefDto resourceDefDto = resourceDefDao.create(json);
 		if (resourceDefDto != null) {
-			resourceDefDao.add(resourceDefDto);
+			return resourceDefDao.add(resourceDefDto);
 		} else {
 			log.error("resourceDefService add resourceDefDto is null. resourceKey json:" + json);
 		}
+		return null;
+	}
+
+	public ResourceDefDto del(String resourceKey) {
+		return resourceDefDao.del(resourceKey);
 
 	}
 
-	public void del(String resourceKey) {
-		resourceDefDao.del(resourceKey);
-
-	}
-
-	public void update(String json) {
+	public ResourceDefDto update(String json) {
 		ResourceDefDto resourceDefDto = resourceDefDao.create(json);
 		if (resourceDefDto != null) {
-			resourceDefDao.update(resourceDefDto);
+			return resourceDefDao.update(resourceDefDto);
 		} else {
 			log.error("resourceDefService update resourceDefDto is null. resourceKey json:" + json);
 		}
+		return null;
 	}
 
 	public ResourceDefDto get(String resourceKey) {

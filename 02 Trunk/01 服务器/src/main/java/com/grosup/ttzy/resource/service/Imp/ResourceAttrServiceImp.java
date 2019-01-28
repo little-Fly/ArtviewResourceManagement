@@ -22,37 +22,38 @@ public class ResourceAttrServiceImp implements ResourceAttrService {
 	@Autowired
 	ResourceDetailService resourceDetailService;
 
-	public void create(String json) {
-		resourceAttrDao.create(json);
+	public ResourceAttrDto create(String json) {
+		return resourceAttrDao.create(json);
 	}
 
-	public void add(String json) {
+	public ResourceAttrDto add(String json) {
 		ResourceAttrDto resourceAttrDto = resourceAttrDao.create(json);
 		if (resourceAttrDto != null) {
-			resourceAttrDao.add(resourceAttrDto);
+			return resourceAttrDao.add(resourceAttrDto);
 		} else {
 			log.error("resourceAttrService add resourceAttrDto is null. attrKey json:" + json);
 		}
-
+		return null;
 	}
 
-	public void del(String attrKey) {
-		resourceAttrDao.del(attrKey);
+	public ResourceAttrDto del(String attrKey) {
+		return resourceAttrDao.del(attrKey);
 	}
 
-	public void update(String json) {
+	public ResourceAttrDto update(String json) {
 		ResourceAttrDto resourceAttrDto = resourceAttrDao.create(json);
 		if (resourceAttrDto != null) {
 			resourceAttrDto = resourceAttrDao.update(resourceAttrDto);
 			if (null != resourceAttrDto) {
 				resourceDetailService.updateAttrName(resourceAttrDto.getAttrKey(), resourceAttrDto.getAttrName());
-			}else
-			{
+				return resourceAttrDto;
+			} else {
 				log.error("resourceAttrService update resourceAttrDto with attrKey is error. json:" + json);
 			}
 		} else {
 			log.error("resourceAttrService update resourceAttrDto is null. attrKey json:" + json);
 		}
+		return null;
 	}
 
 	public ResourceAttrDto get(String attrKey) {

@@ -21,18 +21,18 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 	@Autowired
 	private ResourceDetailDao resourceDetailDao;
 	
-	public void create(String json) {
-		resourceDetailDao.create(json);
+	public Collection<ResourceDetailDto> create(String json) {
+		return resourceDetailDao.create(json);
 	}
 
-	public void add(String json) {
+	public Collection<ResourceDetailDto> add(String json) {
 		Collection<ResourceDetailDto> collection = resourceDetailDao.create(json);
 		if (collection != null) {
-			resourceDetailDao.add(collection);
+			return resourceDetailDao.add(collection);
 		} else {
 			log.error("ResourceDetailService add resourceDetailDto is null. resourceKey json:" + json);
 		}
-
+		return null;
 	}
 
 	public void approvalAdd(String resourceKey, String approvalMess) {

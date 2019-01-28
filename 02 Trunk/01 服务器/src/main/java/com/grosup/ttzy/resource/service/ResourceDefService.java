@@ -5,13 +5,13 @@ import java.util.Collection;
 import com.grosup.ttzy.resource.dto.ResourceDefDto;
 
 public interface ResourceDefService {
-	public void create(String json);
+	public ResourceDefDto create(String json);
 
-	public void add(String json);
+	public ResourceDefDto add(String json);
 
-	public void del(String resourceKey);
+	public ResourceDefDto del(String resourceKey);
 
-	public void update(String json);
+	public ResourceDefDto update(String json);
 
 	public ResourceDefDto get(String resourceKey);
 

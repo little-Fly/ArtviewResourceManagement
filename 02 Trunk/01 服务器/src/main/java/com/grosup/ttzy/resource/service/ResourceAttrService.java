@@ -5,13 +5,13 @@ import java.util.Collection;
 import com.grosup.ttzy.resource.dto.ResourceAttrDto;
 
 public interface ResourceAttrService {
-	public void create(String json);
+	public ResourceAttrDto create(String json);
 
-	public void add(String json);
+	public ResourceAttrDto add(String json);
 
-	public void del(String resourceKey);
+	public ResourceAttrDto del(String resourceKey);
 
-	public void update(String json);
+	public ResourceAttrDto update(String json);
 
 	public ResourceAttrDto get(String resourceKey);
 

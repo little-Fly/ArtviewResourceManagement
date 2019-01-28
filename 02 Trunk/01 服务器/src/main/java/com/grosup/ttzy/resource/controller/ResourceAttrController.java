@@ -23,6 +23,7 @@ import com.grosup.ttzy.util.StringUtil;
 import com.grosup.ttzy.util.TtzyUtil;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/rs/attr")
@@ -44,8 +45,16 @@ public class ResourceAttrController implements MessageMapConstant {
 		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
 			String json = request.getParameter("json");
 			if (!StringUtil.isNullOrEmpty(json)) {
-				resourceAttrService.create(json);
-				messageMap.put(STATE, STATE_SUCCESSFUL);
+				ResourceAttrDto resourceAttrDto = resourceAttrService.create(json);
+				if (null != resourceAttrDto) {
+					JSONObject jsondto = JSONObject.fromObject(resourceAttrDto);
+					messageMap.put(OBJECT, jsondto.toString());
+					messageMap.put(STATE, STATE_SUCCESSFUL);
+				} else {
+					messageMap.put(STATE, STATE_ERROR);
+					messageMap.put(MESSAGE, MESSAGE_JSON_ETER + "json:\"" + json + "\"");
+					log.error("add " + MESSAGE_JSON_ETER + "json:\"" + json + "\"");
+				}
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
 				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
@@ -76,7 +85,16 @@ public class ResourceAttrController implements MessageMapConstant {
 		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
 			String json = request.getParameter("json");
 			if (!StringUtil.isNullOrEmpty(json)) {
-				resourceAttrService.add(json);
+				ResourceAttrDto resourceAttrDto = resourceAttrService.add(json);
+				if (null != resourceAttrDto) {
+					JSONObject jsondto = JSONObject.fromObject(resourceAttrDto);
+					messageMap.put(OBJECT, jsondto.toString());
+					messageMap.put(STATE, STATE_SUCCESSFUL);
+				} else {
+					messageMap.put(STATE, STATE_ERROR);
+					messageMap.put(MESSAGE, MESSAGE_JSON_ETER + "json:\"" + json + "\"");
+					log.error("add " + MESSAGE_JSON_ETER + "json:\"" + json + "\"");
+				}
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
@@ -110,6 +128,7 @@ public class ResourceAttrController implements MessageMapConstant {
 			if (!StringUtil.isNullOrEmpty(attrKey)) {
 				resourceAttrService.del(attrKey);
 				messageMap.put(STATE, STATE_SUCCESSFUL);
+				
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
 				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "attrkey:\"" + attrKey + "\"");
