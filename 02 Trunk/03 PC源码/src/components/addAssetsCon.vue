@@ -13,6 +13,21 @@
 					<el-form-item label="资源类别名称">
 						<el-input placeholder="请输入名称" v-model="form.name"></el-input>
 					</el-form-item>
+					<el-form-item>
+						<el-upload
+								ref="upload"
+								:limit="1"
+								:multiple="false"
+								:on-success="uploadSuc"
+								:on-error="uploadFail"
+								:action="refLogo"
+								:on-change="uploadChange"
+								:auto-upload="false">
+							<el-button slot="trigger" size="small" type="primary">
+								选取资源类型logo
+							</el-button>
+						</el-upload>
+					</el-form-item>
 					<el-form-item label="属性名称" v-for="(item,key) in attrList" :key="key">
 						<el-input placeholder="请输入属性名称" v-model="item.attrName">
 							<el-select v-model="item.type" slot="append" placeholder="请选择属性类型">
@@ -42,6 +57,7 @@
         name: "add-assets-con",
         data() {
             return {
+                refLogo: "",
                 form: {
                     name: "",
                     typeKey: "RDf示例表ID"
@@ -52,10 +68,22 @@
                         type: "default"
                     }
                 ],
-                attrTypeList: []
+                attrTypeList: [],
+                file: null
             };
         },
         methods: {
+            uploadSuc(response) {
+                console.log("upload success");
+                this.$refs.upload.clearFiles();
+                this.file = null;
+            },
+            uploadFail() {
+                console.log("upload Fail");
+            },
+            uploadChange(file) {
+                this.file = file;
+            },
             addConfirm() {
                 if (this.form.name === "") {
                     this.$message.error("资源类别名称不能为空");
@@ -71,6 +99,10 @@
                 }
                 if (isEmpty) {
                     this.$message.error("属性名称或类型不能为空");
+                    return;
+                }
+                if (!this.file) {
+                    this.$message.error("资源类型logo必选");
                     return;
                 }
                 this.addResType();
@@ -90,6 +122,7 @@
                             if (data[0].state === "error") {
                                 this.$message.error(data[0].message);
                             } else {
+                                this.uploadPic(data[0].object);
                                 this.$message.success("资源类型添加成功");
                                 this.form.name = "";
                                 this.form.typeKey = "";
@@ -116,18 +149,19 @@
                         this.$message.error(error.message);
                     });
             },
+            uploadPic(obj) {
+                if (obj) {
+                    obj = JSON.parse(obj);
+                    this.refLogo = `https://www.hwyst.net/rs/file/add.do?json={'typeKey':'${obj.typeKey}'}`;
+                    console.log("this.refLogo:", this.refLogo);
+                    this.$refs.upload.submit();
+                }
+            },
             addAttrFun(typeKey) {
                 for (let i = 0; i < this.attrList.length; i++) {
                     this.addAttrItemFun(this.attrList[i], typeKey);
                 }
             },
-            // attrKey: "RAt示例表头ID1"
-            // attrLevel: "0"
-            // attrName: "示例表头1"
-            // attrType: "default"
-            // attrlen: 0
-            // remark: "示例表头备注"
-            // typeKey: "RDf示例表ID"
             addAttrItemFun(item, typeKey) {
                 let json = {
                     attrName: item.attrName,
