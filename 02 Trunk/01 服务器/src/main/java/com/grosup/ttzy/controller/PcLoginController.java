@@ -64,6 +64,7 @@ public class PcLoginController {
 
         String params = "appid=" + appid + "&secret=" + appSecret + "&code="
                 + code + "&grant_type=" + grant_type;
+        LOGGER.info(Constant.OUTH2_URL + "?" + params);
         String access_token_return_str = HttpRequest.sendGet(Constant.OUTH2_URL,
                 params);
 
@@ -99,15 +100,14 @@ public class PcLoginController {
             }
             queryParam.put("unionId", unionid);
             UserBean user = userService.getUserInfo(queryParam);
-            Map<String, Object> userInfo = new HashMap<String, Object>();
+            LOGGER.info("user value is" + JSONObject.fromObject(user));
             if (ObjectUtil.isNull(user)) {
                 // 用户未注册
-                userInfo.put("status", -1);
+                map.put("status", -1);
             } else {
                 map.put("status", user.getStatus());
                 map.put("userInfo", JSONObject.fromObject(user));
             }
-            map.put("userInfo", userInfo);
             map.put("code", 1);
             map.put("msg", "success");
             

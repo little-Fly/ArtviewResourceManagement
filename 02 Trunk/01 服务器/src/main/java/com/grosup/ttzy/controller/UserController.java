@@ -12,6 +12,7 @@ import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -49,6 +50,7 @@ public class UserController {
     
     @RequestMapping(method = RequestMethod.POST, value = "/add.do")
     @ResponseBody
+    @Transactional
     public JSONObject userAdd(HttpServletRequest request) {
         LOGGER.info("Begin user add...");
         JSONObject result = new JSONObject();
@@ -58,7 +60,7 @@ public class UserController {
             String gender = request.getParameter("gender");
             String reason = request.getParameter("reason");
             String phone = request.getParameter("phone");
-            
+            String name = request.getParameter("name");
             String iv = request.getParameter("iv");
             String encryptedData = request.getParameter("encryptedData");
             UserBean user = new UserBean();
@@ -66,6 +68,7 @@ public class UserController {
             user.setGender(Integer.parseInt(gender));
             user.setPhone(phone);
             user.setReason(reason);
+            user.setName(name);
             SessionBean sessionBean = sessionService.getOpenIdByThirdSession(third_session);
             String ret = AesCbcUtil.decrypt(encryptedData, sessionBean.getSession_key(), iv,
                     "UTF-8");
@@ -73,6 +76,9 @@ public class UserController {
                 LOGGER.error("解密用户信息失败....");
                 throw new Exception();
             }
+            //注册之前先删除
+            userService.userDel(sessionBean.getOpenId());
+
             JSONObject userInfoJSON = JSONObject.fromObject(ret);
             LOGGER.info("ret value = " + userInfoJSON.toString());
             String unionId = (String) userInfoJSON.get("unionId");
@@ -97,7 +103,33 @@ public class UserController {
         }
         return result;
     }
-    
+
+    @RequestMapping(method = RequestMethod.POST, value = "/update.do")
+    @ResponseBody
+    public JSONObject userUpdate(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        try {
+            long uid = Long.parseLong(request.getParameter("uid"));
+            String gender = request.getParameter("gender");
+            String reason = request.getParameter("reason");
+            String phone = request.getParameter("phone");
+            String name = request.getParameter("name");
+            UserBean user = new UserBean();
+            user.setUid(uid);
+            user.setGender(Integer.parseInt(gender));
+            user.setPhone(phone);
+            user.setReason(reason);
+            user.setName(name);
+            user.setStatus(0);
+            userService.userUpdate(user);
+            result.put("code", CodeUtil.SUCCESS);
+        } catch (GrosupException e) {
+            result.put("code", CodeUtil.ERROR);
+            LOGGER.error("修改人员异常", e);
+        }
+        return result;
+    }
+
     @RequestMapping(method = RequestMethod.GET, value = "/queryUnchecked")
     @ResponseBody
     public JSONObject queryUnCheckedUser() {
@@ -111,6 +143,7 @@ public class UserController {
                 for (UserBean userBean : uncheckUsers) {
                     JSONObject user = new JSONObject();
                     user.put("nickName", userBean.getNickName());
+                    user.put("name", userBean.getName());
                     user.put("uid", userBean.getUid());
                     data.add(user);
                 }
@@ -135,7 +168,13 @@ public class UserController {
                 UserRoleBean userRoleBean = new UserRoleBean();
                 userRoleBean.setUid(uid);
                 userRoleBean.setRoleKey("visitor");
+                userRoles.add(userRoleBean);
                 roleService.BatchdelUserRole(userRoles);
+
+                List<UserRoleBean> userRolesAdd = new ArrayList<UserRoleBean>();
+                userRoleBean.setRoleKey("common");
+                userRolesAdd.add(userRoleBean);
+                roleService.BatchAddUserRole(userRolesAdd);
             }
             result.put("code", CodeUtil.SUCCESS);
         } catch (GrosupException e) {
@@ -161,6 +200,7 @@ public class UserController {
                     JSONObject userInfo = new JSONObject();
                     userInfo.put("uid", user.getUid());
                     userInfo.put("nickName", user.getNickName());
+                    userInfo.put("name", user.getName());
                     userInfo.put("phone", user.getPhone());
                     userInfo.put("gender", user.getGender() == 1? "男":"女");
                     userInfo.put("reason", user.getReason());
@@ -211,6 +251,7 @@ public class UserController {
                 JSONObject userInfo = new JSONObject();
                 userInfo.put("uid", user.getUid());
                 userInfo.put("nickName", user.getNickName());
+                userInfo.put("name", user.getName());
                 data.add(userInfo);
             }
             result.put("code", CodeUtil.SUCCESS);
@@ -242,6 +283,7 @@ public class UserController {
                 JSONObject userInfo = new JSONObject();
                 userInfo.put("uid", user.getUid());
                 userInfo.put("nickName", user.getNickName());
+                userInfo.put("name", user.getName());
                 data.add(userInfo);
             }
             result.put("code", CodeUtil.SUCCESS);
@@ -249,6 +291,40 @@ public class UserController {
         } catch (GrosupException e) {
             result.put("code", CodeUtil.ERROR);
             LOGGER.error("查询人员异常", e);
+        }
+        return result;
+    }
+    
+    /**
+     * 清空权限
+     * @param
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.POST, value = "/clear.do")
+    @ResponseBody
+    public JSONObject clearUser(HttpServletRequest request) {
+        JSONObject result = new JSONObject();
+        try {
+            LOGGER.info("uid = " + request.getParameter("uid") + ", name = " + request.getParameter("name"));
+            Long uid = Long.parseLong(request.getParameter("uid"));
+            String name = request.getParameter("name");
+            List<UserRoleBean> users = new ArrayList<UserRoleBean>();
+            users.add(new UserRoleBean(uid, "root"));
+            users.add(new UserRoleBean(uid, "admin"));
+            users.add(new UserRoleBean(uid, "checker"));
+            users.add(new UserRoleBean(uid, "writer"));
+            users.add(new UserRoleBean(uid, "common"));
+            roleImpl.BatchdelUserRole(users);
+            
+            List<UserRoleBean> visitorUser = new ArrayList<UserRoleBean>();
+            visitorUser.add(new UserRoleBean(uid, "visitor"));
+            roleImpl.BatchAddUserRole(visitorUser);
+            userService.changeUserStatus(uid, name, 2, "人员离职");
+            
+            result.put("code", CodeUtil.SUCCESS);
+        } catch (GrosupException e) {
+            result.put("code", CodeUtil.ERROR);
+            LOGGER.error("清空权限异常", e);
         }
         return result;
     }

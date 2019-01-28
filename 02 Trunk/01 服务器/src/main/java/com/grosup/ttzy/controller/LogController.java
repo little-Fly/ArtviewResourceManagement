@@ -20,6 +20,7 @@ import com.grosup.ttzy.beans.ReportBean;
 import com.grosup.ttzy.dao.LogDao;
 import com.grosup.ttzy.util.CodeUtil;
 import com.grosup.ttzy.util.GrosupException;
+import com.grosup.ttzy.util.ObjectUtil;
 
 @Controller
 @RequestMapping("/wx/log")
@@ -40,6 +41,11 @@ public class LogController {
             pageMap.put("indexStart", pageSize * (pageNumber-1));
             pageMap.put("pageSize", pageSize);
             List<LogBean> logs = logDao.queryLogByPage(pageMap);
+            if (ObjectUtil.isNull(logs)) {
+                result.put("code", CodeUtil.NODATA);
+                return result;
+            }
+
             for (LogBean logBean : logs) {
                 JSONObject json = new JSONObject();
                 json.put("remark", logBean.getRemark());
@@ -62,6 +68,9 @@ public class LogController {
         JSONObject result = new JSONObject();
         JSONArray data = new JSONArray();
         try {
+            logger.info("uid = " + uid);
+            logger.info("pageSize = " + pageSize);
+            logger.info("pageNumber = " + pageNumber);
             Map<String, Object> pageMap = new HashMap<String, Object>();
             pageMap.put("indexStart", pageSize * (pageNumber-1));
             pageMap.put("pageSize", pageSize);

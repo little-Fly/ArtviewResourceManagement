@@ -13,6 +13,7 @@ import com.grosup.ttzy.beans.LogBean;
 import com.grosup.ttzy.beans.SessionBean;
 import com.grosup.ttzy.beans.UserBean;
 import com.grosup.ttzy.dao.LogDao;
+import com.grosup.ttzy.dao.RoleDao;
 import com.grosup.ttzy.dao.SessionDao;
 import com.grosup.ttzy.dao.UserDao;
 
@@ -32,11 +33,14 @@ public class TtzyUtil {
     
     private static LogDao logDao;
     
+    public static RoleDao roleDao;
+    
     public void init() {
         ttzyUtil = this;  
         TtzyUtil.sessionDao = this.sessionDao;
         TtzyUtil.userDao = this.userDao;
         TtzyUtil.logDao = this.logDao;
+        TtzyUtil.roleDao = this.roleDao;
     }
     
     public void setSessionDao(SessionDao sessionDao) {
@@ -49,6 +53,10 @@ public class TtzyUtil {
     
     public void setLogDao(LogDao logDao) {
         TtzyUtil.logDao = logDao;
+    }
+    
+    public void setRoleDao(RoleDao roleDao) {
+        TtzyUtil.roleDao = roleDao;
     }
     
     /**

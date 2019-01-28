@@ -10,7 +10,6 @@ public class ObjectUtil {
 	/**
 	 * 判断一个对象是否不为空
 	 * @param obj
-	 * @param msg
 	 * @return
 	 */
 	public static boolean isNotNull(Object obj) {

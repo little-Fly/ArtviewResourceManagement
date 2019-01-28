@@ -107,6 +107,7 @@ public class WxLoginController {
                  //用户未注册
                  map.put("status", -1);
              } else {
+                 LOGGER.info("userInfo value is" + JSONObject.fromObject(userBean));
                  map.put("status", userBean.getStatus());
                  map.put("userInfo", JSONObject.fromObject(userBean));
                  session.setAttribute("userId", userBean.getUid());
