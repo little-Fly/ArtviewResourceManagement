@@ -18,7 +18,10 @@ const store = new Vuex.Store({
     userRoleList: [],
     userAuditStatus: 1, // 用户审核状态 1:未注册 2：审核中 3:被拒绝 4: 已通过
     accessTree: {}, // 角色权限树
-    myShareBag: [],//待分享的资源列表
+    myShareBag: {
+       rsData: [],//待分享的资源列表
+       shareKey: '',
+       isModify: false},
   },
   mutations: {
     updateCustomLoginStatus (state, val) {
@@ -146,6 +149,15 @@ const store = new Vuex.Store({
     },
     updateUserRoleList (state, val) {
       state.userRoleList = val
+    },
+    addRSShareData (state, val) {
+      state.myShareBag.rsData.push(val);
+    },
+    updateRSShareKey (state, val) {
+      state.myShareBag.shareKey = val;
+    },
+    updateRSShareIsModify (state, val) {
+      state.myShareBag.isModify = val;
     },
   }
 })

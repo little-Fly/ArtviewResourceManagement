@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { BASE_URL } from '@/config/api';
+import { HostUrl } from '@/config/api';
 export default {
   data () {
     return {
@@ -139,11 +139,21 @@ export default {
           console.log(res);
           this.resList = res.data;
           for(var i=0; i<this.resList.length; i++){
-            if(this.resList[i].logoUrl)this.resList[i].logoUrl = BASE_URL + this.resList[i].logoUrl;
+            if(this.resList[i].logoUrl)this.resList[i].logoUrl = HostUrl + this.resList[i].logoUrl;
             else this.resList[i].logoUrl = "../../assets/images/resourcebk.png";
           }
         }
       });
+    },
+    errImg(e){
+      var _errImg=e.target.dataset.errImg;
+      var _objImg="'"+_errImg+"'";
+      var _errObj={};
+      _errObj[_errImg]="../../assets/images/resourcebk.png";
+      console.log( e.detail.errMsg+"----"+ _errObj[_errImg] + "----" +_objImg );
+      this.setData(_errObj);
+
+      //this.resList[index].logoUrl = "../../assets/images/resourcebk.png";
     },
     clickResourceTap(typeKey, name){
       wx.navigateTo({url: "resourceView/main?typeKey=" + typeKey+"&typeName="+name})

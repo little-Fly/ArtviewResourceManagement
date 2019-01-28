@@ -59,7 +59,7 @@ export default {
     }
   },
   onShow(){
-    this.shCount = this.$store.state.myShareBag.length;
+    this.shCount = this.$store.state.myShareBag.rsData.length;
     if(this.isForAdd)this.searchText=this.$store.state.rsResearchWord;
   },
   mounted () {
@@ -228,20 +228,21 @@ export default {
      */
     addShareBagBtn(index) {
       var add = true;
-      for(var i=0; i<this.$store.state.myShareBag.length; i++){
+      for(var i=0; i<this.$store.state.myShareBag.rsData.length; i++){
         var flag = 0;
-        for(var j=0; j<this.$store.state.myShareBag[i].length; j++){
+        for(var j=0; j<this.$store.state.myShareBag.rsData[i].length; j++){
           if(this.rsList[index].length < ( j+1 ) )break;
-          if(this.$store.state.myShareBag[i][j] == this.rsList[index][j] ) flag++;
+          if(this.$store.state.myShareBag.rsData[i][j] == this.rsList[index][j] ) flag++;
         }
-        if(flag == this.$store.state.myShareBag[i].length){
+        if(flag == this.$store.state.myShareBag.rsData[i].length){
           add = false;
           break;
         }
       }
       if(add){
-        this.$store.state.myShareBag.push(this.rsList[index]);
-        this.shCount = this.$store.state.myShareBag.length;
+        this.$store.commit('addRSShareData', this.rsList[index]);
+        this.$store.commit('updateRSShareIsModify', true);
+        this.shCount = this.$store.state.myShareBag.rsData.length;
       }
       else{
         wx.showToast({title: '重复选择'});
@@ -252,7 +253,7 @@ export default {
         wx.showModal({title: '提示', content: '选些资源才能打开分享包', showCancel: false});
         return;
       }
-       wx.navigateTo({url: "../../share/main?rsTypeName=" + this.typeName});
+       wx.navigateTo({url: "../../share/main?rsTypeName=" + this.typeName + "&typeKey=" + this.typeKey});
     },
     /**
      * 获取更多资源条目

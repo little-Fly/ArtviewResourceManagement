@@ -1,8 +1,8 @@
 ﻿<template>
   <div class="resourcelist-wrap">
-    <div class="clearfix pt-10 pb-10 pr-pl-15">
-      <div class="fl">选择模版：</div>
-      <div class="fr">
+    <div class="template-box">
+      <div class="fl template">选择模版：</div>
+      <div class="template for-select">
         <picker @change="tPickerChange" :value="tIndex" :range="tArray" range-key="tempName">
           <view class="picker">
             <span class="" v-if="tIndex === -1">请选择</span>
@@ -10,12 +10,12 @@
           </view>
         </picker>
       </div>
+
     </div>
     <div class="function-btn-box">
-      <span class="function-btn for-select-template" @click="creatShareBitmap()">生成二维码</span>
-      <span class="space"></span>
-      <span class="function-btn for-create-page" @click="PreviewSharePage()">预览分享页面</span>
-      <!-- <span class="function-btn for-create-page" @click="createSharePage()">生成分享页面</span> -->
+      <span class="function-btn for-create-page" @click="PreviewSharePage()">预览</span>
+      <span class="space"></span><span class="space"></span>
+      <span class="function-btn for-select-template" @click="creatShareBitmap()">分享</span>
     </div>
     <template v-for="(item, index) in shRsList">
       <div class="resourcelist-item-wrap" :key='index'>
@@ -45,11 +45,14 @@
 </template>
 
 <script>
+import { HostUrl } from '@/config/api';
 export default {
   data () {
     return {
       shRsList: [], //待分享资源列表
+      rsTypeKey: '',
       srTypeName: '',
+      filePath: '',
       tIndex: -1,
       tArray: [
         {
@@ -75,7 +78,9 @@ export default {
   mounted () {
     let paramsObj = this.$tool.getOptions();
     this.rsTypeName = paramsObj.rsTypeName;
-    this.shRsList = this.$store.state.myShareBag;
+    this.rsTypeKey = paramsObj.typeKey;
+    this.shRsList = this.$store.state.myShareBag.rsData;
+    this.submitNewShareResource();
     // 获取可用的模版列表
     let templateList = this.getTemplateList();
   },
@@ -83,17 +88,18 @@ export default {
   methods: {
     tPickerChange (e) {
       this.tIndex = e.target.value;
+      this.filePath = HostUrl + this.tArray[this.tIndex].tempFilePath;
     },
     creatShareBitmap(){
       if (this.checkTemplateSelect()) {
-        var tUrl = "https://www.hwyst.net/ttzy/pages/share/template/template0.jsp";
-        wx.navigateTo({url: "/pages/share/erweima/main?shareUrl=" + tUrl + "&rsTypeName=" + this.rsTypeName});
+        wx.navigateTo({url: "/pages/share/erweima/main?shareUrl=" + this.filePath + "&rsTypeName=" + this.rsTypeName+ "&shareKey=" + this.$store.state.myShareBag.shareKey
+        });
       }
     },
     PreviewSharePage () {
       if (this.checkTemplateSelect()) {
         wx.navigateTo({
-          url: "/pages/share/sharePage/main"
+          url: "/pages/share/sharePage/main?tpltUrl="+ this.filePath + "&shareKey=" + this.$store.state.myShareBag.shareKey
         });
       }
     },
@@ -121,8 +127,36 @@ export default {
       }
       return res;
     },
-    searchResourceBtn(){
-      
+    //将分享包的资源提交后台保存，以获取分享KEY
+    submitNewShareResource(){
+      var rsShare = [];
+      for(var i=0; i<this.$store.state.myShareBag.rsData.length; i++){
+        rsShare.push({
+          typeKey: this.rsTypeKey,
+          resourceKey: this.$store.state.myShareBag.rsData[i][0].resourceKey
+        });
+      }
+      var sData = {
+            resourceListJson: JSON.stringify(rsShare),
+            templateName: 'default模板'
+      };
+      this.$http({
+        url: "/rs/share/add.do",
+        data: {json: sData},
+        method: 'get',
+        header: {
+          'content-type': 'text/plain'
+        },
+        success: res => {
+          if(res.state == "successful"){
+            this.$store.commit('updateRSShareKey', res.id);
+          }
+          else{
+             wx.showModal({title: '错误', content: '服务器异常，请与管理员联系！', showCancel: false});
+          }
+          console.log(res);
+        }
+      });
     },
     addSearchConditions(){
       
@@ -239,7 +273,7 @@ export default {
     font-size: 15px;
   }
   .item-title{
-    display: inline-block;
+    display: flex;
     width: 15%;
     text-align: right;
     word-break: break-all;
@@ -257,10 +291,10 @@ export default {
   }
   .resourcelist-item-wrap{
     display: flex;
-    width:90%;
+    width:92%;
     padding-top: 16px;
     border-top: 1px solid #f56c6c;
-    margin-left: 20px;
+    margin-left: 16px;
   }
   .item-box{
     width:100%;
@@ -277,5 +311,17 @@ export default {
   }
   .sh-count{
     color: #ff0000;
+  }
+  .template-box{
+    display: inline-block;
+    width:92%;
+    margin: 12px 16px;
+  }
+  .template{
+    font-size: 15px;
+    &.for-select{
+      text-align: right;
+      color: #E64340;
+    }
   }
 </style>
