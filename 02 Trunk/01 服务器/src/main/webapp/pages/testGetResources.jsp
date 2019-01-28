@@ -4,8 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="icon" type="image/x-icon" href="/static/img/favicon.ico" />
 <title>资源查看</title>
-		<script src="../static/js/jquery-3.3.1.js"></script>
+<script src="/static/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" >
 	$(document).ready(function(){
 	
@@ -21,7 +22,7 @@
 			  }
 			});
 	
-	$.getJSON("../rs/attr/getall.do", { typekey: "RDf示例表ID", time: getMyTime() },
+	$.getJSON("/rs/attr/getall.do", { typekey: "RDf示例表ID", time: getMyTime() },
 	        function(data){
 	
 			  if(data[0].state=="successful")
@@ -34,7 +35,7 @@
 			});
 		
 	
-	$.getJSON("../rs/detail/getall.do", { typekey: "RDf示例表ID", time: getMyTime() },
+	$.getJSON("/rs/detail/getall.do", { typekey: "RDf示例表ID", time: getMyTime() },
 	        function(data){
 	
 			  if(data[0].state=="successful")
@@ -46,7 +47,7 @@
 			  }
 			});
 	
-	$.getJSON("../rs/share/getall.do", { typekey: "RDf示例表ID", time: getMyTime() },
+	$.getJSON("/rs/share/getall.do", { typekey: "RDf示例表ID", time: getMyTime() },
 	        function(data){
 	
 			  if(data[0].state=="successful")
@@ -57,6 +58,19 @@
 				  error(data[0]);
 			  }
 			});
+	
+	$.getJSON("/rs/file/getall.do", { time: getMyTime() },
+	        function(data){
+	
+			  if(data[0].state=="successful")
+			  {
+				  addFile(data[0].data);
+			  }else
+			  {
+				  error(data[0]);
+			  }
+			});
+	
 	});
 	
 	function addDef(jsonstr)
@@ -129,6 +143,23 @@
 		$("body").append(str);
 	}
 	
+	function addFile(jsonstr)
+	{
+		$("body").append("分享：</br>");
+		var data = $.parseJSON(jsonstr);
+		var len = data.length;
+		var str="";
+		for(var i=0;i<len;i+=1)
+		{
+			str+=data[i].fileKey;
+			str+=": ";
+			str+=data[i].relativePath;
+			str+="</br>";
+		}
+		
+		$("body").append(str);
+	}
+	
 	function error(data)
 	{
 		$("body").html(data);
@@ -141,8 +172,8 @@
 </script>
 </head>
 <body>
-<a href="https://www.hwyst.net/ttzy/pages/share/template/template0.jsp?sharekey=RSrtemplatekey" >template</a>
-<a href="https://www.hwyst.net/ttzy/rs/search/searchbyuser.do?typekey=RDf%E7%A4%BA%E4%BE%8B%E8%A1%A8ID&searchkey={%22RAt%E7%A4%BA%E4%BE%8B%E8%A1%A8%E5%A4%B4ID1%22:%22%E8%A1%8C2%E5%80%BC1%22}" >searchbyuser</a>
-
+<a href="https://www.hwyst.net/pages/share/template/template0.jsp?sharekey=RSrtemplatekey" >template</a>
+<a href="https://www.hwyst.net/rs/search/searchbyuser.do?typekey=RDf%E7%A4%BA%E4%BE%8B%E8%A1%A8ID&searchkey={%22RAt%E7%A4%BA%E4%BE%8B%E8%A1%A8%E5%A4%B4ID1%22:%22%E8%A1%8C2%E5%80%BC1%22}" >searchbyuser</a>
+</br>
 </body>
 </html>

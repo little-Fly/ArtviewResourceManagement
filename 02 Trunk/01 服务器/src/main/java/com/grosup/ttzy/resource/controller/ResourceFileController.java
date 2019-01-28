@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class ResourceFileController implements MessageMapConstant {
 	 * @param json {""}参见 /pages/testUpload.jsp
 	 * @post File
 	 * @return ["state":"successful"}]
-	 * @throws GrosupException 
+	 * @throws GrosupException
 	 */
 	@RequestMapping(value = "/add.do", method = { RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
@@ -129,11 +130,11 @@ public class ResourceFileController implements MessageMapConstant {
 	}
 
 	/**
-	 * /rs/def/del.do
+	 * /rs/file/del.do
 	 * 
 	 * @param filekey ：fileKey
 	 * @return ["state":"error", "message":"错误消息"}]
-	 * @throws GrosupException 
+	 * @throws GrosupException
 	 */
 	@RequestMapping(value = "/del.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
@@ -160,7 +161,7 @@ public class ResourceFileController implements MessageMapConstant {
 	}
 
 	/**
-	 * /rs/def/get.do
+	 * /rs/file/get.do
 	 * 
 	 * @param filekey ：fileKey
 	 * @return [{"data":"[{\"name\":\"示例表名\",\"remark\":\"示例表注释\",\"fileKey\":\"RDf示例表ID\"}]","state":"successful"}]
@@ -187,6 +188,28 @@ public class ResourceFileController implements MessageMapConstant {
 			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + fileKey + "\"");
 			log.error("update " + MESSAGE_PARAM_ETER + "resourceKey:\"" + fileKey + "\"");
 		}
+
+		JSONArray jsonobj = JSONArray.fromObject(messageMap);
+		return jsonobj.toString();
+	}
+
+	/**
+	 * /rs/file/get.do
+	 * 
+	 * @param filekey ：fileKey
+	 * @return [{"data":"[{\"name\":\"示例表名\",\"remark\":\"示例表注释\",\"fileKey\":\"RDf示例表ID\"}]","state":"successful"}]
+	 */
+	@RequestMapping(value = "/getall.do", method = { RequestMethod.GET,
+			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String getAll(HttpServletRequest request, HttpServletResponse response) {
+		Map<String, String> messageMap = new HashMap<String, String>();
+		Collection<ResourceFileDto> list = resourceFileService.getAll();
+		if (list != null) {
+			JSONArray ResourceFileDtoJson = JSONArray.fromObject(list);
+			messageMap.put(DATA, ResourceFileDtoJson.toString());
+			messageMap.put(STATE, STATE_SUCCESSFUL);
+		} 
 
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();

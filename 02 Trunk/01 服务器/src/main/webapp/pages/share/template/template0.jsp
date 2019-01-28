@@ -9,13 +9,13 @@
 <head>
 <title></title>
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
-<link rel="icon" type="image/x-icon" href="../../../static/favicon.ico" />
+<link rel="icon" type="image/x-icon" href="/static/img/favicon.ico" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
-<script src="../../../static/js/jquery-3.3.1.js"></script>
+<script src="/static/js/jquery-3.3.1.js"></script>
 <script src="../share-v1r1c00.js"></script>
 <link href="../share-v1r1c00.css" rel='stylesheet' />
-<script src="../../../static/js/qrcode.js"></script>
+<script src="/static/js/qrcode.js"></script>
 <style type="text/css">
 </style>
 
@@ -43,11 +43,11 @@
 		$("#noshare").hide();
 		$("#loading").hide();
 		$("#shareDiv").show();
-		var url = window.location.href;
-		new QRCode(document.getElementById('qrCode'), url);
-		$("#qrCodeAll").show();
-		var margin = ($("#qrCode").height() - $("#qrCodeIco").height()) / 2; //控制Logo图标的位置
-		$("#qrCodeIco").css("margin", margin);
+		//var url = window.location.href;
+		//new QRCode(document.getElementById('qrCode'), url);
+		//$("#qrCodeAll").show();
+		//var margin = ($("#qrCode").height() - $("#qrCodeIco").height()) / 2; //控制Logo图标的位置
+		//$("#qrCodeIco").css("margin", margin);
 		
 	}
 
