@@ -24,6 +24,7 @@ import com.grosup.ttzy.util.StringUtil;
 import com.grosup.ttzy.util.TtzyUtil;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Controller
 @RequestMapping("/rs/def")
@@ -40,7 +41,8 @@ public class ResourceDefController implements MessageMapConstant {
 	@RequestMapping(value = "/create.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String create(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, GrosupException {
+	public String create(HttpServletRequest request, HttpServletResponse response)
+			throws UnsupportedEncodingException, GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
 		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
 			log.error("request.getCharacterEncoding(): " + request.getCharacterEncoding());
@@ -55,8 +57,16 @@ public class ResourceDefController implements MessageMapConstant {
 			log.error("new String(request.getParameter(\"json\").getBytes(\"iso-8859-1\"), \"utf-8\"): "
 					+ (new String(json.getBytes("iso-8859-1"), "utf-8")));
 			if (!StringUtil.isNullOrEmpty(json)) {
-				resourceDefService.create(json);
-				messageMap.put(STATE, STATE_SUCCESSFUL);
+				ResourceDefDto resourceDefDto = resourceDefService.create(json);
+				if (null != resourceDefDto) {
+					JSONObject jsondto = JSONObject.fromObject(resourceDefDto);
+					messageMap.put(OBJECT, jsondto.toString());
+					messageMap.put(STATE, STATE_SUCCESSFUL);
+				} else {
+					messageMap.put(STATE, STATE_ERROR);
+					messageMap.put(MESSAGE, MESSAGE_JSON_ETER + "json:\"" + json + "\"");
+					log.error("add " + MESSAGE_JSON_ETER + "json:\"" + json + "\"");
+				}
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
 				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
@@ -76,7 +86,7 @@ public class ResourceDefController implements MessageMapConstant {
 	 * 
 	 * @param json [{"name":"示例表名","remark":"示例表注释","typeKey":"RDf示例表ID"}]
 	 * @return ["state":"error", "message":"错误消息"}]
-	 * @throws GrosupException 
+	 * @throws GrosupException
 	 */
 	@RequestMapping(value = "/add.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
@@ -86,8 +96,17 @@ public class ResourceDefController implements MessageMapConstant {
 		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
 			String json = request.getParameter("json");
 			if (!StringUtil.isNullOrEmpty(json)) {
-				resourceDefService.add(json);
-				messageMap.put(STATE, STATE_SUCCESSFUL);
+
+				ResourceDefDto resourceDefDto = resourceDefService.add(json);
+				if (null != resourceDefDto) {
+					JSONObject jsondto = JSONObject.fromObject(resourceDefDto);
+					messageMap.put(OBJECT, jsondto.toString());
+					messageMap.put(STATE, STATE_SUCCESSFUL);
+				} else {
+					messageMap.put(STATE, STATE_ERROR);
+					messageMap.put(MESSAGE, MESSAGE_JSON_ETER + "json:\"" + json + "\"");
+					log.error("add " + MESSAGE_JSON_ETER + "json:\"" + json + "\"");
+				}
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
 				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
@@ -107,7 +126,7 @@ public class ResourceDefController implements MessageMapConstant {
 	 * 
 	 * @param typekey ：typeKey
 	 * @return ["state":"error", "message":"错误消息"}]
-	 * @throws GrosupException 
+	 * @throws GrosupException
 	 */
 	@RequestMapping(value = "/del.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
@@ -138,7 +157,7 @@ public class ResourceDefController implements MessageMapConstant {
 	 * 
 	 * @param json [{"name":"示例表名","remark":"示例表注释","typeKey":"RDf示例表ID"}]
 	 * @return ["state":"error", "message":"错误消息"}]
-	 * @throws GrosupException 
+	 * @throws GrosupException
 	 */
 	@RequestMapping(value = "/update.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")

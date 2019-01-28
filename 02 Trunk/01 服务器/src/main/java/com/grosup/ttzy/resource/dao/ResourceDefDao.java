@@ -45,27 +45,31 @@ public class ResourceDefDao implements ResourceConstant {
 		return resourceDefDto;
 	}
 
-	public void add(ResourceDefDto resourceDefDto) {
+	public ResourceDefDto add(ResourceDefDto resourceDefDto) {
 		String typeKey = RESOURCE_DEF + IdUtils.getIncreaseIdByCurrentTimeMillis();
 		resourceDefDto.setTypeKey(typeKey);
 		map.put(typeKey, resourceDefDto);
+		return resourceDefDto;
 	}
 
-	public void del(String typeKey) {
+	public ResourceDefDto del(String typeKey) {
 		if (!StringUtil.isNullOrEmpty(typeKey)) {
-			map.remove(typeKey);
+			return map.remove(typeKey);
 		} else {
 			log.error("ResourceDefDao del is error. typeKey is:" + typeKey);
 		}
+		return null;
 	}
 
-	public void update(ResourceDefDto resourceDefDto) {
+	public ResourceDefDto update(ResourceDefDto resourceDefDto) {
 		String typeKey = resourceDefDto.getTypeKey();
 		if (!StringUtil.isNullOrEmpty(typeKey)) {
 			map.put(typeKey, resourceDefDto);
+			return resourceDefDto;
 		} else {
 			log.error("ResourceDefDao update is error. typeKey is:" + typeKey);
 		}
+		return null;
 	}
 
 	public ResourceDefDto get(String key) {

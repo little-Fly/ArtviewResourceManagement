@@ -7,9 +7,9 @@ import java.util.Map;
 import com.grosup.ttzy.resource.dto.ResourceDetailDto;
 
 public interface ResourceDetailService {
-	public void create(String json);
+	public Collection<ResourceDetailDto> create(String json);
 
-	public void add(String json);
+	public Collection<ResourceDetailDto> add(String json);
 
 	public void approvalAdd(String resourceKey, String approvalMess);
 
