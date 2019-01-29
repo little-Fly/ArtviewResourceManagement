@@ -638,6 +638,7 @@
                         if (response.status === 200) {
                             let data = response.data;
                             this.attrTypeList = JSON.parse(data[0].data);
+                            console.log(this.attrTypeList);
                             this.searchOptions = this.attrTypeList;
                             if (this.attrTypeList.length > 0) {
                                 this.getResTable(this.attrTypeList[0], 0);
