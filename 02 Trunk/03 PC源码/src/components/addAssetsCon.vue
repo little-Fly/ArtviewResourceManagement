@@ -76,7 +76,26 @@
             uploadSuc(response) {
                 console.log("upload success");
                 this.$refs.upload.clearFiles();
+                let params = {
+                    logoUrl: response[0].data,
+                    typeKey: this.file.typeKey,
+                    name: this.file.name,
+                    remark: this.file.remark
+                };
                 this.file = null;
+                let json = {
+                    json: decodeURI(encodeURI(JSON.stringify(params)))
+                };
+                this.$ajax.def
+                    .updateDef(json)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            if (data[0].state === "error") {
+                                this.$message.error(data[0].message);
+                            }
+                        }
+                    });
             },
             uploadFail() {
                 console.log("upload Fail");
@@ -152,9 +171,11 @@
             uploadPic(obj) {
                 if (obj) {
                     obj = JSON.parse(obj);
-                    this.refLogo = `https://www.hwyst.net/rs/file/add.do?json={'typeKey':'${obj.typeKey}'}`;
-                    console.log("this.refLogo:", this.refLogo);
-                    this.$refs.upload.submit();
+                    this.refLogo = `https://www.hwyst.net/rs/file/add.do?json={"typeKey":"${obj.typeKey}"}`;
+                    this.file = obj;
+                    setTimeout(() => {
+                        this.$refs.upload.submit();
+                    }, 600);
                 }
             },
             addAttrFun(typeKey) {
