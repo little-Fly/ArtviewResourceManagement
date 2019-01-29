@@ -12,7 +12,7 @@
               <span class="item-level">{{ss.attrLevel}}</span>
             </div>
             <div v-else-if="ss.attrType == 'video'" class="content-item">
-              <video :src="ss.attrValue" controls="controls" width="85%" height="180"></video>
+              <video :src="ss.attrValue" controls="controls"  class="resource-vedio"></video>
               <span class="item-level">{{ss.attrLevel}}</span>
             </div>
             <div v-else class="content-item">
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-
+import { $resourcer } from "@/utils/resourcer.js"
 export default {
 
   data () {
@@ -84,31 +84,7 @@ export default {
     clickOpenAuthBtn(index){
       this.register.reason = this.userList[index].reason;
     },
-    /*
-    *从接口拿到的资源数据是一维平铺，这里根据sourceKey进行二维处理
-    */
-    changTheSourceArray(data){
-      var saList = [];
-      var dList = [];
-      for(;;){
-        if(data.length < 1)break;
-        var key = data[0].resourceKey;
-        var i=0;
-        for(;;){
-          if(key == data[i].resourceKey){
-            data[i].attrLevel = this.getAuthorizeWord(data[i].attrLevel);
-            dList.push(data[i]);
-            data.splice(i,1);
-          }
-          else i++;
-          if(data.length == 0)break;
-          if(i >= data.length)break;
-        }
-        saList.push(dList);
-        dList = [];
-      }
-      return saList;
-    },
+
    /*
     *过滤需要审核的资源
     */
@@ -149,7 +125,7 @@ export default {
           start: (this.page-1)*this.rowNumbers,
           len: this.rowNumbers},
         success: res => {
-          var saList = this.changTheSourceArray(res.data);
+          var saList = $resourcer(res.data);
           var auditList = this.attrStateFilter(this.operType, saList);
           wx.hideLoading();
           for(var j=0; j<auditList.length; j++){
@@ -169,11 +145,6 @@ export default {
            }
         }
       });
-    },
-    getAuthorizeWord(attrLevel){
-      if(attrLevel == 2)return "管理员";
-      else if(attrLevel == 1)return "员工";
-      return "任何人";
     },
     /**
      * 审核按钮通过按钮点击
@@ -329,6 +300,10 @@ export default {
     font-size: 20px;
   }
   .resource-image{
+    width: 85%;
+    height: 180px;
+  }
+  .resource-vedio{
     width: 85%;
     height: 180px;
   }

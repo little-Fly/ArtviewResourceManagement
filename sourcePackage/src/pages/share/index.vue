@@ -31,7 +31,7 @@
               <img  class="resource-image" :src="ss.attrValue" alt="">
             </div>
             <div v-else-if="ss.attrType == 'video'" class="content-item" :key="'vdo' + inx">
-              <video :src="ss.attrValue" controls="controls" width="100%" height="180"></video>
+              <video :src="ss.attrValue" controls="controls" class="resource-video"></video>
             </div>
             <div v-else class="content-item" :key="'ctt' + inx">
               <span class="item-title">{{ss.attrName}}：</span>
@@ -53,6 +53,7 @@ export default {
       rsTypeKey: '',
       srTypeName: '',
       filePath: '',
+      fileName: 'defult模板',
       tIndex: -1,
       tArray: [
         {
@@ -80,7 +81,8 @@ export default {
     this.rsTypeName = paramsObj.rsTypeName;
     this.rsTypeKey = paramsObj.typeKey;
     this.shRsList = this.$store.state.myShareBag.rsData;
-    this.submitNewShareResource();
+    if(this.$store.state.myShareBag.shareKey)this.updateRSShareData();
+    else this.submitNewShareResource();
     // 获取可用的模版列表
     let templateList = this.getTemplateList();
   },
@@ -89,6 +91,7 @@ export default {
     tPickerChange (e) {
       this.tIndex = e.target.value;
       this.filePath = HostUrl + this.tArray[this.tIndex].tempFilePath;
+      this.fileName = this.tArray[this.tIndex].tempName;
     },
     creatShareBitmap(){
       if (this.checkTemplateSelect()) {
@@ -103,11 +106,6 @@ export default {
         });
       }
     },
-    /* createSharePage () {
-      wx.navigateTo({
-        url: "/pages/share/resTemplate/main?rsTypeName=" + this.rsTypeName
-      });
-    }, */
     checkTemplateSelect () {
       let res = true;
       if (this.tIndex === -1) {
@@ -138,7 +136,7 @@ export default {
       }
       var sData = {
             resourceListJson: JSON.stringify(rsShare),
-            templateName: 'default模板'
+            templateName: this.fileName
       };
       this.$http({
         url: "/rs/share/add.do",
@@ -150,6 +148,7 @@ export default {
         success: res => {
           if(res.state == "successful"){
             this.$store.commit('updateRSShareKey', res.id);
+            this.$store.commit('updateRSShareIsModify', false);
           }
           else{
              wx.showModal({title: '错误', content: '服务器异常，请与管理员联系！', showCancel: false});
@@ -158,15 +157,46 @@ export default {
         }
       });
     },
-    addSearchConditions(){
-      
+    //分享包数据已修改，提交后台跟新；
+    updateRSShareData(){
+      if(!this.$store.state.myShareBag.isModify)return;
+      var rsShare = [];
+      for(var i=0; i<this.$store.state.myShareBag.rsData.length; i++){
+        rsShare.push({
+          typeKey: this.rsTypeKey,
+          resourceKey: this.$store.state.myShareBag.rsData[i][0].resourceKey
+        });
+      }
+      var sData = {
+            resourceListJson: JSON.stringify(rsShare),
+            templateName: this.fileName
+      };
+      this.$http({
+        url: "/rs/share/update.do",
+        data: {json: sData},
+        method: 'get',
+        header: {
+          'content-type': 'text/plain'
+        },
+        success: res => {
+          if(res.state == "successful"){
+            this.$store.commit('updateRSShareIsModify', false);
+          }
+          else{
+             wx.showModal({title: '错误', content: '服务器异常，请与管理员联系！', showCancel: false});
+          }
+          console.log(res);
+        }
+      });
     },
     /*
     *从资源包里删除一条资源
     */
     delResource(index){
       this.shRsList.splice(index, 1);
-      this.$store.state.myShareBag = this.shRsList;
+      this.$store.commit('updateRSShareData', this.shRsList);
+      this.$store.commit('updateRSShareIsModify', true);
+      this.updateRSShareData();
     },
 
     /*
@@ -179,7 +209,9 @@ export default {
        }
        this.shRsList.splice(index + 1, 0, this.shRsList[index - 1]);
        this.shRsList.splice(index - 1, 1);
-      this.$store.state.myShareBag = this.shRsList;
+       this.$store.commit('updateRSShareData', this.shRsList);
+       this.$store.commit('updateRSShareIsModify', true);
+       this.updateRSShareData();
     },
     downResource(index){
        if((index + 1) >= this.shRsList.length){
@@ -188,7 +220,9 @@ export default {
        }
        this.shRsList.splice(index + 2, 0, this.shRsList[index]);
        this.shRsList.splice(index, 1);
-      this.$store.state.myShareBag = this.shRsList;
+       this.$store.commit('updateRSShareData', this.shRsList);
+       this.$store.commit('updateRSShareIsModify', true);
+       this.updateRSShareData();
     },
 
     /**
@@ -309,19 +343,27 @@ export default {
     width: 100%;
     height: 180px;
   }
+  .resource-video{
+    width: 316px;
+    height: 180px;
+  }
   .sh-count{
     color: #ff0000;
   }
   .template-box{
-    display: inline-block;
+    display: flex;
     width:92%;
-    margin: 12px 16px;
+    margin: 8px 16px;
   }
   .template{
+    display: inline-block;
     font-size: 15px;
+    padding: 4px 8px;
     &.for-select{
       text-align: right;
       color: #E64340;
+      background: #dddddd;
+      border-radius: 8px;
     }
   }
 </style>

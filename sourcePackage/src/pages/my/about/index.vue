@@ -1,9 +1,12 @@
-<template>
+﻿<template>
   <div>
     <div class="zan-panel">
       <div class="zan-cell">
         <div class="zan-cell__bd">天天资源版本号</div>
         <div class="zan-cell__ft">1.0.0</div>
+      </div>
+      <div class="zan-cell">
+        <div class="zan-cell__bd">九天云软件提供技术支持</div>
       </div>
     </div>
   </div>

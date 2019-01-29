@@ -153,6 +153,9 @@ const store = new Vuex.Store({
     addRSShareData (state, val) {
       state.myShareBag.rsData.push(val);
     },
+    updateRSShareData (state, val) {
+      state.myShareBag.rsData = val;
+    },
     updateRSShareKey (state, val) {
       state.myShareBag.shareKey = val;
     },

@@ -15,7 +15,7 @@
               <image  class="resource-image" :src="ss.attrValue" alt=""></image>
             </div>
             <div v-else-if="ss.attrType == 'video'" class="content-item">
-              <video :src="ss.attrValue" controls="controls" width="100%" height="180"></video>
+              <video :src="ss.attrValue" controls="controls"  class="resource-vedio"></video>
             </div>
             <div v-else class="content-item">
               <span class="item-title">{{ss.attrName}}：</span>
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-
+import { $resourcer } from "@/utils/resourcer.js"
 export default {
 
   data () {
@@ -51,7 +51,7 @@ export default {
       isSearchGet: false,
       isMoreSearchGet: false,
       page: 1,
-      rowNumbers: 2,
+      rowNumbers: 5,
       rsList:[], //待审核资源列表
       shCount: 0, //分享包里已选分享资源的数量
       shRsList: [], //待分享资源列表
@@ -140,7 +140,6 @@ export default {
         if((i+1) < searchList.length)sendData += ",";
       }
       sendData += "}";
-      sendData = JSON.parse(sendData);
       this.$http({
         url: '/rs/search/searchbyuser.do',
         method: 'get',
@@ -152,7 +151,7 @@ export default {
         },
         success: res => {
           wx.hideLoading();
-          var rData = this.changTheSourceArray(res.data);
+          var rData = $resourcer(res.data);
           for(var i=0; i<rData.length; i++){
              this.rsList.push(rData[i]);
           }
@@ -173,30 +172,6 @@ export default {
       wx.navigateTo({url: "../searchView/main?attrList=" + alist});
       this.isForAdd = true;
     },
-    /*
-    *从接口拿到的资源数据是一维平铺，这里根据sourceKey进行二维处理
-    */
-    changTheSourceArray(data){
-      var saList = [];
-      var dList = [];
-      for(;;){
-        if(data.length < 1)break;
-        var key = data[0].resourceKey;
-        var i=0;
-        for(;;){
-          if(key == data[i].resourceKey){
-            dList.push(data[i]);
-            data.splice(i,1);
-          }
-          else i++;
-          if(data.length == 0)break;
-          if(i >= data.length)break;
-        }
-        saList.push(dList);
-        dList = [];
-      }
-      return saList;
-    },
 
     /*
      *获取某资源类别下的资源
@@ -210,9 +185,9 @@ export default {
           start: (this.page-1)*this.rowNumbers,
           len: this.rowNumbers},
         success: res => {
-          var rData = this.changTheSourceArray(res.data);
+          var rData = $resourcer(res.data);
           for(var i=0; i<rData.length; i++){
-             this.rsList.push(rData[i]);
+             this.rsList.push(rData[i]);//当获取更多的时候，直接添加到列表的后面
           }
           if(rData.length > 0){
             this.page++;
@@ -371,6 +346,10 @@ export default {
     width: 100%;
     height: 180px;
   }
+  .resource-vedio{
+    width: 100%;
+    height: 200px;
+   }
   .sh-count{
     color: #ff0000;
   }
