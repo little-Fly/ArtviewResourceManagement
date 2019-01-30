@@ -14,13 +14,16 @@
 						<el-input placeholder="请输入名称" v-model="form.name"></el-input>
 					</el-form-item>
 					<el-form-item>
+						<img :src="previewUrl" v-if="previewUrl!==''" width="100" height="100">
 						<el-upload
 								ref="upload"
 								:limit="1"
 								:multiple="false"
 								:on-success="uploadSuc"
 								:on-error="uploadFail"
+								:on-remove="fileRemove"
 								:action="refLogo"
+								accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
 								:on-change="uploadChange"
 								:auto-upload="false">
 							<el-button slot="trigger" size="small" type="primary">
@@ -69,7 +72,8 @@
                     }
                 ],
                 attrTypeList: [],
-                file: null
+                file: null,
+                previewUrl: ""
             };
         },
         methods: {
@@ -99,9 +103,14 @@
             },
             uploadFail() {
                 console.log("upload Fail");
+                this.previewUrl = "";
             },
             uploadChange(file) {
                 this.file = file;
+                this.previewUrl = file.url;
+            },
+            fileRemove() {
+                this.previewUrl = "";
             },
             addConfirm() {
                 if (this.form.name === "") {
