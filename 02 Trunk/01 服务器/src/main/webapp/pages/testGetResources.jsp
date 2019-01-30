@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="icon" type="image/x-icon" href="/static/img/favicon.ico" />
+<link rel="icon" type="image/x-icon" href="/share/favicon.ico" />
 <title>资源查看</title>
-<script src="/static/js/jquery-3.3.1.js"></script>
+<script src="/share/jquery-3.3.1.js"></script>
 <script type="text/javascript" >
 	$(document).ready(function(){
 	

@@ -1,6 +1,6 @@
 package com.grosup.ttzy.resource.service;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.grosup.ttzy.resource.dto.ResourceAttrDto;
 
@@ -15,5 +15,5 @@ public interface ResourceAttrService {
 
 	public ResourceAttrDto get(String resourceKey);
 
-	public Collection<ResourceAttrDto> getAll(String typeKey);
+	public List<ResourceAttrDto> getAll(String typeKey);
 }
