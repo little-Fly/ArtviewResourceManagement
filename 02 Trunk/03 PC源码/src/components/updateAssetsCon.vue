@@ -26,6 +26,25 @@
 				<el-form-item label="资源类别名称" :label-width="formLabelWidth">
 					<el-input v-model="form.name" auto-complete="off"></el-input>
 				</el-form-item>
+				<el-form-item label="资源类别logo" :label-width="formLabelWidth">
+					<img :src="nowLogoUrl" alt=""
+					     v-if="form.logoUrl !== ''" width="100" height="100">
+				</el-form-item>
+				<el-form-item label="" :label-width="formLabelWidth">
+					<el-upload
+							ref="upload"
+							:limit="1"
+							:multiple="false"
+							:on-success="uploadSuc"
+							:on-error="uploadFail"
+							:action="uploadUrl"
+							:on-change="uploadChange"
+							:auto-upload="false">
+						<el-button slot="trigger" size="small" type="primary">
+							点我更换logo
+						</el-button>
+					</el-upload>
+				</el-form-item>
 				<el-form-item label="属性名称" :label-width="formLabelWidth"
 				              v-for="(item,key) in attrList" :key="key">
 					<el-input v-model="item.attrName" readonly auto-complete="off"></el-input>
@@ -80,7 +99,8 @@
                 formLabelWidth: "100px",
                 attrTypeList: [],
                 form: {
-                    name: ""
+                    name: "",
+                    logoUrl: ""
                 },
                 // 资源属性  弹窗字段
                 resAttr: {
@@ -92,9 +112,42 @@
                 type2: "",
                 attrList: [],
                 updateTypeKey: "",
+                uploadUrl: "",
+                nowLogoUrl: "",
+                file: null
             };
         },
         methods: {
+            uploadSuc(response) {
+                console.log("upload success");
+                this.$refs.upload.clearFiles();
+                let params = {
+                    logoUrl: response[0].data,
+                    typeKey: this.updateTypeKey,
+                    name: this.form.name,
+                };
+                this.file = null;
+                let json = {
+                    json: decodeURI(encodeURI(JSON.stringify(params)))
+                };
+                this.$ajax.def
+                    .updateDef(json)
+                    .then((response) => {
+                        if (response.status === 200) {
+                            let data = response.data;
+                            if (data[0].state === "error") {
+                                this.$message.error(data[0].message);
+                            }
+                            this.refreshIndex();
+                        }
+                    });
+            },
+            uploadFail() {
+                console.log("upload Fail");
+            },
+            uploadChange(file) {
+                this.file = file;
+            },
             /**
              * 修改 按钮弹窗
              * @param item
@@ -105,6 +158,9 @@
                 };
                 this.updateTypeKey = item.typeKey;
                 this.form.name = item.name;
+                this.form.logoUrl = item.logoUrl;
+                this.nowLogoUrl = `/rs/file/getfile.do?filekey=${this.form.logoUrl }`;
+                this.uploadUrl = `https://www.hwyst.net/rs/file/add.do?json={"typeKey":"${item.typeKey}"}`;
                 this.$ajax.attr
                     .getAttrAll(params)
                     .then((response) => {
@@ -123,10 +179,10 @@
                 this.resAttr.remark = "";
             },
             //修改资源属性按钮
-            updateThisLine(item){
-	            this.resAttr.attrKey = item.attrKey;
-	            this.resAttr.attrName = item.attrName;
-	            this.resAttr.remark = item.remark;
+            updateThisLine(item) {
+                this.resAttr.attrKey = item.attrKey;
+                this.resAttr.attrName = item.attrName;
+                this.resAttr.remark = item.remark;
                 this.resUpdateVisible = true;
             },
             //删除资源属性
@@ -196,7 +252,7 @@
             /**
              * 确认修改资源属性
              */
-            confirmUpdateAttr(){
+            confirmUpdateAttr() {
                 if (this.resAttr.attrName === "") {
                     this.$message.warning("属性名称不能为空!");
                     return;
@@ -263,7 +319,11 @@
                                     this.$message.error(data[0].message);
                                 } else {
                                     this.$message.success("修改成功");
-                                    this.refreshIndex();
+                                    if( this.file){
+                                        setTimeout(() => {
+                                            this.$refs.upload.submit();
+                                        }, 600);
+	                                }
                                     this.dialogFormVisible = false;
                                 }
                             }

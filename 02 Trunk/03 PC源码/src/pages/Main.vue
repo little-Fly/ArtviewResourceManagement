@@ -169,7 +169,7 @@
                 fileArr: [],
                 currentUploadAttrKey: "",
                 attrLevel: "",
-                searchData: [{attr: "", value: ""}]
+                searchData: [{attr: "", value: ""}] //attrkey
             };
         },
         filters: {
@@ -316,6 +316,7 @@
                             let data = response.data;
                             this.attrData = JSON.parse(data[0].data);
                             if (this.attrData.length > 0) {
+                                console.log("this.attrData", this.attrData);
                                 let arr = [
                                     {attrKey: "attrState", attrName: "审核状态"},
                                     {attrKey: "approvalMess", attrName: "审核意见"},
@@ -638,9 +639,9 @@
                         if (response.status === 200) {
                             let data = response.data;
                             this.attrTypeList = JSON.parse(data[0].data);
-                            console.log(this.attrTypeList);
                             this.searchOptions = this.attrTypeList;
                             if (this.attrTypeList.length > 0) {
+                                console.log("attrTypeList:", this.attrTypeList);
                                 this.getResTable(this.attrTypeList[0], 0);
                             }
                         }
