@@ -1,7 +1,10 @@
 package com.grosup.ttzy.resource.controller;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -222,7 +225,19 @@ public class ResourceAttrController implements MessageMapConstant {
 		Map<String, String> messageMap = new HashMap<String, String>();
 		String typeKey = request.getParameter("typekey");
 		if (!StringUtil.isNullOrEmpty(typeKey)) {
-			Collection<ResourceAttrDto> collection = resourceAttrService.getAll(typeKey);
+			List<ResourceAttrDto> collection = resourceAttrService.getAll(typeKey);
+	        Collections.sort(collection, new Comparator<ResourceAttrDto>(){
+	            public int compare(ResourceAttrDto p1, ResourceAttrDto p2) {
+	                //按照Person的年龄进行升序排列
+	                if(p1.getAttrPosition() > p2.getAttrPosition()){
+	                    return 1;
+	                }
+	                if(p1.getAttrPosition() == p2.getAttrPosition()){
+	                    return 0;
+	                }
+	                return -1;
+	            }
+	        });
 			if (collection != null) {
 				JSONArray resourceAttrJson = JSONArray.fromObject(collection);
 				messageMap.put(DATA, resourceAttrJson.toString());

@@ -1,6 +1,6 @@
 package com.grosup.ttzy.resource.service.Imp;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +60,7 @@ public class ResourceAttrServiceImp implements ResourceAttrService {
 		return resourceAttrDao.get(attrKey);
 	}
 
-	public Collection<ResourceAttrDto> getAll(String typeKey) {
+	public List<ResourceAttrDto> getAll(String typeKey) {
 		return resourceAttrDao.getAll(typeKey);
 	}
 

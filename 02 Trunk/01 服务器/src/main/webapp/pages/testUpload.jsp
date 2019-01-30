@@ -23,5 +23,21 @@
             </tr>
         </table>
     </form>
+       <form action="../rs/file/add.do?json=%7B%22typeKey%22:%22RDf%E7%A4%BA%E4%BE%8B%E8%A1%A8ID%22%7D" enctype="multipart/form-data" method="post">
+        <table>
+            <tr>
+                <td>文件描述2:</td>
+                <td><input type="json" name="description"></td>
+            </tr>
+            <tr>
+                <td>请选择文件2:</td>
+                <td><input type="file" name="file"></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="上传"></td>
+            </tr>
+        </table>
+    </form>
+    
 </body>
 </html>

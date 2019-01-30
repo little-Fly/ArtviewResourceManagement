@@ -30,6 +30,7 @@ public class ResourceAttrDao implements ResourceConstant {
 	private String typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
 	private String attrName = "示例表头"; // varchar Y 属性名
 	private String attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+	private float attrPosition = 0; // varchar Y 资源长位置
 	private String attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 	private String remark = "示例表头备注"; // varchar N 备注
 	
@@ -39,6 +40,7 @@ public class ResourceAttrDao implements ResourceConstant {
 		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
 		attrName = "示例表头1"; // varchar Y 属性名
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrPosition = 1; // varchar Y 资源长位置
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		remark = "示例表头备注"; // varchar N 备注
 		initResourceAttrDto();
@@ -46,13 +48,7 @@ public class ResourceAttrDao implements ResourceConstant {
 		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
 		attrName = "示例表头2"; // varchar Y 属性名
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
-		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
-		remark = "示例表头备注"; // varchar N 备注
-		initResourceAttrDto();
-		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key
-		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
-		attrName = "示例表头3"; // varchar Y 属性名
-		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrPosition = 2; // varchar Y 资源长位置
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		remark = "示例表头备注"; // varchar N 备注
 		initResourceAttrDto();
@@ -60,9 +56,19 @@ public class ResourceAttrDao implements ResourceConstant {
 		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
 		attrName = "示例表头4"; // varchar Y 属性名
 		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrPosition = 4; // varchar Y 资源长位置
 		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
 		remark = "示例表头备注"; // varchar N 备注
 		initResourceAttrDto();
+		attrKey = RESOURCE_ATTR + "示例表头ID3"; // varchar Y 主键，属性Key
+		typeKey = RESOURCE_DEF + "示例表ID"; // varchar Y 资源类型Key
+		attrName = "示例表头3"; // varchar Y 属性名
+		attrLevel = "0"; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		attrPosition = 3; // varchar Y 资源长位置
+		attrType = "default"; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		remark = "示例表头备注"; // varchar N 备注
+		initResourceAttrDto();
+
 	}
 	
 	public void initResourceAttrDto() {
@@ -70,6 +76,7 @@ public class ResourceAttrDao implements ResourceConstant {
 		resourceAttrDto.setTypeKey(typeKey);
 		resourceAttrDto.setAttrKey(attrKey);
 		resourceAttrDto.setAttrLevel(attrLevel);
+		resourceAttrDto.setAttrPosition(attrPosition);
 		resourceAttrDto.setAttrName(attrName);
 		resourceAttrDto.setAttrType(attrType);
 		resourceAttrDto.setRemark(remark);
@@ -117,7 +124,7 @@ public class ResourceAttrDao implements ResourceConstant {
 		return map.get(key);
 	}
 
-	public Collection<ResourceAttrDto> getAll(String typeKey) {
+	public List<ResourceAttrDto> getAll(String typeKey) {
 		Collection<ResourceAttrDto> collection = map.values();
 		List<ResourceAttrDto> list = new ArrayList<ResourceAttrDto>();
 		for (ResourceAttrDto resourceAttrDto : collection) {
