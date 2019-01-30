@@ -96,19 +96,28 @@ export default {
         if(atList.length == 2){
           searchWordList.push({
             name: atList[0],//表头名
+            key: this.getAttrKeyByName(atList[0]),
             word: atList[1] //匹配关键字
           });
         }
       }
       return searchWordList;
     },
-    getAttrList(){
-      var aList = [];
-      for(var i=0; i<this. rsList[0].length; i++){
-        if(this.rsList[0][i].attrType == "default")
-          aList.push(this.rsList[0][i].attrName);
+    getAttrKeyByName(name){
+      for(var i=0; i<this.attrList.names.length; i++){
+        if(this.attrList.names[i] == name)return this.attrList.keys[i];
       }
-      this.attrList = {aList: aList};
+      return '';
+    },
+    getAttrList(){
+      var nameList = [];
+      var keyList = [];
+      for(var i=0; i<this. rsList[0].length; i++){
+        if(this.rsList[0][i].attrType != "picture" && this.rsList[0][i].attrType != "vedio")
+          nameList.push(this.rsList[0][i].attrName);
+          keyList.push(this.rsList[0][i].attrKey);
+      }
+      this.attrList = {names: nameList, keys: keyList};
     },
     searchResourceBtn(){
       this.saveSerchWord();
@@ -136,10 +145,11 @@ export default {
      */
       var sendData = "{";
       for(var i=0; i<searchList.length; i++){
-        sendData +='\"' + searchList[i].name + '\"' + ":" + '\"' + searchList[i].word + '\"';
+        sendData +='\"' + searchList[i].key + '\"' + ":" + '\"' + searchList[i].word + '\"';
         if((i+1) < searchList.length)sendData += ",";
       }
       sendData += "}";
+      sendData = JSON.parse(sendData);
       this.$http({
         url: '/rs/search/searchbyuser.do',
         method: 'get',
@@ -168,8 +178,8 @@ export default {
     },
     addSearchConditions(){
       this.saveSerchWord();
-      var alist = JSON.stringify(this.attrList);
-      wx.navigateTo({url: "../searchView/main?attrList=" + alist});
+      var alist = JSON.stringify({names: this.attrList.names});//直接传数组貌似不行
+      wx.navigateTo({url: "../searchView/main?attrNames=" + alist});
       this.isForAdd = true;
     },
 

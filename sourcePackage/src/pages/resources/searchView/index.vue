@@ -32,7 +32,7 @@ export default {
   },
   mounted () {
     let paramsObj = this.$tool.getOptions();
-    var al = JSON.parse(paramsObj.attrList).aList;
+    var al = JSON.parse(paramsObj.attrNames).names;
     this.searchList = this.cutTheResearchWord();
     this.createSearchVariable(al);
   },
