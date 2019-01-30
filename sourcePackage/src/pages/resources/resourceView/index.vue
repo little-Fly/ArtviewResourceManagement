@@ -12,7 +12,7 @@
         <template v-for="(ss, inx) in item">
           <div :key='inx'>
             <div v-if="ss.attrType == 'picture'" class="content-item">
-              <image  class="resource-image" :src="ss.attrValue" alt=""></image>
+              <image  class="resource-image" :src="ss.attrValue" @error="errImg" alt=""></image>
             </div>
             <div v-else-if="ss.attrType == 'video'" class="content-item">
               <video :src="ss.attrValue" controls="controls"  class="resource-vedio"></video>
@@ -74,6 +74,12 @@ export default {
   },
   
   methods: {
+    errImg(e){
+      var arr=e.target.dataset.eventid.split('-');
+      var row = parseInt(arr[1]);
+      var col = parseInt(arr[2]);
+      this.rsList[row][col].attrValue = "../../../assets/images/resourcebk.png";
+    },
     /*
      *把搜索字符串存入全局变量
      */

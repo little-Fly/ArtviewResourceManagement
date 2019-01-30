@@ -4,7 +4,7 @@
       <template v-for="(item, index) in resList">
         <div class="res-item fl" :key="'res_items_' + index">
           <img v-if="isVisitor" class="res-item__headimg" src="../../assets/images/resourcebk.png" alt="" @click="clickVisitorTap()">
-          <img v-else-if="item.logoUrl" class="res-item__headimg" :src="item.logoUrl" alt="" @click="clickResourceTap(item.typeKey, item.name)">
+          <img v-else-if="item.logoUrl" class="res-item__headimg" :src="item.logoUrl" @error="errImg" alt="" @click="clickResourceTap(item.typeKey, item.name)">
           <img v-else class="res-item__headimg" src="../../assets/images/resourcebk.png" alt="">
           <div class="res-name">{{item.name}}</div>
         </div>
@@ -139,21 +139,16 @@ export default {
           console.log(res);
           this.resList = res.data;
           for(var i=0; i<this.resList.length; i++){
-            if(this.resList[i].logoUrl)this.resList[i].logoUrl = HostUrl + this.resList[i].logoUrl;
+            if(this.resList[i].logoUrl)this.resList[i].logoUrl = HostUrl +"/rs/file/getfile.do?filekey=" + this.resList[i].logoUrl;
             else this.resList[i].logoUrl = "../../assets/images/resourcebk.png";
           }
         }
       });
     },
     errImg(e){
-      var _errImg=e.target.dataset.errImg;
-      var _objImg="'"+_errImg+"'";
-      var _errObj={};
-      _errObj[_errImg]="../../assets/images/resourcebk.png";
-      console.log( e.detail.errMsg+"----"+ _errObj[_errImg] + "----" +_objImg );
-      this.setData(_errObj);
-
-      //this.resList[index].logoUrl = "../../assets/images/resourcebk.png";
+      var arr=e.target.dataset.eventid.split('-');
+      var inx = parseInt(arr[1]);
+      this.resList[inx].logoUrl = "../../assets/images/resourcebk.png";
     },
     clickResourceTap(typeKey, name){
       wx.navigateTo({url: "resourceView/main?typeKey=" + typeKey+"&typeName="+name})

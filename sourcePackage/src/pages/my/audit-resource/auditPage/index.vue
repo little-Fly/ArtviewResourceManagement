@@ -8,7 +8,7 @@
         <template v-for="(ss, inx) in item.data">
           <div :key='inx'>
             <div v-if="ss.attrType == 'picture'" class="content-item">
-              <image  class="resource-image" :src="ss.attrValue" alt=""></image>
+              <image  class="resource-image" :src="ss.attrValue" @error="errImg" alt=""></image>
               <span class="item-level">{{ss.attrLevel}}</span>
             </div>
             <div v-else-if="ss.attrType == 'video'" class="content-item">
@@ -84,7 +84,12 @@ export default {
     clickOpenAuthBtn(index){
       this.register.reason = this.userList[index].reason;
     },
-
+    errImg(e){
+      var arr=e.target.dataset.eventid.split('-');
+      var row = parseInt(arr[1]);
+      var col = parseInt(arr[2]);
+      this.rsList[row][col].attrValue = "../../../../assets/images/resourcebk.png";
+    },
    /*
     *过滤需要审核的资源
     */

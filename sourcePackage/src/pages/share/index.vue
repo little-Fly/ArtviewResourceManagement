@@ -28,7 +28,7 @@
         <div class="item-box">
           <template v-for="(ss, inx) in item">
             <div v-if="ss.attrType == 'picture'" class="content-item" :key="'pic' + inx">
-              <img  class="resource-image" :src="ss.attrValue" alt="">
+              <img  class="resource-image" :src="ss.attrValue" @error="errImg" alt="">
             </div>
             <div v-else-if="ss.attrType == 'video'" class="content-item" :key="'vdo' + inx">
               <video :src="ss.attrValue" controls="controls" class="resource-video"></video>
@@ -88,6 +88,12 @@ export default {
   },
 
   methods: {
+    errImg(e){
+      var arr=e.target.dataset.eventid.split('-');
+      var row = parseInt(arr[1]);
+      var col = parseInt(arr[2]);
+      this.rsList[row][col].attrValue = "../../assets/images/resourcebk.png";
+    },
     tPickerChange (e) {
       this.tIndex = e.target.value;
       this.filePath = HostUrl + this.tArray[this.tIndex].tempFilePath;
