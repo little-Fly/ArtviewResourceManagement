@@ -37,10 +37,10 @@ public class ResourceDefServiceImp implements ResourceDefService {
 
 	}
 
-	public ResourceDefDto update(String json) {
+	public ResourceDefDto update(String typeKey, String json) {
 		ResourceDefDto resourceDefDto = resourceDefDao.create(json);
 		if (resourceDefDto != null) {
-			return resourceDefDao.update(resourceDefDto);
+			return resourceDefDao.update(typeKey, resourceDefDto);
 		} else {
 			log.error("resourceDefService update resourceDefDto is null. resourceKey json:" + json);
 		}

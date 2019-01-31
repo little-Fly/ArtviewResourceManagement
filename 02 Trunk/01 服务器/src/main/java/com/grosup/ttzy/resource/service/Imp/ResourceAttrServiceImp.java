@@ -40,10 +40,10 @@ public class ResourceAttrServiceImp implements ResourceAttrService {
 		return resourceAttrDao.del(attrKey);
 	}
 
-	public ResourceAttrDto update(String json) {
+	public ResourceAttrDto update(String attrKey, String json) {
 		ResourceAttrDto resourceAttrDto = resourceAttrDao.create(json);
 		if (resourceAttrDto != null) {
-			resourceAttrDto = resourceAttrDao.update(resourceAttrDto);
+			resourceAttrDto = resourceAttrDao.update(attrKey, resourceAttrDto);
 			if (null != resourceAttrDto) {
 				resourceDetailService.updateAttrName(resourceAttrDto.getAttrKey(), resourceAttrDto.getAttrName());
 				return resourceAttrDto;

@@ -148,7 +148,7 @@ public class ResourceAttrController implements MessageMapConstant {
 
 	/**
 	 * /rs/attr/update.do
-	 * 
+	 * @param attkey ：attrKey
 	 * @param json ："[{"attrKey":"RAt示例表头ID","attrLevel":"0","attrName":"示例表头","attrType":"default","remark":"示例表头备注","typeKey":"RDf示例表ID"}]"
 	 * @return ["state":"successful"}]
 	 *         参见示例请求：localhost:8080/practice/rs/attr/getall.do?typekey=RDf示例表ID
@@ -160,14 +160,28 @@ public class ResourceAttrController implements MessageMapConstant {
 	public String update(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
 		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
-			String json = request.getParameter("json");
-			if (!StringUtil.isNullOrEmpty(json)) {
-				resourceAttrService.update(json);
-				messageMap.put(STATE, STATE_SUCCESSFUL);
+			String attrKey = request.getParameter("attrkey");
+			if (!StringUtil.isNullOrEmpty(attrKey)) {
+				ResourceAttrDto resourceAttrDto = resourceAttrService.get(attrKey);
+				if (resourceAttrDto != null) {
+					String json = request.getParameter("json");
+					if (!StringUtil.isNullOrEmpty(json)) {
+						resourceAttrService.update(attrKey, json);
+						messageMap.put(STATE, STATE_SUCCESSFUL);
+					} else {
+						messageMap.put(STATE, STATE_ERROR);
+						messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+						log.error("update " + MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+					}
+				} else {
+					messageMap.put(STATE, STATE_ERROR);
+					messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "attrkey:\"" + attrKey + "\"");
+					log.error("get " + MESSAGE_DTO_ETER + "attrkey:\"" + attrKey + "\"");
+				}
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
-				log.error("update " + MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "attrkey:\"" + attrKey + "\"");
+				log.error("get " + MESSAGE_PARAM_ETER + "attrkey:\"" + attrKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);

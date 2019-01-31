@@ -11,7 +11,7 @@ public interface ResourceDefService {
 
 	public ResourceDefDto del(String resourceKey);
 
-	public ResourceDefDto update(String json);
+	public ResourceDefDto update(String typeKey, String json);
 
 	public ResourceDefDto get(String resourceKey);
 

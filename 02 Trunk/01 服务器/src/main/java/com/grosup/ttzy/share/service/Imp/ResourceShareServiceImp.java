@@ -37,10 +37,10 @@ public class ResourceShareServiceImp implements ResourceShareService {
 
 	}
 
-	public void update(String json) {
+	public void update(String shareKey, String json) {
 		ResourceShareDto resourceDefDto = resourceShareDao.create(json);
 		if (resourceDefDto != null) {
-			resourceShareDao.update(resourceDefDto);
+			resourceShareDao.update(shareKey, resourceDefDto);
 		} else {
 			log.error("resourceDefService update resourceDefDto is null. shareKey json:" + json);
 		}

@@ -8,7 +8,7 @@
 </head>
 <body>
     <h2>文件上传</h2>
-    <form action="../rs/file/add.do?json=%7B%22attrKey%22:%22RAt%E7%A4%BA%E4%BE%8B%E8%A1%A8%E5%A4%B4ID%22,%22attrName%22:%22%E7%A4%BA%E4%BE%8B%E8%A1%A8%E5%A4%B4%22,%22resourceKey%22:%22RDt%E7%A4%BA%E4%BE%8B%E5%80%BCID%22,%22typeKey%22:%22RDf%E7%A4%BA%E4%BE%8B%E8%A1%A8ID%22%7D" enctype="multipart/form-data" method="post">
+    <form action="/rs/file/add.do?json=%7B%22attrKey%22:%22RAt%E7%A4%BA%E4%BE%8B%E8%A1%A8%E5%A4%B4ID%22,%22attrName%22:%22%E7%A4%BA%E4%BE%8B%E8%A1%A8%E5%A4%B4%22,%22resourceKey%22:%22RDt%E7%A4%BA%E4%BE%8B%E5%80%BCID%22,%22typeKey%22:%22RDf%E7%A4%BA%E4%BE%8B%E8%A1%A8ID%22%7D" enctype="multipart/form-data" method="post">
         <table>
             <tr>
                 <td>文件描述:</td>
@@ -23,7 +23,7 @@
             </tr>
         </table>
     </form>
-       <form action="../rs/file/add.do?json=%7B%22typeKey%22:%22RDf%E7%A4%BA%E4%BE%8B%E8%A1%A8ID%22%7D" enctype="multipart/form-data" method="post">
+       <form action="/rs/file/add.do?json=%7B%22typeKey%22:%22RDf%E7%A4%BA%E4%BE%8B%E8%A1%A8ID%22%7D" enctype="multipart/form-data" method="post">
         <table>
             <tr>
                 <td>文件描述2:</td>

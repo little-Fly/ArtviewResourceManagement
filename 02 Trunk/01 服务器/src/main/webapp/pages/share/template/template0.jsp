@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
 	String shareKey = request.getParameter("sharekey");
@@ -9,13 +9,13 @@
 <head>
 <title></title>
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
-<link rel="icon" type="image/x-icon" href="../favicon.ico" />
+<link rel="icon" type="image/x-icon" href="/pages/share/favicon.ico" />
 <meta name="viewport"
 	content="width=device-width, initial-scale=1.0, minimum-scale=0.5, maximum-scale=2.0, user-scalable=yes" />
-<script type="text/javascript"  src="../jquery-3.3.1.js"></script>
-<script type="text/javascript" src="../share-v1r1c00.js"></script>
-<link href="../share-v1r1c00.css" rel='stylesheet' />
-<script type="text/javascript" src="../qrcode.js"></script>
+<script type="text/javascript" src="/pages/share/jquery-3.3.1.js"></script>
+<script type="text/javascript" src="/pages/share/share-v1r1c00.js"></script>
+<link href="/pages/share/share-v1r1c00.css" rel='stylesheet' />
+<script src="/pages/share/qrcode.js"></script>
 <style type="text/css">
 </style>
 
@@ -77,7 +77,7 @@
 
 		$table.append($tr);
 		$($tr.children()[0])
-				.append("<p><a href='"+url+"'>" + name + "</a></p>");
+				.append("<p>" + name + ": </p>");
 		$($tr.children()[0]).append("<img src='"+url+"' />");
 
 	}
@@ -89,7 +89,7 @@
 
 		$table.append($tr);
 		$($tr.children()[0])
-				.append("<p><a href='"+url+"'>" + name + "</a></p>");
+				.append("<p><a>" + name + "</a></p>");
 		$($tr.children()[0])
 				.append(
 						"<video src='"+url+"' controls='controls'>您的浏览器不支持 video 标签。</video>");
