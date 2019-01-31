@@ -558,23 +558,21 @@
                     default:
                         break;
                 }
-                // if (!canUpdate) {
-                //     this.$message({
-                //         type: "warning",
-                //         message: "审核通过的数据不能修改!"
-                //     });
-                //     return;
-                // }
+                if (!canUpdate) {
+                    this.$message({
+                        type: "warning",
+                        message: "审核通过的数据不能修改!"
+                    });
+                    return;
+                }
                 this.clearForm();
                 this.operatingMode = "update";
                 this.addForm.title = `修改${this.currentActiveItem}资源`;
                 this.dialogFormVisible = true;
                 for (let i = 0; i < this.attrData.length; i++) {
-                    if (this.attrData[i].attrLevel) {
-                        this.attrLevel = this.attrData[i].attrLevel;
-                    }
                     let key = this.attrData[i].attrKey;
-                    this.addForm[key] = this.multipleSelection[0][key];
+                    this.addForm[key] = this.multipleSelection[0][key].attrValue;
+                    this.attrLevel = this.multipleSelection[0][key].attrLevel;
                 }
             },
             updateDetailFun(json) {
