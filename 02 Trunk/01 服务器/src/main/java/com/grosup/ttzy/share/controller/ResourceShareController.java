@@ -29,8 +29,8 @@ import com.grosup.ttzy.util.TtzyUtil;
 import net.sf.json.JSONArray;
 
 @Controller
-@RequestMapping ( "/rs/share" )
-public class ResourceShareController implements MessageMapConstant{
+@RequestMapping("/rs/share")
+public class ResourceShareController implements MessageMapConstant {
 
 	private static Logger log = Logger.getLogger(ResourceShareController.class);
 
@@ -39,15 +39,18 @@ public class ResourceShareController implements MessageMapConstant{
 
 	@Autowired
 	ResourceDetailService resourceDetailService;
-	
+
 	@Autowired
 	RoleDao roleDao;
-	
+
 	/**
 	 * /rs/share/add.do
-	 * @param json {"resourceListJson":"[{\"typeKey\":\"RDf示例表ID\", \"resourceKey\":\"RDt示例值ID\"}]","templateName":"default"}
+	 * 
+	 * @param json {"resourceListJson":"[{\"typeKey\":\"RDf示例表ID\",
+	 *             \"resourceKey\":\"RDt示例值ID\"}]","templateName":"default"}
 	 * @return [{"state":"error", "message":"错误消息"}]
-	 * 示例：localhost:8080/practice/rs/share/add.do?json={"resourceListJson":"[{\"typeKey\":\"RDf示例表ID\", \"resourceKey\":\"RDt示例值ID\"}]","templateName":"default"}
+	 *         示例：localhost:8080/practice/rs/share/add.do?json={"resourceListJson":"[{\"typeKey\":\"RDf示例表ID\",
+	 *         \"resourceKey\":\"RDt示例值ID\"}]","templateName":"default"}
 	 */
 	@RequestMapping(value = "/add.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
@@ -62,7 +65,7 @@ public class ResourceShareController implements MessageMapConstant{
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
 			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
-			log.error("add "+MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+			log.error("add " + MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
@@ -70,6 +73,7 @@ public class ResourceShareController implements MessageMapConstant{
 
 	/**
 	 * /rs/share/del.do
+	 * 
 	 * @param sharekey ：shareKey
 	 * @return [{"state":"error", "message":"错误消息"}]
 	 */
@@ -84,8 +88,8 @@ public class ResourceShareController implements MessageMapConstant{
 			messageMap.put(STATE, STATE_SUCCESSFUL);
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "shareKey:\"" + shareKey + "\"");
-			log.error("del "+MESSAGE_PARAM_ETER + "shareKey:\"" + shareKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "sharekey:\"" + shareKey + "\"");
+			log.error("del " + MESSAGE_PARAM_ETER + "sharekey:\"" + shareKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
@@ -93,7 +97,9 @@ public class ResourceShareController implements MessageMapConstant{
 
 	/**
 	 * /rs/share/update.do
-	 * @param json {"resourceListJson":"[{\"typeKey\":\"RDf示例表ID\", \"resourceKey\":\"RDt示例值ID\"}]","templateName":"default"}
+	 * @param sharekey ：shareKey
+	 * @param json {"resourceListJson":"[{\"typeKey\":\"RDf示例表ID\",
+	 *             \"resourceKey\":\"RDt示例值ID\"}]","templateName":"default"}
 	 * @return [{"state":"error", "message":"错误消息"}]
 	 */
 	@RequestMapping(value = "/update.do", method = { RequestMethod.GET,
@@ -101,14 +107,27 @@ public class ResourceShareController implements MessageMapConstant{
 	@ResponseBody
 	public String update(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String json = request.getParameter("json");
-		if (!StringUtil.isNullOrEmpty(json)) {
-			resourceShareService.update(json);
-			messageMap.put(STATE, STATE_SUCCESSFUL);
+		String shareKey = request.getParameter("sharekey");
+		if (!StringUtil.isNullOrEmpty(shareKey)) {
+			ResourceShareDto resourceShareDto = resourceShareService.get(shareKey);
+			if (resourceShareDto != null) {
+				String json = request.getParameter("json");
+				if (!StringUtil.isNullOrEmpty(json)) {
+					resourceShareService.update(shareKey, json);
+					messageMap.put(STATE, STATE_SUCCESSFUL);
+				} else {
+					messageMap.put(STATE, STATE_ERROR);
+					messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+					log.error("update "+MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+				}
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "sharekey:\"" + shareKey + "\"");
+				log.error("get "+MESSAGE_DTO_ETER + "sharekey:\"" + shareKey + "\"");
+			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
-			log.error("update "+MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "sharekey:\"" + shareKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
@@ -133,13 +152,13 @@ public class ResourceShareController implements MessageMapConstant{
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "shareKey:\"" + shareKey + "\"");
-				log.error("get "+MESSAGE_DTO_ETER + "shareKey:\"" + shareKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "sharekey:\"" + shareKey + "\"");
+				log.error("get "+MESSAGE_DTO_ETER + "sharekey:\"" + shareKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "shareKey:\"" + shareKey + "\"");
-			log.error("update "+MESSAGE_PARAM_ETER + "shareKey:\"" + shareKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "sharekey:\"" + shareKey + "\"");
+			log.error("update "+MESSAGE_PARAM_ETER + "sharekey:\"" + shareKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
@@ -147,8 +166,10 @@ public class ResourceShareController implements MessageMapConstant{
 
 	/**
 	 * /rs/share/getall.do
-	 * @return [{"data":"[{\"lastTime\":1538382729506,\"resourceListJson\":\"[{\\\"typeKey\\\":\\\"RDf示例表ID\\\", \\\"resourceKey\\\":\\\"RDt示例值ID\\\"}]\",\"sendTime\":1538382729506,\"sendUser\":\"示例分享人\",\"shareKey\":\"RSrtemplatekey\",\"templateName\":\"default\"}]","state":"successful"}]
-	 * @throws GrosupException 
+	 * 
+	 * @return [{"data":"[{\"lastTime\":1538382729506,\"resourceListJson\":\"[{\\\"typeKey\\\":\\\"RDf示例表ID\\\",
+	 *         \\\"resourceKey\\\":\\\"RDt示例值ID\\\"}]\",\"sendTime\":1538382729506,\"sendUser\":\"示例分享人\",\"shareKey\":\"RSrtemplatekey\",\"templateName\":\"default\"}]","state":"successful"}]
+	 * @throws GrosupException
 	 */
 	@RequestMapping(value = "/getall.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
@@ -164,7 +185,7 @@ public class ResourceShareController implements MessageMapConstant{
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
 				messageMap.put(MESSAGE, MESSAGE_LIST_ETER);
-				log.error("getAll "+MESSAGE_LIST_ETER);
+				log.error("getAll " + MESSAGE_LIST_ETER);
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
@@ -173,10 +194,12 @@ public class ResourceShareController implements MessageMapConstant{
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
-	
+
 	/**
 	 * /rs/share/getresource.do
-	 * @return [{"data":"[{\"lastTime\":1538382729506,\"resourceListJson\":\"[{\\\"typeKey\\\":\\\"RDf示例表ID\\\", \\\"resourceKey\\\":\\\"RDt示例值ID\\\"}]\",\"sendTime\":1538382729506,\"sendUser\":\"示例分享人\",\"shareKey\":\"RSrtemplatekey\",\"templateName\":\"default\"}]","state":"successful"}]
+	 * 
+	 * @return [{"data":"[{\"lastTime\":1538382729506,\"resourceListJson\":\"[{\\\"typeKey\\\":\\\"RDf示例表ID\\\",
+	 *         \\\"resourceKey\\\":\\\"RDt示例值ID\\\"}]\",\"sendTime\":1538382729506,\"sendUser\":\"示例分享人\",\"shareKey\":\"RSrtemplatekey\",\"templateName\":\"default\"}]","state":"successful"}]
 	 */
 	@RequestMapping(value = "/getresource.do", method = { RequestMethod.GET,
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
@@ -188,10 +211,9 @@ public class ResourceShareController implements MessageMapConstant{
 			JSONArray jsonArray = JSONArray.fromObject(resourceKey);
 			Collection<ResourceDto> resourceDtoList = (Collection<ResourceDto>) JSONArray.toCollection(jsonArray,
 					ResourceDto.class);
-			
-			Collection<String> resourceList =new ArrayList<String>();
-			for(ResourceDto resourceDto: resourceDtoList)
-			{
+
+			Collection<String> resourceList = new ArrayList<String>();
+			for (ResourceDto resourceDto : resourceDtoList) {
 				resourceList.add(resourceDto.getResourceKey());
 			}
 			Collection<ResourceDetailDto> collection = resourceDetailService.getByUser(resourceList);
@@ -201,10 +223,10 @@ public class ResourceShareController implements MessageMapConstant{
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
 			messageMap.put(MESSAGE, MESSAGE_LIST_ETER);
-			log.error("getAll "+MESSAGE_LIST_ETER);
+			log.error("getAll " + MESSAGE_LIST_ETER);
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
-	
+
 }

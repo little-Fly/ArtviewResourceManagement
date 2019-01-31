@@ -140,8 +140,8 @@ public class ResourceDefController implements MessageMapConstant {
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + typeKey + "\"");
-				log.error("del " + MESSAGE_PARAM_ETER + "resourceKey:\"" + typeKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "typekey:\"" + typeKey + "\"");
+				log.error("del " + MESSAGE_PARAM_ETER + "typekey:\"" + typeKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
@@ -154,7 +154,7 @@ public class ResourceDefController implements MessageMapConstant {
 
 	/**
 	 * /rs/def/update.do
-	 * 
+	 * @param typekey ：typeKey
 	 * @param json [{"name":"示例表名","remark":"示例表注释","typeKey":"RDf示例表ID"}]
 	 * @return ["state":"error", "message":"错误消息"}]
 	 * @throws GrosupException
@@ -165,14 +165,29 @@ public class ResourceDefController implements MessageMapConstant {
 	public String update(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 		Map<String, String> messageMap = new HashMap<String, String>();
 		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
-			String json = request.getParameter("json");
-			if (!StringUtil.isNullOrEmpty(json)) {
-				resourceDefService.update(json);
-				messageMap.put(STATE, STATE_SUCCESSFUL);
+			String typeKey = request.getParameter("typekey");
+			if (!StringUtil.isNullOrEmpty(typeKey)) {
+				ResourceDefDto resourceDefDto = resourceDefService.get(typeKey);
+				if (resourceDefDto != null) {
+					String json = request.getParameter("json");
+					if (!StringUtil.isNullOrEmpty(json)) {
+						resourceDefService.update(typeKey, json);
+						messageMap.put(STATE, STATE_SUCCESSFUL);
+					} else {
+						messageMap.put(STATE, STATE_ERROR);
+						messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+						log.error("update " + MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+					}
+				
+				} else {
+					messageMap.put(STATE, STATE_ERROR);
+					messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "typekey:\"" + typeKey + "\"");
+					log.error("get " + MESSAGE_DTO_ETER + "typekey:\"" + typeKey + "\"");
+				}
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
-				log.error("update " + MESSAGE_PARAM_ETER + "json:\"" + json + "\"");
+				messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "typekey:\"" + typeKey + "\"");
+				log.error("get " + MESSAGE_PARAM_ETER + "typekey:\"" + typeKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
@@ -203,13 +218,13 @@ public class ResourceDefController implements MessageMapConstant {
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
-				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "resourceKey:\"" + typeKey + "\"");
-				log.error("get " + MESSAGE_DTO_ETER + "resourceKey:\"" + typeKey + "\"");
+				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "typekey:\"" + typeKey + "\"");
+				log.error("get " + MESSAGE_DTO_ETER + "typekey:\"" + typeKey + "\"");
 			}
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "resourceKey:\"" + typeKey + "\"");
-			log.error("get " + MESSAGE_PARAM_ETER + "resourceKey:\"" + typeKey + "\"");
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "typekey:\"" + typeKey + "\"");
+			log.error("get " + MESSAGE_PARAM_ETER + "typekey:\"" + typeKey + "\"");
 		}
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();

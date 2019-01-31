@@ -11,7 +11,7 @@ public interface ResourceAttrService {
 
 	public ResourceAttrDto del(String resourceKey);
 
-	public ResourceAttrDto update(String json);
+	public ResourceAttrDto update(String attrKey, String json);
 
 	public ResourceAttrDto get(String resourceKey);
 

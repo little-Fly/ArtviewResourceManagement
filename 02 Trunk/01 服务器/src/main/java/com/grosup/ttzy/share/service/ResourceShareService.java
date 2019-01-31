@@ -12,7 +12,7 @@ public interface ResourceShareService {
 
 	public void del(String shareKey);
 
-	public void update(String json);
+	public void update(String shareKey, String json);
 
 	public ResourceShareDto get(String shareKey);
 	
