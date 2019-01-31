@@ -29,15 +29,15 @@
 				<el-form-item label="资源类别logo" :label-width="formLabelWidth">
 					<img :src="nowLogoUrl" alt=""
 					     v-if="form.logoUrl !== ''" width="100" height="100">
-				</el-form-item>
-				<el-form-item label="" :label-width="formLabelWidth">
 					<el-upload
 							ref="upload"
 							:limit="1"
 							:multiple="false"
 							:on-success="uploadSuc"
 							:on-error="uploadFail"
+							:on-remove="fileRemove"
 							:action="uploadUrl"
+							accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
 							:on-change="uploadChange"
 							:auto-upload="false">
 						<el-button slot="trigger" size="small" type="primary">
@@ -114,6 +114,7 @@
                 updateTypeKey: "",
                 uploadUrl: "",
                 nowLogoUrl: "",
+                oldLogoUrl: "",
                 file: null
             };
         },
@@ -144,9 +145,15 @@
             },
             uploadFail() {
                 console.log("upload Fail");
+                this.nowLogoUrl = this.oldLogoUrl;
             },
             uploadChange(file) {
                 this.file = file;
+                this.oldLogoUrl = this.nowLogoUrl;
+                this.nowLogoUrl = file.url;
+            },
+            fileRemove() {
+                this.nowLogoUrl = this.oldLogoUrl;
             },
             /**
              * 修改 按钮弹窗
@@ -319,11 +326,11 @@
                                     this.$message.error(data[0].message);
                                 } else {
                                     this.$message.success("修改成功");
-                                    if( this.file){
+                                    if (this.file) {
                                         setTimeout(() => {
                                             this.$refs.upload.submit();
                                         }, 600);
-	                                }
+                                    }
                                     this.dialogFormVisible = false;
                                 }
                             }
