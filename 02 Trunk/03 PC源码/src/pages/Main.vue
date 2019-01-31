@@ -112,10 +112,10 @@
 								</el-upload>
 								<img :src="item.previewUrl"
 								     v-if="item.attrType === 'picture' && item.previewUrl !== undefined && item.previewUrl !== ''"
-								     width="100" height="100">
+								     width="100">
 								<video :src="item.previewUrl"
 								       v-if="item.attrType === 'video' && item.previewUrl !== undefined && item.previewUrl !== ''"
-								       controls="controls" width="100" height="100"></video>
+								       controls="controls" width="100"></video>
 								<el-input v-model="addForm[item.attrKey]"
 								          v-if="item.attrType !== 'picture'&&item.attrType !== 'video'"
 								          :maxlength="item.attrlen > 0 ? item.attrlen :100"
@@ -199,7 +199,7 @@
                             let imgUrl = data.attrValue.indexOf("/rs/file/getfile.do?filekey") === -1
                                 ? `https://www.hwyst.net/rs/file/getfile.do?filekey=${data.attrValue}`
                                 : data.attrValue;
-                            text = `<img src="${imgUrl}" style="width: 100px;height: 100px">`;
+                            text = `<img src="${imgUrl}" style="width: 100px;">`;
                             break;
                         case "video":
                             if (data.attrValue === "") {
@@ -324,7 +324,7 @@
                             let data = response.data;
                             this.attrData = JSON.parse(data[0].data);
                             if (this.attrData.length > 0) {
-                                // console.log("this.attrData", this.attrData);
+                                console.log("this.attrData", this.attrData);
                                 let arr = [
                                     {attrKey: "attrState", attrName: "审核状态"},
                                     {attrKey: "approvalMess", attrName: "审核意见"},
@@ -392,6 +392,7 @@
                         arr[index - 1] = obj;
                     }
                 }
+                console.log(this.tableData);
                 this.tableData = arr;
             },
             /**
@@ -459,9 +460,6 @@
                         json.push(obj);
                     }
                 }
-                // console.log(len);
-                // console.log(json);
-                // console.log(this.attrData);
                 if (json.length === 0) {
                     this.$message.error("请输入内容");
                     return;
@@ -560,13 +558,13 @@
                     default:
                         break;
                 }
-                if (!canUpdate) {
-                    this.$message({
-                        type: "warning",
-                        message: "审核通过的数据不能修改!"
-                    });
-                    return;
-                }
+                // if (!canUpdate) {
+                //     this.$message({
+                //         type: "warning",
+                //         message: "审核通过的数据不能修改!"
+                //     });
+                //     return;
+                // }
                 this.clearForm();
                 this.operatingMode = "update";
                 this.addForm.title = `修改${this.currentActiveItem}资源`;
