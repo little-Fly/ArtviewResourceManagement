@@ -21,7 +21,7 @@
 	function share(jsonstr)
 	{
 		var data = $.parseJSON(jsonstr)[0];
-		$("#shareDiv").css("width",document.body.clientWidth);
+		$("#shareDiv").css("width",document.body.clientWidth-31);
 		loading(data.shareName);
 		getResource(data.resourceListJson)
 		show();

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
 	String shareKey = request.getParameter("sharekey");
@@ -15,7 +15,6 @@
 <script type="text/javascript" src="/pages/share/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="/pages/share/share-v1r1c00.js"></script>
 <link href="/pages/share/share-v1r1c00.css" rel='stylesheet' />
-<script src="/pages/share/qrcode.js"></script>
 <style type="text/css">
 </style>
 
@@ -29,7 +28,6 @@
 		$("#noshare").hide();
 		$("#loading").hide();
 		$("#shareDiv").hide();
-		$("#qrCodeAll").hide();
 	}
 
 	function loading(title) {
@@ -43,12 +41,6 @@
 		$("#noshare").hide();
 		$("#loading").hide();
 		$("#shareDiv").show();
-		//var url = window.location.href;
-		//new QRCode(document.getElementById('qrCode'), url);
-		//$("#qrCodeAll").show();
-		//var margin = ($("#qrCode").height() - $("#qrCodeIco").height()) / 2; //控制Logo图标的位置
-		//$("#qrCodeIco").css("margin", margin);
-		
 	}
 
 	function errorAll(data) {
@@ -78,8 +70,7 @@
 		$table.append($tr);
 		$($tr.children()[0])
 				.append("<p>" + name + ": </p>");
-		$($tr.children()[0]).append("<img src='"+url+"' />");
-
+		$($tr.children()[0]).append("<img src='"+url+"' style='max-width: " + (document.body.clientWidth -33) + "px;'  />");
 	}
 
 	function addVideoResources(id, name, url) {
@@ -92,7 +83,7 @@
 				.append("<p><a>" + name + "</a></p>");
 		$($tr.children()[0])
 				.append(
-						"<video src='"+url+"' controls='controls'>您的浏览器不支持 video 标签。</video>");
+				"<video src='"+url+"' controls='controls' style='width: " + (document.body.clientWidth -33) + "px;'>您的浏览器不支持 video 标签。</video>");
 
 	}
 
@@ -115,18 +106,11 @@
 	<div id='shareDiv' class='swipe'></div>
 	<div id='loading'>数据请求中。</div>
 	<div id='noshare'>内容不存在，资源已下线。</div>
-	
-	<div id="qrCodeAll">
-	<p>分享内容，请截图二维码部分转发</p>
-	<div id="qrCode">
-	<img id="qrCodeIco" src="../../../static/favicon.png" style="position: absolute;width: 30px; height: 30px;" />
-	</div>
-	</div>
 	<table id='shareTable' class="table" border="0">
 		<thead>
 			<tr>
-				<th width="100px;">&nbsp;</th>
-				<th>&nbsp;</th>
+				<th width="100px;" height="0"></th>
+				<th width="auto" height="0"></th>
 			</tr>
 		</thead>
 		<tbody>
