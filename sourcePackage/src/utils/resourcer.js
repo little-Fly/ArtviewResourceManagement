@@ -33,7 +33,7 @@ function sequnce(saList){
       if(len > 1){
         for(var j=0; j<(len-1); j++){
           if(saList[i][j].attrType == 'picture' || saList[i][j].attrType == 'video'){
-            saList[i][j].attrValue = HostUrl + saList[i][j].attrValue; // 给图片视频加上host路径
+            saList[i][j].attrValue = HostUrl +"/rs/file/getfile.do?filekey=" + saList[i][j].attrValue; // 给图片视频加上host路径
             if(j == (len-2)){
               if(saList[i][len-1].attrType != 'picture' && saList[i][len-1].attrType != 'video'){
                 saList[i].push(saList[i][j]);
