@@ -30,10 +30,10 @@
 				</el-row>
 			</el-header>
 			<el-container>
-				<el-aside width="300px">
+				<el-aside width="200px">
 					<div class="type-list">
 						<ul>
-							<li class="type-list-item tc" :class="{'isActive':isActive === key}"
+							<li class="type-list-item no-wrap tc" :class="{'isActive':isActive === key}"
 							    @click="getResTable(item,key)" v-for="(item,key) in attrTypeList">
 								{{item.name}}
 							</li>
