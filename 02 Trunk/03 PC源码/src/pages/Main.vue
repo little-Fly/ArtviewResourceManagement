@@ -56,20 +56,21 @@
 					<div class="main-body">
 						<el-table :data="tableData"
 						          height="100%"
+						          style="width: 100%"
 						          stripe
 						          :header-cell-style="{
 							            color: '#000',
 	                                    fontSize: '1.1rem'
 									}"
 						          border
-						          @selection-change="handleSelectionChange"
-						          style="width: 100%">
+						          @selection-change="handleSelectionChange">
 							<el-table-column
 									type="selection"
 									width="55">
 							</el-table-column>
 							<template v-for="(col ,index) in attrData">
 								<el-table-column
+										resizable
 										:prop="col.attrKey"
 										align="center"
 										:label="col.attrName">
@@ -103,8 +104,8 @@
 										:on-error="uploadFail"
 										:on-remove="fileRemove"
 										:on-change="uploadChange"
-										:before-upload="beforeUpload(item,key)"
-										:action="item.url"
+										:before-upload="beforeUpload"
+										:action="getAction(item, key)"
 										:auto-upload="true">
 									<el-button slot="trigger" @click="chooseFile(item)" size="small" type="primary">
 										选取文件({{item.attrType}})
@@ -172,6 +173,7 @@
                 isActive: 0,
                 currentTypeKey: "",
                 currentActiveItem: "",
+                currentUploadItem: {},
                 addDetailData: [],
                 operatingMode: "", // 当前行为 是add、update
                 fileArr: [],
@@ -199,7 +201,7 @@
                             let imgUrl = data.attrValue.indexOf("/rs/file/getfile.do?filekey") === -1
                                 ? `https://www.hwyst.net/rs/file/getfile.do?filekey=${data.attrValue}`
                                 : data.attrValue;
-                            text = `<img src="${imgUrl}" style="width: 100px;">`;
+                            text = `<img src="${imgUrl}" style="width: 90%;min-width: 100px">`;
                             break;
                         case "video":
                             if (data.attrValue === "") {
@@ -209,7 +211,7 @@
                             let url = data.attrValue.indexOf("/rs/file/getfile.do?filekey") === -1
                                 ? `https://www.hwyst.net/rs/file/getfile.do?filekey=${data.attrValue}`
                                 : data.attrValue;
-                            text = `<video src="${url}" controls="controls" style="width: 100px;height: 100px"></video>`;
+                            text = `<video src="${url}" controls="controls" style="width: 90%;min-width: 100px"></video>`;
                             break;
                     }
                 } else {
@@ -255,7 +257,12 @@
                         this.$message.warning("搜索条件不能为空");
                         return;
                     }
-                    obj[this.searchData[i].attr] = this.searchData[i].value;
+                    for (let j = 0; j < this.attrData.length; j++) {
+                        if (this.searchData[i].attr === this.attrData[j].attrName) {
+                            obj[this.attrData[j].attrKey] = this.searchData[i].value;
+                            break;
+                        }
+                    }
                 }
                 let json = {
                     typekey: this.searchType,
@@ -324,7 +331,7 @@
                             let data = response.data;
                             this.attrData = JSON.parse(data[0].data);
                             if (this.attrData.length > 0) {
-                                console.log("this.attrData", this.attrData);
+                                // console.log("this.attrData", this.attrData);
                                 let arr = [
                                     {attrKey: "attrState", attrName: "审核状态"},
                                     {attrKey: "approvalMess", attrName: "审核意见"},
@@ -332,6 +339,86 @@
                                 ];
                                 this.attrData = [...this.attrData, ...arr];
                             }
+                            let json = [
+                                {
+                                    approvalMess: "",
+                                    approvalUser: "",
+                                    attrKey: "RAt15498884831312339106746997660967",
+                                    attrLastState: "",
+                                    attrLevel: "1",
+                                    attrName: "11",
+                                    attrState: "ApprovalAdd",
+                                    attrType: "default",
+                                    attrValue: "手动阀手动阀啊但是发射点发啊但是发射点发射点发啊但是发射点发地方啊但是发射点发射点发啊但是发射点法大师傅啊但是发射点发射点发啊手动阀手动阀手动阀，，啊但是发射点发跑i爱的跑iu阿婆撒旦发射点方法，，asdfiqwoeiuq-werafa落款时间分厘卡士大夫就奥省的浪费空间阿斯利康的飞机奥克兰",
+                                    resourceKey: "RDt15498885040482339106712133930635",
+                                    typeKey: "RDf15498884827902339106720898958845"
+                                },
+                                {
+                                    approvalMess: "",
+                                    approvalUser: "",
+                                    attrKey: "RAt15498884831412339106712186525981",
+                                    attrLastState: "",
+                                    attrLevel: "1",
+                                    attrName: "2",
+                                    attrState: "ApprovalAdd",
+                                    attrType: "picture",
+                                    attrValue: "RFl15498884982222339106711885180584",
+                                    resourceKey: "RDt15498885040482339106712133930635",
+                                    typeKey: "RDf15498884827902339106720898958845"
+                                },
+                                {
+                                    approvalMess: "",
+                                    approvalUser: "",
+                                    attrKey: "RAt15498884832272339106714244227639",
+                                    attrLastState: "",
+                                    attrLevel: "1",
+                                    attrName: "33",
+                                    attrState: "ApprovalAdd",
+                                    attrType: "picture",
+                                    attrValue: "RFl15498885010882339106746931644488",
+                                    resourceKey: "RDt15498885040482339106712133930635",
+                                    typeKey: "RDf15498884827902339106720898958845"
+                                },
+                                {
+                                    approvalMess: "",
+                                    approvalUser: "",
+                                    attrKey: "RAt15498884831312339106746997660967",
+                                    attrLastState: "",
+                                    attrLevel: "1",
+                                    attrName: "11",
+                                    attrState: "ApprovalAdd",
+                                    attrType: "default",
+                                    attrValue: "21",
+                                    resourceKey: "RDt15498885156272339106712188683515",
+                                    typeKey: "RDf15498884827902339106720898958845"
+                                },
+                                {
+                                    approvalMess: "",
+                                    approvalUser: "",
+                                    attrKey: "RAt15498884831412339106712186525981",
+                                    attrLastState: "",
+                                    attrLevel: "1",
+                                    attrName: "2",
+                                    attrState: "ApprovalAdd",
+                                    attrType: "picture",
+                                    attrValue: "RFl15498885105962339106780535304967",
+                                    resourceKey: "RDt15498885156272339106712188683515",
+                                    typeKey: "RDf15498884827902339106720898958845"
+                                },
+                                {
+                                    approvalMess: "",
+                                    approvalUser: "",
+                                    attrKey: "RAt15498884832272339106714244227639",
+                                    attrLastState: "",
+                                    attrLevel: "1",
+                                    attrName: "33",
+                                    attrState: "ApprovalAdd",
+                                    attrType: "picture",
+                                    attrValue: "RFl15498885128042339106746980478258",
+                                    resourceKey: "RDt15498885156272339106712188683515",
+                                    typeKey: "RDf15498884827902339106720898958845"
+                                }
+                            ];
                             // this.getLineData(json);
                             // return;
                             /*********************************************************************************/
@@ -358,7 +445,7 @@
                                     return;
                                 }
                                 let json = JSON.parse(detail[0].data);
-                                // console.log("表格数据11", json);
+                                console.log("表格数据11", json);
                                 this.getLineData(json);
                             }
                         }
@@ -392,8 +479,16 @@
                         arr[index - 1] = obj;
                     }
                 }
-                console.log(this.tableData);
+                // console.log(this.tableData);
                 this.tableData = arr;
+            },
+            clearForm() {
+                this.attrLevel = "1";
+                for (let key in this.addForm) {
+                    if (this.addForm.hasOwnProperty(key) && key !== "title") {
+                        this.addForm[key] = "";
+                    }
+                }
             },
             /**
              * 新增资源按钮
@@ -412,101 +507,67 @@
                 this.addForm = {title: `新增${this.currentActiveItem}资源`};
                 this.dialogFormVisible = true;
             },
-            clearForm() {
-                this.attrLevel = "1";
-                for (let key in this.addForm) {
-                    if (this.addForm.hasOwnProperty(key) && key !== "title") {
-                        this.addForm[key] = "";
-                    }
-                }
-            },
             /**
-             * 提交审核
+             * 修改资源按钮
              */
-            submitAudit() {
-                let json = [];
-                let len = 0;
-                for (let i = 0; i < this.attrData.length; i++) {
-                    let item = this.attrData[i].attrKey;
-                    if (item === "attrState"
-                        || item === "approvalMess"
-                        || item === "approvalUser") {
-                        continue;
-                    }
-                    len++;
-                }
-                for (let key in this.addForm) {
-                    if (key === "attrState"
-                        || key === "approvalMess"
-                        || key === "approvalUser") {
-                        break;
-                    }
-                    if (this.addForm.hasOwnProperty(key) &&
-                        key !== "title" &&
-                        key !== "resourceKey") {
-                        let obj = {
-                            "attrKey": key,
-                            "attrName": "",
-                            "attrValue": this.addForm[key],
-                            "typeKey": this.currentTypeKey,
-                            attrLevel: this.attrLevel
-                        };
-                        for (let i = 0; i < this.attrData.length; i++) {
-                            if (this.attrData[i].attrKey === obj.attrKey) {
-                                obj.attrType = this.attrData[i].attrType;
-                                obj.attrName = this.attrData[i].attrName;
-                            }
-                        }
-                        json.push(obj);
-                    }
-                }
-                if (json.length === 0) {
-                    this.$message.error("请输入内容");
+            updateSource() {
+                if (this.multipleSelection.length > 1) {
+                    this.$message({
+                        type: "warning",
+                        message: "一次最多只能修改一条数据!"
+                    });
                     return;
                 }
-                if (json.length < len) {
-                    this.$message.error("全部字段必填");
+                if (this.multipleSelection.length < 1) {
+                    this.$message({
+                        type: "warning",
+                        message: "请先选择需要修改的数据!"
+                    });
                     return;
                 }
-                for (let i = 0; i < json.length; i++) {
-                    let val = json[i].attrValue;
-                    if (val === "") {
-                        this.$message.error("全部字段必填");
-                        return;
+                // let canUpdate = false;
+                // switch (this.multipleSelection[0].attrState) {
+                //     case "ApprovalReject":
+                //         canUpdate = true;
+                //         break;
+                //     case "Available":
+                //     case "ApprovalAdd":
+                //     case "ApprovalDel":
+                //     case "ApprovalUpdate":
+                //     default:
+                //         break;
+                // }
+                // if (!canUpdate) {
+                //     this.$message({
+                //         type: "warning",
+                //         message: "审核通过的数据不能修改!"
+                //     });
+                //     return;
+                // }
+                if (this.$refs.upload) {
+                    for (let i = 0; i < this.$refs.upload.length; i++) {
+                        this.$refs.upload[i].clearFiles();
                     }
                 }
-                this.$confirm("确认提交审核吗?", "提示", {
-                    confirmButtonText: "提交审核",
-                    cancelButtonText: "我再想想",
-                    type: "warning",
-                    center: true
-                }).then(() => {
-                    let params = {
-                        json: decodeURI(encodeURI(JSON.stringify(json)))
-                    };
-                    if (this.operatingMode === "add") {
-                        this.addDetailFun(params);
-                    } else if (this.operatingMode === "update") {
-                        this.updateDetailFun(json);
-                    }
-                }).catch(() => {
-
+                this.attrData.forEach((item, i) => {
+                    this.$set(this.attrData[i], "previewUrl", "");
                 });
-            },
-            chooseFile(item) {
-                if (this.addForm[item.attrKey] && this.addForm[item.attrKey] !== "") {
-                    return;
+                this.clearForm();
+                this.operatingMode = "update";
+                this.addForm.title = `修改${this.currentActiveItem}资源`;
+                this.dialogFormVisible = true;
+                for (let i = 0; i < this.attrData.length; i++) {
+                    let key = this.attrData[i].attrKey;
+                    if (this.multipleSelection[0][key]) {
+                        this.addForm[key] = this.multipleSelection[0][key].attrValue;
+                        this.attrLevel = this.multipleSelection[0][key].attrLevel;
+                        if (this.attrData[i].attrType === "picture" || this.attrData[i].attrType === "video") {
+                            let url = `https://www.hwyst.net/rs/file/getfile.do?filekey=${ this.addForm[key]}`;
+                            this.$set(this.attrData[i], "previewUrl", url);
+                        }
+                    }
                 }
-                this.addForm[item.attrKey] = "";
-                this.currentUploadAttrKey = item.attrKey;
             },
-            beforeUpload(item, i) {
-                let url = `https://www.hwyst.net/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
-                this.$set(this.attrData[i], "url", url);
-            },
-            // uploadChange(file){
-            //
-            // },
             addDetailFun(data) {
                 this.$ajax.detail
                     .addDetail(data)
@@ -527,53 +588,6 @@
                     }, (error) => {
                         this.$message.error(error.message);
                     });
-            },
-            /**
-             * 修改资源按钮
-             */
-            updateSource() {
-                if (this.multipleSelection.length > 1) {
-                    this.$message({
-                        type: "warning",
-                        message: "一次最多只能修改一条数据!"
-                    });
-                    return;
-                }
-                if (this.multipleSelection.length < 1) {
-                    this.$message({
-                        type: "warning",
-                        message: "请先选择需要修改的数据!"
-                    });
-                    return;
-                }
-                let canUpdate = false;
-                switch (this.multipleSelection[0].attrState) {
-                    case "ApprovalReject":
-                        canUpdate = true;
-                        break;
-                    case "Available":
-                    case "ApprovalAdd":
-                    case "ApprovalDel":
-                    case "ApprovalUpdate":
-                    default:
-                        break;
-                }
-                if (!canUpdate) {
-                    this.$message({
-                        type: "warning",
-                        message: "审核通过的数据不能修改!"
-                    });
-                    return;
-                }
-                this.clearForm();
-                this.operatingMode = "update";
-                this.addForm.title = `修改${this.currentActiveItem}资源`;
-                this.dialogFormVisible = true;
-                for (let i = 0; i < this.attrData.length; i++) {
-                    let key = this.attrData[i].attrKey;
-                    this.addForm[key] = this.multipleSelection[0][key].attrValue;
-                    this.attrLevel = this.multipleSelection[0][key].attrLevel;
-                }
             },
             updateDetailFun(json) {
                 let data = {
@@ -599,6 +613,83 @@
                     }, (error) => {
                         this.$message.error(error.message);
                     });
+            },
+            /**
+             * 提交审核
+             */
+            submitAudit() {
+                let json = [];
+                let len = 0;
+                for (let i = 0; i < this.attrData.length; i++) {
+                    let item = this.attrData[i].attrKey;
+                    if (item === "attrState"
+                        || item === "approvalMess"
+                        || item === "approvalUser") {
+                        continue;
+                    }
+                    len++;
+                }
+                // console.log("this.addForm:", this.addForm);
+                for (let key in this.addForm) {
+                    if (key === "attrState"
+                        || key === "approvalMess"
+                        || key === "approvalUser") {
+                        continue;
+                    }
+                    if (this.addForm.hasOwnProperty(key) &&
+                        key !== "title" &&
+                        key !== "resourceKey") {
+                        let obj = {
+                            "attrKey": key,
+                            "attrName": "",
+                            "attrValue": this.addForm[key],
+                            "typeKey": this.currentTypeKey,
+                            attrLevel: this.attrLevel
+                        };
+                        for (let i = 0; i < this.attrData.length; i++) {
+                            if (this.attrData[i].attrKey === obj.attrKey) {
+                                obj.attrType = this.attrData[i].attrType;
+                                obj.attrName = this.attrData[i].attrName;
+                            }
+                        }
+                        json.push(obj);
+                    }
+                }
+                // console.log("this.attrData:", this.attrData);
+                // console.log("json:", json);
+                // console.log("len:", len);
+                if (json.length === 0) {
+                    this.$message.error("请输入内容");
+                    return;
+                }
+                if (json.length < len) {
+                    this.$message.error("全部字段必填1");
+                    return;
+                }
+                for (let i = 0; i < json.length; i++) {
+                    let val = json[i].attrValue;
+                    if (val === "") {
+                        this.$message.error("全部字段必填2");
+                        return;
+                    }
+                }
+                this.$confirm("确认提交审核吗?", "提示", {
+                    confirmButtonText: "提交审核",
+                    cancelButtonText: "我再想想",
+                    type: "warning",
+                    center: true
+                }).then(() => {
+                    let params = {
+                        json: decodeURI(encodeURI(JSON.stringify(json)))
+                    };
+                    if (this.operatingMode === "add") {
+                        this.addDetailFun(params);
+                    } else if (this.operatingMode === "update") {
+                        this.updateDetailFun(json);
+                    }
+                }).catch(() => {
+
+                });
             },
             /**
              * 删除资源
@@ -686,6 +777,33 @@
             uploadSuc(response) {
                 this.addForm[this.currentUploadAttrKey] = response[0].data;
                 console.log("upload success");
+            },
+            getAction(item, i) {
+                let url = `https://www.hwyst.net/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
+                this.$set(this.attrData[i], "url", url);
+                return url;
+            },
+            chooseFile(item) {
+                this.currentUploadAttrKey = item.attrKey;
+                this.currentUploadItem = item;
+                if (this.addForm[item.attrKey] && this.addForm[item.attrKey] !== "") {
+                    return;
+                }
+                this.addForm[item.attrKey] = "";
+            },
+            beforeUpload(file) {
+                if (this.currentUploadItem.attrType === "picture") {
+                    if (file.type.indexOf("image") === -1) {
+                        this.$message.error("请选择图片格式的文件");
+                        return false;
+                    }
+                } else if (this.currentUploadItem.attrType === "video") {
+                    if (file.type.indexOf("video") === -1) {
+                        this.$message.error("请选择视频格式的文件");
+                        return false;
+                    }
+                }
+                return true;
             },
             uploadFail() {
                 console.log("upload Fail");
