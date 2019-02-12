@@ -14,13 +14,16 @@
 						<el-input placeholder="请输入名称" v-model="form.name"></el-input>
 					</el-form-item>
 					<el-form-item>
+						<img :src="previewUrl" v-if="previewUrl!==''" width="100">
 						<el-upload
 								ref="upload"
 								:limit="1"
 								:multiple="false"
 								:on-success="uploadSuc"
 								:on-error="uploadFail"
+								:on-remove="fileRemove"
 								:action="refLogo"
+								accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
 								:on-change="uploadChange"
 								:auto-upload="false">
 							<el-button slot="trigger" size="small" type="primary">
@@ -69,7 +72,8 @@
                     }
                 ],
                 attrTypeList: [],
-                file: null
+                file: null,
+                previewUrl: ""
             };
         },
         methods: {
@@ -82,15 +86,17 @@
                     name: this.file.name,
                     remark: this.file.remark
                 };
-                this.file = null;
                 let json = {
+                    typekey: this.file.typeKey,
                     json: decodeURI(encodeURI(JSON.stringify(params)))
                 };
+                this.file = null;
                 this.$ajax.def
                     .updateDef(json)
                     .then((response) => {
                         if (response.status === 200) {
                             let data = response.data;
+                            this.previewUrl = "";
                             if (data[0].state === "error") {
                                 this.$message.error(data[0].message);
                             }
@@ -99,9 +105,14 @@
             },
             uploadFail() {
                 console.log("upload Fail");
+                this.previewUrl = "";
             },
             uploadChange(file) {
                 this.file = file;
+                this.previewUrl = file.url;
+            },
+            fileRemove() {
+                this.previewUrl = "";
             },
             addConfirm() {
                 if (this.form.name === "") {
@@ -180,13 +191,14 @@
             },
             addAttrFun(typeKey) {
                 for (let i = 0; i < this.attrList.length; i++) {
-                    this.addAttrItemFun(this.attrList[i], typeKey);
+                    this.addAttrItemFun(this.attrList[i], typeKey, i);
                 }
             },
-            addAttrItemFun(item, typeKey) {
+            addAttrItemFun(item, typeKey, i) {
                 let json = {
                     attrName: item.attrName,
                     attrType: item.type,
+                    attrPosition: i,
                     typeKey: typeKey,
                     attrlen: item.attrlen,
                 };

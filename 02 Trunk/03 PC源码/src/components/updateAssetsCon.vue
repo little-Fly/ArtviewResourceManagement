@@ -28,16 +28,16 @@
 				</el-form-item>
 				<el-form-item label="资源类别logo" :label-width="formLabelWidth">
 					<img :src="nowLogoUrl" alt=""
-					     v-if="form.logoUrl !== ''" width="100" height="100">
-				</el-form-item>
-				<el-form-item label="" :label-width="formLabelWidth">
+					     v-if="form.logoUrl !== ''" width="100">
 					<el-upload
 							ref="upload"
 							:limit="1"
 							:multiple="false"
 							:on-success="uploadSuc"
 							:on-error="uploadFail"
+							:on-remove="fileRemove"
 							:action="uploadUrl"
+							accept=".jpg,.jpeg,.png,.gif,.bmp,.JPG,.JPEG,.PBG,.GIF,.BMP"
 							:on-change="uploadChange"
 							:auto-upload="false">
 						<el-button slot="trigger" size="small" type="primary">
@@ -64,6 +64,16 @@
 				<el-form-item label="属性名称" :label-width="formLabelWidth">
 					<el-input v-model="resAttr.attrName" auto-complete="off"></el-input>
 				</el-form-item>
+				<el-form-item label="属性类型" :label-width="formLabelWidth">
+					<el-select v-model="resAttr.attrType" placeholder="请选择属性类型">
+						<el-option label="文字" value="default"></el-option>
+						<el-option label="图片" value="picture"></el-option>
+						<el-option label="视频" value="video"></el-option>
+					</el-select>
+					<el-input placeholder="字符限制" style="width: 100px"
+					          v-if="resAttr.attrType==='default'"
+					          v-model="resAttr.attrlen"></el-input>
+				</el-form-item>
 				<el-form-item label="备注" :label-width="formLabelWidth">
 					<el-input v-model="resAttr.remark" auto-complete="off"></el-input>
 				</el-form-item>
@@ -76,6 +86,16 @@
 			<el-form>
 				<el-form-item label="属性名称" :label-width="formLabelWidth">
 					<el-input v-model="resAttr.attrName" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="属性类型" :label-width="formLabelWidth">
+					<el-select v-model="resAttr.attrType" placeholder="请选择属性类型">
+						<el-option label="文字" value="default"></el-option>
+						<el-option label="图片" value="picture"></el-option>
+						<el-option label="视频" value="video"></el-option>
+					</el-select>
+					<el-input placeholder="字符限制" style="width: 100px"
+					          v-if="resAttr.attrType==='default'"
+					          v-model="resAttr.attrlen"></el-input>
 				</el-form-item>
 				<el-form-item label="备注" :label-width="formLabelWidth">
 					<el-input v-model="resAttr.remark" auto-complete="off"></el-input>
@@ -106,7 +126,10 @@
                 resAttr: {
                     attrKey: "",
                     attrName: "",
-                    remark: ""
+                    remark: "",
+                    attrPosition: 0,
+                    attrlen: 1,
+                    attrType: "default"
                 },
                 type1: "",
                 type2: "",
@@ -114,6 +137,7 @@
                 updateTypeKey: "",
                 uploadUrl: "",
                 nowLogoUrl: "",
+                oldLogoUrl: "",
                 file: null
             };
         },
@@ -126,10 +150,11 @@
                     typeKey: this.updateTypeKey,
                     name: this.form.name,
                 };
-                this.file = null;
                 let json = {
+                    typekey: this.updateTypeKey,
                     json: decodeURI(encodeURI(JSON.stringify(params)))
                 };
+                this.file = null;
                 this.$ajax.def
                     .updateDef(json)
                     .then((response) => {
@@ -144,9 +169,16 @@
             },
             uploadFail() {
                 console.log("upload Fail");
+                this.nowLogoUrl = this.oldLogoUrl;
             },
             uploadChange(file) {
                 this.file = file;
+                this.oldLogoUrl = this.nowLogoUrl;
+                this.nowLogoUrl = file.url;
+                this.form.logoUrl = file.url;
+            },
+            fileRemove() {
+                this.nowLogoUrl = this.oldLogoUrl;
             },
             /**
              * 修改 按钮弹窗
@@ -177,12 +209,18 @@
                 this.resAttr.attrKey = "";
                 this.resAttr.attrName = "";
                 this.resAttr.remark = "";
+                this.resAttr.attrPosition = 0;
+                this.resAttr.attrlen = 2;
+                this.resAttr.attrType = "default";
             },
             //修改资源属性按钮
             updateThisLine(item) {
                 this.resAttr.attrKey = item.attrKey;
                 this.resAttr.attrName = item.attrName;
                 this.resAttr.remark = item.remark;
+                this.resAttr.attrPosition = item.attrPosition;
+                this.resAttr.attrlen = item.attrlen;
+                this.resAttr.attrType = item.attrType;
                 this.resUpdateVisible = true;
             },
             //删除资源属性
@@ -224,11 +262,12 @@
                 }
                 let json = {
                     attrKey: this.resAttr.attrKey,
-                    attrLevel: "0",
                     attrName: this.resAttr.attrName,
-                    attrType: "default",
+                    attrType: this.resAttr.attrType,
+                    attrlen: this.resAttr.attrlen,
                     remark: this.resAttr.remark,
-                    typeKey: this.updateTypeKey
+                    typeKey: this.updateTypeKey,
+                    attrPosition: this.attrList.length + 1
                 };
                 let params = {
                     json: decodeURI(encodeURI(JSON.stringify(json)))
@@ -259,13 +298,15 @@
                 }
                 let json = {
                     attrKey: this.resAttr.attrKey,
-                    attrLevel: "0",
                     attrName: this.resAttr.attrName,
-                    attrType: "default",
+                    attrType: this.resAttr.attrType,
+                    attrlen: this.resAttr.attrlen,
                     remark: this.resAttr.remark,
+                    attrPosition: this.resAttr.attrPosition,
                     typeKey: this.updateTypeKey
                 };
                 let params = {
+                    attrkey: this.resAttr.attrKey,
                     json: decodeURI(encodeURI(JSON.stringify(json)))
                 };
                 this.$ajax.attr
@@ -308,6 +349,7 @@
                         name: this.form.name
                     };
                     let json = {
+                        typekey: this.updateTypeKey,
                         json: decodeURI(encodeURI(JSON.stringify(params)))
                     };
                     this.$ajax.def
@@ -319,11 +361,11 @@
                                     this.$message.error(data[0].message);
                                 } else {
                                     this.$message.success("修改成功");
-                                    if( this.file){
+                                    if (this.file) {
                                         setTimeout(() => {
                                             this.$refs.upload.submit();
                                         }, 600);
-	                                }
+                                    }
                                     this.dialogFormVisible = false;
                                 }
                             }

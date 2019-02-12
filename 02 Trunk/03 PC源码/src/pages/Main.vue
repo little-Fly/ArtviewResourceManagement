@@ -30,10 +30,10 @@
 				</el-row>
 			</el-header>
 			<el-container>
-				<el-aside width="300px">
+				<el-aside width="200px">
 					<div class="type-list">
 						<ul>
-							<li class="type-list-item tc" :class="{'isActive':isActive === key}"
+							<li class="type-list-item no-wrap tc" :class="{'isActive':isActive === key}"
 							    @click="getResTable(item,key)" v-for="(item,key) in attrTypeList">
 								{{item.name}}
 							</li>
@@ -96,19 +96,26 @@
 							              v-if="item.attrKey !== 'attrState' && item.attrKey !== 'approvalMess'&& item.attrKey !== 'approvalUser'">
 								<el-upload
 										v-if="item.attrType === 'picture'||item.attrType === 'video'"
-										class="upload-demo"
 										ref="upload"
 										:limit="1"
 										:multiple="false"
 										:on-success="uploadSuc"
 										:on-error="uploadFail"
+										:on-remove="fileRemove"
+										:on-change="uploadChange"
 										:before-upload="beforeUpload(item,key)"
 										:action="item.url"
 										:auto-upload="true">
 									<el-button slot="trigger" @click="chooseFile(item)" size="small" type="primary">
-										选取文件
+										选取文件({{item.attrType}})
 									</el-button>
 								</el-upload>
+								<img :src="item.previewUrl"
+								     v-if="item.attrType === 'picture' && item.previewUrl !== undefined && item.previewUrl !== ''"
+								     width="100">
+								<video :src="item.previewUrl"
+								       v-if="item.attrType === 'video' && item.previewUrl !== undefined && item.previewUrl !== ''"
+								       controls="controls" width="100"></video>
 								<el-input v-model="addForm[item.attrKey]"
 								          v-if="item.attrType !== 'picture'&&item.attrType !== 'video'"
 								          :maxlength="item.attrlen > 0 ? item.attrlen :100"
@@ -116,10 +123,11 @@
 								          auto-complete="off"></el-input>
 							</el-form-item>
 							<el-form-item label="数据级别" :label-width="formLabelWidth">
-								<el-input v-model="attrLevel" @blur="inputModalBlur"
-								          placeholder="0:任何人可见;1:成员可见;2:管理员可见"
-								          type="number" max="2" min="0"
-								          auto-complete="off"></el-input>
+								<el-select v-model="attrLevel" placeholder="请选择数据级别">
+									<el-option label="任何人可见" value="0"></el-option>
+									<el-option label="成员可见" value="1"></el-option>
+									<el-option label="管理员可见" value="2"></el-option>
+								</el-select>
 							</el-form-item>
 						</el-form>
 						<div slot="footer" class="dialog-footer">
@@ -168,7 +176,7 @@
                 operatingMode: "", // 当前行为 是add、update
                 fileArr: [],
                 currentUploadAttrKey: "",
-                attrLevel: "",
+                attrLevel: "1",
                 searchData: [{attr: "", value: ""}] //attrkey
             };
         },
@@ -191,7 +199,7 @@
                             let imgUrl = data.attrValue.indexOf("/rs/file/getfile.do?filekey") === -1
                                 ? `https://www.hwyst.net/rs/file/getfile.do?filekey=${data.attrValue}`
                                 : data.attrValue;
-                            text = `<img src="${imgUrl}" style="width: 100px;height: 100px">`;
+                            text = `<img src="${imgUrl}" style="width: 100px;">`;
                             break;
                         case "video":
                             if (data.attrValue === "") {
@@ -384,6 +392,7 @@
                         arr[index - 1] = obj;
                     }
                 }
+                console.log(this.tableData);
                 this.tableData = arr;
             },
             /**
@@ -395,13 +404,16 @@
                         this.$refs.upload[i].clearFiles();
                     }
                 }
+                this.attrData.forEach((item, i) => {
+                    this.$set(this.attrData[i], "previewUrl", "");
+                });
                 this.operatingMode = "add";
                 this.clearForm();
-                this.addForm.title = `新增${this.currentActiveItem}资源`;
+                this.addForm = {title: `新增${this.currentActiveItem}资源`};
                 this.dialogFormVisible = true;
             },
             clearForm() {
-                this.attrLevel = "";
+                this.attrLevel = "1";
                 for (let key in this.addForm) {
                     if (this.addForm.hasOwnProperty(key) && key !== "title") {
                         this.addForm[key] = "";
@@ -413,6 +425,16 @@
              */
             submitAudit() {
                 let json = [];
+                let len = 0;
+                for (let i = 0; i < this.attrData.length; i++) {
+                    let item = this.attrData[i].attrKey;
+                    if (item === "attrState"
+                        || item === "approvalMess"
+                        || item === "approvalUser") {
+                        continue;
+                    }
+                    len++;
+                }
                 for (let key in this.addForm) {
                     if (key === "attrState"
                         || key === "approvalMess"
@@ -441,6 +463,17 @@
                 if (json.length === 0) {
                     this.$message.error("请输入内容");
                     return;
+                }
+                if (json.length < len) {
+                    this.$message.error("全部字段必填");
+                    return;
+                }
+                for (let i = 0; i < json.length; i++) {
+                    let val = json[i].attrValue;
+                    if (val === "") {
+                        this.$message.error("全部字段必填");
+                        return;
+                    }
                 }
                 this.$confirm("确认提交审核吗?", "提示", {
                     confirmButtonText: "提交审核",
@@ -471,6 +504,9 @@
                 let url = `https://www.hwyst.net/rs/file/add.do?json={'attrKey':'${item.attrKey}','typeKey':'${item.typeKey}'}`;
                 this.$set(this.attrData[i], "url", url);
             },
+            // uploadChange(file){
+            //
+            // },
             addDetailFun(data) {
                 this.$ajax.detail
                     .addDetail(data)
@@ -534,11 +570,9 @@
                 this.addForm.title = `修改${this.currentActiveItem}资源`;
                 this.dialogFormVisible = true;
                 for (let i = 0; i < this.attrData.length; i++) {
-                    if (this.attrData[i].attrLevel) {
-                        this.attrLevel = this.attrData[i].attrLevel;
-                    }
                     let key = this.attrData[i].attrKey;
-                    this.addForm[key] = this.multipleSelection[0][key];
+                    this.addForm[key] = this.multipleSelection[0][key].attrValue;
+                    this.attrLevel = this.multipleSelection[0][key].attrLevel;
                 }
             },
             updateDetailFun(json) {
@@ -641,7 +675,7 @@
                             this.attrTypeList = JSON.parse(data[0].data);
                             this.searchOptions = this.attrTypeList;
                             if (this.attrTypeList.length > 0) {
-                                console.log("attrTypeList:", this.attrTypeList);
+                                // console.log("attrTypeList:", this.attrTypeList);
                                 this.getResTable(this.attrTypeList[0], 0);
                             }
                         }
@@ -655,10 +689,26 @@
             },
             uploadFail() {
                 console.log("upload Fail");
+                this.attrData.forEach((item, i) => {
+                    if (this.currentUploadAttrKey === item.attrKey) {
+                        this.$set(this.attrData[i], "previewUrl", "");
+                    }
+                });
             },
-            inputModalBlur() {
-                this.attrLevel = this.attrLevel < 0 ? 0 : this.attrLevel > 2 ? 2 : this.attrLevel;
-            }
+            fileRemove() {
+                this.attrData.forEach((item, i) => {
+                    if (this.currentUploadAttrKey === item.attrKey) {
+                        this.$set(this.attrData[i], "previewUrl", "");
+                    }
+                });
+            },
+            uploadChange(file) {
+                this.attrData.forEach((item, i) => {
+                    if (this.currentUploadAttrKey === item.attrKey) {
+                        this.$set(this.attrData[i], "previewUrl", file.url);
+                    }
+                });
+            },
         },
         mounted() {
             this.$chargeAuthority().then((t) => {

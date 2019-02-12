@@ -45,22 +45,26 @@
   clear: both;
 }
 
-
-
-
 /**   margin start   **/
 .mt-40 {
   margin-top: 40px;
 }
+
 .mt-50 {
   margin-top: 50px;
 }
+
 .mt-60 {
   margin-top: 60px;
 }
 
 /**   maigin end  **/
 
+.no-wrap {
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
 
 .no-select-text {
   -webkit-user-select: none;
