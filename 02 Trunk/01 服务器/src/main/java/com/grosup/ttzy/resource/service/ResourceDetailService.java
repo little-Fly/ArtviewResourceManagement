@@ -9,19 +9,19 @@ import com.grosup.ttzy.resource.dto.ResourceDetailDto;
 public interface ResourceDetailService {
 	public Collection<ResourceDetailDto> create(String json);
 
-	public Collection<ResourceDetailDto> add(String json);
+	public Collection<ResourceDetailDto> add(String json, String approvalUser);
 
-	public void approvalAdd(String resourceKey, String approvalMess);
+	public void approvalAdd(String resourceKey, String approvalMess, String approvalUser);
 
-	public void approvalDel(String resourceKey, String approvalMess);
+	public void approvalDel(String resourceKey, String approvalMess, String approvalUser);
 	
-	public void approvalUpdate(String resourceKey, String approvalMess);
+	public void approvalUpdate(String resourceKey, String approvalMess, String approvalUser);
 
-	public void reject(String resourceKey, String approvalMess);
+	public void reject(String resourceKey, String approvalMess, String approvalUser);
 
-	public void del(String resourceKey);
+	public void del(String resourceKey, String approvalUser);
 
-	public void update(String resourceKey, String json);
+	public void update(String resourceKey, String json, String approvalUser);
 	
 	public void updateAttrName(String newAttrKey, String newAttrName);
 	

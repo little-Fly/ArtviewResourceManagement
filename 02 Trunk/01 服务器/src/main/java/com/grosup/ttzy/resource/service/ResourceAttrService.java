@@ -9,7 +9,7 @@ public interface ResourceAttrService {
 
 	public ResourceAttrDto add(String json);
 
-	public ResourceAttrDto del(String resourceKey);
+	public void del(String resourceKey);
 
 	public ResourceAttrDto update(String attrKey, String json);
 

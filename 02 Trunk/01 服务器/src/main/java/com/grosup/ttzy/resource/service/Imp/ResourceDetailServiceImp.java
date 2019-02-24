@@ -25,41 +25,41 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 		return resourceDetailDao.create(json);
 	}
 
-	public Collection<ResourceDetailDto> add(String json) {
+	public Collection<ResourceDetailDto> add(String json, String approvalUser) {
 		Collection<ResourceDetailDto> collection = resourceDetailDao.create(json);
 		if (collection != null) {
-			return resourceDetailDao.add(collection);
+			return resourceDetailDao.add(collection, approvalUser);
 		} else {
 			log.error("ResourceDetailService add resourceDetailDto is null. resourceKey json:" + json);
 		}
 		return null;
 	}
 
-	public void approvalAdd(String resourceKey, String approvalMess) {
-		resourceDetailDao.approvalAdd(resourceKey, approvalMess);
+	public void approvalAdd(String resourceKey, String approvalMess, String approvalUser) {
+		resourceDetailDao.approvalAdd(resourceKey, approvalMess, approvalUser);
 	}
 
-	public void approvalDel(String resourceKey, String approvalMess) {
-		resourceDetailDao.approvalDel(resourceKey, approvalMess);
+	public void approvalDel(String resourceKey, String approvalMess, String approvalUser) {
+		resourceDetailDao.approvalDel(resourceKey, approvalMess, approvalUser);
 	}
 
-	public void approvalUpdate(String resourceKey, String approvalMess)
+	public void approvalUpdate(String resourceKey, String approvalMess, String approvalUser)
 	{
-		resourceDetailDao.approvalUpdate(resourceKey, approvalMess);
+		resourceDetailDao.approvalUpdate(resourceKey, approvalMess, approvalUser);
 	}
 	
-	public void reject(String resourceKey, String approvalMess) {
-		resourceDetailDao.reject(resourceKey, approvalMess);
+	public void reject(String resourceKey, String approvalMess, String approvalUser) {
+		resourceDetailDao.reject(resourceKey, approvalMess, approvalUser);
 	}
 	
-	public void del(String resourceKey) {
-		resourceDetailDao.del(resourceKey);
+	public void del(String resourceKey, String approvalUser) {
+		resourceDetailDao.del(resourceKey, approvalUser);
 	}
 
-	public void update(String resourceKey, String json) {
+	public void update(String resourceKey, String json, String approvalUser) {
 		Collection<ResourceDetailDto> collection = resourceDetailDao.create(json);
 		if (collection != null) {
-			resourceDetailDao.update(resourceKey, collection);
+			resourceDetailDao.update(resourceKey, collection, approvalUser);
 		} else {
 			log.error("ResourceDetailService update resourceDetailDto is null. resourceKey json:" + json);
 		}

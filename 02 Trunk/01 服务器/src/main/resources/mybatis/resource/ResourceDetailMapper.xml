@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.grosup.ttzy.resource.mapper.ResourceDetailMapper">  
+    
+    <!-- 
+    
+     Table structure for resource_detail
+		private String resourceKey; // long Y 主键，资源Id
+		private String attrKey; // varchar Y 主键，属性Key
+		private String typeKey; // varchar Y 资源类型Key
+		private String attrName; // varchar Y 属性名
+		private String attrLevel; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		private String attrType; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		private String attrValue; // varchar Y 属性值
+		private String attrState; // varchar Y 状态
+		private String attrLastState; // varchar Y 状态
+		private String approvalUser;// 審批人
+		private String approvalMess;// 審批意見
+     -->
+    <resultMap type="com.grosup.ttzy.resource.dto.ResourceDetailDto" id="BaseResultMap">
+        <id column="resourceKey" property="resourceKey"/>
+        <result column="attrKey" property="attrKey"/>
+        <result column="typeKey" property="typeKey"/>
+        <result column="attrName" property="attrName"/>
+        <result column="attrLevel" property="attrLevel"/>
+        <result column="attrType" property="attrType"/>
+        <result column="attrValue" property="attrValue"/>
+        <result column="attrState" property="attrState"/>
+        <result column="attrLastState" property="attrLastState"/>
+        <result column="approvalUser" property="approvalUser"/>
+        <result column="approvalMess" property="approvalMess"/>
+    </resultMap>
+ 
+
+    <insert id="add" parameterType="com.grosup.ttzy.resource.dto.ResourceDetailDto">
+        INSERT INTO resource_detail(resourceKey, attrKey, typeKey, attrName, attrLevel, attrType, attrValue, ,#{attrState}, attrLastState, approvalUser, approvalMess) 
+        VALUES(#{resourceKey},#{attrKey},#{typeKey},#{attrName},#{attrLevel},#{attrType},#{attrValue},#{attrState},#{attrLastState},#{approvalUser},#{approvalMess})
+    </insert>
+   
+    <delete id="del" parameterType="java.lang.String">
+        delete from resource_detail where resourceKey = #{resourceKey}
+    </delete>
+    
+    <update id="updateAttrName" parameterType="java.util.Map">
+        update resource_detail set 
+        attrName = #{attrName}
+        where attrKey = #{attrKey}
+    </update>
+    
+    
+    <update id="update" parameterType="com.grosup.ttzy.resource.dto.ResourceDetailDto">
+        update resource_detail set 
+        attrKey = #{attrKey}
+        typeKey = #{typeKey}
+        attrName = #{attrName}
+        attrLevel = #{attrLevel}
+        attrType = #{attrType}
+        attrValue = #{attrValue}
+        attrState = #{attrState}
+        attrLastState = #{attrLastState}
+        approvalUser = #{approvalUser}
+        approvalMess = #{approvalMess}
+        where resourceKey = #{resourceKey}
+    </update>
+    
+    <update id="updateState" parameterType="java.util.Map">
+        update resource_detail set 
+        attrState = #{attrState}
+        attrLastState = attrState
+        approvalUser = #{approvalUser}
+        approvalMess = #{approvalMess}
+        where resourceKey = #{resourceKey}
+    </update>
+    
+    <select id="get" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from resource_detail where resourceKey = #{resourceKey}
+    </select>
+
+    
+    <select id="getByUser" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select * from resource_detail where resourceKey = #{resourceKey} and attrState = #{attrState} and attrLevel &lt;&gt; #{attrLevel}
+    </select>
+    
+    <select id="getByAdmin" parameterType="java.util.Map" resultMap="BaseResultMap">
+        select * from resource_detail where resourceKey = #{resourceKey} and attrState = #{attrState}
+    </select>
+    
+     <select id="getAll" parameterType="java.util.Map" resultType="java.lang.String">
+        select distinct resourceKey from resource_detail where typeKey= #{typeKey} limit #{start},#{len}
+    </select>
+    
+    <select id="getAllByUser" parameterType="java.util.Map" resultType="java.lang.String">
+        select distinct resourceKey from resource_detail where typeKey= #{typeKey} and attrState = #{attrState} and attrLevel &lt;&gt; #{attrLevel} limit #{start},#{len}
+    </select>
+    
+    <select id="getAllPending" parameterType="java.util.Map" resultType="java.lang.String">
+        select distinct resourceKey from resource_detail where typeKey= #{typeKey} and (attrState = 'ApprovalAdd' or attrState = 'ApprovalDel' or attrState = 'ApprovalUpdate') limit #{start},#{len}
+    </select>
+    
+    <select id="getAllByAdmin" parameterType="java.util.Map" resultType="java.lang.String">
+        select distinct resourceKey from resource_detail where typeKey= #{typeKey} and attrState = #{attrState} limit #{start},#{len}
+    </select>
+    
+     <select id="search" parameterType="java.util.Map" resultType="java.lang.String">
+     	<bind name="searchkeylike" value="'%' + searchKey + '%'" />
+        select distinct resourceKey from resource_detail where typeKey= #{typeKey} and attrKey = #{attrKey} and attrValue like #{searchkeylike}
+    </select>
+    
+    <select id="searchInResourceKey" parameterType="java.util.Map" resultType="java.lang.String">
+     	<bind name="searchkeylike" value="'%' + searchKey + '%'" />
+        select distinct resourceKey from resource_detail where typeKey= #{typeKey} and attrKey = #{attrKey} and attrValue like #{searchkeylike} and resourceKey IN
+        <foreach collection="resourceList" item="resource" index="index" open="(" close=")" separator=",">
+	  		#{resource}
+		</foreach>
+    </select>
+        
+    <select id="searchByUserAndAdmin" parameterType="java.util.Map" resultType="java.lang.String">
+    	<bind name="searchkeylike" value="'%' + searchKey + '%'" />
+        select distinct resourceKey from resource_detail where typeKey= #{typeKey} and attrKey = #{attrKey} and attrValue like #{searchkeylike} and attrState = #{attrState}
+    </select>
+    
+    <select id="searchByUserAndAdminInResourceKey" parameterType="java.util.Map" resultType="java.lang.String">
+     	<bind name="searchkeylike" value="'%' + searchKey + '%'" />
+        select distinct resourceKey from resource_detail where typeKey= #{typeKey} and attrKey = #{attrKey} and attrValue like #{searchkeylike} and attrState = #{attrState} and resourceKey IN
+        <foreach collection="resourceList" item="resource" index="index" open="(" close=")" separator=",">
+	  		#{resource}
+		</foreach>
+    </select>
+
+</mapper>  

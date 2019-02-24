@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.grosup.ttzy.resource.mapper.ResourceFileMapper">  
+    
+    <!-- 
+    
+     Table structure for resource_file
+		private String fileKey; // varchar Y 主键，资源Id
+		private String resourceKey; // long Y 资源Id
+		private String attrKey; // varchar Y 属性Key
+		private String typeKey; // varchar Y 资源类型Key
+		private String attrName; // varchar Y 属性名
+		private String directory; // varchar Y 存储的目录
+		private String relativePath; // varchar 相对路径
+		private String lastmodifytime; // long Y 最后修改时间
+     -->
+    <resultMap type="com.grosup.ttzy.resource.dto.ResourceFileDto" id="BaseResultMap">
+        <id column="fileKey" property="fileKey"/>
+        <result column="resourceKey" property="resourceKey"/>
+        <result column="attrKey" property="attrKey"/>
+        <result column="typeKey" property="typeKey"/>
+        <result column="attrName" property="attrName"/>
+        <result column="directory" property="directory"/>
+        <result column="relativePath" property="relativePath"/>
+        <result column="lastmodifytime" property="lastmodifytime"/>
+    </resultMap>
+  
+
+    <insert id="add" parameterType="com.grosup.ttzy.resource.dto.ResourceFileDto">
+        INSERT INTO resource_file(fileKey, resourceKey, attrKey, typeKey, attrName, directory, relativePath, lastmodifytime) 
+        VALUES(#{fileKey},#{resourceKey},#{attrKey},#{typeKey},#{attrName},#{directory},#{relativePath},#{lastmodifytime})
+    </insert>
+   
+    <delete id="del" parameterType="java.lang.String">
+        delete from resource_file where fileKey = #{fileKey}
+    </delete>
+    
+    <update id="update" parameterType="com.grosup.ttzy.resource.dto.ResourceFileDto">
+        update resource_file set 
+        resourceKey = #{resourceKey}
+        attrKey = #{attrKey}
+        typeKey = #{typeKey}
+        attrName = #{attrName}
+        directory = #{directory}
+        relativePath = #{relativePath}
+        lastmodifytime = #{lastmodifytime}
+        where fileKey = #{fileKey}
+    </update>
+    
+    <select id="get" parameterType="java.lang.String" resultType="com.grosup.ttzy.resource.dto.ResourceFileDto">
+        select * from resource_file where fileKey = #{fileKey}
+    </select>
+    
+     <select id="getAll" resultMap="BaseResultMap">
+        select * from resource_file
+    </select>
+
+  
+</mapper>  

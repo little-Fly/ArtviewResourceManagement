@@ -11,8 +11,8 @@ public class ResourceShareDto {
 	private String resourceListJson; //分享的资源列表Json格式
 	private String sendUser;		//分享人
 	private String templateName;		//模板名称
-	private long sendTime;			//最后一次发布时间
-	private long LastTime;			//最近更新时间，用于做双校验
+	private String sendTime;			//最后一次发布时间
+	private String LastTime;			//最近更新时间，用于做双校验
 	public String getShareKey() {
 		return shareKey;
 	}
@@ -43,16 +43,16 @@ public class ResourceShareDto {
 	public void setTemplateName(String templateName) {
 		this.templateName = templateName;
 	}
-	public long getSendTime() {
+	public String getSendTime() {
 		return sendTime;
 	}
-	public void setSendTime(long sendTime) {
+	public void setSendTime(String sendTime) {
 		this.sendTime = sendTime;
 	}
-	public long getLastTime() {
+	public String getLastTime() {
 		return LastTime;
 	}
-	public void setLastTime(long lastTime) {
+	public void setLastTime(String lastTime) {
 		LastTime = lastTime;
 	}
 

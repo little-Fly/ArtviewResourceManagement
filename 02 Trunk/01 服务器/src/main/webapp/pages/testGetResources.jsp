@@ -10,8 +10,8 @@
 <script type="text/javascript" >
 	$(document).ready(function(){
 	
-	$.getJSON("../rs/def/getall.do", { typekey: "RDf示例表ID", time: getMyTime() },
-	        function(data){
+	$.getJSON("../rs/def/getall.do", { typekey: "RESOURCE_DEF示例表ID", time: getMyTime() },
+		function(data){
 	
 			  if(data[0].state=="successful")
 			  {
@@ -22,8 +22,8 @@
 			  }
 			});
 	
-	$.getJSON("/rs/attr/getall.do", { typekey: "RDf示例表ID", time: getMyTime() },
-	        function(data){
+	$.getJSON("/rs/attr/getall.do", { typekey: "RESOURCE_DEF示例表ID", time: getMyTime() },
+		function(data){
 	
 			  if(data[0].state=="successful")
 			  {
@@ -35,8 +35,8 @@
 			});
 		
 	
-	$.getJSON("/rs/detail/getall.do", { typekey: "RDf示例表ID", time: getMyTime() },
-	        function(data){
+	$.getJSON("/rs/detail/getall.do", { typekey: "RESOURCE_DEF示例表ID", time: getMyTime() },
+		function(data){
 	
 			  if(data[0].state=="successful")
 			  {
@@ -47,8 +47,8 @@
 			  }
 			});
 	
-	$.getJSON("/rs/share/getall.do", { typekey: "RDf示例表ID", time: getMyTime() },
-	        function(data){
+	$.getJSON("/rs/share/getall.do", { typekey: "RESOURCE_DEF示例表ID", time: getMyTime() },
+		function(data){
 	
 			  if(data[0].state=="successful")
 			  {
@@ -60,7 +60,7 @@
 			});
 	
 	$.getJSON("/rs/file/getall.do", { time: getMyTime() },
-	        function(data){
+		function(data){
 	
 			  if(data[0].state=="successful")
 			  {
@@ -71,11 +71,56 @@
 			  }
 			});
 	
+	$.getJSON("/rs/sharetemp/getall.do", { time: getMyTime() },
+		function(data){
+	
+			  if(data[0].state=="successful")
+			  {
+				  addShareTemp(data[0].data);
+			  }else
+			  {
+				  error(data[0]);
+			  }
+			});
+	
+	$.getJSON("/rs/search/searchbyuser.do", { time: getMyTime(),typekey:'RESOURCE_DEF示例表ID',searchkey:'{"RESOURCE_ATTR示例表头ID1":"1", "RESOURCE_ATTR示例表头ID2":"2"}'},
+		function(data){
+		
+		  if(data[0].state=="successful")
+		  {
+			  addsearch(data[0].data);
+		  }else
+		  {
+			  error(data[0]);
+		  }
+		});
+	
 	});
+	
+	function addsearch(jsonstr)
+	{
+		$("body").append("<b>search：{\"RESOURCE_ATTR示例表头ID1\":\"1\", \"RESOURCE_ATTR示例表头ID2\":\"2\"}</b></br>");
+		var data = $.parseJSON(jsonstr);
+		var len = data.length;
+		var str="";
+		for(var i=0;i<len;i+=1)
+		{
+			str+=data[i].resourceKey;
+			str+=": ";
+			str+=data[i].attrKey;
+			str+=", ";
+			str+=data[i].attrValue;
+			str+="， 状态：";
+			str+=data[i].attrState;
+			str+="</br>";
+		}
+		str+="</br>";
+		$("body").append(str);
+	}
 	
 	function addDef(jsonstr)
 	{
-		$("body").append("表名：</br>");
+		$("body").append("<b>表名：</b></br>");
 		var data = $.parseJSON(jsonstr);
 		var len = data.length;
 		var str="";
@@ -86,13 +131,13 @@
 			str+=data[i].name;
 			str+="</br>";
 		}
-		
+		str+="</br>";
 		$("body").append(str);
 	}
 	
 	function addAttr(jsonstr)
 	{
-		$("body").append("表头：</br>");
+		$("body").append("<b>表头：</b></br>");
 		var data = $.parseJSON(jsonstr);
 		var len = data.length;
 		var str="";
@@ -103,13 +148,13 @@
 			str+=data[i].attrName;
 			str+="</br>";
 		}
-		
+		str+="</br>";
 		$("body").append(str);
 	}
 	
 	function addDetail(jsonstr)
 	{
-		$("body").append("表值：</br>");
+		$("body").append("<b>表值：</b></br>");
 		var data = $.parseJSON(jsonstr);
 		var len = data.length;
 		var str="";
@@ -122,13 +167,13 @@
 			str+=data[i].attrState;
 			str+="</br>";
 		}
-		
+		str+="</br>";
 		$("body").append(str);
 	}
 	
 	function addShare(jsonstr)
 	{
-		$("body").append("分享：</br>");
+		$("body").append("<b>分享：</b></br>");
 		var data = $.parseJSON(jsonstr);
 		var len = data.length;
 		var str="";
@@ -139,13 +184,13 @@
 			str+=data[i].resourceListJson;
 			str+="</br>";
 		}
-		
+		str+="</br>";
 		$("body").append(str);
 	}
 	
 	function addFile(jsonstr)
 	{
-		$("body").append("分享：</br>");
+		$("body").append("<b>文件列表：</b></br>");
 		var data = $.parseJSON(jsonstr);
 		var len = data.length;
 		var str="";
@@ -156,7 +201,26 @@
 			str+=data[i].relativePath;
 			str+="</br>";
 		}
-		
+		str+="</br>";
+		$("body").append(str);
+	}
+	
+	function addShareTemp(jsonstr)
+	{
+		$("body").append("<b>分享模板：</b></br>");
+		var data = $.parseJSON(jsonstr);
+		var len = data.length;
+		var str="";
+		for(var i=0;i<len;i+=1)
+		{
+			str+=data[i].tempKey;
+			str+=": ";
+			str+=data[i].tempName;
+			str+=", ";
+			str+=data[i].tempFilePath;
+			str+="</br>";
+		}
+		str+="</br>";
 		$("body").append(str);
 	}
 	
