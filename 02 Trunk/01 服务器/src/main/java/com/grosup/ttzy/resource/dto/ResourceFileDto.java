@@ -2,14 +2,14 @@ package com.grosup.ttzy.resource.dto;
 
 public class ResourceFileDto {
 
+	private String fileKey; // varchar Y 主键，资源Id
 	private String resourceKey; // long Y 资源Id
 	private String attrKey; // varchar Y 属性Key
 	private String typeKey; // varchar Y 资源类型Key
 	private String attrName; // varchar Y 属性名
-	private String fileKey; // varchar Y 主键，资源Id
 	private String directory; // varchar Y 存储的目录
 	private String relativePath; // varchar 相对路径
-	private long lastmodifytime; // long Y 最后修改时间
+	private String lastmodifytime; // long Y 最后修改时间
 	public String getResourceKey() {
 		return resourceKey;
 	}
@@ -52,10 +52,10 @@ public class ResourceFileDto {
 	public void setRelativePath(String relativePath) {
 		this.relativePath = relativePath;
 	}
-	public long getLastmodifytime() {
+	public String getLastmodifytime() {
 		return lastmodifytime;
 	}
-	public void setLastmodifytime(long lastmodifytime) {
+	public void setLastmodifytime(String lastmodifytime) {
 		this.lastmodifytime = lastmodifytime;
 	}
 }

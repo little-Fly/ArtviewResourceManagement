@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.grosup.ttzy.resource.mapper.ResourceDefMapper">  
+    
+    <!-- 
+    
+     Table structure for resource_def
+	 	private String typeKey = RESOURCE_DEF + "示例表ID";	//varchar	Y	主键，资源类型Key
+		private String logoUrl = "/pages/share/model.jpg";//示例图片
+		private String name = "示例表名";	//varchar	Y	资源类型名称
+		private String remark = "示例表注释";	//varchar	N	备注
+     -->
+    <resultMap type="com.grosup.ttzy.resource.dto.ResourceDefDto" id="BaseResultMap">
+        <id column="typeKey" property="typeKey"/>
+        <result column="logoUrl" property="logoUrl"/>
+        <result column="name" property="name"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+  
+
+    <insert id="add" parameterType="com.grosup.ttzy.resource.dto.ResourceDefDto">
+        INSERT INTO resource_def(typeKey, logoUrl, name, remark) 
+        VALUES(#{typeKey},#{logoUrl},#{name},#{remark})
+    </insert>
+   
+    <delete id="del" parameterType="java.lang.String">
+        delete from resource_def where typeKey = #{typeKey}
+    </delete>
+    
+    <update id="update" parameterType="com.grosup.ttzy.resource.dto.ResourceDefDto">
+        update resource_def set 
+        logoUrl = #{logoUrl}
+        name = #{name}
+        remark = #{remark}
+        where typeKey = #{typeKey}
+    </update>
+    
+    <select id="get" parameterType="java.lang.String" resultType="com.grosup.ttzy.resource.dto.ResourceDefDto">
+        select * from resource_def where typeKey = #{typeKey}
+    </select>
+    
+     <select id="getAll" resultMap="BaseResultMap">
+        select * from resource_def
+    </select>
+
+  
+</mapper>  

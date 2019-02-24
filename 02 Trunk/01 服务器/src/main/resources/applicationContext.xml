@@ -40,7 +40,7 @@
 	<util:properties id="resourceFileService" location="classpath:application.properties"/>
 	
 	<!-- 引入jdbc.properties -->
-<!-- 	<context:property-placeholder location="classpath:jdbc.properties"/> -->
+ 	<context:property-placeholder location="classpath:pro/jdbc.properties"/> 
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		 <property name="driverClassName" value="${jdbc.driver}" />
@@ -77,10 +77,22 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="configLocation" value="classpath:sqlMapConfig.xml"></property>
 		<property name="dataSource" ref="dataSource" />
+		 <property name="mapperLocations">
+		 <array>
+		 <value>classpath:mybatis/share/*.xml</value> 
+		 <value>classpath:mybatis/resource/*.xml</value> 
+		 </array> 
+		 </property>
 	</bean>
 	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
 		<constructor-arg index="0" ref="sqlSessionFactory" />
 	</bean>
+	 <!-- DAO接口所在包名，Spring会自动查找其下的类 -->  
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.grosup.ttzy.**.mapper"/>  
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>  
+    </bean> 
+	
 	
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">

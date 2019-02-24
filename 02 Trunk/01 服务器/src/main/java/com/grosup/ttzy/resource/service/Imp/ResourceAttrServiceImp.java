@@ -36,8 +36,8 @@ public class ResourceAttrServiceImp implements ResourceAttrService {
 		return null;
 	}
 
-	public ResourceAttrDto del(String attrKey) {
-		return resourceAttrDao.del(attrKey);
+	public void del(String attrKey) {
+		resourceAttrDao.del(attrKey);
 	}
 
 	public ResourceAttrDto update(String attrKey, String json) {
