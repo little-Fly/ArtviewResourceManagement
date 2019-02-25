@@ -34,17 +34,32 @@ public interface ResourceDetailService {
 	public List<ResourceDetailDto> getByUser(Collection<String> resourceList);
 
 	public Collection<ResourceDetailDto> getAll(String typeKey, int start, int len);
-
+	
+	public int getAllTotal(String typeKey);
+	
 	public Collection<ResourceDetailDto> getAllByUser(String typeKey, int start, int len);
+	
+	public int getAllTotalByUser(String typeKey);
 	
 	public Collection<ResourceDetailDto> getAllByAdmin(String typeKey, int start, int len);
 	
+	public int getAllTotalByAdmin(String typeKey);
+	
 	public Collection<ResourceDetailDto> getAllPending(String typeKey, int start, int len);
+	
+	public int getAllPendingTotal(String typeKey);
 
 	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len);
 	
+	public int getSearchTotal(String typeKey, Map<String, String> searchKeyMap);
+	
 	public Collection<ResourceDetailDto> searchByUser(String typeKey, Map<String, String> searchKeyMap, int start, int len);
 	
+	public int getSearchTotalByUser(String typeKey, Map<String, String> searchKeyMap);
+	
 	public Collection<ResourceDetailDto> searchByAdmin(String typeKey, Map<String, String> searchKeyMap, int start, int len);
+	
+	public int getSearchTotalByAdmin(String typeKey, Map<String, String> searchKeyMap);
+	
 
 }

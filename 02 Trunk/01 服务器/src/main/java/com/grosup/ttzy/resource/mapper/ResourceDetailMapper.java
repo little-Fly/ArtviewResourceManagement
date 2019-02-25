@@ -42,4 +42,12 @@ public interface ResourceDetailMapper {
 	public List<String> searchByUserAndAdmin(Map<String, Object> map);
 	
 	public List<String> searchByUserAndAdminInResourceKey(Map<String, Object> map);
+	
+	public int getAllTotal(Map<String, Object> map);
+	
+	public int getAllTotalByUser(Map<String, Object> map);
+	
+	public int getAllTotalByAdmin(Map<String, Object> map);
+	
+	public int getAllPendingTotal(Map<String, Object> map);
 }

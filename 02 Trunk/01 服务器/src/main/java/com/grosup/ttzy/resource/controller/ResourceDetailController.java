@@ -467,7 +467,7 @@ public class ResourceDetailController implements MessageMapConstant {
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String getAll(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
-		Map<String, String> messageMap = new HashMap<String, String>();
+		Map<String, Object> messageMap = new HashMap<String, Object>();
 		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
 			int start = 0;
 			int len = 10;
@@ -491,6 +491,9 @@ public class ResourceDetailController implements MessageMapConstant {
 					JSONArray resourceDetailJson = JSONArray.fromObject(collection);
 					messageMap.put(DATA, resourceDetailJson.toString());
 					messageMap.put(STATE, STATE_SUCCESSFUL);
+					int total = resourceDetailService.getAllTotal(typeKey);
+					messageMap.put(TOTAL, total);
+					
 				} else {
 					messageMap.put(STATE, STATE_ERROR);
 					messageMap.put(MESSAGE, MESSAGE_LIST_ETER);
@@ -523,7 +526,7 @@ public class ResourceDetailController implements MessageMapConstant {
 			RequestMethod.POST }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String getAllByUser(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
-		Map<String, String> messageMap = new HashMap<String, String>();
+		Map<String, Object> messageMap = new HashMap<String, Object>();
 		int start = 0;
 		int len = 10;
 		String startStr = request.getParameter("start");
@@ -544,8 +547,12 @@ public class ResourceDetailController implements MessageMapConstant {
 			Collection<ResourceDetailDto> collection;
 			if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
 				collection = resourceDetailService.getAllByAdmin(typeKey, start, len);
+				int total = resourceDetailService.getAllTotalByAdmin(typeKey);
+				messageMap.put(TOTAL, total);
 			} else {
 				collection = resourceDetailService.getAllByUser(typeKey, start, len);
+				int total = resourceDetailService.getAllTotalByUser(typeKey);
+				messageMap.put(TOTAL, total);
 			}
 
 			if (collection != null) {
