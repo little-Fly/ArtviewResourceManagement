@@ -20,15 +20,15 @@ public class SsoConstant {
 	/**
 	 * 间隔30分钟重新刷新时间，防止过期超时。以毫秒为单位。
 	 */
-	public static final long REVALID_TERVAL_TIME = 1000 * 60 * 30;
+	public static final long REVALID_TERVAL_TIME = 1000 * 60 * 2;
 	
 	/**
 	 * Cookie有效期 以秒为单位
 	 */
 	public static int COOKIE_VALID_TIME = 60 * 60 * 12;
 	
-	public static String SSO_URL;
+	public static String SSO_URL="https://www.hwyst.net";
 	
-	public static final String DEFAULT_REDIRECT = "http://localhost:8080/resource/pages/login/login.jsp";
+	public static final String DEFAULT_REDIRECT = "https://www.hwyst.net/index.html#/";
 
 }
