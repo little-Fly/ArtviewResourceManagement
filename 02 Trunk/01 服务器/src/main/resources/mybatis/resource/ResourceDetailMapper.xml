@@ -129,4 +129,21 @@
 		</foreach>
     </select>
 
+     <select id="getAllTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(distinct resourceKey) from resource_detail where typeKey= #{typeKey}
+    </select>
+    
+    <select id="getAllTotalByUser" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(distinct resourceKey) from resource_detail where typeKey= #{typeKey} and attrState = #{attrState} and attrLevel &lt;&gt; #{attrLevel}
+    </select>
+    
+    <select id="getAllPendingTotal" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(distinct resourceKey) from resource_detail where typeKey= #{typeKey} and (attrState = 'ApprovalAdd' or attrState = 'ApprovalDel' or attrState = 'ApprovalUpdate')
+    </select>
+    
+    <select id="getAllTotalByAdmin" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(distinct resourceKey) from resource_detail where typeKey= #{typeKey} and attrState = #{attrState}
+    </select>
+
+
 </mapper>  

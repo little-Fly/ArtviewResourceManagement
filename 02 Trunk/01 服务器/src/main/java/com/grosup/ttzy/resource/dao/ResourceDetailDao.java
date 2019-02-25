@@ -455,7 +455,7 @@ public class ResourceDetailDao implements ResourceConstant {
 //		}
 		return resourceDetaillist;
 	}
-
+	
 	public Collection<ResourceDetailDto> getAllByUser(String typeKey, int start, int len) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("typeKey", typeKey);
@@ -827,6 +827,84 @@ public class ResourceDetailDao implements ResourceConstant {
 //		}
 		return resourceDetaillist;
 
+	}
+
+	public int getAllTotal(String typeKey) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("typeKey", typeKey);
+		return resourceDetailMapper.getAllTotal(map);
+	}
+	
+	public int getAllTotalByUser(String typeKey) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("typeKey", typeKey);
+		map.put("attrState", RESOURCE_STATE_AVAILABLE);
+		map.put("attrLevel", RESOURCE_LEVEL_2);
+		return resourceDetailMapper.getAllTotalByUser(map);
+	}
+
+	public int getAllTotalByAdmin(String typeKey) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("typeKey", typeKey);
+		map.put("attrState", RESOURCE_STATE_AVAILABLE);
+		return resourceDetailMapper.getAllTotalByAdmin(map);
+	}
+
+	public int getAllPendingTotal(String typeKey) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("typeKey", typeKey);
+		return resourceDetailMapper.getAllPendingTotal(map);
+	}
+
+	public int getSearchTotal(String typeKey, Map<String, String> searchKeyMap) {
+		List<String> resourceList = null;
+		boolean first = true;
+		for (String key : searchKeyMap.keySet()) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("typeKey", typeKey);
+			map.put("attrKey", key);
+			map.put("searchKey", searchKeyMap.get(key));
+			if (first) {
+				resourceList = resourceDetailMapper.search(map);
+				first = false;
+				if (resourceList.size() == 0) {
+					break;
+				}
+			} else {
+				map.put("resourceList", resourceList);
+				resourceList = resourceDetailMapper.searchInResourceKey(map);
+				if (resourceList.size() == 0) {
+					break;
+				}
+			}
+		}
+		return resourceList.size();
+	}
+
+	public int getSearchTotalByUserAndAdmin(String typeKey, Map<String, String> searchKeyMap) {
+		List<String> resourceList = null;
+		boolean first = true;
+		for (String key : searchKeyMap.keySet()) {
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("typeKey", typeKey);
+			map.put("attrKey", key);
+			map.put("attrState", RESOURCE_STATE_AVAILABLE);
+			map.put("searchKey", searchKeyMap.get(key));
+			if (first) {
+				resourceList = resourceDetailMapper.searchByUserAndAdmin(map);
+				first = false;
+				if (resourceList.size() == 0) {
+					break;
+				}
+			} else {
+				map.put("resourceList", resourceList);
+				resourceList = resourceDetailMapper.searchByUserAndAdminInResourceKey(map);
+				if (resourceList.size() == 0) {
+					break;
+				}
+			}
+		}
+		return resourceList.size();
 	}
 
 }
