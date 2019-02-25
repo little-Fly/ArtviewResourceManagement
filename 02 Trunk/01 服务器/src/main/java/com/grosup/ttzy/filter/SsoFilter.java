@@ -1,6 +1,7 @@
 package com.grosup.ttzy.filter;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -75,6 +76,7 @@ public abstract class SsoFilter implements Filter {
 		} else {
 			// 跳转登录页面
 			redirectLogin(request, response);
+			return;
 		}
 
 	}
@@ -92,7 +94,7 @@ public abstract class SsoFilter implements Filter {
 			HttpServletResponse response) throws IOException {
 		// 跳转登录页面
 		String redirectUrl = SsoUtil.getLoginRedirectUrl(request);
-		response.sendRedirect(SsoConstant.DEFAULT_REDIRECT);
+		response.sendRedirect(redirectUrl);
 	}
 
 	/*
@@ -120,24 +122,27 @@ public abstract class SsoFilter implements Filter {
 
 	private boolean isLogin(HttpServletRequest request,
 			HttpServletResponse response) {
+		log.info("judge is login");
 		UserBean user = SsoUtil.getUserBean(request);
-		if (null != user) {
+		if (null == user) {
 //			// 用户状态 0：表示正常 9：表示禁用 1：表示未激活
 //			if (!UserStatus.Normal.value().equals(user.getStatus())) {
 //				return false;
 //			}
 
-			return true;
+			return false;
 		}
 
+		long curTime = System.currentTimeMillis();
+		log.info("user.getLastValidTime()=" + user.getLastValidTime());
+		log.info("curTime=" + curTime);
+		// 在服务器验证有效期内
+		if ((curTime - user.getLastValidTime()) <=
+				SsoConstant.REVALID_TERVAL_TIME) {
+			log.info("1111");
+			SsoUtil.addSessionInfo(request, user);
+			return true;
+		}
 		return false;
-		// long curTime = System.currentTimeMillis();
-		// // 在服务器验证有效期内
-		// if ((curTime - user.getLastValidTime()) <=
-		// SsoConstant.REVALID_TERVAL_TIME) {
-		// SsoUtil.addSessionInfo(request, user);
-		// return true;
-		// }
-		// return false;
 	}
 }

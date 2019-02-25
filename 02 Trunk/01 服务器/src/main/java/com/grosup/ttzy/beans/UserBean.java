@@ -18,6 +18,10 @@ public class UserBean {
         this.uid = obj.optLong("uid");
         this.openId = obj.optString("openId");
         this.nickName = obj.optString("nickName");
+        this.name = obj.optString("name");
+        this.gender = obj.optInt("gender");
+        this.lastValidTime = obj.optLong("lastValidTime");
+        this.phone = obj.optString("phone");
     }
     
     private long uid;
