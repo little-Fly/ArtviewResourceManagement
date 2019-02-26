@@ -208,62 +208,6 @@ Vue.prototype.$chargeAuthority = () => {
     //     {"remark": "", "roleKey": "root", "roleName": "录入人员", "roleType": 0},
     // ];
     // sessionStorage.setItem("myRoles", JSON.stringify(ada));
-    let json = [
-        {
-            approvalMess: "",
-            approvalUser: "",
-            attrKey: "RAt示例表头ID1",
-            attrLastState: "",
-            attrLevel: "0",
-            attrName: "示例表头1",
-            attrState: "Available",
-            attrType: "default",
-            attrValue: "行1值1",
-            resourceKey: "RDt示例值ID",
-            typeKey: "RDf示例表ID"
-
-        },
-        {
-            approvalMess: "",
-            approvalUser: "",
-            attrKey: "RAt示例表头ID2",
-            attrLastState: "",
-            attrLevel: "0",
-            attrName: "示例表头2",
-            attrState: "Available",
-            attrType: "picture",
-            attrValue: "/rs/file/getfile.do?filekey=RFlpicture",
-            resourceKey: "RDt示例值ID",
-            typeKey: "RDf示例表ID"
-
-        },
-        {
-            approvalMess: "",
-            approvalUser: "",
-            attrKey: "RAt示例表头ID3",
-            attrLastState: "",
-            attrLevel: "0",
-            attrName: "示例表头3",
-            attrState: "Available",
-            attrType: "video",
-            attrValue: "RFlvideo",
-            resourceKey: "RDt示例值ID",
-            typeKey: "RDf示例表ID",
-        },
-        {
-            approvalMess: "",
-            approvalUser: "",
-            attrKey: "RAt示例表头ID4",
-            attrLastState: "",
-            attrLevel: "2",
-            attrName: "示例表头4",
-            attrState: "ApprovalAdd",
-            attrType: "default",
-            attrValue: "44",
-            resourceKey: "RDt示例值ID",
-            typeKey: "RDf示例表ID"
-        }
-    ];
     return new Promise((resolve, reject) => {
         let role = sessionStorage.getItem("myRoles");
         if (!role || role === "") {
