@@ -84,10 +84,11 @@
 					<div class="main-foot tc">
 						<el-pagination
 								background
+								@current-change="pagination"
 								prev-text="<上一页"
 								next-text="下一页>"
 								layout="prev, pager, next,total,jumper"
-								:total="1">
+								:total="total">
 						</el-pagination>
 					</div>
 					<el-dialog :title="addForm.title" width="30%" :visible.sync="dialogFormVisible">
@@ -179,7 +180,9 @@
                 fileArr: [],
                 currentUploadAttrKey: "",
                 attrLevel: "1",
-                searchData: [{attr: "", value: ""}] //attrkey
+                searchData: [{attr: "", value: ""}], //attrkey
+                total: 0,
+                pageSize: 10
             };
         },
         filters: {
@@ -240,6 +243,9 @@
             }
         },
         methods: {
+            pagination(i) {
+                this.getResTableDetail(i * this.pageSize, this.pageSize);
+            },
             /**
              * 搜索获取焦点
              */
@@ -444,8 +450,9 @@
                                     this.$message.error(detail[0].message);
                                     return;
                                 }
+                                this.total = detail[0].total;
                                 let json = JSON.parse(detail[0].data);
-                                console.log("表格数据11", json);
+                                // console.log("表格数据11", detail);
                                 this.getLineData(json);
                             }
                         }
