@@ -20,54 +20,51 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 
 	@Autowired
 	private ResourceDetailDao resourceDetailDao;
-	
+
 	public Collection<ResourceDetailDto> create(String json) {
 		return resourceDetailDao.create(json);
 	}
 
-	public Collection<ResourceDetailDto> add(String json) {
+	public Collection<ResourceDetailDto> add(String json, String approvalUser) {
 		Collection<ResourceDetailDto> collection = resourceDetailDao.create(json);
 		if (collection != null) {
-			return resourceDetailDao.add(collection);
+			return resourceDetailDao.add(collection, approvalUser);
 		} else {
 			log.error("ResourceDetailService add resourceDetailDto is null. resourceKey json:" + json);
 		}
 		return null;
 	}
 
-	public void approvalAdd(String resourceKey, String approvalMess) {
-		resourceDetailDao.approvalAdd(resourceKey, approvalMess);
+	public void approvalAdd(String resourceKey, String approvalMess, String approvalUser) {
+		resourceDetailDao.approvalAdd(resourceKey, approvalMess, approvalUser);
 	}
 
-	public void approvalDel(String resourceKey, String approvalMess) {
-		resourceDetailDao.approvalDel(resourceKey, approvalMess);
+	public void approvalDel(String resourceKey, String approvalMess, String approvalUser) {
+		resourceDetailDao.approvalDel(resourceKey, approvalMess, approvalUser);
 	}
 
-	public void approvalUpdate(String resourceKey, String approvalMess)
-	{
-		resourceDetailDao.approvalUpdate(resourceKey, approvalMess);
-	}
-	
-	public void reject(String resourceKey, String approvalMess) {
-		resourceDetailDao.reject(resourceKey, approvalMess);
-	}
-	
-	public void del(String resourceKey) {
-		resourceDetailDao.del(resourceKey);
+	public void approvalUpdate(String resourceKey, String approvalMess, String approvalUser) {
+		resourceDetailDao.approvalUpdate(resourceKey, approvalMess, approvalUser);
 	}
 
-	public void update(String resourceKey, String json) {
+	public void reject(String resourceKey, String approvalMess, String approvalUser) {
+		resourceDetailDao.reject(resourceKey, approvalMess, approvalUser);
+	}
+
+	public void del(String resourceKey, String approvalUser) {
+		resourceDetailDao.del(resourceKey, approvalUser);
+	}
+
+	public void update(String resourceKey, String json, String approvalUser) {
 		Collection<ResourceDetailDto> collection = resourceDetailDao.create(json);
 		if (collection != null) {
-			resourceDetailDao.update(resourceKey, collection);
+			resourceDetailDao.update(resourceKey, collection, approvalUser);
 		} else {
 			log.error("ResourceDetailService update resourceDetailDto is null. resourceKey json:" + json);
 		}
 	}
-	
-	
-	public void updateAttrName(String newAttrKey, String newAttrName)
-	{
+
+	public void updateAttrName(String newAttrKey, String newAttrName) {
 		resourceDetailDao.updateAttrName(newAttrKey, newAttrName);
 	}
 
@@ -78,7 +75,7 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 	public List<ResourceDetailDto> getByUser(String resourceKey) {
 		return resourceDetailDao.getByUser(resourceKey);
 	}
-	
+
 	public List<ResourceDetailDto> getByAdmin(String resourceKey) {
 		return resourceDetailDao.getByAdmin(resourceKey);
 	}
@@ -91,30 +88,58 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 		return resourceDetailDao.getAll(typeKey, start, len);
 	}
 
+	public int getAllTotal(String typeKey) {
+		return resourceDetailDao.getAllTotal(typeKey);
+	}
+
 	public Collection<ResourceDetailDto> getAllByUser(String typeKey, int start, int len) {
 		return resourceDetailDao.getAllByUser(typeKey, start, len);
 	}
-	
+
+	public int getAllTotalByUser(String typeKey) {
+		return resourceDetailDao.getAllTotalByUser(typeKey);
+	}
+
 	public Collection<ResourceDetailDto> getAllByAdmin(String typeKey, int start, int len) {
 		return resourceDetailDao.getAllByAdmin(typeKey, start, len);
+	}
+
+	public int getAllTotalByAdmin(String typeKey) {
+		return resourceDetailDao.getAllTotalByAdmin(typeKey);
 	}
 
 	public Collection<ResourceDetailDto> getAllPending(String typeKey, int start, int len) {
 		return resourceDetailDao.getAllPending(typeKey, start, len);
 	}
-	
+
+	public int getAllPendingTotal(String typeKey) {
+		return resourceDetailDao.getAllPendingTotal(typeKey);
+	}
+
 	public Collection<ResourceDetailDto> search(String typeKey, Map<String, String> searchKeyMap, int start, int len) {
 		return resourceDetailDao.search(typeKey, searchKeyMap, start, len);
 	}
-	
-	public Collection<ResourceDetailDto> searchByUser(String typeKey, Map<String, String> searchKeyMap, int start, int len)
-	{
+
+	public int getSearchTotal(String typeKey, Map<String, String> searchKeyMap) {
+		return resourceDetailDao.getSearchTotal(typeKey, searchKeyMap);
+	}
+
+	public Collection<ResourceDetailDto> searchByUser(String typeKey, Map<String, String> searchKeyMap, int start,
+			int len) {
 		return resourceDetailDao.searchByUser(typeKey, searchKeyMap, start, len);
 	}
-	
-	public Collection<ResourceDetailDto> searchByAdmin(String typeKey, Map<String, String> searchKeyMap, int start, int len)
-	{
+
+	public int getSearchTotalByUser(String typeKey, Map<String, String> searchKeyMap) {
+		return resourceDetailDao.getSearchTotalByUserAndAdmin(typeKey, searchKeyMap);
+	}
+
+	public Collection<ResourceDetailDto> searchByAdmin(String typeKey, Map<String, String> searchKeyMap, int start,
+			int len) {
 		return resourceDetailDao.searchByAdmin(typeKey, searchKeyMap, start, len);
+	}
+
+	public int getSearchTotalByAdmin(String typeKey, Map<String, String> searchKeyMap) {
+		return resourceDetailDao.getSearchTotalByUserAndAdmin(typeKey, searchKeyMap);
 	}
 
 }

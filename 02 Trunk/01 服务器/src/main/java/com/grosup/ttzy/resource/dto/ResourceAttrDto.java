@@ -9,7 +9,7 @@ public class ResourceAttrDto {
 
 	private String attrKey; // varchar Y 主键，属性Key
 	private String typeKey; // varchar Y 资源类型Key
-	private int attrlen; // varchar Y 资源长度
+	private String attrlen; // varchar Y 资源长度
 	private float attrPosition = 0; // varchar Y 资源长位置
 	private String attrName; // varchar Y 属性名
 	private String attrLevel; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
@@ -36,11 +36,11 @@ public class ResourceAttrDto {
 		return attrName;
 	}
 
-	public int getAttrlen() {
+	public String getAttrlen() {
 		return attrlen;
 	}
 
-	public void setAttrlen(int attrlen) {
+	public void setAttrlen(String attrlen) {
 		this.attrlen = attrlen;
 	}
 	

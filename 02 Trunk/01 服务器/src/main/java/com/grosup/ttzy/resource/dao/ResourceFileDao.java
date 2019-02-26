@@ -42,7 +42,6 @@ public class ResourceFileDao implements ResourceConstant {
 		resourceFileDto.setFileKey(fileKey);
 		resourceFileDto.setDirectory(directory);
 		resourceFileDto.setRelativePath(relativePath);
-		resourceFileDto.setLastmodifytime(lastmodifytime);
 		map.put(fileKey, resourceFileDto);
 		resourceFileDto = new ResourceFileDto();
 		resourceKey = RESOURCE_DETAIL + "video"; // long Y 主键，资源Id
@@ -60,14 +59,13 @@ public class ResourceFileDao implements ResourceConstant {
 		resourceFileDto.setFileKey(fileKey);
 		resourceFileDto.setDirectory(directory);
 		resourceFileDto.setRelativePath(relativePath);
-		resourceFileDto.setLastmodifytime(lastmodifytime);
 		map.put(fileKey, resourceFileDto);
 	}
 
 	public ResourceFileDto create(String json) {
 		JSONObject jsonObject = JSONObject.fromObject(json);
 		ResourceFileDto resourceFileDto = (ResourceFileDto) JSONObject.toBean(jsonObject, ResourceFileDto.class);
-		resourceFileDto.setLastmodifytime(System.currentTimeMillis());
+		resourceFileDto.setLastmodifytime(String.valueOf(System.currentTimeMillis()));
 		return resourceFileDto;
 	}
 
@@ -91,6 +89,7 @@ public class ResourceFileDao implements ResourceConstant {
 	public void update(ResourceFileDto resourceFileDto) {
 		String fileKey = resourceFileDto.getTypeKey();
 		if (!StringUtil.isNullOrEmpty(fileKey)) {
+			resourceFileDto.setLastmodifytime(String.valueOf(System.currentTimeMillis()));
 			map.put(fileKey, resourceFileDto);
 		} else {
 			log.error("ResourceFileDao update is error. fileKey is:" + fileKey);

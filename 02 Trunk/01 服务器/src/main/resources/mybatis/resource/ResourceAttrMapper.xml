@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper  
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+<mapper namespace="com.grosup.ttzy.resource.mapper.ResourceAttrMapper">  
+    
+    <!-- 
+    
+     Table structure for resource_attr
+		private String attrKey; // varchar Y 主键，属性Key
+		private String typeKey; // varchar Y 资源类型Key
+		private String attrlen; // varchar Y 资源长度
+		private float attrPosition = 0; // varchar Y 资源长位置
+		private String attrName; // varchar Y 属性名
+		private String attrLevel; // int Y 属性级别 0:任何人可见1:成员可见 2:管理员可见
+		private String attrType; // varchar Y 属性类型 默认：直接读取图片：根据值从图片库中获取
+		private String remark; // varchar N 备注
+     -->
+    <resultMap type="com.grosup.ttzy.resource.dto.ResourceAttrDto" id="BaseResultMap">
+        <id column="attrKey" property="attrKey"/>
+        <result column="attrlen" property="attrlen"/>
+        <result column="attrPosition" property="attrPosition"/>
+        <result column="attrName" property="attrName"/>
+        <result column="attrLevel" property="attrLevel"/>
+        <result column="attrType" property="attrType"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+  
+
+    <insert id="add" parameterType="com.grosup.ttzy.resource.dto.ResourceAttrDto">
+        INSERT INTO resource_attr(attrKey, attrlen, attrPosition, attrName, attrLevel, attrType, remark) 
+        VALUES(#{attrKey},#{attrlen},#{attrPosition},#{attrName},#{attrLevel},#{attrType},#{remark})
+    </insert>
+   
+    <delete id="del" parameterType="java.lang.String">
+        delete from resource_attr where attrKey = #{attrKey}
+    </delete>
+    
+    <update id="update" parameterType="com.grosup.ttzy.resource.dto.ResourceAttrDto">
+        update resource_attr set 
+        attrlen = #{attrlen}
+        attrPosition = #{attrPosition}
+        attrName = #{attrName}
+        attrLevel = #{attrLevel}
+        attrType = #{attrType}
+        remark = #{remark}
+        where attrKey = #{attrKey}
+    </update>
+    
+    <select id="get" parameterType="java.lang.String" resultType="com.grosup.ttzy.resource.dto.ResourceAttrDto">
+        select * from resource_attr where attrKey = #{attrKey}
+    </select>
+    
+     <select id="getAll" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select * from resource_attr where typeKey = #{typeKey}
+    </select>
+
+  
+</mapper>  

@@ -4,6 +4,7 @@ public interface MessageMapConstant {
 	
 	String OBJECT = "object";
 	String STATE = "state";
+	String TOTAL = "total";
 	String STATE_SUCCESSFUL = "successful";
 	String STATE_ERROR = "error";
 	String MESSAGE = "message";

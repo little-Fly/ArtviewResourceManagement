@@ -8,6 +8,7 @@ public interface ResourceConstant {
 	String RESOURCE_SHARE = "RSr"; //ResourceAttr
 	String RESOURCE_SHARE_TEMP = "RST"; //ResourceAttr
 	String RESOURCE_FILE = "RFl"; //ResourceAttr
+	String RESOURCE_LOG = "RLG"; //ResourceLog
 	
 	String RESOURCE_STATE_APPROVAL_ADD = "ApprovalAdd"; //审批添加状态
 	String RESOURCE_STATE_APPROVAL_DEL = "ApprovalDel"; //审批删除状态
