@@ -13,7 +13,7 @@ public interface ResourceAttrService {
 
 	public ResourceAttrDto update(String attrKey, String json);
 
-	public ResourceAttrDto get(String resourceKey);
+	public ResourceAttrDto get(String attrKey);
 
 	public List<ResourceAttrDto> getAll(String typeKey);
 }
