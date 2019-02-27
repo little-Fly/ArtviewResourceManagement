@@ -88,7 +88,7 @@ public class ResourceDetailController implements MessageMapConstant {
 			if (!StringUtil.isNullOrEmpty(json)) {
 				Collection<ResourceDetailDto> list = resourceDetailService.add(json, String.valueOf(TtzyUtil.getUid(request)));
 				if (null != list) {
-					JSONArray jsonlist = JSONArray.fromObject(messageMap);
+					JSONArray jsonlist = JSONArray.fromObject(list);
 					messageMap.put(OBJECT, jsonlist.toString());
 					messageMap.put(STATE, STATE_SUCCESSFUL);
 				}else

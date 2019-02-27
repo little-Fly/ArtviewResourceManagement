@@ -35,7 +35,7 @@
  
 
     <insert id="add" parameterType="com.grosup.ttzy.resource.dto.ResourceDetailDto">
-        INSERT INTO resource_detail(resourceKey, attrKey, typeKey, attrName, attrLevel, attrType, attrValue, ,#{attrState}, attrLastState, approvalUser, approvalMess) 
+        INSERT INTO resource_detail(resourceKey, attrKey, typeKey, attrName, attrLevel, attrType, attrValue, attrState, attrLastState, approvalUser, approvalMess) 
         VALUES(#{resourceKey},#{attrKey},#{typeKey},#{attrName},#{attrLevel},#{attrType},#{attrValue},#{attrState},#{attrLastState},#{approvalUser},#{approvalMess})
     </insert>
    

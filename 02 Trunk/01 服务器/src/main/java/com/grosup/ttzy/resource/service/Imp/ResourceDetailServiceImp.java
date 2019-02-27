@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.grosup.ttzy.resource.dao.ResourceDetailDao;
+import com.grosup.ttzy.resource.dto.ResourceAttrDto;
 import com.grosup.ttzy.resource.dto.ResourceDetailDto;
 import com.grosup.ttzy.resource.service.ResourceAttrService;
 import com.grosup.ttzy.resource.service.ResourceDetailService;
@@ -20,6 +21,9 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 
 	@Autowired
 	private ResourceDetailDao resourceDetailDao;
+	
+	@Autowired
+	ResourceAttrService resourceAttrService;
 
 	public Collection<ResourceDetailDto> create(String json) {
 		return resourceDetailDao.create(json);
@@ -28,6 +32,18 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 	public Collection<ResourceDetailDto> add(String json, String approvalUser) {
 		Collection<ResourceDetailDto> collection = resourceDetailDao.create(json);
 		if (collection != null) {
+			for(ResourceDetailDto resourceDetailDto: collection)
+			{
+				ResourceAttrDto resourceAttrDto = resourceAttrService.get(resourceDetailDto.getAttrKey());
+				if(null != resourceAttrDto)
+				{
+					resourceDetailDto.setAttrName(resourceAttrDto.getAttrName());
+					resourceDetailDto.setAttrLevel(resourceAttrDto.getAttrLevel());
+				}else
+				{
+					return null;
+				}
+			}
 			return resourceDetailDao.add(collection, approvalUser);
 		} else {
 			log.error("ResourceDetailService add resourceDetailDto is null. resourceKey json:" + json);
