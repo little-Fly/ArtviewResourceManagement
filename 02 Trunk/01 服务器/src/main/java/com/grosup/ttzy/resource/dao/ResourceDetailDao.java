@@ -217,6 +217,7 @@ public class ResourceDetailDao implements ResourceConstant {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("resourceKey", resourceKey);
 			map.put("attrState", RESOURCE_STATE_AVAILABLE);
+			map.put("attrLastState", RESOURCE_STATE_APPROVAL_ADD);
 			map.put("approvalUser", approvalUser);
 			map.put("approvalMess", approvalMess);
 			resourceDetailMapper.updateState(map);
@@ -259,6 +260,7 @@ public class ResourceDetailDao implements ResourceConstant {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("resourceKey", resourceKey);
 			map.put("attrState", RESOURCE_STATE_AVAILABLE);
+			map.put("attrLastState", RESOURCE_STATE_APPROVAL_UPDATE);
 			map.put("approvalUser", approvalUser);
 			map.put("approvalMess", approvalMess);
 			resourceDetailMapper.updateState(map);
@@ -286,9 +288,16 @@ public class ResourceDetailDao implements ResourceConstant {
 
 	public void reject(String resourceKey, String approvalMess, String approvalUser) {
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
+			List<ResourceDetailDto> list = get(resourceKey);
+			if(list.size()==0)
+			{
+				return;
+			}
+			String attrLastState = list.get(0).getAttrState();
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("resourceKey", resourceKey);
 			map.put("attrState", RESOURCE_STATE_APPROVA_REJECT);
+			map.put("attrLastState", attrLastState);
 			map.put("approvalUser", approvalUser);
 			map.put("approvalMess", approvalMess);
 			resourceDetailMapper.updateState(map);
@@ -309,6 +318,7 @@ public class ResourceDetailDao implements ResourceConstant {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("resourceKey", resourceKey);
 			map.put("attrState", RESOURCE_STATE_APPROVAL_DEL);
+			map.put("attrLastState", "");
 			map.put("approvalUser", approvalUser);
 			map.put("approvalMess", "");
 			resourceDetailMapper.updateState(map);
@@ -344,6 +354,7 @@ public class ResourceDetailDao implements ResourceConstant {
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("resourceKey", resourceKey);
 			map.put("attrState", RESOURCE_STATE_APPROVAL_UPDATE);
+			map.put("attrLastState", "");
 			map.put("approvalUser", approvalUser);
 			map.put("approvalMess", "");
 			resourceDetailMapper.updateState(map);

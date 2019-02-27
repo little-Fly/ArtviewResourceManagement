@@ -39,12 +39,12 @@
     
     <update id="update" parameterType="com.grosup.ttzy.resource.dto.ResourceFileDto">
         update resource_file set 
-        resourceKey = #{resourceKey}
-        attrKey = #{attrKey}
-        typeKey = #{typeKey}
-        attrName = #{attrName}
-        directory = #{directory}
-        relativePath = #{relativePath}
+        resourceKey = #{resourceKey},
+        attrKey = #{attrKey},
+        typeKey = #{typeKey},
+        attrName = #{attrName},
+        directory = #{directory},
+        relativePath = #{relativePath},
         lastmodifytime = #{lastmodifytime}
         where fileKey = #{fileKey}
     </update>

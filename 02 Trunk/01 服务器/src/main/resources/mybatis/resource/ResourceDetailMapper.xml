@@ -52,24 +52,22 @@
     
     <update id="update" parameterType="com.grosup.ttzy.resource.dto.ResourceDetailDto">
         update resource_detail set 
-        attrKey = #{attrKey}
-        typeKey = #{typeKey}
-        attrName = #{attrName}
-        attrLevel = #{attrLevel}
-        attrType = #{attrType}
-        attrValue = #{attrValue}
-        attrState = #{attrState}
-        attrLastState = #{attrLastState}
-        approvalUser = #{approvalUser}
+        attrKey = #{attrKey},
+        typeKey = #{typeKey},
+        attrName = #{attrName},
+        attrLevel = #{attrLevel},
+        attrType = #{attrType},
+        attrValue = #{attrValue},
+        approvalUser = #{approvalUser},
         approvalMess = #{approvalMess}
         where resourceKey = #{resourceKey}
     </update>
     
     <update id="updateState" parameterType="java.util.Map">
         update resource_detail set 
-        attrState = #{attrState}
-        attrLastState = attrState
-        approvalUser = #{approvalUser}
+        attrState = #{attrState},
+        attrLastState = #{attrLastState},
+        approvalUser = #{approvalUser},
         approvalMess = #{approvalMess}
         where resourceKey = #{resourceKey}
     </update>
