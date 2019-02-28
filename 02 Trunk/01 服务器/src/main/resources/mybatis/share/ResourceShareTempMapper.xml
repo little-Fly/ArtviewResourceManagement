@@ -29,7 +29,7 @@
     
     <update id="update" parameterType="com.grosup.ttzy.share.dto.ResourceShareTempDto">
         update resource_sharetemp set 
-        tempName = #{tempName}
+        tempName = #{tempName},
         tempFilePath = #{tempFilePath}
         where tempKey = #{tempKey}
     </update>

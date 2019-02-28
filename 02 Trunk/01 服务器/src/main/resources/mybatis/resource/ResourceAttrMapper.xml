@@ -38,11 +38,11 @@
     
     <update id="update" parameterType="com.grosup.ttzy.resource.dto.ResourceAttrDto">
         update resource_attr set 
-        attrlen = #{attrlen}
-        attrPosition = #{attrPosition}
-        attrName = #{attrName}
-        attrLevel = #{attrLevel}
-        attrType = #{attrType}
+        attrlen = #{attrlen},
+        attrPosition = #{attrPosition},
+        attrName = #{attrName},
+        attrLevel = #{attrLevel},
+        attrType = #{attrType},
         remark = #{remark}
         where attrKey = #{attrKey}
     </update>

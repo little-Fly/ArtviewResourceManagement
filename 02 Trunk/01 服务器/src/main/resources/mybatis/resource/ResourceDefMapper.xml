@@ -31,8 +31,8 @@
     
     <update id="update" parameterType="com.grosup.ttzy.resource.dto.ResourceDefDto">
         update resource_def set 
-        logoUrl = #{logoUrl}
-        name = #{name}
+        logoUrl = #{logoUrl},
+        name = #{name},
         remark = #{remark}
         where typeKey = #{typeKey}
     </update>
