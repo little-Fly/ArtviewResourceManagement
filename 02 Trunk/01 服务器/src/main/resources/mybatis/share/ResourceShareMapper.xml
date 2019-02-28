@@ -26,11 +26,11 @@
     
     <update id="update" parameterType="com.grosup.ttzy.share.dto.ResourceShareDto">
         update resource_share set 
-        sharename = #{shareName}
-        resourcelistjson = #{resourceListJson}
-        senduser = #{sendUser}
-        templatename = #{templateName}
-        sendtime = #{sendTime}
+        sharename = #{shareName},
+        resourcelistjson = #{resourceListJson},
+        senduser = #{sendUser},
+        templatename = #{templateName},
+        sendtime = #{sendTime},
         lasttime = #{LastTime}
         where sharekey = #{shareKey}
     </update>
