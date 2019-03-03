@@ -32,18 +32,18 @@
         <filter-class>com.grosup.ttzy.filter.WxLoginFilter</filter-class>
         <init-param>
             <param-name>excludeurls</param-name>
-            <param-value>*/rs/*,*/sso/*,*/image/*,*/js/*,*/css/*,*/pages/login/*,*.html,*.png,*.jpg</param-value>
+            <param-value>/,*/rs/*,*/sso/*,*/image/*,*/js/*,*/css/*,*/pages/login/*,*.html,*.png,*.jpg</param-value>
         </init-param>
     </filter>
     <!-- 小程序url都经过此拦截器 -->
-    <filter>
-        <filter-name>securityFilter</filter-name>
-        <filter-class>com.grosup.ttzy.filter.SecurityFilter</filter-class>
-        <init-param>
-            <param-name>excludeurls</param-name>
-            <param-value>*/sso/*,*/image/*,*/js/*,*/css/*,*/pages/login/*,*.html,*.png,*.jpg</param-value>
-        </init-param>
-    </filter>
+    <!--<filter>-->
+        <!--<filter-name>securityFilter</filter-name>-->
+        <!--<filter-class>com.grosup.ttzy.filter.SecurityFilter</filter-class>-->
+        <!--<init-param>-->
+            <!--<param-name>excludeurls</param-name>-->
+            <!--<param-value>*/sso/*,*/image/*,*/js/*,*/css/*,*/pages/login/*,*.html,*.png,*.jpg</param-value>-->
+        <!--</init-param>-->
+    <!--</filter>-->
     
 <!--     PC url都经过此拦截器 -->
     <filter>
@@ -51,7 +51,7 @@
         <filter-class>com.grosup.ttzy.filter.LoginFilter</filter-class>
         <init-param>
             <param-name>excludeurls</param-name>
-            <param-value>*/sso/*,*/image/*,*/js/*,*/css/*,*/pages/login/*,*.html,*/wx/*,*.png,*.jpg,*/login/*,*/Redirect</param-value>
+            <param-value>/*.ico,/,*/sso/*,*/image/*,*/js/*,*/css/*,*/pages/login/*,*.html,*/wx/*,*.png,*.jpg,*/login/*,*/Redirect,*/static/*</param-value>
         </init-param>
     </filter>
 
@@ -78,20 +78,21 @@
         <filter-name>SpringCharacterEncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <filter-mapping>
+        <filter-name>loginFilter</filter-name>
+        <url-pattern>/ttzy/*</url-pattern>
+    </filter-mapping>
     <!-- 小程序url都经过此拦截器 -->
     <filter-mapping>
         <filter-name>wxLoginFilter</filter-name>
         <url-pattern>/wx/*</url-pattern>
     </filter-mapping>
     <!-- 小程序url都经过此拦截器 -->
-    <filter-mapping>
-        <filter-name>securityFilter</filter-name>
-        <url-pattern>/wx/*</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>loginFilter</filter-name>
-        <url-pattern>/rs/*</url-pattern>
-    </filter-mapping>
+    <!--<filter-mapping>-->
+    <!--<filter-name>securityFilter</filter-name>-->
+    <!--<url-pattern>/wx/*</url-pattern>-->
+    <!--</filter-mapping>-->
 
      <!-- 加载Spring框架中的log4j监听器Log4jConfigListener -->
     <listener>

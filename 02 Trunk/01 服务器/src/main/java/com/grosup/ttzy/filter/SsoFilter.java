@@ -12,6 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.grosup.ttzy.util.StringUtil;
 import org.apache.log4j.Logger;
 
 import com.grosup.ttzy.beans.UserBean;
@@ -53,32 +54,32 @@ public abstract class SsoFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) sRequest;
 		HttpServletResponse response = (HttpServletResponse) sResponse;
 		this.doBeforFilter(request, response);
-		// System.out.println(RequestUtil.getCurrentUrl(request));
 
 		log.info("request url is," + request.getRequestURI());
 		// 如果URL属于排除之列，直接执行嵌套Filter和Filter后期操作，并且返回。
 		if (this.isExcludeUrl(request)) {
+			log.info("排除之外");
 			chain.doFilter(request, response);
-			if (!response.isCommitted()) {
-				this.doAfterFilter(request, response);
-			}
 			return;
-		}
 
-		if (this.isLogin(request, response)) {
-			this.doAfterLogin(request, response);
+		}
+		String third_session = request.getHeader("third_session");
+		log.info("third_session value is" + third_session);
+		if (StringUtil.isNullOrEmpty(third_session)) {
+			if (this.isLogin(request, response)) {
+				this.doAfterLogin(request, response);
 			if (!response.isCommitted()) {
 				chain.doFilter(request, response);
 			}
-			if (!response.isCommitted()) {
-				this.doAfterFilter(request, response);
+//			if (!response.isCommitted()) {
+//				this.doAfterFilter(request, response);
+//			}
+			} else {
+				redirectLogin(request, response);
 			}
 		} else {
-			// 跳转登录页面
-			redirectLogin(request, response);
-			return;
+			chain.doFilter(sRequest, sResponse);
 		}
-
 	}
 
 	public abstract void doBeforFilter(HttpServletRequest request,
