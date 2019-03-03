@@ -55,9 +55,9 @@ DROP TABLE IF EXISTS `resource_attr`;
 CREATE TABLE `resource_attr` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，ID',
   `attrkey` varchar(100) NOT NULL COMMENT '资源属性Key',
-  `typekey` varchar(1000) DEFAULT NULL COMMENT '资源类型Key',
+  `typekey` varchar(1000) NOT NULL COMMENT '资源类型Key',
   `attrlen` int(11) DEFAULT NULL COMMENT '资源长度',
-  `attrname` varchar(200) DEFAULT NULL COMMENT '资源属性名',
+  `attrname` varchar(200) NOT NULL COMMENT '资源属性名',
   `attrlevel` varchar(200) NOT NULL COMMENT '属性级别',
   `attrposition` float(35) DEFAULT NULL COMMENT '资源位置',
   `attrtype` varchar(200) DEFAULT NULL COMMENT '属性类型',
@@ -195,7 +195,7 @@ DROP TABLE IF EXISTS `resource_share`;
 CREATE TABLE `resource_share` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键，ID',
   `sharekey` varchar(100) NOT NULL COMMENT '分享Key',
-  `sharename` varchar(100) NOT NULL COMMENT '分享名称',
+  `sharename` varchar(100) DEFAULT NULL COMMENT '分享名称',
   `resourcelistjson` text DEFAULT NULL COMMENT '资源列表',
   `senduser` varchar(100) DEFAULT NULL COMMENT '分享人',
   `templatename` varchar(100) NOT NULL COMMENT '模板名称',
