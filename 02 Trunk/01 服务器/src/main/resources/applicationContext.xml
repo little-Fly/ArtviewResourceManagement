@@ -34,13 +34,13 @@
 
 	<!-- 配置定时任务 -->
 	<task:annotation-driven/>
-	<context:component-scan base-package="com.grosup.practice.task"></context:component-scan>
+	<!--<context:component-scan base-package="com.grosup.practice.task"></context:component-scan>-->
 	
 	
 	<util:properties id="resourceFileService" location="classpath:application.properties"/>
 	
 	<!-- 引入jdbc.properties -->
- 	<context:property-placeholder location="classpath:pro/jdbc.properties"/> 
+ 	<!--<context:property-placeholder location="classpath:pro/jdbc.properties"/>-->
 	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		 <property name="driverClassName" value="${jdbc.driver}" />
