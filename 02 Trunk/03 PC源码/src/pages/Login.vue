@@ -30,7 +30,7 @@
             return {
                 appId:"wxb41c2d9e3682c984",
                 scope:"snsapi_login",
-                redirect_uri: "http%3A%2F%2Fwww.hwyst.net%2Findex.html%23%2Fredirect",
+                redirect_uri: "https%3A%2F%2Fwww.hwyst.net%2Findex.html%23%2Fredirect",
             }
         },
 	    methods:{

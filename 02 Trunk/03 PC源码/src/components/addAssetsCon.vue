@@ -77,7 +77,7 @@
             };
         },
         methods: {
-            beforeUpload(file){
+            beforeUpload(file) {
 
             },
             uploadSuc(response) {
@@ -209,6 +209,7 @@
                     attrPosition: i,
                     typeKey: typeKey,
                     attrlen: item.attrlen,
+                    attrLevel: 1
                 };
                 let params = {
                     json: decodeURI(encodeURI(JSON.stringify(json)))
