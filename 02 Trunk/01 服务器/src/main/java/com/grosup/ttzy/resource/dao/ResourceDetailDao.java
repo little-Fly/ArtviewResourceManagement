@@ -2,14 +2,9 @@ package com.grosup.ttzy.resource.dao;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -517,7 +512,7 @@ public class ResourceDetailDao implements ResourceConstant {
 
 		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
 		for (String resourceKey : resourceList) {
-			resourceDetaillist.addAll(getByUser(resourceKey));
+			resourceDetaillist.addAll(get(resourceKey));
 		}
 
 //		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
@@ -556,7 +551,7 @@ public class ResourceDetailDao implements ResourceConstant {
 
 		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
 		for (String resourceKey : resourceList) {
-			resourceDetaillist.addAll(getByUser(resourceKey));
+			resourceDetaillist.addAll(getByAdmin(resourceKey));
 		}
 
 //		List<ResourceDetailDto> resourceDetaillist = new ArrayList<ResourceDetailDto>();
