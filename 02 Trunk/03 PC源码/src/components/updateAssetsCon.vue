@@ -272,6 +272,7 @@
                     attrlen: this.resAttr.attrlen,
                     remark: this.resAttr.remark,
                     typeKey: this.updateTypeKey,
+                    attrLevel: 1,
                     attrPosition: this.attrList.length + 1
                 };
                 let params = {
@@ -307,6 +308,7 @@
                     attrType: this.resAttr.attrType,
                     attrlen: this.resAttr.attrlen,
                     remark: this.resAttr.remark,
+                    attrLevel: 1,
                     attrPosition: this.resAttr.attrPosition,
                     typeKey: this.updateTypeKey
                 };
