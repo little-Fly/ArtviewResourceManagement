@@ -268,7 +268,7 @@
 		
 				  if(data[0].state=="successful")
 				  {
-					  addAttr(data[0].data);
+					  addAttr(data[0].data, typekeyStr);
 				  }else
 				  {
 					  error(data[0]);
@@ -284,7 +284,7 @@
 		
 				  if(data[0].state=="successful")
 				  {
-					  addDetail(data[0].data);
+					  addDetail(data[0].data, typekeyStr);
 				  }else
 				  {
 					  error(data[0]);
@@ -316,27 +316,29 @@
 	
 	function addDef(jsonstr)
 	{
-		$("body").append("<b>表名：</b></br>");
+		
+		
 		var data = $.parseJSON(jsonstr);
 		var len = data.length;
 		var str="";
 		for(var i=0;i<len;i+=1)
 		{
+			$("#resourceDiv").append("<div id="+data[i].typeKey+"></div>");
+			$("#"+data[i].typeKey).append("<b>表名：</b></br>");
 			str+=data[i].typeKey;
 			str+=": ";
 			str+=data[i].name;
 			str+="</br>";
 			str+="</br>";
-			$("body").append(str);
+			$("#"+data[i].typeKey).append(str);
 			getAttr(data[i].typeKey);
-			getDetail(data[i].typeKey);
 		}
 
 	}
 	
-	function addAttr(jsonstr)
+	function addAttr(jsonstr, typekeyStr)
 	{
-		$("body").append("<b>表头：</b></br>");
+		$("#"+typekeyStr).append("<b>表头：</b></br>");
 		var data = $.parseJSON(jsonstr);
 		var len = data.length;
 		var str="";
@@ -348,12 +350,13 @@
 			str+="</br>";
 		}
 		str+="</br>";
-		$("body").append(str);
+		$("#"+typekeyStr).append(str);
+		getDetail(typekeyStr);
 	}
 	
-	function addDetail(jsonstr)
+	function addDetail(jsonstr, typekeyStr)
 	{
-		$("body").append("<b>表值：</b></br>");
+		$("#"+typekeyStr).append("<b>表值：</b></br>");
 		var data = $.parseJSON(jsonstr);
 		var len = data.length;
 		var str="";
@@ -367,7 +370,7 @@
 			str+="</br>";
 		}
 		str+="</br>";
-		$("body").append(str);
+		$("#"+typekeyStr).append(str);
 	}
 	
 	function addShare(jsonstr)
@@ -441,5 +444,6 @@
 </br><b>search：</b><input id='searchKey' type='text' value='{"RESOURCE_ATTR示例表头ID1":"1", "RESOURCE_ATTR示例表头ID2":"2"}' style='width:500px' /><input type='button' value='search' onclick='searchKey()'></br>
 <div id="searchDiv"></div>
 </br>
+<div id="resourceDiv"></div>
 </body>
 </html>
