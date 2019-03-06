@@ -18,6 +18,7 @@
      -->
     <resultMap type="com.grosup.ttzy.resource.dto.ResourceAttrDto" id="BaseResultMap">
         <id column="attrKey" property="attrKey"/>
+        <result column="typeKey" property="typeKey"/>
         <result column="attrlen" property="attrlen"/>
         <result column="attrPosition" property="attrPosition"/>
         <result column="attrName" property="attrName"/>
@@ -28,8 +29,8 @@
   
 
     <insert id="add" parameterType="com.grosup.ttzy.resource.dto.ResourceAttrDto">
-        INSERT INTO resource_attr(attrKey, attrlen, attrPosition, attrName, attrLevel, attrType, remark) 
-        VALUES(#{attrKey},#{attrlen},#{attrPosition},#{attrName},#{attrLevel},#{attrType},#{remark})
+        INSERT INTO resource_attr(attrKey, typeKey, attrlen, attrPosition, attrName, attrLevel, attrType, remark) 
+        VALUES(#{attrKey},#{typeKey},#{attrlen},#{attrPosition},#{attrName},#{attrLevel},#{attrType},#{remark})
     </insert>
    
     <delete id="del" parameterType="java.lang.String">
