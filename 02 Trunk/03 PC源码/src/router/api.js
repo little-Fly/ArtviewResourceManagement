@@ -49,6 +49,17 @@ axios.interceptors.request.use(function (config) {
     return config;
 });
 
+
+axios.interceptors.response.use(function (response) {
+    if (typeof response.data !== "object") {
+        sessionStorage.clear();
+        router.replace({
+            path: "/login",
+            query: {redirect: router.currentRoute.fullPath}
+        });
+    }
+    return response;
+});
 Vue.prototype.$ajax = {
     //登录请求
     autoService: {

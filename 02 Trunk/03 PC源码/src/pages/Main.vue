@@ -244,7 +244,7 @@
         },
         methods: {
             pagination(i) {
-                this.getResTableDetail(i * this.pageSize, this.pageSize);
+                this.getTableByType((i - 1) * this.pageSize, this.pageSize);
             },
             /**
              * 搜索获取焦点
@@ -324,9 +324,9 @@
                 this.currentActiveItem = item.name;
                 this.isActive = i;
                 this.searchType = this.currentTypeKey;
-                this.getTableByType();
+                this.getTableByType(0, 10);
             },
-            getTableByType() {
+            getTableByType(_from, _size) {
                 let params = {
                     typekey: this.currentTypeKey,
                 };
@@ -428,7 +428,7 @@
                             // this.getLineData(json);
                             // return;
                             /*********************************************************************************/
-                            this.getResTableDetail(0, 10);
+                            this.getResTableDetail(_from, _size);
                         }
                     }, (error) => {
                         this.$message.error(error.message);
@@ -532,25 +532,6 @@
                     });
                     return;
                 }
-                // let canUpdate = false;
-                // switch (this.multipleSelection[0].attrState) {
-                //     case "ApprovalReject":
-                //         canUpdate = true;
-                //         break;
-                //     case "Available":
-                //     case "ApprovalAdd":
-                //     case "ApprovalDel":
-                //     case "ApprovalUpdate":
-                //     default:
-                //         break;
-                // }
-                // if (!canUpdate) {
-                //     this.$message({
-                //         type: "warning",
-                //         message: "审核通过的数据不能修改!"
-                //     });
-                //     return;
-                // }
                 if (this.$refs.upload) {
                     for (let i = 0; i < this.$refs.upload.length; i++) {
                         this.$refs.upload[i].clearFiles();
@@ -588,7 +569,7 @@
                                     type: "success",
                                     message: "提交成功!请等待审核！"
                                 });
-                                this.getTableByType();
+                                this.getTableByType(0, 10);
                                 this.dialogFormVisible = false;
                             }
                         }
@@ -613,7 +594,7 @@
                                     type: "success",
                                     message: "提交成功!请等待审核！"
                                 });
-                                this.getTableByType();
+                                this.getTableByType(0, 10);
                                 this.dialogFormVisible = false;
                             }
                         }
@@ -733,7 +714,7 @@
                                 if (data[0].state === "error") {
                                     this.$message.error(data[0].message);
                                 } else {
-                                    this.getTableByType();
+                                    this.getTableByType(0, 10);
                                     this.$message.success("请等待审核");
                                 }
                             }
@@ -836,7 +817,6 @@
         },
         mounted() {
             this.$chargeAuthority().then((t) => {
-                console.log(t);
                 this.getDefAll();
                 if (t === "writer") {
                     this.canWrite = true;
