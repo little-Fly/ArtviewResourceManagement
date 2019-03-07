@@ -20,7 +20,7 @@ public class SsoConstant {
 	/**
 	 * 间隔30分钟重新刷新时间，防止过期超时。以毫秒为单位。
 	 */
-	public static final long REVALID_TERVAL_TIME = 1000 * 60 * 2;
+	public static final long REVALID_TERVAL_TIME = 1000 * 60 * 30;
 	
 	/**
 	 * Cookie有效期 以秒为单位

@@ -51,9 +51,13 @@ public abstract class SsoFilter implements Filter {
 			ServletException {
 		log.info("SSO: Do Befor Fiter.");
 
+
 		HttpServletRequest request = (HttpServletRequest) sRequest;
 		HttpServletResponse response = (HttpServletResponse) sResponse;
 		this.doBeforFilter(request, response);
+		response.setHeader("Cache-Control", "no-store");//or no-cache
+		response.setHeader("Pragrma", "no-cache");
+		response.setDateHeader("Expires", 0);
 
 		log.info("request url is," + request.getRequestURI());
 		// 如果URL属于排除之列，直接执行嵌套Filter和Filter后期操作，并且返回。
