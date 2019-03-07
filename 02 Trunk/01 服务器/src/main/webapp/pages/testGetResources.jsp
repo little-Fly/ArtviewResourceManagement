@@ -10,6 +10,11 @@
 <script type="text/javascript" >
 	$(document).ready(function(){
 	
+		testAll();
+	});
+	
+	function get()
+	{
 		$.getJSON("/rs/share/getall.do", { typekey: "RESOURCE_DEF示例表ID", time: getMyTime() },
 				function(data){
 			
@@ -47,12 +52,177 @@
 				});
 		
 		search('{"RESOURCE_ATTR示例表头ID1":"1", "RESOURCE_ATTR示例表头ID2":"2"}');
+	}
 		
-		
-		setTimeout( function (){getDef();},1000);
+
 	
+
 	
-	});
+	function messDiv(mess)
+	{
+		$("#messDiv").append(mess+"</br>");
+	}
+	
+	function errorDiv(error)
+	{
+		$("#errorDiv").append(error+"</br>");
+	}
+	
+	function testAll()
+	{
+		testDef();
+		testAttr();
+		testDetail();
+		setTimeout( function (){get();},1000);
+		setTimeout( function (){getDef();},2000);
+	}
+	
+	function testDetail()
+	{
+		$.getJSON("/rs/detail/add.do", { json:"[{'attrLevel':'0','attrName':'示例表头','attrType':'default','attrValue':'test1','typeKey':'RESOURCE_DEF示例表ID','attrKey':'RESOURCE_ATTR示例表头ID1'}]", time: getMyTime() },	
+				function(data){ 
+			if(data[0].state=="successful") {
+				messDiv("/rs/detail/add.do successful.");
+				
+				var data = $.parseJSON(data[0].object);
+				var len = data.length;
+				var str="";
+				for(var i=0;i<len;i+=1)
+				{
+					testDetailUpdate(data[i].resourceKey);
+					break;
+				}
+			  }else
+			  {
+				  errorDiv("/rs/detail/add.do error.");
+			  }
+			});
+	}
+	
+	function testDetailUpdate(resourceKey)
+	{		
+		$.getJSON("/rs/detail/update.do", {"resourcekey" : resourceKey, json:"[{'attrLevel':'0','attrName':'示例表头','attrType':'default','attrValue':'test2','typeKey':'RESOURCE_DEF示例表ID','attrKey':'RESOURCE_ATTR示例表头ID1'}]", time: getMyTime() },	
+				function(data){ 
+			if(data[0].state=="successful") {
+				messDiv("/rs/detail/update.do successful.");
+				testDetailDel(resourceKey);
+			  }else
+			  {
+				  errorDiv("/rs/detail/update.do error.");
+			  }
+			});
+	}
+	
+	function testDetailDel(resourceKey)
+	{	
+		$.getJSON("/rs/detail/del.do", {  "typekey":"RESOURCE_DEF示例表ID", "resourcekey" : resourceKey , time: getMyTime() },	
+				function(data){ 
+			if(data[0].state=="successful") {
+				messDiv("/rs/detail/del.do successful.");
+				testDetailApprovaldel(resourceKey);
+			  }else
+			  {
+				  errorDiv("/rs/detail/del.do error.");
+			  }
+			});
+	}
+	
+	function testDetailApprovaldel(resourceKey)
+	{	
+		$.getJSON("/rs/detail/approvaldel.do", {  "typekey":"RESOURCE_DEF示例表ID", "resourcekey" : resourceKey, approvalmess:'test' , time: getMyTime() },	
+				function(data){ 
+			if(data[0].state=="successful") {
+				messDiv("/rs/detail/approvaldel.do successful.");
+			  }else
+			  {
+				  errorDiv("/rs/detail/approvaldel.do error.");
+			  }
+			});
+	}
+	
+	function testAttr()
+	{
+		$.getJSON("/rs/attr/add.do", { json:"{'attrKey':'RAt示例表头ID','attrLevel':'0','attrName':'test表头','attrType':'default','typeKey':'RESOURCE_DEF示例表ID'}", time: getMyTime() },	
+				function(data){ 
+			if(data[0].state=="successful") {
+				messDiv("/rs/attr/add.do successful.");
+				var data = $.parseJSON(data[0].object);
+				testAttrUpdate(data.attrKey);
+			  }else
+			  {
+				  errorDiv("/rs/attr/add.do error.");
+			  }
+			});
+	}
+	
+	function testAttrUpdate(attrKey)
+	{		
+		$.getJSON("/rs/attr/update.do", { "typekey":"RESOURCE_DEF示例表ID", "attrkey" : attrKey, json:"{'attrKey':'RAt示例表头ID','attrLevel':'0','attrName':'test示例表头2','attrType':'default','typeKey':'RESOURCE_DEF示例表ID'}", time: getMyTime() },	
+				function(data){ 
+			if(data[0].state=="successful") {
+				messDiv("/rs/attr/update.do successful.");
+				testAttrDel(attrKey);
+			  }else
+			  {
+				  errorDiv("/rs/attr/update.do error.");
+			  }
+			});
+	}
+	
+	function testAttrDel(attrKey)
+	{	
+		$.getJSON("/rs/attr/del.do", {  "typekey":"RESOURCE_DEF示例表ID", "attrkey" : attrKey , time: getMyTime() },	
+				function(data){ 
+			if(data[0].state=="successful") {
+				messDiv("/rs/attr/del.do successful.");
+			  }else
+			  {
+				  errorDiv("/rs/attr/del.do error.");
+			  }
+			});
+	}
+	
+	function testDef()
+	{
+		$.getJSON("/rs/def/add.do", { json:"{'name':'图书','remark':'test图书'}", time: getMyTime() },	
+				function(data){ 
+			if(data[0].state=="successful") {
+				messDiv("/rs/def/add.do successful.");
+				var data = $.parseJSON(data[0].object);
+				testDefUpdate(data.typeKey);
+			  }else
+			  {
+				  errorDiv("/rs/def/add.do error.");
+			  }
+			});
+	}
+	
+	function testDefUpdate(typeKey)
+	{		
+		$.getJSON("/rs/def/update.do", { "typekey":typeKey, json:"{'name':'图书2','remark':'test图书'}", time: getMyTime() },	
+				function(data){ 
+			if(data[0].state=="successful") {
+				messDiv("/rs/def/update.do successful.");
+				testDefDel(typeKey);
+			  }else
+			  {
+				  errorDiv("/rs/def/update.do error.");
+			  }
+			});
+	}
+	
+	function testDefDel(typeKey)
+	{	
+		$.getJSON("/rs/def/del.do", {  "typekey":typeKey, time: getMyTime() },	
+				function(data){ 
+			if(data[0].state=="successful") {
+				messDiv("/rs/def/del.do successful.");
+			  }else
+			  {
+				  errorDiv("/rs/def/del.do error.");
+			  }
+			});
+	}
 	
 	function searchKey()
 	{
@@ -98,7 +268,7 @@
 		
 				  if(data[0].state=="successful")
 				  {
-					  addAttr(data[0].data);
+					  addAttr(data[0].data, typekeyStr);
 				  }else
 				  {
 					  error(data[0]);
@@ -114,7 +284,7 @@
 		
 				  if(data[0].state=="successful")
 				  {
-					  addDetail(data[0].data);
+					  addDetail(data[0].data, typekeyStr);
 				  }else
 				  {
 					  error(data[0]);
@@ -146,27 +316,29 @@
 	
 	function addDef(jsonstr)
 	{
-		$("body").append("<b>表名：</b></br>");
+		
+		
 		var data = $.parseJSON(jsonstr);
 		var len = data.length;
 		var str="";
 		for(var i=0;i<len;i+=1)
 		{
+			$("#resourceDiv").append("<div id="+data[i].typeKey+"></div>");
+			$("#"+data[i].typeKey).append("<b>表名：</b></br>");
 			str+=data[i].typeKey;
 			str+=": ";
 			str+=data[i].name;
 			str+="</br>";
 			str+="</br>";
-			$("body").append(str);
+			$("#"+data[i].typeKey).append(str);
 			getAttr(data[i].typeKey);
-			getDetail(data[i].typeKey);
 		}
 
 	}
 	
-	function addAttr(jsonstr)
+	function addAttr(jsonstr, typekeyStr)
 	{
-		$("body").append("<b>表头：</b></br>");
+		$("#"+typekeyStr).append("<b>表头：</b></br>");
 		var data = $.parseJSON(jsonstr);
 		var len = data.length;
 		var str="";
@@ -178,12 +350,13 @@
 			str+="</br>";
 		}
 		str+="</br>";
-		$("body").append(str);
+		$("#"+typekeyStr).append(str);
+		getDetail(typekeyStr);
 	}
 	
-	function addDetail(jsonstr)
+	function addDetail(jsonstr, typekeyStr)
 	{
-		$("body").append("<b>表值：</b></br>");
+		$("#"+typekeyStr).append("<b>表值：</b></br>");
 		var data = $.parseJSON(jsonstr);
 		var len = data.length;
 		var str="";
@@ -197,7 +370,7 @@
 			str+="</br>";
 		}
 		str+="</br>";
-		$("body").append(str);
+		$("#"+typekeyStr).append(str);
 	}
 	
 	function addShare(jsonstr)
@@ -266,8 +439,11 @@
 </head>
 <body>
 
+<div id="messDiv"></div>
+<div id="errorDiv" style="font-color: #FF0000"></div>
 </br><b>search：</b><input id='searchKey' type='text' value='{"RESOURCE_ATTR示例表头ID1":"1", "RESOURCE_ATTR示例表头ID2":"2"}' style='width:500px' /><input type='button' value='search' onclick='searchKey()'></br>
 <div id="searchDiv"></div>
 </br>
+<div id="resourceDiv"></div>
 </body>
 </html>
