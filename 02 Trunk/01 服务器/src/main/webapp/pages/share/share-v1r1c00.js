@@ -6,16 +6,19 @@
 		
 		init();
 		$("#table_default").hide();
-		$.getJSON("../../../rs/share/get.do", { "sharekey": escape(escape(shareKey)), "time": getMyTime() },
+		$("#shareDiv").css("width",document.body.clientWidth-31);
+		loading("");
+		$.getJSON("../../../rs/share/getresource.do", { "sharekey": escape(escape(shareKey)), "time": getMyTime() },
 	          function(data){
 			  if(data[0].state=="successful")
 			  {
-				  share(data[0].data);
+				  addShare(data[0].data);
 			  }else
 			  {
 				  errorAll(data[0]);
 			  }
 		});
+		show();
 	});
 
 	function share(jsonstr)
@@ -59,6 +62,10 @@
 			{
 				addVideoResources(data[i].resourceKey, data[i].attrName, data[i].attrValue);
 			}
+		}
+		if(len ==0)
+		{
+			errorAll(jsonstr);
 		}
 	}
 	

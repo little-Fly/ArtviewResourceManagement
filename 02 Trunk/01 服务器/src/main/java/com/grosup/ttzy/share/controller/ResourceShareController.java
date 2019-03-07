@@ -206,25 +206,35 @@ public class ResourceShareController implements MessageMapConstant {
 	@ResponseBody
 	public String getResource(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, String> messageMap = new HashMap<String, String>();
-		String resourceKey = request.getParameter("resourcekey");
-		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-			JSONArray jsonArray = JSONArray.fromObject(resourceKey);
-			Collection<ResourceDto> resourceDtoList = (Collection<ResourceDto>) JSONArray.toCollection(jsonArray,
-					ResourceDto.class);
+		
+		String shareKey = request.getParameter("sharekey");
+		if (!StringUtil.isNullOrEmpty(shareKey)) {
+			ResourceShareDto resourceShareDto = resourceShareService.get(shareKey);
+			if (resourceShareDto != null) {
+		
+				JSONArray jsonArray = JSONArray.fromObject(resourceShareDto.getResourceListJson());
+				Collection<ResourceDto> resourceDtoList = (Collection<ResourceDto>) JSONArray.toCollection(jsonArray,
+						ResourceDto.class);
 
-			Collection<String> resourceList = new ArrayList<String>();
-			for (ResourceDto resourceDto : resourceDtoList) {
-				resourceList.add(resourceDto.getResourceKey());
+				Collection<String> resourceList = new ArrayList<String>();
+				for (ResourceDto resourceDto : resourceDtoList) {
+					resourceList.add(resourceDto.getResourceKey());
+				}
+				Collection<ResourceDetailDto> collection = resourceDetailService.getByUser(resourceList);
+				JSONArray resourceDefJson = JSONArray.fromObject(collection);
+				messageMap.put(DATA, resourceDefJson.toString());
+				messageMap.put(STATE, STATE_SUCCESSFUL);
+			} else {
+				messageMap.put(STATE, STATE_ERROR);
+				messageMap.put(MESSAGE, MESSAGE_DTO_ETER + "sharekey:\"" + shareKey + "\"");
+				log.error("get "+MESSAGE_DTO_ETER + "sharekey:\"" + shareKey + "\"");
 			}
-			Collection<ResourceDetailDto> collection = resourceDetailService.getByUser(resourceList);
-			JSONArray resourceDefJson = JSONArray.fromObject(collection);
-			messageMap.put(DATA, resourceDefJson.toString());
-			messageMap.put(STATE, STATE_SUCCESSFUL);
 		} else {
 			messageMap.put(STATE, STATE_ERROR);
-			messageMap.put(MESSAGE, MESSAGE_LIST_ETER);
-			log.error("getAll " + MESSAGE_LIST_ETER);
+			messageMap.put(MESSAGE, MESSAGE_PARAM_ETER + "sharekey:\"" + shareKey + "\"");
+			log.error("update "+MESSAGE_PARAM_ETER + "sharekey:\"" + shareKey + "\"");
 		}
+		
 		JSONArray jsonobj = JSONArray.fromObject(messageMap);
 		return jsonobj.toString();
 	}
