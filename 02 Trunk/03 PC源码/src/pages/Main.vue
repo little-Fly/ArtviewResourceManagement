@@ -270,6 +270,10 @@
                         }
                     }
                 }
+                if (JSON.stringify(obj) === "{}") {
+                    this.$message.warning("搜索条件有误");
+                    return;
+                }
                 let json = {
                     typekey: this.searchType,
                     searchkey: decodeURI(encodeURI(JSON.stringify(obj)))
