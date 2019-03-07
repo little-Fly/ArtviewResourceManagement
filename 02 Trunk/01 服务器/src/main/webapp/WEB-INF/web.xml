@@ -81,7 +81,7 @@
 
     <filter-mapping>
         <filter-name>loginFilter</filter-name>
-        <url-pattern>/ttzy/*</url-pattern>
+        <url-pattern>/rs/*</url-pattern>
     </filter-mapping>
     <!-- 小程序url都经过此拦截器 -->
     <filter-mapping>
