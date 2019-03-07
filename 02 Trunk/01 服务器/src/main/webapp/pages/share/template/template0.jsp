@@ -1,4 +1,4 @@
-﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
+<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
 	String shareKey = request.getParameter("sharekey");
@@ -15,7 +15,6 @@
 <script type="text/javascript" src="/pages/share/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="/pages/share/share-v1r1c00.js"></script>
 <link href="/pages/share/share-v1r1c00.css" rel='stylesheet' />
-<script src="/pages/share/qrcode.js"></script>
 <style type="text/css">
 </style>
 
@@ -50,7 +49,7 @@
 		$("#loading").hide();
 		$("#noshare").show();
 		$("#shareDiv").show();
-		$("#shareDiv").append("<br>" + data.message);
+		$("#shareDiv").append("<br>error with data.message:" + data.message);
 	}
 	function phasing(id, table){
 		if(id != resourceKey){
