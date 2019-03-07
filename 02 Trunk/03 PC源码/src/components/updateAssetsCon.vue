@@ -368,11 +368,12 @@
                                     this.$message.error(data[0].message);
                                 } else {
                                     this.$message.success("修改成功");
-                                    if (this.file) {
-                                        setTimeout(() => {
+                                    setTimeout(() => {
+                                        if (this.file) {
                                             this.$refs.upload.submit();
-                                        }, 600);
-                                    }
+                                        }
+                                        this.refreshIndex();
+                                    }, 600);
                                     this.dialogFormVisible = false;
                                 }
                             }
