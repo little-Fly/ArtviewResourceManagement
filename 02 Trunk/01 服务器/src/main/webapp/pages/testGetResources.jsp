@@ -323,6 +323,7 @@
 		var str="";
 		for(var i=0;i<len;i+=1)
 		{
+			str="";
 			$("#resourceDiv").append("<div id="+data[i].typeKey+"></div>");
 			$("#"+data[i].typeKey).append("<b>表名：</b></br>");
 			str+=data[i].typeKey;

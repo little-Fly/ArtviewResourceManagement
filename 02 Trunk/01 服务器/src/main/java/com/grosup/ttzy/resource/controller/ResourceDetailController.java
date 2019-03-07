@@ -268,7 +268,7 @@ public class ResourceDetailController implements MessageMapConstant {
 	public String getAllPending(HttpServletRequest request, HttpServletResponse response) throws GrosupException {
 
 		Map<String, String> messageMap = new HashMap<String, String>();
-		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
+		if (roleDao.isAdmin(TtzyUtil.getUid(request))) {
 			int start = 0;
 			int len = 10;
 			String startStr = request.getParameter("start");
