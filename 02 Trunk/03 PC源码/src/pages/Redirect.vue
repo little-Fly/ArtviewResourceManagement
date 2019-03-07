@@ -45,7 +45,7 @@
                             let data = response.data;
                             // console.log(data);
                             if (data.msg === "success") {
-                                console.log(data.userInfo);
+                                // console.log(data.userInfo);
                                 if (data.userInfo) {
                                     let myRoles = data.userInfo.roles;
                                     sessionStorage.setItem("myRoles", JSON.stringify(myRoles));

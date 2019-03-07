@@ -54,7 +54,8 @@
 		width: 100%;
 		height: 100%;
 		background: url("../assets/image/bg.jpg") no-repeat;
-		background-size: 100% 100%;
+		background-size: 120% 120%;
+		background-position: 50% 50%;
 		.content {
 			width: 50%;
 			height: 100%;
