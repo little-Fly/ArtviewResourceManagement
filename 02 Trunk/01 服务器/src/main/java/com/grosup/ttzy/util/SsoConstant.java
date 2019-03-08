@@ -27,8 +27,8 @@ public class SsoConstant {
 	 */
 	public static int COOKIE_VALID_TIME = 60 * 60 * 12;
 	
-	public static String SSO_URL;
+	public static String SSO_URL="https://www.hwyst.net";
 	
-	public static final String DEFAULT_REDIRECT = "http://localhost:8080/resource/pages/login/login.jsp";
+	public static final String DEFAULT_REDIRECT = "https://www.hwyst.net/index.html#/";
 
 }

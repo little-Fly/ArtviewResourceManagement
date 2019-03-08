@@ -1,6 +1,7 @@
 package com.grosup.ttzy.filter;
 
 import java.io.IOException;
+import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -11,6 +12,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.grosup.ttzy.util.StringUtil;
 import org.apache.log4j.Logger;
 
 import com.grosup.ttzy.beans.UserBean;
@@ -49,34 +51,39 @@ public abstract class SsoFilter implements Filter {
 			ServletException {
 		log.info("SSO: Do Befor Fiter.");
 
+
 		HttpServletRequest request = (HttpServletRequest) sRequest;
 		HttpServletResponse response = (HttpServletResponse) sResponse;
 		this.doBeforFilter(request, response);
-		// System.out.println(RequestUtil.getCurrentUrl(request));
+		response.setHeader("Cache-Control", "no-store");//or no-cache
+		response.setHeader("Pragrma", "no-cache");
+		response.setDateHeader("Expires", 0);
 
 		log.info("request url is," + request.getRequestURI());
 		// 如果URL属于排除之列，直接执行嵌套Filter和Filter后期操作，并且返回。
 		if (this.isExcludeUrl(request)) {
+			log.info("排除之外");
 			chain.doFilter(request, response);
-			if (!response.isCommitted()) {
-				this.doAfterFilter(request, response);
-			}
 			return;
-		}
 
-		if (this.isLogin(request, response)) {
-			this.doAfterLogin(request, response);
+		}
+		String third_session = request.getHeader("third_session");
+		log.info("third_session value is" + third_session);
+		if (StringUtil.isNullOrEmpty(third_session)) {
+			if (this.isLogin(request, response)) {
+				this.doAfterLogin(request, response);
 			if (!response.isCommitted()) {
 				chain.doFilter(request, response);
 			}
-			if (!response.isCommitted()) {
-				this.doAfterFilter(request, response);
+//			if (!response.isCommitted()) {
+//				this.doAfterFilter(request, response);
+//			}
+			} else {
+				redirectLogin(request, response);
 			}
 		} else {
-			// 跳转登录页面
-			redirectLogin(request, response);
+			chain.doFilter(sRequest, sResponse);
 		}
-
 	}
 
 	public abstract void doBeforFilter(HttpServletRequest request,
@@ -92,7 +99,7 @@ public abstract class SsoFilter implements Filter {
 			HttpServletResponse response) throws IOException {
 		// 跳转登录页面
 		String redirectUrl = SsoUtil.getLoginRedirectUrl(request);
-		response.sendRedirect(SsoConstant.DEFAULT_REDIRECT);
+		response.sendRedirect(redirectUrl);
 	}
 
 	/*
@@ -120,24 +127,27 @@ public abstract class SsoFilter implements Filter {
 
 	private boolean isLogin(HttpServletRequest request,
 			HttpServletResponse response) {
+		log.info("judge is login");
 		UserBean user = SsoUtil.getUserBean(request);
-		if (null != user) {
+		if (null == user) {
 //			// 用户状态 0：表示正常 9：表示禁用 1：表示未激活
 //			if (!UserStatus.Normal.value().equals(user.getStatus())) {
 //				return false;
 //			}
 
-			return true;
+			return false;
 		}
 
+		long curTime = System.currentTimeMillis();
+		log.info("user.getLastValidTime()=" + user.getLastValidTime());
+		log.info("curTime=" + curTime);
+		// 在服务器验证有效期内
+		if ((curTime - user.getLastValidTime()) <=
+				SsoConstant.REVALID_TERVAL_TIME) {
+			log.info("1111");
+			SsoUtil.addSessionInfo(request, user);
+			return true;
+		}
 		return false;
-		// long curTime = System.currentTimeMillis();
-		// // 在服务器验证有效期内
-		// if ((curTime - user.getLastValidTime()) <=
-		// SsoConstant.REVALID_TERVAL_TIME) {
-		// SsoUtil.addSessionInfo(request, user);
-		// return true;
-		// }
-		// return false;
 	}
 }

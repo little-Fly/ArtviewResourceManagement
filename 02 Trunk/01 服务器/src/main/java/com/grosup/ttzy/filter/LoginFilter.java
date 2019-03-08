@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import com.grosup.ttzy.beans.UserBean;
 import com.grosup.ttzy.util.SsoConstant;
 import com.grosup.ttzy.util.SsoUtil;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -21,6 +22,8 @@ import com.grosup.ttzy.util.SsoUtil;
  * 
  */
 public class LoginFilter extends SsoFilter {
+
+	private static final Logger log = Logger.getLogger(LoginFilter.class);
 
 	/*
 	 * (non-Javadoc)
@@ -52,6 +55,7 @@ public class LoginFilter extends SsoFilter {
 	public void doAfterLogin(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		// 判断用户，并刷新用户角色基本信息表
+		log.info("Begin doAfterLogin...");
 		HttpSession session = request.getSession(true);
 		UserBean user = (UserBean) session
 				.getAttribute(SsoConstant.SESSION_USER);

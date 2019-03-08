@@ -176,6 +176,11 @@
                 this.oldLogoUrl = this.nowLogoUrl;
                 this.nowLogoUrl = file.url;
                 this.form.logoUrl = file.url;
+                if (file.raw.type.indexOf("image") === -1) {
+                    this.$message.error("请选择图片格式的文件");
+                    this.$refs.upload.clearFiles();
+                    this.previewUrl = "";
+                }
             },
             fileRemove() {
                 this.nowLogoUrl = this.oldLogoUrl;
@@ -226,8 +231,8 @@
             //删除资源属性
             delThisLine(item, key) {
                 this.$confirm("是否确定删除该属性?", "提示", {
-                    confirmButtonText: "提交审核",
-                    cancelButtonText: "我再想想",
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
                     type: "warning",
                     center: true
                 }).then(() => {
@@ -267,6 +272,7 @@
                     attrlen: this.resAttr.attrlen,
                     remark: this.resAttr.remark,
                     typeKey: this.updateTypeKey,
+                    attrLevel: 1,
                     attrPosition: this.attrList.length + 1
                 };
                 let params = {
@@ -302,6 +308,7 @@
                     attrType: this.resAttr.attrType,
                     attrlen: this.resAttr.attrlen,
                     remark: this.resAttr.remark,
+                    attrLevel: 1,
                     attrPosition: this.resAttr.attrPosition,
                     typeKey: this.updateTypeKey
                 };
@@ -338,8 +345,8 @@
                     return;
                 }
                 this.$confirm("是否确定保存?", "提示", {
-                    confirmButtonText: "提交审核",
-                    cancelButtonText: "我再想想",
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
                     type: "warning",
                     center: true
                 }).then(() => {
@@ -361,11 +368,12 @@
                                     this.$message.error(data[0].message);
                                 } else {
                                     this.$message.success("修改成功");
-                                    if (this.file) {
-                                        setTimeout(() => {
+                                    setTimeout(() => {
+                                        if (this.file) {
                                             this.$refs.upload.submit();
-                                        }, 600);
-                                    }
+                                        }
+                                        this.refreshIndex();
+                                    }, 600);
                                     this.dialogFormVisible = false;
                                 }
                             }
@@ -409,8 +417,8 @@
             //删除资源类型
             deleteRs(item) {
                 this.$confirm("确定删除该属性吗?", "提示", {
-                    confirmButtonText: "提交审核",
-                    cancelButtonText: "我再想想",
+                    confirmButtonText: "确定",
+                    cancelButtonText: "取消",
                     type: "warning",
                     center: true
                 }).then(() => {

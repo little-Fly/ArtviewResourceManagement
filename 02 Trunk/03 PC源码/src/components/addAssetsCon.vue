@@ -77,6 +77,9 @@
             };
         },
         methods: {
+            beforeUpload(file) {
+
+            },
             uploadSuc(response) {
                 console.log("upload success");
                 this.$refs.upload.clearFiles();
@@ -110,6 +113,11 @@
             uploadChange(file) {
                 this.file = file;
                 this.previewUrl = file.url;
+                if (file.raw.type.indexOf("image") === -1) {
+                    this.$message.error("请选择图片格式的文件");
+                    this.$refs.upload.clearFiles();
+                    this.previewUrl = "";
+                }
             },
             fileRemove() {
                 this.previewUrl = "";
@@ -201,6 +209,7 @@
                     attrPosition: i,
                     typeKey: typeKey,
                     attrlen: item.attrlen,
+                    attrLevel: 1
                 };
                 let params = {
                     json: decodeURI(encodeURI(JSON.stringify(json)))

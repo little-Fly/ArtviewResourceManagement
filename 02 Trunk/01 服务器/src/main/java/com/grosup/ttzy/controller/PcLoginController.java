@@ -110,9 +110,10 @@ public class PcLoginController {
             }
             map.put("code", 1);
             map.put("msg", "success");
-            
+            LOGGER.info("set user info");
             user.setLastValidTime(System.currentTimeMillis());
             CookieUtil.setCookies(response, user);
+            LOGGER.info("user value is" + JSONObject.fromObject(user));
         } catch (GrosupException e) {
             LOGGER.error("登录认证失败", e);
         }
