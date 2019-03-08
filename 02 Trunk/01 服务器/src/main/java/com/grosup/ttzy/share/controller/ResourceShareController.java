@@ -1,5 +1,8 @@
 package com.grosup.ttzy.share.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,6 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +24,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.grosup.ttzy.dao.RoleDao;
 import com.grosup.ttzy.resource.common.MessageMapConstant;
 import com.grosup.ttzy.resource.dto.ResourceDetailDto;
+import com.grosup.ttzy.resource.dto.ResourceFileDto;
 import com.grosup.ttzy.resource.service.ResourceDetailService;
+import com.grosup.ttzy.resource.service.ResourceFileService;
 import com.grosup.ttzy.share.dto.ResourceDto;
 import com.grosup.ttzy.share.dto.ResourceShareDto;
 import com.grosup.ttzy.share.service.ResourceShareService;
@@ -34,6 +42,9 @@ public class ResourceShareController implements MessageMapConstant {
 
 	private static Logger log = Logger.getLogger(ResourceShareController.class);
 
+	@Autowired
+	ResourceFileService resourceFileService;
+	
 	@Autowired
 	ResourceShareService resourceShareService;
 
@@ -212,6 +223,7 @@ public class ResourceShareController implements MessageMapConstant {
 			ResourceShareDto resourceShareDto = resourceShareService.get(shareKey);
 			if (resourceShareDto != null) {
 		
+				
 				JSONArray jsonArray = JSONArray.fromObject(resourceShareDto.getResourceListJson());
 				Collection<ResourceDto> resourceDtoList = (Collection<ResourceDto>) JSONArray.toCollection(jsonArray,
 						ResourceDto.class);
@@ -221,6 +233,13 @@ public class ResourceShareController implements MessageMapConstant {
 					resourceList.add(resourceDto.getResourceKey());
 				}
 				Collection<ResourceDetailDto> collection = resourceDetailService.getByUser(resourceList);
+				String value;
+				for(ResourceDetailDto resourceDetailDto : collection)
+				{
+					value =  resourceDetailDto.getAttrValue();
+					value = value.replaceAll("/rs/file/", "/rs/share/");
+					resourceDetailDto.setAttrValue(value);
+				}
 				JSONArray resourceDefJson = JSONArray.fromObject(collection);
 				messageMap.put(DATA, resourceDefJson.toString());
 				messageMap.put(STATE, STATE_SUCCESSFUL);
@@ -239,4 +258,34 @@ public class ResourceShareController implements MessageMapConstant {
 		return jsonobj.toString();
 	}
 
+	
+	/**
+	 * /rs/share/get.do
+	 * 
+	 * @param filekey:fileKey
+	 * @return 文件流
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "/getfile.do", method = { RequestMethod.GET })
+	public ResponseEntity<byte[]> fileDownLoad(HttpServletRequest request) throws Exception {
+		String fileKey = request.getParameter("filekey");
+		if (!StringUtil.isNullOrEmpty(fileKey)) {
+			ResourceFileDto resourceFileDto = resourceFileService.get(fileKey);
+			String fileName = resourceFileDto.getRelativePath();
+			String directory = resourceFileDto.getDirectory();
+			InputStream in = new FileInputStream(new File(directory + File.separator + fileName));// 将该文件加入到输入流之中
+			byte[] body = null;
+			body = new byte[in.available()];// 返回下一次对此输入流调用的方法可以不受阻塞地从此输入流读取（或跳过）的估计剩余字节数
+			in.read(body);// 读入到输入流里面
+
+			fileName = new String(fileName.getBytes("UTF-8"), "iso8859-1");// 防止中文乱码
+			HttpHeaders headers = new HttpHeaders();// 设置响应头
+			headers.add("Content-Disposition", "attachment;filename=" + fileName);
+			HttpStatus statusCode = HttpStatus.OK;// 设置响应吗
+			ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(body, headers, statusCode);
+			return response;
+		}
+		return null;
+	}
+	
 }
