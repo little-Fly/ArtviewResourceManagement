@@ -102,9 +102,9 @@ public class ResourceFileServiceImp implements ResourceFileService {
 		String[] filelist = relativePath.split(FILE_SPLIT_CHAR);
 		File file;
 		for (String fileName : filelist) {
-			file = new File(directory + File.pathSeparator + fileName);
+			file = new File(directory + File.separator + fileName);
 			if (!file.isFile()) {
-				file = new File(getUploadDirectory() + File.pathSeparator + fileName);
+				file = new File(getUploadDirectory() + File.separator + fileName);
 			}
 			if (file.isFile()) {
 				moveToDelDirectory(file);
@@ -129,7 +129,7 @@ public class ResourceFileServiceImp implements ResourceFileService {
 			relativePath = name + "(" + (++time) + ")" + name2;
 			afile = new File(path + File.separator + relativePath);
 		}
-		afile.mkdirs();
+		afile.getParentFile().mkdirs();
 		multipartFile.transferTo(afile);
 		resourceFileDto.setDirectory(getUploadDirectory());
 		resourceFileDto.setRelativePath(relativePath);
@@ -150,7 +150,7 @@ public class ResourceFileServiceImp implements ResourceFileService {
 		while (afile.isFile()) {
 			afile = new File(path + File.separator + date + File.separator + name + "(" + (++time) + ")" + name2);
 		}
-		afile.mkdirs();
+		afile.getParentFile().mkdirs();
 		f.renameTo(afile);
 	}
 
