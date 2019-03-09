@@ -37,7 +37,7 @@ CREATE TABLE `resource_def` (
 -- ----------------------------
 -- Records of resource_def
 -- ----------------------------*/
-INSERT INTO `resource_def` VALUES ('1', 'RESOURCE_DEF示例表ID', '/pages/share/model.jpg', '示例表名', '示例表注释', '预留1', '预留2', '预留3', '预留4', '预留5');
+INSERT INTO `resource_def` VALUES ('1', 'RESOURCE_DEF示例表ID', 'RESOURCE_DETAILpicture', '示例表名', '示例表注释', '预留1', '预留2', '预留3', '预留4', '预留5');
 
 /*
 -- ----------------------------
@@ -125,19 +125,19 @@ INSERT INTO `resource_detail` VALUES ('2', 'RESOURCE_DETAIL示例值ID1', 'RESOURCE
 INSERT INTO `resource_detail` VALUES ('3', 'RESOURCE_DETAIL示例值ID1', 'RESOURCE_ATTR示例表头ID3', 'RESOURCE_DEF示例表ID', '示例表头3', '0', 'default', '行1值3', 'Available', 'ApprovalAdd', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
 INSERT INTO `resource_detail` VALUES ('4', 'RESOURCE_DETAIL示例值ID1', 'RESOURCE_ATTR示例表头ID4', 'RESOURCE_DEF示例表ID', '示例表头4', '2', 'default', '行1值4', 'Available', 'ApprovalAdd', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
 INSERT INTO `resource_detail` VALUES ('5', 'RESOURCE_DETAIL示例值ID2', 'RESOURCE_ATTR示例表头ID1', 'RESOURCE_DEF示例表ID', '示例表头1', '0', 'default', '行2值1', 'Available', 'ApprovalAdd', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
-INSERT INTO `resource_detail` VALUES ('6', 'RESOURCE_DETAIL示例值ID2', 'RESOURCE_ATTR示例表头ID2', 'RESOURCE_DEF示例表ID', '示例表头2', '0', 'picture', '/rs/file/getfile.do?filekey=RFlpicture', 'Available', 'ApprovalAdd', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
-INSERT INTO `resource_detail` VALUES ('7', 'RESOURCE_DETAIL示例值ID2', 'RESOURCE_ATTR示例表头ID3', 'RESOURCE_DEF示例表ID', '示例表头3', '0', 'video', '/rs/file/getfile.do?filekey=RFlvideo', 'Available', 'ApprovalAdd', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
+INSERT INTO `resource_detail` VALUES ('6', 'RESOURCE_DETAIL示例值ID2', 'RESOURCE_ATTR示例表头ID2', 'RESOURCE_DEF示例表ID', '示例表头2', '0', 'picture', '/rs/file/getfile.do?filekey=RESOURCE_DETAILpicture', 'Available', 'ApprovalAdd', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
+INSERT INTO `resource_detail` VALUES ('7', 'RESOURCE_DETAIL示例值ID2', 'RESOURCE_ATTR示例表头ID3', 'RESOURCE_DEF示例表ID', '示例表头3', '0', 'video', '/rs/file/getfile.do?filekey=RESOURCE_DETAILvideo', 'Available', 'ApprovalAdd', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
 INSERT INTO `resource_detail` VALUES ('8', 'RESOURCE_DETAIL示例值ID2', 'RESOURCE_ATTR示例表头ID4', 'RESOURCE_DEF示例表ID', '示例表头4', '2', 'default', '行2值4', 'Available', 'ApprovalAdd', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
 INSERT INTO `resource_detail` VALUES ('9', 'RESOURCE_DETAIL示例值ID3', 'RESOURCE_ATTR示例表头ID1', 'RESOURCE_DEF示例表ID', '示例表头1', '0', 'default', '行3值1', 'ApprovalAdd', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
 INSERT INTO `resource_detail` VALUES ('10', 'RESOURCE_DETAIL示例值ID3', 'RESOURCE_ATTR示例表头ID2', 'RESOURCE_DEF示例表ID', '示例表头2', '0', 'default', '行3值2', 'ApprovalAdd', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
-INSERT INTO `resource_detail` VALUES ('11', 'RESOURCE_DETAIL示例值ID3', 'RESOURCE_ATTR示例表头ID3', 'RESOURCE_DEF示例表ID', '示例表头3', '0', 'picture', '/rs/file/getfile.do?filekey=RFlpicture', 'ApprovalAdd', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
-INSERT INTO `resource_detail` VALUES ('12', 'RESOURCE_DETAIL示例值ID3', 'RESOURCE_ATTR示例表头ID4', 'RESOURCE_DEF示例表ID', '示例表头4', '2', 'video', '/rs/file/getfile.do?filekey=RFlvideo', 'ApprovalAdd', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
-INSERT INTO `resource_detail` VALUES ('13', 'RESOURCE_DETAIL示例值ID4', 'RESOURCE_ATTR示例表头ID1', 'RESOURCE_DEF示例表ID', '示例表头1', '0', 'video', '/rs/file/getfile.do?filekey=RFlvideo', 'ApprovalDel', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
+INSERT INTO `resource_detail` VALUES ('11', 'RESOURCE_DETAIL示例值ID3', 'RESOURCE_ATTR示例表头ID3', 'RESOURCE_DEF示例表ID', '示例表头3', '0', 'picture', '/rs/file/getfile.do?filekey=RESOURCE_DETAILpicture', 'ApprovalAdd', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
+INSERT INTO `resource_detail` VALUES ('12', 'RESOURCE_DETAIL示例值ID3', 'RESOURCE_ATTR示例表头ID4', 'RESOURCE_DEF示例表ID', '示例表头4', '2', 'video', '/rs/file/getfile.do?filekey=RESOURCE_DETAILvideo', 'ApprovalAdd', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
+INSERT INTO `resource_detail` VALUES ('13', 'RESOURCE_DETAIL示例值ID4', 'RESOURCE_ATTR示例表头ID1', 'RESOURCE_DEF示例表ID', '示例表头1', '0', 'video', '/rs/file/getfile.do?filekey=RESOURCE_DETAILvideo', 'ApprovalDel', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
 INSERT INTO `resource_detail` VALUES ('14', 'RESOURCE_DETAIL示例值ID4', 'RESOURCE_ATTR示例表头ID2', 'RESOURCE_DEF示例表ID', '示例表头2', '0', 'default', '行4值2', 'ApprovalDel', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
 INSERT INTO `resource_detail` VALUES ('15', 'RESOURCE_DETAIL示例值ID4', 'RESOURCE_ATTR示例表头ID3', 'RESOURCE_DEF示例表ID', '示例表头3', '0', 'default', '行4值3', 'ApprovalDel', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
-INSERT INTO `resource_detail` VALUES ('16', 'RESOURCE_DETAIL示例值ID4', 'RESOURCE_ATTR示例表头ID4', 'RESOURCE_DEF示例表ID', '示例表头4', '2', 'picture', '/rs/file/getfile.do?filekey=RFlpicture', 'ApprovalDel', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
-INSERT INTO `resource_detail` VALUES ('17', 'RESOURCE_DETAIL示例值ID5', 'RESOURCE_ATTR示例表头ID1', 'RESOURCE_DEF示例表ID', '示例表头1', '0', 'picture', '/rs/file/getfile.do?filekey=RFlpicture', 'ApprovalUpdate', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
-INSERT INTO `resource_detail` VALUES ('18', 'RESOURCE_DETAIL示例值ID5', 'RESOURCE_ATTR示例表头ID2', 'RESOURCE_DEF示例表ID', '示例表头2', '0', 'video', '/rs/file/getfile.do?filekey=RFlvideo', 'ApprovalUpdate', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
+INSERT INTO `resource_detail` VALUES ('16', 'RESOURCE_DETAIL示例值ID4', 'RESOURCE_ATTR示例表头ID4', 'RESOURCE_DEF示例表ID', '示例表头4', '2', 'picture', '/rs/file/getfile.do?filekey=RESOURCE_DETAILpicture', 'ApprovalDel', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
+INSERT INTO `resource_detail` VALUES ('17', 'RESOURCE_DETAIL示例值ID5', 'RESOURCE_ATTR示例表头ID1', 'RESOURCE_DEF示例表ID', '示例表头1', '0', 'picture', '/rs/file/getfile.do?filekey=RESOURCE_DETAILpicture', 'ApprovalUpdate', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
+INSERT INTO `resource_detail` VALUES ('18', 'RESOURCE_DETAIL示例值ID5', 'RESOURCE_ATTR示例表头ID2', 'RESOURCE_DEF示例表ID', '示例表头2', '0', 'video', '/rs/file/getfile.do?filekey=RESOURCE_DETAILvideo', 'ApprovalUpdate', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
 INSERT INTO `resource_detail` VALUES ('19', 'RESOURCE_DETAIL示例值ID5', 'RESOURCE_ATTR示例表头ID3', 'RESOURCE_DEF示例表ID', '示例表头3', '0', 'default', '行5值3', 'ApprovalUpdate', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
 INSERT INTO `resource_detail` VALUES ('20', 'RESOURCE_DETAIL示例值ID5', 'RESOURCE_ATTR示例表头ID4', 'RESOURCE_DEF示例表ID', '示例表头4', '2', 'default', '行5值4', 'ApprovalUpdate', '', '系统添加', '', '预留1', '预留2', '预留3', '预留4', '预留5');
 
