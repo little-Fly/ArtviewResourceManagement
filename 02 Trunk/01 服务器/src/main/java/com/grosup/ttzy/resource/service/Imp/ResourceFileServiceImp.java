@@ -9,14 +9,12 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.grosup.ttzy.resource.dao.ResourceFileDao;
 import com.grosup.ttzy.resource.dto.ResourceFileDto;
 import com.grosup.ttzy.resource.service.ResourceFileService;
-import com.grosup.ttzy.util.SpringPropertyConfigurer;
 import com.grosup.ttzy.util.StringUtil;
 
 @Service
@@ -30,9 +28,6 @@ public class ResourceFileServiceImp implements ResourceFileService {
 	private SimpleDateFormat sdf1 = new SimpleDateFormat("yyyyMMdd");
 
 	private static final String FILE_SPLIT_CHAR = ";";
-
-	@Autowired
-	private Environment env;
 
 	@Value("#{resourceFileService['ResourceFileService.uploadDirectory']}")
 	private String uploadDirectory;
@@ -64,7 +59,21 @@ public class ResourceFileServiceImp implements ResourceFileService {
 
 	public void del(String fileKey) {
 		ResourceFileDto resourceFileDto = resourceFileDao.del(fileKey);
-		if (!StringUtil.isNullOrEmpty(fileKey)) {
+		if (null != resourceFileDto) {
+			delFile(resourceFileDto.getDirectory(), resourceFileDto.getRelativePath());
+		}
+	}
+
+	public void del4def(String typeKey) {
+		ResourceFileDto resourceFileDto = resourceFileDao.del4def(typeKey);
+		if (null != resourceFileDto) {
+			delFile(resourceFileDto.getDirectory(), resourceFileDto.getRelativePath());
+		}
+	}
+
+	public void del4detail(String resourceKey) {
+		ResourceFileDto resourceFileDto = resourceFileDao.del4detail(resourceKey);
+		if (null != resourceFileDto) {
 			delFile(resourceFileDto.getDirectory(), resourceFileDto.getRelativePath());
 		}
 	}

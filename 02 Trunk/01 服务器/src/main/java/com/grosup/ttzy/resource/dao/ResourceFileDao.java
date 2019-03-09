@@ -24,10 +24,9 @@ import net.sf.json.JSONObject;
 public class ResourceFileDao implements ResourceConstant {
 	private static Logger log = Logger.getLogger(ResourceFileDao.class);
 
-	
 	@Autowired
 	private ResourceFileMapper resourceFileMapper;
-	
+
 //	Map<String, ResourceFileDto> map = Collections.synchronizedMap(new HashMap<String, ResourceFileDto>());
 //
 //	private String resourceKey = RESOURCE_DETAIL + "picture"; // long Y 主键，资源Id
@@ -81,6 +80,28 @@ public class ResourceFileDao implements ResourceConstant {
 		resourceFileDto.setFileKey(typeKey);
 		resourceFileMapper.add(resourceFileDto);
 //		map.put(typeKey, resourceFileDto);
+	}
+
+	public ResourceFileDto del4def(String typeKey) {
+		ResourceFileDto resourceFileDto = null;
+		if (!StringUtil.isNullOrEmpty(typeKey)) {
+			resourceFileDto = resourceFileMapper.get4def(typeKey);
+			resourceFileMapper.del4def(typeKey);
+		} else {
+			log.error("ResourceFileDao del4def is error. typeKey is:" + typeKey);
+		}
+		return resourceFileDto;
+	}
+
+	public ResourceFileDto del4detail(String resourceKey) {
+		ResourceFileDto resourceFileDto = null;
+		if (!StringUtil.isNullOrEmpty(resourceKey)) {
+			resourceFileDto = resourceFileMapper.get4detail(resourceKey);
+			resourceFileMapper.del4detail(resourceKey);
+		} else {
+			log.error("ResourceFileDao del4detail is error. resourceKey is:" + resourceKey);
+		}
+		return resourceFileDto;
 	}
 
 	public ResourceFileDto del(String fileKey) {
