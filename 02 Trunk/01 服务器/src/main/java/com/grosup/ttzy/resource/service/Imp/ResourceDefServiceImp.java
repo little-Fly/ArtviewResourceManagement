@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.grosup.ttzy.resource.dao.ResourceDefDao;
 import com.grosup.ttzy.resource.dto.ResourceDefDto;
 import com.grosup.ttzy.resource.service.ResourceDefService;
+import com.grosup.ttzy.resource.service.ResourceFileService;
 
 @Service
 public class ResourceDefServiceImp implements ResourceDefService {
@@ -18,6 +19,9 @@ public class ResourceDefServiceImp implements ResourceDefService {
 	@Autowired
 	private ResourceDefDao resourceDefDao;
 
+	@Autowired
+	ResourceFileService resourceFileService;
+	
 	public ResourceDefDto create(String json) {
 		return resourceDefDao.create(json);
 	}
@@ -32,8 +36,10 @@ public class ResourceDefServiceImp implements ResourceDefService {
 		return null;
 	}
 
-	public ResourceDefDto del(String resourceKey) {
-		return resourceDefDao.del(resourceKey);
+	public ResourceDefDto del(String typeKey) {
+		ResourceDefDto resourceDefDto = resourceDefDao.del(typeKey);
+		resourceFileService.del4def(typeKey);
+		return resourceDefDto;
 
 	}
 
@@ -47,8 +53,8 @@ public class ResourceDefServiceImp implements ResourceDefService {
 		return null;
 	}
 
-	public ResourceDefDto get(String resourceKey) {
-		return resourceDefDao.get(resourceKey);
+	public ResourceDefDto get(String typeKey) {
+		return resourceDefDao.get(typeKey);
 	}
 
 	public Collection<ResourceDefDto> getAll() {

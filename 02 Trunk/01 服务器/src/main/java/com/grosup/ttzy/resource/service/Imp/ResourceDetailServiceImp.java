@@ -13,6 +13,7 @@ import com.grosup.ttzy.resource.dto.ResourceAttrDto;
 import com.grosup.ttzy.resource.dto.ResourceDetailDto;
 import com.grosup.ttzy.resource.service.ResourceAttrService;
 import com.grosup.ttzy.resource.service.ResourceDetailService;
+import com.grosup.ttzy.resource.service.ResourceFileService;
 
 @Service
 public class ResourceDetailServiceImp implements ResourceDetailService {
@@ -25,6 +26,9 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 	@Autowired
 	ResourceAttrService resourceAttrService;
 
+	@Autowired
+	ResourceFileService resourceFileService;
+	
 	public Collection<ResourceDetailDto> create(String json) {
 		return resourceDetailDao.create(json);
 	}
@@ -57,6 +61,8 @@ public class ResourceDetailServiceImp implements ResourceDetailService {
 
 	public void approvalDel(String resourceKey, String approvalMess, String approvalUser) {
 		resourceDetailDao.approvalDel(resourceKey, approvalMess, approvalUser);
+		resourceFileService.del4detail(resourceKey);
+		
 	}
 
 	public void approvalUpdate(String resourceKey, String approvalMess, String approvalUser) {

@@ -37,6 +37,14 @@
         delete from resource_file where fileKey = #{fileKey}
     </delete>
     
+    <delete id="del4def" parameterType="java.lang.String">
+        delete from resource_file where typeKey = #{typeKey} and resourceKey is null
+    </delete>
+    
+    <delete id="del4detail" parameterType="java.lang.String">
+        delete from resource_file where resourceKey = #{resourceKey}
+    </delete>
+    
     <update id="update" parameterType="com.grosup.ttzy.resource.dto.ResourceFileDto">
         update resource_file set 
         resourceKey = #{resourceKey},
@@ -52,7 +60,15 @@
     <select id="get" parameterType="java.lang.String" resultType="com.grosup.ttzy.resource.dto.ResourceFileDto">
         select * from resource_file where fileKey = #{fileKey}
     </select>
+      
+    <select id="get4def" parameterType="java.lang.String" resultType="com.grosup.ttzy.resource.dto.ResourceFileDto">
+        select * from resource_file where typeKey = #{typeKey} and resourceKey is null
+    </select>
     
+    <select id="get4detail" parameterType="java.lang.String" resultType="com.grosup.ttzy.resource.dto.ResourceFileDto">
+        select * from resource_file where resourceKey = #{resourceKey}
+    </select>
+      
      <select id="getAll" resultMap="BaseResultMap">
         select * from resource_file
     </select>

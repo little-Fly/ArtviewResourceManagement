@@ -14,11 +14,15 @@ public interface ResourceFileService {
 
 	public void add(ResourceFileDto resourceFileDto);
 
-	public void del(String resourceKey);
-
+	public void del(String fileKey);
+	
+	public void del4def(String typeKey);
+	
+	public void del4detail(String resourceKey);
+	
 	public void update(String json);
 
-	public ResourceFileDto get(String resourceKey);
+	public ResourceFileDto get(String fileKey);
 
 	public Collection<ResourceFileDto> getAll();
 

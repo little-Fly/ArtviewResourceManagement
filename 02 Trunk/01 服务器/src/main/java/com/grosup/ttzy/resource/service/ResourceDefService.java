@@ -9,11 +9,11 @@ public interface ResourceDefService {
 
 	public ResourceDefDto add(String json);
 
-	public ResourceDefDto del(String resourceKey);
+	public ResourceDefDto del(String typeKey);
 
 	public ResourceDefDto update(String typeKey, String json);
 
-	public ResourceDefDto get(String resourceKey);
+	public ResourceDefDto get(String typeKey);
 
 	public Collection<ResourceDefDto> getAll();
 }
