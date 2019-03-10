@@ -554,8 +554,11 @@
                         this.addForm[key] = this.multipleSelection[0][key].attrValue;
                         this.attrLevel = this.multipleSelection[0][key].attrLevel;
                         if (this.attrData[i].attrType === "picture" || this.attrData[i].attrType === "video") {
-                            let url = `https://www.hwyst.net/rs/file/getfile.do?filekey=${ this.addForm[key]}`;
-                            this.$set(this.attrData[i], "previewUrl", url);
+                            // let url = `https://www.hwyst.net/rs/file/getfile.do?filekey=${ this.addForm[key]}`;
+                            let url = this.addForm[key].indexOf("/rs/file/getfile.do?filekey") === -1
+                                ? `/rs/file/getfile.do?filekey=${this.addForm[key]}`
+                                : this.addForm[key];
+                            this.$set(this.attrData[i], "previewUrl", "https://www.hwyst.net" + url);
                         }
                     }
                 }
