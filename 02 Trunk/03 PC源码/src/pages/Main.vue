@@ -456,7 +456,7 @@
                                 }
                                 this.total = detail[0].total;
                                 let json = JSON.parse(detail[0].data);
-                                // console.log("表格数据11", detail);
+                                // console.log("表格数据11", json);
                                 this.getLineData(json);
                             }
                         }
@@ -766,7 +766,7 @@
                     });
             },
             uploadSuc(response) {
-                this.addForm[this.currentUploadAttrKey] = response[0].data;
+                this.addForm[this.currentUploadAttrKey] = "/rs/file/getfile.do?filekey=" + response[0].data;
                 console.log("upload success");
             },
             getAction(item, i) {
