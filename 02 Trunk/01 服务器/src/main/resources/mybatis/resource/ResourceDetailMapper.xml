@@ -5,7 +5,6 @@
 <mapper namespace="com.grosup.ttzy.resource.mapper.ResourceDetailMapper">  
     
     <!-- 
-    
      Table structure for resource_detail
 		private String resourceKey; // long Y 主键，资源Id
 		private String attrKey; // varchar Y 主键，属性Key
@@ -19,6 +18,8 @@
 		private String approvalUser;// 審批人
 		private String approvalMess;// 審批意見
      -->
+     
+     
     <resultMap type="com.grosup.ttzy.resource.dto.ResourceDetailDto" id="BaseResultMap">
         <id column="resourceKey" property="resourceKey"/>
         <result column="attrKey" property="attrKey"/>
@@ -52,15 +53,14 @@
     
     <update id="update" parameterType="com.grosup.ttzy.resource.dto.ResourceDetailDto">
         update resource_detail set 
-        attrKey = #{attrKey},
-        typeKey = #{typeKey},
         attrName = #{attrName},
         attrLevel = #{attrLevel},
         attrType = #{attrType},
         attrValue = #{attrValue},
-        approvalUser = #{approvalUser},
-        approvalMess = #{approvalMess}
-        where resourceKey = #{resourceKey}
+        attrState = #{attrState},
+        attrLastState = #{attrLastState},
+        approvalUser = #{approvalUser}
+        where resourceKey = #{resourceKey} and typeKey = #{typeKey} and attrKey = #{attrKey}
     </update>
     
     <update id="updateState" parameterType="java.util.Map">

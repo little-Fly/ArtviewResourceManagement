@@ -310,10 +310,17 @@ public class ResourceDetailDao implements ResourceConstant {
 
 	public void del(String resourceKey, String approvalUser) {
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
+			List<ResourceDetailDto> list = get(resourceKey);
+			if(list.size()==0)
+			{
+				return;
+			}
+			String attrLastState = list.get(0).getAttrState();
+			
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("resourceKey", resourceKey);
 			map.put("attrState", RESOURCE_STATE_APPROVAL_DEL);
-			map.put("attrLastState", "");
+			map.put("attrLastState", attrLastState);
 			map.put("approvalUser", approvalUser);
 			map.put("approvalMess", "");
 			resourceDetailMapper.updateState(map);
@@ -345,15 +352,20 @@ public class ResourceDetailDao implements ResourceConstant {
 
 	public void update(String resourceKey, Collection<ResourceDetailDto> collection, String approvalUser) {
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-
-			Map<String, Object> map = new HashMap<String, Object>();
-			map.put("resourceKey", resourceKey);
-			map.put("attrState", RESOURCE_STATE_APPROVAL_UPDATE);
-			map.put("attrLastState", "");
-			map.put("approvalUser", approvalUser);
-			map.put("approvalMess", "");
-			resourceDetailMapper.updateState(map);
-
+			List<ResourceDetailDto> list = get(resourceKey);
+			if(list.size()==0)
+			{
+				return;
+			}
+			String attrLastState = list.get(0).getAttrState();
+			
+			for (ResourceDetailDto resourceDetailDto : collection) {
+				resourceDetailDto.setResourceKey(resourceKey);
+				resourceDetailDto.setAttrState(RESOURCE_STATE_APPROVAL_UPDATE);
+				resourceDetailDto.setAttrLastState(attrLastState);
+				resourceDetailDto.setApprovalUser(approvalUser);
+				resourceDetailMapper.update(resourceDetailDto);
+			}
 //			for (ResourceDetailDto resourceDetailDto : collection) {
 //				resourceDetailDto.setResourceKey(resourceKey);
 //				resourceDetailDto.setAttrState(RESOURCE_STATE_APPROVAL_UPDATE);
