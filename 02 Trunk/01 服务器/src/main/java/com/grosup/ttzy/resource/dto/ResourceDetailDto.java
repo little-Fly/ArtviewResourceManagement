@@ -78,16 +78,16 @@ public class ResourceDetailDto {
 	public String getAttrState() {
 		return attrState;
 	}
-
+	public void setAttrState(String attrState) {
+		this.attrState = attrState;
+	}
+	
 	public String getAttrLastState() {
 		return attrLastState;
 	}
 
-	public void setAttrState(String attrState) {
-		if (this.attrState != attrState) {
-			attrLastState = this.attrState;
-			this.attrState = attrState;
-		}
+	public void setAttrLastState(String attrLastState) {
+		this.attrLastState = attrLastState;
 	}
 
 	public String getApprovalUser() {
