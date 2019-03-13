@@ -122,14 +122,13 @@
 								          v-if="item.attrType !== 'picture'&&item.attrType !== 'video'"
 								          :maxlength="item.attrlen > 0 ? item.attrlen :100"
 								          :placeholder="item.attrlen >0 ? `限制${item.attrlen}个字符` :``"
-								          auto-complete="off"></el-input>
-							</el-form-item>
-							<el-form-item label="数据级别" :label-width="formLabelWidth">
-								<el-select v-model="attrLevel" placeholder="请选择数据级别">
-									<el-option label="任何人可见" value="0"></el-option>
-									<el-option label="成员可见" value="1"></el-option>
-									<el-option label="管理员可见" value="2"></el-option>
-								</el-select>
+								          auto-complete="off">
+									<el-select v-model="item.attrLevel" slot="append" placeholder="请选择数据级别">
+										<el-option label="任何人可见" value="0"></el-option>
+										<el-option label="成员可见" value="1"></el-option>
+										<el-option label="管理员可见" value="2"></el-option>
+									</el-select>
+								</el-input>
 							</el-form-item>
 						</el-form>
 						<div slot="footer" class="dialog-footer">
@@ -179,7 +178,6 @@
                 operatingMode: "", // 当前行为 是add、update
                 fileArr: [],
                 currentUploadAttrKey: "",
-                attrLevel: "1",
                 searchData: [{attr: "", value: ""}], //attrkey
                 total: 0,
                 pageSize: 10
@@ -235,7 +233,7 @@
                             text = "驳回";
                             break;
                         default:
-                            text = data.attrValue;
+                            text = data;
                             break;
                     }
                 }
@@ -349,86 +347,6 @@
                                 ];
                                 this.attrData = [...this.attrData, ...arr];
                             }
-                            let json = [
-                                {
-                                    approvalMess: "",
-                                    approvalUser: "",
-                                    attrKey: "RAt15498884831312339106746997660967",
-                                    attrLastState: "",
-                                    attrLevel: "1",
-                                    attrName: "11",
-                                    attrState: "ApprovalAdd",
-                                    attrType: "default",
-                                    attrValue: "手动阀手动阀啊但是发射点发啊但是发射点发射点发啊但是发射点发地方啊但是发射点发射点发啊但是发射点法大师傅啊但是发射点发射点发啊手动阀手动阀手动阀，，啊但是发射点发跑i爱的跑iu阿婆撒旦发射点方法，，asdfiqwoeiuq-werafa落款时间分厘卡士大夫就奥省的浪费空间阿斯利康的飞机奥克兰",
-                                    resourceKey: "RDt15498885040482339106712133930635",
-                                    typeKey: "RDf15498884827902339106720898958845"
-                                },
-                                {
-                                    approvalMess: "",
-                                    approvalUser: "",
-                                    attrKey: "RAt15498884831412339106712186525981",
-                                    attrLastState: "",
-                                    attrLevel: "1",
-                                    attrName: "2",
-                                    attrState: "ApprovalAdd",
-                                    attrType: "picture",
-                                    attrValue: "RFl15498884982222339106711885180584",
-                                    resourceKey: "RDt15498885040482339106712133930635",
-                                    typeKey: "RDf15498884827902339106720898958845"
-                                },
-                                {
-                                    approvalMess: "",
-                                    approvalUser: "",
-                                    attrKey: "RAt15498884832272339106714244227639",
-                                    attrLastState: "",
-                                    attrLevel: "1",
-                                    attrName: "33",
-                                    attrState: "ApprovalAdd",
-                                    attrType: "picture",
-                                    attrValue: "RFl15498885010882339106746931644488",
-                                    resourceKey: "RDt15498885040482339106712133930635",
-                                    typeKey: "RDf15498884827902339106720898958845"
-                                },
-                                {
-                                    approvalMess: "",
-                                    approvalUser: "",
-                                    attrKey: "RAt15498884831312339106746997660967",
-                                    attrLastState: "",
-                                    attrLevel: "1",
-                                    attrName: "11",
-                                    attrState: "ApprovalAdd",
-                                    attrType: "default",
-                                    attrValue: "21",
-                                    resourceKey: "RDt15498885156272339106712188683515",
-                                    typeKey: "RDf15498884827902339106720898958845"
-                                },
-                                {
-                                    approvalMess: "",
-                                    approvalUser: "",
-                                    attrKey: "RAt15498884831412339106712186525981",
-                                    attrLastState: "",
-                                    attrLevel: "1",
-                                    attrName: "2",
-                                    attrState: "ApprovalAdd",
-                                    attrType: "picture",
-                                    attrValue: "RFl15498885105962339106780535304967",
-                                    resourceKey: "RDt15498885156272339106712188683515",
-                                    typeKey: "RDf15498884827902339106720898958845"
-                                },
-                                {
-                                    approvalMess: "",
-                                    approvalUser: "",
-                                    attrKey: "RAt15498884832272339106714244227639",
-                                    attrLastState: "",
-                                    attrLevel: "1",
-                                    attrName: "33",
-                                    attrState: "ApprovalAdd",
-                                    attrType: "picture",
-                                    attrValue: "RFl15498885128042339106746980478258",
-                                    resourceKey: "RDt15498885156272339106712188683515",
-                                    typeKey: "RDf15498884827902339106720898958845"
-                                }
-                            ];
                             // this.getLineData(json);
                             // return;
                             /*********************************************************************************/
@@ -490,11 +408,10 @@
                         arr[index - 1] = obj;
                     }
                 }
-                // console.log(this.tableData);
                 this.tableData = arr;
+                // console.log("this.tableData", this.tableData);
             },
             clearForm() {
-                this.attrLevel = "1";
                 for (let key in this.addForm) {
                     if (this.addForm.hasOwnProperty(key) && key !== "title") {
                         this.addForm[key] = "";
@@ -552,13 +469,17 @@
                     let key = this.attrData[i].attrKey;
                     if (this.multipleSelection[0][key]) {
                         this.addForm[key] = this.multipleSelection[0][key].attrValue;
-                        this.attrLevel = this.multipleSelection[0][key].attrLevel;
                         if (this.attrData[i].attrType === "picture" || this.attrData[i].attrType === "video") {
                             // let url = `https://www.hwyst.net/rs/file/getfile.do?filekey=${ this.addForm[key]}`;
                             let url = this.addForm[key].indexOf("/rs/file/getfile.do?filekey") === -1
                                 ? `/rs/file/getfile.do?filekey=${this.addForm[key]}`
                                 : this.addForm[key];
                             this.$set(this.attrData[i], "previewUrl", "https://www.hwyst.net" + url);
+                        }
+                        for (let j = 0; j < this.attrData.length; j++) {
+							if(this.multipleSelection[0][key].attrKey === this.attrData[j].attrKey){
+                                this.$set(this.attrData[j], "attrLevel", this.multipleSelection[0][key].attrLevel);
+							}
                         }
                     }
                 }
@@ -624,7 +545,6 @@
                     }
                     len++;
                 }
-                // console.log("this.addForm:", this.addForm);
                 for (let key in this.addForm) {
                     if (key === "attrState"
                         || key === "approvalMess"
@@ -639,12 +559,12 @@
                             "attrName": "",
                             "attrValue": this.addForm[key],
                             "typeKey": this.currentTypeKey,
-                            attrLevel: this.attrLevel
                         };
                         for (let i = 0; i < this.attrData.length; i++) {
                             if (this.attrData[i].attrKey === obj.attrKey) {
                                 obj.attrType = this.attrData[i].attrType;
                                 obj.attrName = this.attrData[i].attrName;
+                                obj.attrLevel = this.attrData[i].attrLevel;
                             }
                         }
                         json.push(obj);
