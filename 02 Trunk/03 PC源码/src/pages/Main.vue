@@ -118,6 +118,12 @@
 								<video :src="item.previewUrl"
 								       v-if="item.attrType === 'video' && item.previewUrl !== undefined && item.previewUrl !== ''"
 								       controls="controls" width="100"></video>
+								<el-select v-if="item.attrType === 'picture'||item.attrType === 'video'"
+								           v-model="item.attrLevel" placeholder="请选择数据级别">
+									<el-option label="任何人可见" value="0"></el-option>
+									<el-option label="成员可见" value="1"></el-option>
+									<el-option label="管理员可见" value="2"></el-option>
+								</el-select>
 								<el-input v-model="addForm[item.attrKey]"
 								          v-if="item.attrType !== 'picture'&&item.attrType !== 'video'"
 								          :maxlength="item.attrlen > 0 ? item.attrlen :100"
@@ -477,9 +483,9 @@
                             this.$set(this.attrData[i], "previewUrl", "https://www.hwyst.net" + url);
                         }
                         for (let j = 0; j < this.attrData.length; j++) {
-							if(this.multipleSelection[0][key].attrKey === this.attrData[j].attrKey){
+                            if (this.multipleSelection[0][key].attrKey === this.attrData[j].attrKey) {
                                 this.$set(this.attrData[j], "attrLevel", this.multipleSelection[0][key].attrLevel);
-							}
+                            }
                         }
                     }
                 }
@@ -540,7 +546,8 @@
                     let item = this.attrData[i].attrKey;
                     if (item === "attrState"
                         || item === "approvalMess"
-                        || item === "approvalUser") {
+                        || item === "approvalUser"
+                        || this.attrData[i].attrType === undefined) {
                         continue;
                     }
                     len++;
@@ -567,10 +574,13 @@
                                 obj.attrLevel = this.attrData[i].attrLevel;
                             }
                         }
-                        json.push(obj);
+                        if (obj.attrType !== undefined) {
+                            json.push(obj);
+                        }
                     }
                 }
                 // console.log("this.attrData:", this.attrData);
+                // console.log("this.addForm:", this.addForm);
                 // console.log("json:", json);
                 // console.log("len:", len);
                 if (json.length === 0) {
