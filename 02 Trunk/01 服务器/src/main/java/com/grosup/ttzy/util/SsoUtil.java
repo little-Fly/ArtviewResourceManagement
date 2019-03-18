@@ -80,7 +80,8 @@ public class SsoUtil {
 	public static String getLoginRedirectUrl(HttpServletRequest request) {
 		String curUrl = RequestUtil.getCurrentUrl(request);
 		StringBuilder result = new StringBuilder();
-		result.append(SsoConstant.SSO_URL).append("?redirect=").append(curUrl);
+//		result.append(SsoConstant.SSO_URL).append("?redirect=").append(curUrl);
+		result.append(SsoConstant.SSO_URL);
 		return result.toString();
 	}
 
