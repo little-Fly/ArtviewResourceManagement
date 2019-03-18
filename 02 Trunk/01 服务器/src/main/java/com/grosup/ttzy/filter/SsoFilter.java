@@ -55,9 +55,6 @@ public abstract class SsoFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) sRequest;
 		HttpServletResponse response = (HttpServletResponse) sResponse;
 		this.doBeforFilter(request, response);
-		response.setHeader("Cache-Control", "no-store");//or no-cache
-		response.setHeader("Pragrma", "no-cache");
-		response.setDateHeader("Expires", 0);
 
 		log.info("request url is," + request.getRequestURI());
 		// 如果URL属于排除之列，直接执行嵌套Filter和Filter后期操作，并且返回。
@@ -79,7 +76,13 @@ public abstract class SsoFilter implements Filter {
 //				this.doAfterFilter(request, response);
 //			}
 			} else {
+			    log.info("22222222222");
+                response.setHeader("Cache-Control", "no-cache");//or no-cache
+                response.setDateHeader("Expires", -1);
+
+                request.getSession().invalidate();
 				redirectLogin(request, response);
+				return;
 			}
 		} else {
 			chain.doFilter(sRequest, sResponse);
