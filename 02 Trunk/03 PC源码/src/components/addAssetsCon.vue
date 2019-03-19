@@ -47,7 +47,8 @@
 						</el-button>
 					</el-form-item>
 					<p class="tc ">
-						<el-button type="success" class="add-confirm-btn" @click="addConfirm">确认新增</el-button>
+						<el-button type="success" class="add-confirm-btn" @click="addConfirm" :loading="isFetch">确认新增
+						</el-button>
 					</p>
 				</el-form>
 			</el-col>
@@ -73,7 +74,8 @@
                 ],
                 attrTypeList: [],
                 file: null,
-                previewUrl: ""
+                previewUrl: "",
+                isFetch: false
             };
         },
         methods: {
@@ -152,11 +154,13 @@
                 let json = {
                     json: decodeURI(encodeURI(JSON.stringify(params)))
                 };
+                this.isFetch = true;
                 this.$ajax.def
                     .addDef(json)
                     .then((response) => {
                         if (response.status === 200) {
                             let data = response.data;
+                            this.isFetch = false;
                             if (data[0].state === "error") {
                                 this.$message.error(data[0].message);
                             } else {
@@ -184,6 +188,7 @@
                             }
                         }
                     }, (error) => {
+                        this.isFetch = false;
                         this.$message.error(error.message);
                     });
             },
