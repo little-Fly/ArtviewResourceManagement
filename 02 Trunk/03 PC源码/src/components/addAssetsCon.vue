@@ -30,6 +30,7 @@
 								选取资源类型logo
 							</el-button>
 						</el-upload>
+						<p style="font-size: 12px">推荐图片大小“105*105”,图片类型“JPG、png”</p>
 					</el-form-item>
 					<el-form-item label="属性名称" v-for="(item,key) in attrList" :key="key">
 						<el-input placeholder="请输入属性名称" v-model="item.attrName">

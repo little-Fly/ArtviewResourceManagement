@@ -96,6 +96,7 @@
 							<el-form-item :label="item.attrName" :label-width="formLabelWidth"
 							              v-for="(item,key) in attrData" :key="key"
 							              v-if="item.attrKey !== 'attrState' && item.attrKey !== 'approvalMess'&& item.attrKey !== 'approvalUser'">
+								<p style="font-size: 12px;line-height: 15px">推荐图片大小“<2M”,图片类型“jpg、png”;视频大小"<20M",视频类型"mp4、3gp"</p>
 								<el-upload
 										v-if="item.attrType === 'picture'||item.attrType === 'video'"
 										ref="upload"
