@@ -53,10 +53,7 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
     if (typeof response.data !== "object") {
         sessionStorage.clear();
-        router.replace({
-            path: "/login",
-            query: {redirect: router.currentRoute.fullPath}
-        });
+        location.href = location.origin;
     }
     return response;
 });
