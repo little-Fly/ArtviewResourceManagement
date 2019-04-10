@@ -27,8 +27,8 @@ public class SsoConstant {
 	 */
 	public static int COOKIE_VALID_TIME = 60 * 60 * 12;
 	
-	public static String SSO_URL="https://www.hwyst.net";
+	public static String SSO_URL="https://www.debug.group/";
 	
-	public static final String DEFAULT_REDIRECT = "https://www.hwyst.net/index.html#/";
+	public static final String DEFAULT_REDIRECT = "https://www.debug.group//index.html#/";
 
 }
