@@ -30,6 +30,7 @@
 								选取资源类型logo
 							</el-button>
 						</el-upload>
+						<p style="font-size: 12px">推荐图片大小“105*105”,图片类型“JPG、png”</p>
 					</el-form-item>
 					<el-form-item label="属性名称" v-for="(item,key) in attrList" :key="key">
 						<el-input placeholder="请输入属性名称" v-model="item.attrName">
@@ -47,7 +48,8 @@
 						</el-button>
 					</el-form-item>
 					<p class="tc ">
-						<el-button type="success" class="add-confirm-btn" @click="addConfirm">确认新增</el-button>
+						<el-button type="success" class="add-confirm-btn" @click="addConfirm" :loading="isFetch">确认新增
+						</el-button>
 					</p>
 				</el-form>
 			</el-col>
@@ -73,7 +75,8 @@
                 ],
                 attrTypeList: [],
                 file: null,
-                previewUrl: ""
+                previewUrl: "",
+                isFetch: false
             };
         },
         methods: {
@@ -152,11 +155,13 @@
                 let json = {
                     json: decodeURI(encodeURI(JSON.stringify(params)))
                 };
+                this.isFetch = true;
                 this.$ajax.def
                     .addDef(json)
                     .then((response) => {
                         if (response.status === 200) {
                             let data = response.data;
+                            this.isFetch = false;
                             if (data[0].state === "error") {
                                 this.$message.error(data[0].message);
                             } else {
@@ -184,6 +189,7 @@
                             }
                         }
                     }, (error) => {
+                        this.isFetch = false;
                         this.$message.error(error.message);
                     });
             },
