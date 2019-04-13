@@ -93,15 +93,15 @@ public class ResourceFileDao implements ResourceConstant {
 		return resourceFileDto;
 	}
 
-	public ResourceFileDto del4detail(String resourceKey) {
-		ResourceFileDto resourceFileDto = null;
+	public Collection<ResourceFileDto> del4detail(String resourceKey) {
+		Collection<ResourceFileDto> resourceFileDtos = null;
 		if (!StringUtil.isNullOrEmpty(resourceKey)) {
-			resourceFileDto = resourceFileMapper.get4detail(resourceKey);
+			resourceFileDtos = resourceFileMapper.get4detail(resourceKey);
 			resourceFileMapper.del4detail(resourceKey);
 		} else {
 			log.error("ResourceFileDao del4detail is error. resourceKey is:" + resourceKey);
 		}
-		return resourceFileDto;
+		return resourceFileDtos;
 	}
 
 	public ResourceFileDto del(String fileKey) {
