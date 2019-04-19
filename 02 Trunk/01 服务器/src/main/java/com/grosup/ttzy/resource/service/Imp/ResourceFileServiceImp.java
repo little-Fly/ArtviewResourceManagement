@@ -72,8 +72,8 @@ public class ResourceFileServiceImp implements ResourceFileService {
 	}
 
 	public void del4detail(String resourceKey) {
-		ResourceFileDto resourceFileDto = resourceFileDao.del4detail(resourceKey);
-		if (null != resourceFileDto) {
+		Collection<ResourceFileDto> resourceFileDtos = resourceFileDao.del4detail(resourceKey);
+		for (ResourceFileDto resourceFileDto : resourceFileDtos) {
 			delFile(resourceFileDto.getDirectory(), resourceFileDto.getRelativePath());
 		}
 	}
