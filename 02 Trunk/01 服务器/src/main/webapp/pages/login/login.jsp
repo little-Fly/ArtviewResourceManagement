@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%
-    String redirect_uri = java.net.URLEncoder.encode("http%3A%2F%2Fwww.hwyst.net%2F", "utf-8");   
+    String redirect_uri = java.net.URLEncoder.encode("http%3A%2F%2Fwww.grosup.com%2F", "utf-8");
     System.out.println(redirect_uri);
 %>
 <html>
