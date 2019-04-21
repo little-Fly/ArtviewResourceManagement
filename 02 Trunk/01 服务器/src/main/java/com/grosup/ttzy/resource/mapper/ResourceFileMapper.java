@@ -23,7 +23,7 @@ public interface ResourceFileMapper {
 	
 	public ResourceFileDto get4def(String typeKey);
 	
-	public ResourceFileDto get4detail(String resourceKey);
+	public Collection<ResourceFileDto> get4detail(String resourceKey);
 
 	public Collection<ResourceFileDto> getAll();
 }
