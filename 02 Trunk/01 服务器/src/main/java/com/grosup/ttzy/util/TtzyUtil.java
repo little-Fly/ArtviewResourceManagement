@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 
 import com.grosup.ttzy.beans.LogBean;
@@ -179,13 +178,12 @@ public class TtzyUtil {
                 String userJson = AESUtil.RevertAESCode(userStr);
                 user = new UserBean(userJson);
             }
-            LOGGER.info("user value is " + JSONObject.fromObject(user));
         } catch (Exception e) {
             LOGGER.error("get user failed", e);
         }
         return user;
     }
-    
+
     private static Cookie getCookie(HttpServletRequest request, String key) {
         if (null == request) {
             return null;
