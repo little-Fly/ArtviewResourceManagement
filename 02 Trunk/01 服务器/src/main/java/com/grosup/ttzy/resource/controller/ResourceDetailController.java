@@ -86,7 +86,7 @@ public class ResourceDetailController implements MessageMapConstant {
 		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
 			String json = request.getParameter("json");
 			if (!StringUtil.isNullOrEmpty(json)) {
-				Collection<ResourceDetailDto> list = resourceDetailService.add(json, String.valueOf(TtzyUtil.getUid(request)));
+				Collection<ResourceDetailDto> list = resourceDetailService.add(json, String.valueOf(TtzyUtil.getUser(request)));
 				if (null != list) {
 					JSONArray jsonlist = JSONArray.fromObject(list);
 					messageMap.put(OBJECT, jsonlist.toString());
@@ -129,7 +129,7 @@ public class ResourceDetailController implements MessageMapConstant {
 			String resourceKey = request.getParameter("resourcekey");
 			String approvalMess = request.getParameter("approvalmess");
 			if (!StringUtil.isNullOrEmpty(resourceKey) && !StringUtil.isNullOrEmpty(approvalMess)) {
-				resourceDetailService.approvalAdd(resourceKey, approvalMess, String.valueOf(TtzyUtil.getUid(request)));
+				resourceDetailService.approvalAdd(resourceKey, approvalMess, String.valueOf(TtzyUtil.getUser(request)));
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
@@ -199,7 +199,7 @@ public class ResourceDetailController implements MessageMapConstant {
 			String resourceKey = request.getParameter("resourcekey");
 			String approvalMess = request.getParameter("approvalmess");
 			if (!StringUtil.isNullOrEmpty(resourceKey) && !StringUtil.isNullOrEmpty(approvalMess)) {
-				resourceDetailService.approvalUpdate(resourceKey, approvalMess, String.valueOf(TtzyUtil.getUid(request)));
+				resourceDetailService.approvalUpdate(resourceKey, approvalMess, String.valueOf(TtzyUtil.getUser(request)));
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
@@ -235,7 +235,7 @@ public class ResourceDetailController implements MessageMapConstant {
 			String resourceKey = request.getParameter("resourcekey");
 			String approvalMess = request.getParameter("approvalmess");
 			if (!StringUtil.isNullOrEmpty(resourceKey) && !StringUtil.isNullOrEmpty(approvalMess)) {
-				resourceDetailService.reject(resourceKey, approvalMess, String.valueOf(TtzyUtil.getUid(request)));
+				resourceDetailService.reject(resourceKey, approvalMess, String.valueOf(TtzyUtil.getUser(request)));
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
@@ -326,7 +326,7 @@ public class ResourceDetailController implements MessageMapConstant {
 		if (roleDao.isWriter(TtzyUtil.getUid(request))) {
 			String resourceKey = request.getParameter("resourcekey");
 			if (!StringUtil.isNullOrEmpty(resourceKey)) {
-				resourceDetailService.del(resourceKey, String.valueOf(TtzyUtil.getUid(request)));
+				resourceDetailService.del(resourceKey, String.valueOf(TtzyUtil.getUser(request)));
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);
@@ -359,7 +359,7 @@ public class ResourceDetailController implements MessageMapConstant {
 			String json = request.getParameter("json");
 
 			if (!StringUtil.isNullOrEmpty(resourceKey) && !StringUtil.isNullOrEmpty(json)) {
-				resourceDetailService.update(resourceKey, json, String.valueOf(TtzyUtil.getUid(request)));
+				resourceDetailService.update(resourceKey, json, String.valueOf(TtzyUtil.getUser(request)));
 				messageMap.put(STATE, STATE_SUCCESSFUL);
 			} else {
 				messageMap.put(STATE, STATE_ERROR);

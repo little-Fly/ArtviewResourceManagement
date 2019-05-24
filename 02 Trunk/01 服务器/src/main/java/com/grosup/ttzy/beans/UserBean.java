@@ -158,7 +158,7 @@ public class UserBean {
 
     public String toString() {
         return JSONBuilder.build().put("uid", this.uid)
-                .put("openId", this.openId).put("nickName", this.nickName)
+                .put("openId", this.openId).put("nickName", this.nickName).put("name", this.name)
                 .put("createTime", this.createTime).put("lastTime", this.lastTime)
                 .put("status", this.status).put("openId", this.openId).put("unionId", this.unionId)
                 .put("lastValidTime", this.lastValidTime).put("roles", this.roles).toString();

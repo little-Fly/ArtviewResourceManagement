@@ -17,7 +17,5 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class TestController {
 	@RequestMapping(method = RequestMethod.GET,value = "helloword.do")
 	public void helloworld(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		UserBean user = TtzyUtil.getUser(request);
-		response.getWriter().write(JSONObject.fromObject(user).toString());
 	}
 }

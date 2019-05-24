@@ -56,9 +56,9 @@ public class PcLoginController {
         }
 
         // appid
-        String appid = "wxb41c2d9e3682c984";
+        String appid = "wx84695f838010ce36";
         // 微信 app secret (秘钥)
-        String appSecret = "89742aa2e8e08bfa83fa6f8789621c02";
+        String appSecret = "92b44796591e474f87176b7db482b95b";
         // 用户授权
         String grant_type = "authorization_code";
 

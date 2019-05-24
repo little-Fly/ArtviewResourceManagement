@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 
 import com.grosup.ttzy.beans.LogBean;
@@ -161,7 +162,7 @@ public class TtzyUtil {
      * @param request
      * @return
      */
-    public static UserBean getUser(HttpServletRequest request) {
+    public static String getUser(HttpServletRequest request) {
         UserBean user = null;
         try {
             //1、从cookie获取
@@ -170,7 +171,7 @@ public class TtzyUtil {
             if ((null == cookieUser) || (null == cookieValid)) {
                 //2、wx小程序方式获取
                 user = getUserBywx(request);
-                return user;
+                return user.getName();
             }
             String userStr = cookieUser.getValue();
             String validStr = cookieValid.getValue();
@@ -181,7 +182,8 @@ public class TtzyUtil {
         } catch (Exception e) {
             LOGGER.error("get user failed", e);
         }
-        return user;
+        LOGGER.info("user value is " + JSONObject.fromObject(user));
+        return user.getName();
     }
 
     private static Cookie getCookie(HttpServletRequest request, String key) {
