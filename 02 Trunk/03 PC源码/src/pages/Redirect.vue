@@ -19,24 +19,6 @@
                 code: code,
                 noCheck: 1
             };
-            let json = {
-                "msg": "success",
-                "userInfo": {
-                    "gender": 1,
-                    "lastValidTime": 1545233361873,
-                    "nickName": "薛利飞",
-                    "openId": "oVEQd0SO9VTr0WkHR4uJCmq7MWdo",
-                    "phone": "13347176976",
-                    "reason": "厉害了",
-                    "roles": [{"remark": "", "roleKey": "writer", "roleName": "录入人员", "roleType": 0}],
-                    // rolekey;admin/管理员,checker/审核人员，writer/录入人员，common/一般员工，visitor/游客
-                    "status": 1, //-1、0、1、2==未注册、待审核、已审核、被拒绝
-                    "uid": 26,
-                    "unionId": "ogOHU1HNbJPVM6izCoA6ZrWaRwms"
-                },
-                "code": 1,
-                "status": 1
-            };
             try {
                 this.$ajax.autoService
                     .login(params)

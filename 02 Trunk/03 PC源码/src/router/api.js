@@ -3,6 +3,7 @@ import axios from "axios";
 import qs from "qs";
 
 const PRODUCT = "https://www.hwyst.net/";
+const TEST = "https://www.debug.group";
 const LOCAL = "url/";
 const HOST = PRODUCT;
 

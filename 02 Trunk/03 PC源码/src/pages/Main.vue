@@ -96,7 +96,9 @@
 							<el-form-item :label="item.attrName" :label-width="formLabelWidth"
 							              v-for="(item,key) in attrData" :key="key"
 							              v-if="item.attrKey !== 'attrState' && item.attrKey !== 'approvalMess'&& item.attrKey !== 'approvalUser'">
-								<p style="font-size: 12px;line-height: 15px">推荐图片大小“<2M”,图片类型“jpg、png”;视频大小"<20M",视频类型"mp4、3gp"</p>
+								<p style="font-size: 12px;line-height: 15px" v-if="item.attrType === 'picture'||item.attrType === 'video'">
+									推荐图片大小“<2M”,图片类型“jpg、png”;视频大小"<20M",视频类型"mp4、3gp"
+								</p>
 								<el-upload
 										v-if="item.attrType === 'picture'||item.attrType === 'video'"
 										ref="upload"
@@ -119,6 +121,7 @@
 								<video :src="item.previewUrl"
 								       v-if="item.attrType === 'video' && item.previewUrl !== undefined && item.previewUrl !== ''"
 								       controls="controls" width="100"></video>
+								<br>
 								<el-select v-if="item.attrType === 'picture'||item.attrType === 'video'"
 								           v-model="item.attrLevel" placeholder="请选择数据级别">
 									<el-option label="任何人可见" value="0"></el-option>
