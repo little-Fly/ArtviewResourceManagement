@@ -29,6 +29,7 @@
         data() {
             return {
                 appId:"wxb41c2d9e3682c984",
+                // appId:"wx84695f838010ce36",
                 scope:"snsapi_login",
                 redirect_uri: "https%3A%2F%2Fwww.hwyst.net%2Findex.html%23%2Fredirect",
             }
